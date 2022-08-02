@@ -12,7 +12,6 @@ jobs:
         working-directory: ../../client
     steps:
       - uses: actions/checkout@v2
-        working-directory: ../../client
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
