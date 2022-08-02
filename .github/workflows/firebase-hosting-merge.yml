@@ -1,10 +1,9 @@
 name: Deploy to Firebase Hosting on merge
 "on":
   push:
-    paths:
-      - 'client/**'
-      branches:
-        - main
+    branches:
+      - main
+      - "client/**"
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
