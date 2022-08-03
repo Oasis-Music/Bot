@@ -1,0 +1,8 @@
+type Query
+# type Mutation
+
+scalar Date
+
+type NotFound {
+  message: String!
+}
