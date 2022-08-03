@@ -1,7 +1,7 @@
 package composites
 
 import (
-	trackStorage "oasis/backend/internal/adapters/db"
+	trackStorage "oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/domain/services/soundtrack"
 
 	"github.com/jackc/pgx/v4/pgxpool"
