@@ -68,8 +68,8 @@ func (a *App) Serve() {
 	defer cancel()
 
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("server shutdown failed:%+v", err)
+		log.Fatalf("❌ server shutdown failed:%+v", err)
 	}
 
-	log.Print("server shutdown gracefully")
+	log.Print("✅ server shutdown gracefully")
 }
