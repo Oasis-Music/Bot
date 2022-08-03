@@ -1,0 +1,11 @@
+type Soundtrack {
+  id: ID!
+  title: String!
+  createdAt: Date!
+}
+
+union SoundtrackResult = Soundtrack | NotFound
+
+extend type Query {
+  soundtrack(id: ID!): SoundtrackResult
+}
