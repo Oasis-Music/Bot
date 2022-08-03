@@ -2,7 +2,7 @@ package soundtrack
 
 import (
 	"context"
-	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/adapters/graph/models"
 	"strconv"
 
@@ -14,10 +14,10 @@ type SoundtrackService interface {
 }
 
 type soundtrackService struct {
-	storage db.SoundtrackStorage
+	storage soundtrack.SoundtrackStorage
 }
 
-func NewSoundtrackService(storage db.SoundtrackStorage) SoundtrackService {
+func NewSoundtrackService(storage soundtrack.SoundtrackStorage) SoundtrackService {
 	return &soundtrackService{
 		storage: storage,
 	}
