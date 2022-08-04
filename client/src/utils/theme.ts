@@ -1,0 +1,74 @@
+import { createGlobalStyle } from 'styled-components'
+
+export interface ITheme {
+  colors: {
+    primary: string
+  }
+
+  breakpoints: {
+    xs: number
+    sm: number
+    md: number
+    lg: number
+    xl: number
+    tablet: number
+    laptop: number
+    desktop: number
+  }
+  media: {
+    xs: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
+    tablet: string
+    laptop: string
+    desktop: string
+  }
+}
+
+const breakpoints = {
+  xs: 0,
+  sm: 450,
+  md: 600,
+  lg: 900,
+  xl: 1200,
+  tablet: 800,
+  laptop: 1000,
+  desktop: 1400
+}
+
+const styledTheme: ITheme = {
+  colors: {
+    primary: '#F2E30C'
+  },
+  breakpoints,
+  media: {
+    xs: `(min-width: ${breakpoints.xs}px)`,
+    sm: `(min-width: ${breakpoints.sm}px)`,
+    md: `(min-width: ${breakpoints.md}px)`,
+    lg: `(min-width: ${breakpoints.lg}px)`,
+    xl: `(min-width: ${breakpoints.xl}px)`,
+    tablet: `(min-width: ${breakpoints.tablet}px)`,
+    laptop: `(min-width: ${breakpoints.laptop}px)`,
+    desktop: `(min-width: ${breakpoints.desktop}px)`
+  }
+}
+
+export default styledTheme
+
+export const GlobalStyles = createGlobalStyle`
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  body {
+    font-family: Roboto,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  }
+`
