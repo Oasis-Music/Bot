@@ -1,9 +1,10 @@
 import React from 'react'
+import Trackline from './Trackline/Trackline'
 
 const Player: React.FC = () => {
   return (
     <div>
-      <h1>Player</h1>
+      <Trackline />
     </div>
   )
 }
