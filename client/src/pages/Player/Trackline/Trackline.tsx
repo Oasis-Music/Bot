@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import Button from '../../../shared/Button'
-import { Container } from './Trackline.styled'
 import soundtrack from './track.mp3'
 import WaveSurfer from 'wavesurfer.js'
+import Controls from './Controls/Controls'
+import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
 
 function timeFormater(value: number): string {
   const sec = String(Math.floor(value % 60))
   const min = String(Math.floor(value / 60))
 
-  return min.padStart(2, '0') + ':' + sec.padStart(2, '0')
+  return min.padStart(1, '0') + ':' + sec.padStart(2, '0')
 }
 
 const Trackline: React.FC = () => {
   const [play, setPlay] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
-  const [currentTime, setCurrentTime] = useState<string>('00:00')
-  const [duration, setDuration] = useState<string>('00:00')
+  const [currentTime, setCurrentTime] = useState<string>('0:00')
+  const [duration, setDuration] = useState<string>('0:00')
 
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer>()
 
@@ -28,9 +28,9 @@ const Trackline: React.FC = () => {
       cursorWidth: 1,
       backend: 'WebAudio',
       height: 30,
-      progressColor: '#F2E30C',
+      progressColor: '#dbdbdb',
       responsive: true,
-      waveColor: '#a8a8a8',
+      waveColor: '#575763',
       cursorColor: 'transparent'
     })
 
@@ -64,14 +64,14 @@ const Trackline: React.FC = () => {
 
   return (
     <Container>
-      <h1>Trackline</h1>
-      <Button disabled={!readyForPlay} onClick={buttonHandler}>
-        {play ? 'Stop' : 'Play'}
-      </Button>
-      <div id="waveform" />
-      <p>
-        {currentTime}/{duration}
-      </p>
+      <WaveWrapper>
+        <div id="waveform" />
+      </WaveWrapper>
+      <TimeBox>
+        <span>{currentTime}</span>
+        <span>{duration}</span>
+      </TimeBox>
+      <Controls isPlay={play} onPlayPause={buttonHandler} />
     </Container>
   )
 }
