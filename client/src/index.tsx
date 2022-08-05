@@ -9,6 +9,8 @@ import history from './utils/history'
 import { ThemeProvider } from 'styled-components'
 // import reportWebVitals from './reportWebVitals'
 
+import 'normalize.css'
+
 const Application: React.FC = () => {
   return (
     <HistoryRouter history={history}>
