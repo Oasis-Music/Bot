@@ -1,26 +1,27 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { lazy, Suspense } from 'react'
+// import AppLayout from './components/AppLayout/AppLayout'
+import Fallback from './components/Fallback/Fallback'
+import PrivateRoute from './shared/PrivateRoute'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
-function App() {
+const Player = lazy(() => import('./pages/Player'))
+const UI = lazy(() => import('./pages/UI'))
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Oasis
-        </a>
-      </header>
-    </div>
-  );
+    <Suspense fallback={<Fallback />}>
+      {/* <AppLayout> */}
+      <Routes>
+        {/* <Route path="/auth" element={<Auth />} /> */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/player" element={<Player />} />
+          <Route path="/ui" element={<UI />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/orders" />} />
+      </Routes>
+      {/* </AppLayout> */}
+    </Suspense>
+  )
 }
 
-export default App;
+export default App
