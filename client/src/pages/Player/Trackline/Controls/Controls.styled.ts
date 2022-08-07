@@ -28,6 +28,7 @@ const subControlsBtsStyles = css`
 export const Container = styled.div`
   display: flex;
   justify-content: space-around;
+  margin-top: 10px;
 `
 
 export const InnerWrapper = styled.div``

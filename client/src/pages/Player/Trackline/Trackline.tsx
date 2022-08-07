@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import soundtrack from './track.mp3'
 import WaveSurfer from 'wavesurfer.js'
 import Controls from './Controls/Controls'
 import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
+import { timeFormater } from '../../../utils/helpers'
 
-function timeFormater(value: number): string {
-  const sec = String(Math.floor(value % 60))
-  const min = String(Math.floor(value / 60))
-
-  return min.padStart(1, '0') + ':' + sec.padStart(2, '0')
+interface TracklineProps {
+  soundtrack: string
 }
 
-const Trackline: React.FC = () => {
+const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
   const [play, setPlay] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
