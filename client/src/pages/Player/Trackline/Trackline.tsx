@@ -11,6 +11,7 @@ interface TracklineProps {
 const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
   const [play, setPlay] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
+  const [loop, setLoop] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [duration, setDuration] = useState<string>('0:00')
 
@@ -20,13 +21,12 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
     const obj = WaveSurfer.create({
       mediaType: 'audio',
       container: '#waveform',
-      barWidth: 3,
+      barWidth: 2,
       barRadius: 4,
       cursorWidth: 1,
       backend: 'WebAudio',
       height: 30,
       progressColor: '#dbdbdb',
-      responsive: true,
       waveColor: '#575763',
       cursorColor: 'transparent'
     })
@@ -41,6 +41,7 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
       setDuration(timeFormater(obj.getDuration()))
       setReadyForPlay(true)
     })
+
     obj.on('audioprocess', function () {
       setCurrentTime(timeFormater(obj.getCurrentTime()))
     })
@@ -59,6 +60,10 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
     }
   }
 
+  const loopButtonHandler = () => {
+    setLoop(!loop)
+  }
+
   return (
     <Container>
       <WaveWrapper>
@@ -68,7 +73,13 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
         <span>{currentTime}</span>
         <span>{duration}</span>
       </TimeBox>
-      <Controls isPlay={play} onPlayPause={buttonHandler} />
+      <Controls
+        isPlay={play}
+        readyForPlay={readyForPlay}
+        isLoop={loop}
+        onPlayPause={buttonHandler}
+        onLoop={loopButtonHandler}
+      />
     </Container>
   )
 }
