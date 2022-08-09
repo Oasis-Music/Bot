@@ -31,8 +31,6 @@ export const Container = styled.div`
   margin-top: 10px;
 `
 
-export const InnerWrapper = styled.div``
-
 export const PlayBotton = styled(IconButton)`
   && {
     color: #1b1818;
@@ -43,6 +41,10 @@ export const PlayBotton = styled(IconButton)`
     /* box-shadow: 0 0 0px #fff, 0 0 20px #fff, 0 0 60px #fff; */
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
       0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
+
+    &:disabled {
+      box-shadow: none;
+    }
 
     &:hover:not(:disabled) {
       background-color: #fff;
@@ -61,12 +63,16 @@ export const NextBotton = styled(IconButton)`
     ${arrowButtonStyles}
   }
 `
+interface loopButtonStyles {
+  $loop: boolean
+}
 
 export const RandomButton = styled(IconButton)`
   ${subControlsBtsStyles}
 `
-export const RepeatButton = styled(IconButton)`
+export const LoopButton = styled(IconButton)<loopButtonStyles>`
   ${subControlsBtsStyles}
+  color: ${({ $loop }) => ($loop ? '#fff' : '#838383')};
 `
 
 export const PrevArrowIcon = styled(SvgIcon)`

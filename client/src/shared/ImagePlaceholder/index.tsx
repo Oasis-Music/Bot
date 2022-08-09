@@ -29,7 +29,7 @@ const Box = styled.picture<StyleProps>`
   height: ${({ $plain }) => ($plain ? '100%' : 'auto')};
 `
 
-const imageStyles = css`
+const imageStyles = css<StyleProps>`
   position: absolute;
   top: 0;
   left: 0;
@@ -41,7 +41,7 @@ const imageStyles = css`
   outline: none;
   object-fit: cover;
   user-select: none;
-  border-radius: 15px;
+  border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
 `
 
 const Image = styled.img`
@@ -61,7 +61,7 @@ const shineAnimation = keyframes`
     }
 `
 
-const ShineBox = styled.div`
+const ShineBox = styled.div<StyleProps>`
   width: 100%;
   height: 100%;
   transition: 0.3s;
@@ -70,6 +70,7 @@ const ShineBox = styled.div`
   opacity: 0.8;
   border-radius: 15px;
   animation: ${shineAnimation} 1.3s infinite;
+  border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
 `
 
 const ImageWrapper = styled.div`
@@ -86,8 +87,8 @@ const ImageWrapper = styled.div`
 
 const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain = false }) => {
   const placeholderPlug = (
-    <ImagePlug>
-      <ShineBox />
+    <ImagePlug $plain={plain}>
+      <ShineBox $plain={plain} />
       <ImageWrapper>
         <PlugIcon>
           <PlaceholderImage />
@@ -96,7 +97,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
     </ImagePlug>
   )
 
-  const plainPlug = <ShineBox />
+  const plainPlug = <ShineBox $plain={plain} />
 
   const plug: React.ReactNode = plain ? plainPlug : placeholderPlug
 
@@ -104,7 +105,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
     <Box $plain={plain}>
       <ProgressiveImage src={src} placeholder="">
         {(src: string, loading: boolean) => {
-          return loading ? plug : <Image src={src} alt={altText} />
+          return loading ? plug : <Image $plain={plain} src={src} alt={altText} />
         }}
       </ProgressiveImage>
     </Box>

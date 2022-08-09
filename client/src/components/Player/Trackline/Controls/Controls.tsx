@@ -1,5 +1,4 @@
 import React from 'react'
-import IconButton from '../../../../shared/IconButton'
 import { ReactComponent as PlayIcon } from '../../../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../../../assets/svg/pause.svg'
 import { ReactComponent as ArrowAltIcon } from '../../../../assets/svg/arrow-alt.svg'
@@ -12,16 +11,25 @@ import {
   PrevBotton,
   NextBotton,
   PrevArrowIcon,
-  RepeatButton,
+  LoopButton,
   RandomButton
 } from './Controls.styled'
 
 interface ControlsProps {
   isPlay: boolean
+  readyForPlay: boolean
+  isLoop: boolean
   onPlayPause?(): void
+  onLoop(): void
 }
 
-const Controls: React.FC<ControlsProps> = ({ isPlay, onPlayPause }) => {
+const Controls: React.FC<ControlsProps> = ({
+  isPlay,
+  isLoop,
+  readyForPlay,
+  onPlayPause,
+  onLoop
+}) => {
   return (
     <Container>
       <RandomButton withoutShadow>
@@ -36,7 +44,7 @@ const Controls: React.FC<ControlsProps> = ({ isPlay, onPlayPause }) => {
         </PrevArrowIcon>
       </PrevBotton>
       {/*  */}
-      <PlayBotton withoutShadow onClick={onPlayPause}>
+      <PlayBotton disabled={!readyForPlay} withoutShadow onClick={onPlayPause}>
         <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
       </PlayBotton>
       {/*  */}
@@ -46,11 +54,11 @@ const Controls: React.FC<ControlsProps> = ({ isPlay, onPlayPause }) => {
         </SvgIcon>
       </NextBotton>
       {/*  */}
-      <RepeatButton withoutShadow>
+      <LoopButton $loop={isLoop} onClick={onLoop} withoutShadow>
         <SvgIcon>
           <RepeatIcon />
         </SvgIcon>
-      </RepeatButton>
+      </LoopButton>
     </Container>
   )
 }
