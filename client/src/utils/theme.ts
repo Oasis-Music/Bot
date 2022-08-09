@@ -71,4 +71,10 @@ export const GlobalStyles = createGlobalStyle`
   body {
     font-family: Roboto,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
   }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 `
