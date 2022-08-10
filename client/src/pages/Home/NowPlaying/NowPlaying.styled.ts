@@ -1,11 +1,38 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Button from '../../../shared/Button'
+import IconButton from '../../../shared/IconButton'
 import SvgIcon from '../../../shared/SvgIcon'
+
+const buttonsStyles = css`
+  color: #838383;
+  padding: 15px;
+  background: none;
+  box-shadow: none;
+  &:active {
+    color: #bbb;
+  }
+  &:hover:not(:disabled) {
+    background-color: #fff;
+    background-color: transparent;
+  }
+`
 
 export const Container = styled.section`
   display: flex;
-  padding: 15px 13px;
-  margin-bottom: 20px;
+  position: relative;
+  padding: 35px 13px 15px 17px;
+  margin-bottom: 30px;
+  &::after {
+    content: '';
+    position: absolute;
+    width: 60%;
+    height: 2px;
+    border-radius: 2px;
+    background: #808080;
+    bottom: -10px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 `
 
 export const ImageWrapper = styled.div`
@@ -59,4 +86,35 @@ export const AddBotton = styled(Button)`
 export const AddIcon = styled(SvgIcon)`
   font-size: 12px;
   margin-right: 5px;
+`
+
+export const ControlsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+`
+
+export const DeleteBotton = styled(IconButton)`
+  && {
+    ${buttonsStyles}
+    padding: 0;
+    font-size: 14px;
+  }
+`
+
+export const DownloadBotton = styled(IconButton)`
+  && {
+    ${buttonsStyles}
+    padding-top: 16px;
+    font-size: 19px;
+  }
+`
+
+export const CopyInfoBotton = styled(IconButton)`
+  && {
+    ${buttonsStyles}
+    padding: 0;
+    padding-top: 1px;
+    font-size: 15px;
+  }
 `

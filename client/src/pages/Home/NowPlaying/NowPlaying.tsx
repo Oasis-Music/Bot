@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
+import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
+import { ReactComponent as DownloadIcon } from '../../../assets/svg/cloud-download.svg'
+import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
 import {
   Container,
   ImageWrapper,
@@ -8,8 +11,13 @@ import {
   TrackTitle,
   AuthorTitle,
   AddBotton,
-  AddIcon
+  AddIcon,
+  DeleteBotton,
+  DownloadBotton,
+  ControlsWrapper,
+  CopyInfoBotton
 } from './NowPlaying.styled'
+import SvgIcon from '../../../shared/SvgIcon'
 
 const TEMP = {
   title: 'The Scientist',
@@ -18,6 +26,12 @@ const TEMP = {
 }
 
 const NowPlaying: React.FC = () => {
+  const [isAdded, setIsAdded] = useState<boolean>(false)
+
+  const addButtonHandler = () => {
+    setIsAdded(true)
+  }
+
   return (
     <Container>
       <ImageWrapper>
@@ -26,17 +40,38 @@ const NowPlaying: React.FC = () => {
       <Details>
         <TrackTitle>{TEMP.title}</TrackTitle>
         <AuthorTitle>{TEMP.title}</AuthorTitle>
-        <AddBotton
-          fullWidth
-          disableShadow
-          startIcon={
-            <AddIcon>
-              <PlusIcon />
-            </AddIcon>
-          }
-        >
-          Add Song
-        </AddBotton>
+        {isAdded ? (
+          <ControlsWrapper>
+            <DeleteBotton>
+              <SvgIcon>
+                <TrashIcon />
+              </SvgIcon>
+            </DeleteBotton>
+            <DownloadBotton>
+              <SvgIcon>
+                <DownloadIcon />
+              </SvgIcon>
+            </DownloadBotton>
+            <CopyInfoBotton>
+              <SvgIcon>
+                <CopyIcon />
+              </SvgIcon>
+            </CopyInfoBotton>
+          </ControlsWrapper>
+        ) : (
+          <AddBotton
+            fullWidth
+            disableShadow
+            onClick={addButtonHandler}
+            startIcon={
+              <AddIcon>
+                <PlusIcon />
+              </AddIcon>
+            }
+          >
+            Добавить
+          </AddBotton>
+        )}
       </Details>
     </Container>
   )
