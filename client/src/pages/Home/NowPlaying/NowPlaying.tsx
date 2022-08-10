@@ -39,7 +39,7 @@ const NowPlaying: React.FC = () => {
       </ImageWrapper>
       <Details>
         <TrackTitle>{TEMP.title}</TrackTitle>
-        <AuthorTitle>{TEMP.title}</AuthorTitle>
+        <AuthorTitle>{TEMP.author}</AuthorTitle>
         {isAdded ? (
           <ControlsWrapper>
             <DeleteBotton>

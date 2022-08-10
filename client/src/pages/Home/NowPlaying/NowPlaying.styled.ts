@@ -39,8 +39,9 @@ export const ImageWrapper = styled.div`
   width: 150px;
   margin-right: 17px;
   border-radius: 15px;
-  box-shadow: 0 0 0px rgb(255 255 255 / 60%), 0 0 6px rgb(255 255 255 / 45%),
-    0 0 10px rgb(255 255 255 / 25%), 0 0 30px rgb(255 255 255 / 10%);
+  border: 1px solid #fff;
+  /* box-shadow: 0 0 0px rgb(255 255 255 / 60%), 0 0 6px rgb(255 255 255 / 45%),
+    0 0 10px rgb(255 255 255 / 25%), 0 0 30px rgb(255 255 255 / 10%); */
 `
 
 export const Details = styled.div`
