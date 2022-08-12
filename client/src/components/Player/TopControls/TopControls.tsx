@@ -7,12 +7,13 @@ import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.
 
 interface TopControlsProps {
   id: string
+  onClose(): void
 }
 
-const TopControls: React.FC<TopControlsProps> = () => {
+const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
   return (
     <Container>
-      <MinimizeButton withoutShadow>
+      <MinimizeButton withoutShadow onClick={onClose}>
         <SvgIcon>
           <ArrowIcon />
         </SvgIcon>

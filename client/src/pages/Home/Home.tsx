@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 const List = styled.ul`
   height: 100%;
-  max-height: 460px;
+  max-height: calc(100% - 265px);
   overflow-y: auto;
 `
 

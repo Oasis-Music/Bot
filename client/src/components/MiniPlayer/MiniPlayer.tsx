@@ -6,12 +6,22 @@ import { ReactComponent as PlayIcon } from '../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../assets/svg/pause.svg'
 import SvgIcon from '../../shared/SvgIcon'
 
+interface MiniPlayerProps {
+  onPlayerOpen(): void
+}
+
 const Container = styled.div`
   display: flex;
+  z-index: 100;
   background-color: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 5px 20px 5px 7px;
+`
+
+const InnerContainer = styled.div`
+  display: flex;
+  width: 100%;
 `
 
 const ImageWrapper = styled.div`
@@ -44,6 +54,7 @@ const PlayBottonWrapper = styled.div`
   align-content: center;
   align-self: center;
   margin-left: auto;
+  padding-left: 15px;
 `
 
 const PlayBotton = styled(IconButton)`
@@ -62,7 +73,7 @@ const PlayBotton = styled(IconButton)`
   }
 `
 
-const MiniPlayer: React.FC = () => {
+const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
   const [isPlay, setIsPlay] = useState<boolean>(true)
 
   const playButtonHandler = () => {
@@ -71,13 +82,15 @@ const MiniPlayer: React.FC = () => {
 
   return (
     <Container>
-      <ImageWrapper>
-        <ImagePlaceholder src={TEMP_DATA.coverImageURL} plain altText={TEMP_DATA.title} />
-      </ImageWrapper>
-      <InfoBox>
-        <Title>{TEMP_DATA.title}</Title>
-        <Author>{TEMP_DATA.author}</Author>
-      </InfoBox>
+      <InnerContainer onClick={onPlayerOpen}>
+        <ImageWrapper>
+          <ImagePlaceholder src={TEMP_DATA.coverImageURL} plain altText={TEMP_DATA.title} />
+        </ImageWrapper>
+        <InfoBox>
+          <Title>{TEMP_DATA.title}</Title>
+          <Author>{TEMP_DATA.author}</Author>
+        </InfoBox>
+      </InnerContainer>
       <PlayBottonWrapper>
         <PlayBotton onClick={playButtonHandler}>
           <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
