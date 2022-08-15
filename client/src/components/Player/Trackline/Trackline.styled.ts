@@ -4,7 +4,7 @@ export const Container = styled.div``
 
 export const WaveWrapper = styled.div`
   margin: 13px 0;
-  margin-top: 60px;
+  margin-top: 35px;
   padding: 0 15px;
 `
 
