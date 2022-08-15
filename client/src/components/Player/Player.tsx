@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import localTrack from './track.mp3'
+import localTrack from '../../assets/music/track.mp3'
 import TopControls from './TopControls/TopControls'
 import Details from './Details/Details'
 import Trackline from './Trackline/Trackline'
