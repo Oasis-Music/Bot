@@ -40,5 +40,29 @@ export default [
     title: 'Adventur Of A Lifetime',
     author: 'North music',
     duration: 201
+  },
+  {
+    id: 'x8',
+    title: 'Ekon Tui Kita',
+    author: 'Andu Bandu',
+    duration: 200
+  },
+  {
+    id: 'x9',
+    title: 'Bandana',
+    author: 'Big Baby Tape',
+    duration: 159
+  },
+  {
+    id: 'x10',
+    title: 'Baby mama',
+    author: 'Skryptonite',
+    duration: 172
+  },
+  {
+    id: 'x11',
+    title: 'Freelove - Flood Mix',
+    author: 'Depeche Mode',
+    duration: 210
   }
 ]

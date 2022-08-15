@@ -1,13 +1,34 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import localTrack from './track.mp3'
 import TopControls from './TopControls/TopControls'
 import Details from './Details/Details'
 import Trackline from './Trackline/Trackline'
 
-const Container = styled.div`
-  height: 100vh;
+interface PlayerProps {
+  isOpen: boolean
+  onClose(): void
+}
+
+interface containerStylesProps {
+  $open: boolean
+}
+
+const Container = styled.div<containerStylesProps>`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
+  height: 100%;
   background-color: #101318;
+  z-index: 999;
+  transform: translateY(100%);
+  transition: transform 0.3s;
+  ${({ $open }) =>
+    $open &&
+    css`
+      transform: translateY(0);
+    `}
 `
 
 const TEMP_DATA = {
@@ -18,10 +39,10 @@ const TEMP_DATA = {
   soundtrackURL: localTrack
 }
 
-const Player: React.FC = () => {
+const Player: React.FC<PlayerProps> = ({ isOpen, onClose }) => {
   return (
-    <Container>
-      <TopControls id={TEMP_DATA.id} />
+    <Container $open={isOpen}>
+      <TopControls id={TEMP_DATA.id} onClose={onClose} />
       <Details
         title={TEMP_DATA.title}
         author={TEMP_DATA.author}

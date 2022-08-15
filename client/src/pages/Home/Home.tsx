@@ -8,7 +8,11 @@ const Container = styled.div`
   height: 100vh; // TODO: dev temp
   background-color: #101318;
 `
-const List = styled.ul``
+const List = styled.ul`
+  height: 100%;
+  max-height: calc(100% - 265px);
+  overflow-y: auto;
+`
 
 const coverImageURL = 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'
 
