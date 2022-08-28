@@ -10,8 +10,11 @@ const Container = styled.div`
 `
 const List = styled.ul`
   height: 100%;
-  max-height: calc(100% - 265px);
+  max-height: 50vh;
   overflow-y: auto;
+  @media ${({ theme }) => theme.media.hxs} {
+    max-height: calc(100% - 265px);
+  }
 `
 
 const coverImageURL = 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'

@@ -33,7 +33,7 @@ const NowPlaying: React.FC = () => {
   }
 
   return (
-    <Container>
+    <Container $isAdded={isAdded}>
       <ImageWrapper>
         <ImagePlaceholder src={TEMP.coverImage} altText={TEMP.title} />
       </ImageWrapper>
