@@ -10,8 +10,21 @@ const Container = styled.div`
 `
 const List = styled.ul`
   height: 100%;
-  max-height: calc(100% - 265px);
+  max-height: 50vh;
   overflow-y: auto;
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background-color: #9f9f9f !important;
+  }
+  @media ${({ theme }) => theme.media.hxs} {
+    max-height: calc(100% - 265px);
+  }
 `
 
 const coverImageURL = 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'

@@ -6,6 +6,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 const Home = lazy(() => import('./pages/Home'))
 const UI = lazy(() => import('./pages/UI'))
+const Test = lazy(() => import('./pages/Test'))
 
 const App: React.FC = () => {
   return (
@@ -15,6 +16,7 @@ const App: React.FC = () => {
           <Route element={<PrivateRoute />}>
             <Route index element={<Home />} />
             <Route path="/ui" element={<UI />} />
+            <Route path="/test" element={<Test />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" />} />

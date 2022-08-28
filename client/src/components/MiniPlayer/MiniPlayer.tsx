@@ -26,12 +26,20 @@ const InnerContainer = styled.div`
 
 const ImageWrapper = styled.div`
   margin-right: 7px;
-  width: 75px;
-  height: 75px;
+  width: 10vh;
+  @media ${({ theme }) => theme.media.hxs} {
+    width: 75px;
+    height: 75px;
+  }
 `
 
 const InfoBox = styled.div`
-  padding-top: 7px;
+  font-size: 2.7vh;
+  padding-top: 0.7vh;
+  @media ${({ theme }) => theme.media.hxs} {
+    padding-top: 7px;
+    font-size: 16px;
+  }
 `
 
 const Title = styled.h3`
@@ -61,14 +69,18 @@ const PlayBotton = styled(IconButton)`
   && {
     color: #fff;
     background-color: #1b1818;
-    font-size: 17px;
-    padding: 15px;
+    font-size: 2.7vh;
+    padding: 2vh;
     box-shadow: none;
     &:disabled {
       box-shadow: none;
     }
     &:hover:not(:disabled) {
       background-color: #1b1818;
+    }
+    @media ${({ theme }) => theme.media.hxs} {
+      font-size: 17px;
+      padding: 15px;
     }
   }
 `
