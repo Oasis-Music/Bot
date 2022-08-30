@@ -9,8 +9,11 @@ export const Container = styled.div`
 
 export const Title = styled.span`
   color: #cbcbcb;
-  font-size: 18px;
+  font-size: 3.5vh;
   font-weight: 500;
+  @media ${({ theme }) => theme.media.hxs} {
+    font-size: 18px;
+  }
 `
 
 const controlButtonStyles = css`

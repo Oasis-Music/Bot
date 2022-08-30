@@ -3,9 +3,13 @@ import styled from 'styled-components'
 export const Container = styled.div``
 
 export const WaveWrapper = styled.div`
-  margin: 13px 0;
-  margin-top: 35px;
+  margin: 1vh 0;
+  margin-top: 4vh;
   padding: 0 15px;
+  @media ${({ theme }) => theme.media.hxs} {
+    margin: 13px 0;
+    margin-top: 35px;
+  }
 `
 
 export const TimeBox = styled.div`
