@@ -1,6 +1,10 @@
 type Soundtrack {
   id: ID!
   title: String!
+  author: String!
+  duration: Int!
+  coverImage: String!
+  fileURL: String!
   createdAt: Date!
 }
 

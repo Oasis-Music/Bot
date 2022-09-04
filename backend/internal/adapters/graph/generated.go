@@ -51,9 +51,13 @@ type ComplexityRoot struct {
 	}
 
 	Soundtrack struct {
-		CreatedAt func(childComplexity int) int
-		ID        func(childComplexity int) int
-		Title     func(childComplexity int) int
+		Author     func(childComplexity int) int
+		CoverImage func(childComplexity int) int
+		CreatedAt  func(childComplexity int) int
+		Duration   func(childComplexity int) int
+		FileURL    func(childComplexity int) int
+		ID         func(childComplexity int) int
+		Title      func(childComplexity int) int
 	}
 }
 
@@ -95,12 +99,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Soundtrack(childComplexity, args["id"].(string)), true
 
+	case "Soundtrack.author":
+		if e.complexity.Soundtrack.Author == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.Author(childComplexity), true
+
+	case "Soundtrack.coverImage":
+		if e.complexity.Soundtrack.CoverImage == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.CoverImage(childComplexity), true
+
 	case "Soundtrack.createdAt":
 		if e.complexity.Soundtrack.CreatedAt == nil {
 			break
 		}
 
 		return e.complexity.Soundtrack.CreatedAt(childComplexity), true
+
+	case "Soundtrack.duration":
+		if e.complexity.Soundtrack.Duration == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.Duration(childComplexity), true
+
+	case "Soundtrack.fileURL":
+		if e.complexity.Soundtrack.FileURL == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.FileURL(childComplexity), true
 
 	case "Soundtrack.id":
 		if e.complexity.Soundtrack.ID == nil {
@@ -180,6 +212,10 @@ type NotFound {
 	{Name: "../../../schemas/soundtrack.graphql", Input: `type Soundtrack {
   id: ID!
   title: String!
+  author: String!
+  duration: Int!
+  coverImage: String!
+  fileURL: String!
   createdAt: Date!
 }
 
@@ -565,6 +601,182 @@ func (ec *executionContext) _Soundtrack_title(ctx context.Context, field graphql
 }
 
 func (ec *executionContext) fieldContext_Soundtrack_title(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Soundtrack_author(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_author(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Author, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_author(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Soundtrack_duration(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_duration(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Duration, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_duration(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Soundtrack_coverImage(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_coverImage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CoverImage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_coverImage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Soundtrack_fileURL(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_fileURL(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.FileURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_fileURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Soundtrack",
 		Field:      field,
@@ -2539,6 +2751,34 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "author":
+
+			out.Values[i] = ec._Soundtrack_author(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "duration":
+
+			out.Values[i] = ec._Soundtrack_duration(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "coverImage":
+
+			out.Values[i] = ec._Soundtrack_coverImage(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "fileURL":
+
+			out.Values[i] = ec._Soundtrack_fileURL(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createdAt":
 
 			out.Values[i] = ec._Soundtrack_createdAt(ctx, field, obj)
@@ -2912,6 +3152,21 @@ func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface
 
 func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalID(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	res := graphql.MarshalInt(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
