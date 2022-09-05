@@ -58,8 +58,12 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
   coverImage,
   isPlaying
 }) => {
+  const trackClickHandler = () => {
+    console.log('open: ', id)
+  }
+
   return (
-    <Container>
+    <Container onClick={trackClickHandler}>
       <ImageWrapper>
         <ImagePlaceholder plain src={coverImage} altText={title} />
       </ImageWrapper>
