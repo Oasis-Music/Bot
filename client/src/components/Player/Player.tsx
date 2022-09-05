@@ -32,14 +32,6 @@ const Container = styled.div<containerStylesProps>`
     `}
 `
 
-const TEMP_DATA = {
-  id: 's001',
-  title: 'Cristal & МОЁТ',
-  author: 'MORGENSHTERN',
-  coverImageURL: 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg',
-  soundtrackURL: 'http://localhost:5000/audio/99problem.mp3'
-}
-
 const Player: React.FC<PlayerProps> = ({ isOpen, onClose }) => {
   const track = useReactiveVar(currentTrackVar)
 
