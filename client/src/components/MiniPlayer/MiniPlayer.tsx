@@ -5,6 +5,8 @@ import ImagePlaceholder from '../../shared/ImagePlaceholder'
 import { ReactComponent as PlayIcon } from '../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../assets/svg/pause.svg'
 import SvgIcon from '../../shared/SvgIcon'
+import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '../../apollo/cache/variables'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
@@ -51,13 +53,6 @@ const Author = styled.p`
   font-weight: 400;
 `
 
-const TEMP_DATA = {
-  id: 's001',
-  title: 'The Scientist',
-  author: 'Cold Play',
-  coverImageURL: 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'
-}
-
 const PlayBottonWrapper = styled.div`
   align-content: center;
   align-self: center;
@@ -88,6 +83,8 @@ const PlayBotton = styled(IconButton)`
 const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
   const [isPlay, setIsPlay] = useState<boolean>(true)
 
+  const track = useReactiveVar(currentTrackVar)
+
   const playButtonHandler = () => {
     setIsPlay(!isPlay)
   }
@@ -96,11 +93,11 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
     <Container>
       <InnerContainer onClick={onPlayerOpen}>
         <ImageWrapper>
-          <ImagePlaceholder src={TEMP_DATA.coverImageURL} plain altText={TEMP_DATA.title} />
+          <ImagePlaceholder src={track.coverImage} plain altText={track.title} />
         </ImageWrapper>
         <InfoBox>
-          <Title>{TEMP_DATA.title}</Title>
-          <Author>{TEMP_DATA.author}</Author>
+          <Title>{track.title}</Title>
+          <Author>{track.author}</Author>
         </InfoBox>
       </InnerContainer>
       <PlayBottonWrapper>

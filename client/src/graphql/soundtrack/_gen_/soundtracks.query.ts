@@ -16,6 +16,7 @@ export type AllSoundtracksQuery = {
       author: string
       duration: number
       coverImage: string
+      fileURL: string
     }>
   }
 }
@@ -35,6 +36,7 @@ export const AllSoundtracksDocument = gql`
         author
         duration
         coverImage
+        fileURL
       }
     }
   }

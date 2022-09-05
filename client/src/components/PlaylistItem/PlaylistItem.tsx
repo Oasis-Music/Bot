@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import ImagePlaceholder from '../../shared/ImagePlaceholder'
 import ScaleLoader from '../../shared/Loader'
 import { timeFormater } from '../../utils/helpers'
+import { SoundtrackMutations } from '../../apollo/cache/mutations'
 
 interface PlaylistItemProps {
   id: string
@@ -10,6 +11,7 @@ interface PlaylistItemProps {
   author: string
   duration: number
   coverImage: string
+  fileURL: string
   isPlaying: boolean
 }
 
@@ -56,10 +58,19 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
   author,
   duration,
   coverImage,
+  fileURL,
   isPlaying
 }) => {
   const trackClickHandler = () => {
-    console.log('open: ', id)
+    SoundtrackMutations.setCurrentTrack({
+      id,
+      title,
+      author,
+      duration,
+      coverImage,
+      fileURL,
+      isPlaying
+    })
   }
 
   return (

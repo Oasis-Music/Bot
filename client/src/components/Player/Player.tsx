@@ -1,9 +1,10 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import localTrack from '../../assets/music/track.mp3'
 import TopControls from './TopControls/TopControls'
 import Details from './Details/Details'
 import Trackline from './Trackline/Trackline'
+import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '../../apollo/cache/variables'
 
 interface PlayerProps {
   isOpen: boolean
@@ -36,19 +37,17 @@ const TEMP_DATA = {
   title: 'Cristal & МОЁТ',
   author: 'MORGENSHTERN',
   coverImageURL: 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg',
-  soundtrackURL: localTrack
+  soundtrackURL: 'http://localhost:5000/audio/99problem.mp3'
 }
 
 const Player: React.FC<PlayerProps> = ({ isOpen, onClose }) => {
+  const track = useReactiveVar(currentTrackVar)
+
   return (
     <Container $open={isOpen}>
-      <TopControls id={TEMP_DATA.id} onClose={onClose} />
-      <Details
-        title={TEMP_DATA.title}
-        author={TEMP_DATA.author}
-        coverImageURL={TEMP_DATA.coverImageURL}
-      />
-      <Trackline soundtrack={TEMP_DATA.soundtrackURL} />
+      <TopControls id={track.id} onClose={onClose} />
+      <Details title={track.title} author={track.author} coverImageURL={track.coverImage} />
+      <Trackline soundtrack={track.fileURL} />
     </Container>
   )
 }

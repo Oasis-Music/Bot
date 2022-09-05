@@ -2,12 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
-import { useQuery } from '@apollo/client'
+import { useQuery, useReactiveVar } from '@apollo/client'
 import {
   AllSoundtracksQuery,
   AllSoundtracksVariables,
   AllSoundtracksDocument
 } from '../../graphql/soundtrack/_gen_/soundtracks.query'
+import { currentTrackIdVar } from '../../apollo/cache/variables'
 
 const Container = styled.div`
   height: 100vh; // TODO: dev temp
@@ -33,7 +34,7 @@ const List = styled.ul`
 `
 
 const Home: React.FC = () => {
-  const nowPlayingID = '1'
+  const nowPlayingID = useReactiveVar<string>(currentTrackIdVar)
 
   const { data, loading } = useQuery<AllSoundtracksQuery, AllSoundtracksVariables>(
     AllSoundtracksDocument,
@@ -43,8 +44,6 @@ const Home: React.FC = () => {
       }
     }
   )
-
-  console.log(data)
 
   if (loading) {
     return <div>Loading</div>
@@ -62,6 +61,7 @@ const Home: React.FC = () => {
             author={track.author}
             duration={track.duration}
             coverImage={track.coverImage}
+            fileURL={track.fileURL}
             isPlaying={nowPlayingID === track.id}
           />
         ))}
