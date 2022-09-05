@@ -5,9 +5,19 @@ import (
 	"oasis/backend/internal/adapters/db"
 )
 
-const getTrackQuery = "SELECT id, title, author, duration, coverImage, fileURL, created_at FROM soundtracks WHERE id=$1"
+const getTrackQuery = `
+SELECT id,
+	title,
+	author,
+	duration,
+	coverImage,
+	fileURL,
+	created_at
+FROM soundtracks
+WHERE id = $1;
+`
 
-func (s *soundtrackStorage) GetTrack(ctx context.Context, id string) (db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error) {
 
 	row := s.database.QueryRow(context.Background(), getTrackQuery, id)
 

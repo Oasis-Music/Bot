@@ -2,6 +2,7 @@ package soundtrack
 
 import (
 	"context"
+	"errors"
 	"log"
 	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/adapters/graph/models"
@@ -27,11 +28,16 @@ func NewSoundtrackService(storage soundtrack.SoundtrackStorage) SoundtrackServic
 
 func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
 
-	soundtrack, err := s.storage.GetTrack(ctx, id)
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return nil, errors.New("invalid ID")
+	}
+
+	soundtrack, err := s.storage.GetTrack(ctx, int32(i))
 
 	if err == pgx.ErrNoRows {
 		return models.NotFound{
-			Message: "not found",
+			Message: "soundtrack not found",
 		}, nil
 	} else if err != nil {
 		return nil, err
@@ -47,12 +53,18 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 		log.Fatal("AUDIO_PATH is not specified")
 	}
 
+	var coverImg string
+
+	if soundtrack.CoverImage.Valid {
+		coverImg = coverPath + soundtrack.CoverImage.String
+	}
+
 	return &models.Soundtrack{
 		ID:         strconv.Itoa(int(soundtrack.ID)),
 		Title:      soundtrack.Title,
 		Author:     soundtrack.Author,
-		Duration:   soundtrack.Duration,
-		CoverImage: coverPath + soundtrack.CoverImage,
+		Duration:   int(soundtrack.Duration),
+		CoverImage: coverImg,
 		FileURL:    audioPath + soundtrack.FileURL,
 		CreatedAt:  soundtrack.CreatedAt.UTC().String(),
 	}, nil

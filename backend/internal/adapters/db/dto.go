@@ -1,13 +1,16 @@
 package db
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type SoundtrackDTO struct {
-	ID         int64
+	ID         int32
 	Title      string
 	Author     string
-	Duration   int
-	CoverImage string
+	Duration   int16
+	CoverImage sql.NullString
 	FileURL    string
 	CreatedAt  time.Time
 }

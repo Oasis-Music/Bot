@@ -12,7 +12,7 @@ type soundtrackStorage struct {
 }
 
 type SoundtrackStorage interface {
-	GetTrack(ctx context.Context, id string) (db.SoundtrackDTO, error)
+	GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
 }
 
 func NewSoundtrackStorage(db *pgxpool.Pool) SoundtrackStorage {
