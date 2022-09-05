@@ -12,3 +12,8 @@ import (
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
 	return r.SoundtrackService.GetTrack(ctx, id)
 }
+
+// Soundtracks is the resolver for the soundtracks field.
+func (r *queryResolver) Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error) {
+	return r.SoundtrackService.GetSoundtracks(ctx, filter)
+}

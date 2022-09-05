@@ -23,3 +23,11 @@ type Soundtrack struct {
 }
 
 func (Soundtrack) IsSoundtrackResult() {}
+
+type SoundtracksFilter struct {
+	Page int `json:"page"`
+}
+
+type SoundtracksResponse struct {
+	Soundtracks []Soundtrack `json:"soundtracks"`
+}

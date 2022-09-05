@@ -12,4 +12,13 @@ union SoundtrackResult = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult
+  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+}
+
+input SoundtracksFilter {
+  page: Int!
+}
+
+type SoundtracksResponse {
+  soundtracks: [Soundtrack!]!
 }
