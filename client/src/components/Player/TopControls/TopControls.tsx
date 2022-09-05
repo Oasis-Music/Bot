@@ -18,7 +18,7 @@ const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
           <ArrowIcon />
         </SvgIcon>
       </MinimizeButton>
-      <Title>Now Playing</Title>
+      <Title>Сейчас играет</Title>
       <PlaylistButton withoutShadow>
         <SvgIcon>
           <MusicListIcon />

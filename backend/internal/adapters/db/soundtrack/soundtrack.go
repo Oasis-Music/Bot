@@ -3,6 +3,7 @@ package soundtrack
 import (
 	"context"
 	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/adapters/graph/models"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -12,7 +13,8 @@ type soundtrackStorage struct {
 }
 
 type SoundtrackStorage interface {
-	GetTrack(ctx context.Context, id string) (db.SoundtrackDTO, error)
+	GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
+	GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) ([]db.SoundtrackDTO, error)
 }
 
 func NewSoundtrackStorage(db *pgxpool.Pool) SoundtrackStorage {

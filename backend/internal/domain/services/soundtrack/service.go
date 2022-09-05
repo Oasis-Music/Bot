@@ -4,13 +4,11 @@ import (
 	"context"
 	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/adapters/graph/models"
-	"strconv"
-
-	"github.com/jackc/pgx/v4"
 )
 
 type SoundtrackService interface {
 	GetTrack(ctx context.Context, id string) (models.SoundtrackResult, error)
+	GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
 }
 
 type soundtrackService struct {
@@ -21,23 +19,4 @@ func NewSoundtrackService(storage soundtrack.SoundtrackStorage) SoundtrackServic
 	return &soundtrackService{
 		storage: storage,
 	}
-}
-
-func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
-
-	soundtrack, err := s.storage.GetTrack(ctx, id)
-
-	if err == pgx.ErrNoRows {
-		return models.NotFound{
-			Message: "not found",
-		}, nil
-	} else if err != nil {
-		return nil, err
-	}
-
-	return &models.Soundtrack{
-		ID:        strconv.Itoa(int(soundtrack.ID)),
-		Title:     soundtrack.Title,
-		CreatedAt: soundtrack.CreatedAt.UTC().String(),
-	}, nil
 }

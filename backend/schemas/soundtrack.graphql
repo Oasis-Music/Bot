@@ -1,6 +1,10 @@
 type Soundtrack {
   id: ID!
   title: String!
+  author: String!
+  duration: Int!
+  coverImage: String!
+  fileURL: String!
   createdAt: Date!
 }
 
@@ -8,4 +12,13 @@ union SoundtrackResult = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult
+  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+}
+
+input SoundtracksFilter {
+  page: Int!
+}
+
+type SoundtracksResponse {
+  soundtracks: [Soundtrack!]!
 }

@@ -13,9 +13,21 @@ type NotFound struct {
 func (NotFound) IsSoundtrackResult() {}
 
 type Soundtrack struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	CreatedAt string `json:"createdAt"`
+	ID         string `json:"id"`
+	Title      string `json:"title"`
+	Author     string `json:"author"`
+	Duration   int    `json:"duration"`
+	CoverImage string `json:"coverImage"`
+	FileURL    string `json:"fileURL"`
+	CreatedAt  string `json:"createdAt"`
 }
 
 func (Soundtrack) IsSoundtrackResult() {}
+
+type SoundtracksFilter struct {
+	Page int `json:"page"`
+}
+
+type SoundtracksResponse struct {
+	Soundtracks []Soundtrack `json:"soundtracks"`
+}

@@ -1,0 +1,17 @@
+query getTrackByID($id: ID!) {
+  soundtrack(id: $id) {
+    __typename
+    ... on Soundtrack {
+      id
+      title
+      author
+      duration
+      coverImage
+      fileURL
+      createdAt
+    }
+    ... on NotFound {
+      message
+    }
+  }
+}

@@ -2,7 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
-import TEMP_DATA from './temp'
+import { useQuery, useReactiveVar } from '@apollo/client'
+import {
+  AllSoundtracksQuery,
+  AllSoundtracksVariables,
+  AllSoundtracksDocument
+} from '../../graphql/soundtrack/_gen_/soundtracks.query'
+import { currentTrackIdVar } from '../../apollo/cache/variables'
 
 const Container = styled.div`
   height: 100vh; // TODO: dev temp
@@ -27,23 +33,35 @@ const List = styled.ul`
   }
 `
 
-const coverImageURL = 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'
-
 const Home: React.FC = () => {
-  const nowPlayingID = 'x5'
+  const nowPlayingID = useReactiveVar<string>(currentTrackIdVar)
+
+  const { data, loading } = useQuery<AllSoundtracksQuery, AllSoundtracksVariables>(
+    AllSoundtracksDocument,
+    {
+      variables: {
+        page: 1
+      }
+    }
+  )
+
+  if (loading) {
+    return <div>Loading</div>
+  }
 
   return (
     <Container>
       <NowPlaying />
       <List>
-        {TEMP_DATA.map((track) => (
+        {data?.soundtracks.soundtracks.map((track) => (
           <PlaylistItem
             key={track.id}
             id={track.id}
             title={track.title}
             author={track.author}
             duration={track.duration}
-            coverImage={coverImageURL}
+            coverImage={track.coverImage}
+            fileURL={track.fileURL}
             isPlaying={nowPlayingID === track.id}
           />
         ))}

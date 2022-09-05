@@ -18,15 +18,12 @@ import {
   CopyInfoBotton
 } from './NowPlaying.styled'
 import SvgIcon from '../../../shared/SvgIcon'
-
-const TEMP = {
-  title: 'The Scientist',
-  author: 'Cold play',
-  coverImage: 'https://dl.muzonovs.ru/files/image/2020/12/morgenshtern-kristal-moyot.jpg'
-}
+import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '../../../apollo/cache/variables'
 
 const NowPlaying: React.FC = () => {
   const [isAdded, setIsAdded] = useState<boolean>(false)
+  const track = useReactiveVar(currentTrackVar)
 
   const addButtonHandler = () => {
     setIsAdded(true)
@@ -35,11 +32,11 @@ const NowPlaying: React.FC = () => {
   return (
     <Container $isAdded={isAdded}>
       <ImageWrapper>
-        <ImagePlaceholder src={TEMP.coverImage} altText={TEMP.title} />
+        <ImagePlaceholder src={track.coverImage} altText={track.title} />
       </ImageWrapper>
       <Details>
-        <TrackTitle>{TEMP.title}</TrackTitle>
-        <AuthorTitle>{TEMP.author}</AuthorTitle>
+        <TrackTitle>{track.title}</TrackTitle>
+        <AuthorTitle>{track.author}</AuthorTitle>
         {isAdded ? (
           <ControlsWrapper>
             <DeleteBotton>

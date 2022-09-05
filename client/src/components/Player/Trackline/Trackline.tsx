@@ -40,6 +40,7 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
     obj.on('ready', function () {
       setDuration(timeFormater(obj.getDuration()))
       setReadyForPlay(true)
+      obj.play()
     })
 
     obj.on('audioprocess', function () {
@@ -51,7 +52,7 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
     return () => {
       obj.destroy()
     }
-  }, [])
+  }, [soundtrack])
 
   const buttonHandler = () => {
     setPlay(!play)

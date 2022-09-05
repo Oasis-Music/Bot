@@ -1,0 +1,12 @@
+query allSoundtracks($page: Int!) {
+  soundtracks(filter: { page: $page }) {
+    soundtracks {
+      id
+      title
+      author
+      duration
+      coverImage
+      fileURL
+    }
+  }
+}

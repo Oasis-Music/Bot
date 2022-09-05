@@ -5,14 +5,30 @@ import (
 	"oasis/backend/internal/adapters/db"
 )
 
-func (s *soundtrackStorage) GetTrack(ctx context.Context, id string) (db.SoundtrackDTO, error) {
+const GET_SOUNDTRACK_QUERY = `
+SELECT id,
+	title,
+	author,
+	duration,
+	coverImage,
+	fileURL,
+	created_at
+FROM soundtracks
+WHERE id = $1;
+`
 
-	row := s.database.QueryRow(context.Background(), "SELECT id, title, created_at FROM soundtracks where id=$1", id)
+func (s *soundtrackStorage) GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error) {
+
+	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id)
 
 	var dto db.SoundtrackDTO
 	err := row.Scan(
 		&dto.ID,
 		&dto.Title,
+		&dto.Author,
+		&dto.Duration,
+		&dto.CoverImage,
+		&dto.FileURL,
 		&dto.CreatedAt,
 	)
 
