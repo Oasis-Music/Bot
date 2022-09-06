@@ -12,5 +12,6 @@ interface currentTrack {
 
 export const currentTrackVar = makeVar<currentTrack>({} as currentTrack)
 export const currentTrackIdVar = makeVar<string>('')
+export const isPlayingVar = makeVar<boolean>(false)
 
 export type { currentTrack }
