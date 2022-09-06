@@ -11,12 +11,16 @@ import {
 import { currentTrackIdVar } from '../../apollo/cache/variables'
 
 const Container = styled.div`
-  height: 100vh; // TODO: dev temp
+  height: 100vh;
   background-color: #101318;
 `
-const List = styled.ul`
-  height: 100%;
-  max-height: 50vh;
+
+interface listStyleProps {
+  $isPlay: boolean
+}
+
+const List = styled.ul<listStyleProps>`
+  height: ${({ $isPlay }) => ($isPlay ? 'calc(60vh - 52px)' : '60vh')};
   overflow-y: auto;
   &::-webkit-scrollbar-track {
     background-color: transparent;
@@ -52,7 +56,7 @@ const Home: React.FC = () => {
   return (
     <Container>
       <NowPlaying />
-      <List>
+      <List $isPlay={!!nowPlayingID}>
         {data?.soundtracks.soundtracks.map((track) => (
           <PlaylistItem
             key={track.id}

@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import IconButton from '../../shared/IconButton'
 
 export const Container = styled.nav`
+  z-index: 400;
+  position: relative;
   background-color: #070c13;
   display: flex;
   align-items: center;
