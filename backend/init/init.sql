@@ -95,4 +95,67 @@ VALUES
         251,
         NULL,
         'After_Dark.mp3'
+    ),
+    (
+        'No Type',
+        'Rae Sremmurd',
+        201,
+        'notype7825.jpeg',
+        'rae_sremmurd_no_type.mp3'
+    ),
+    (
+        'I Mean It',
+        'G-Eazy',
+        237,
+        'imeanit.jpeg',
+        'g-eazy-i-mean-it.mp3'
+    ),
+    (
+        'Smells Like Teen Spirit',
+        'Nirvana',
+        301,
+        'nirvana.jpeg',
+        'nirvana_smells_like_teen_spirit.mp3'
+    ),
+    (
+        'Перемен',
+        'КИНО',
+        295,
+        'peremen.jpeg',
+        'kino_peremen.mp3'
+    ),
+    (
+        'Falling',
+        'Trevor Daniel',
+        159,
+        'falling_cover.jpeg',
+        'falling.mp3'
+    ),
+    (
+        'Хипстер',
+        'Би-2',
+        278,
+        'b2.jpeg',
+        'b2_hipster.mp3'
+    ),
+    (
+        'Nothing Else Matters',
+        'Metallica',
+        388,
+        'metallica.jpeg',
+        'metallica_nothing_else_matters.mp3'
+    ),
+    (
+        'Иностранец',
+        'Валерий Меладзе',
+        245,
+        'inostranets.jpeg',
+        'valerijj_meladze_inostranec.mp3'
+    ),
+    (
+        'Капитал',
+        'Ляпис Трубецкой',
+        195,
+        'kapital_cover.jpeg',
+        'kaaaapital.mp3'
     );
