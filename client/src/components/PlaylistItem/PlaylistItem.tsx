@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled from 'styled-components'
 import ImagePlaceholder from '../../shared/ImagePlaceholder'
 import ScaleLoader from '../../shared/Loader'
 import { timeFormater } from '../../utils/helpers'
 import { SoundtrackMutations } from '../../apollo/cache/mutations'
 
-interface PlaylistItemProps {
+interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   id: string
   title: string
   author: string
@@ -52,15 +52,10 @@ const SideBox = styled.div`
   font-weight: 400;
 `
 
-const PlaylistItem: React.FC<PlaylistItemProps> = ({
-  id,
-  title,
-  author,
-  duration,
-  coverImage,
-  fileURL,
-  isPlaying
-}) => {
+const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemProps> = (
+  { id, title, author, duration, coverImage, fileURL, isPlaying },
+  ref
+) => {
   const trackClickHandler = () => {
     SoundtrackMutations.setCurrentTrack({
       id,
@@ -74,7 +69,7 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
   }
 
   return (
-    <Container onClick={trackClickHandler}>
+    <Container ref={ref ? ref : undefined} onClick={trackClickHandler}>
       <ImageWrapper>
         <ImagePlaceholder plain src={coverImage} altText={title} />
       </ImageWrapper>
@@ -89,4 +84,4 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({
   )
 }
 
-export default PlaylistItem
+export default forwardRef(PlaylistItem)

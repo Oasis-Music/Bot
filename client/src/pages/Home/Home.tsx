@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import styled from 'styled-components'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
-import { useQuery, useReactiveVar } from '@apollo/client'
+import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
   AllSoundtracksQuery,
   AllSoundtracksVariables,
@@ -37,19 +37,65 @@ const List = styled.ul<listStyleProps>`
   }
 `
 
+interface Track {
+  id: string
+  title: string
+  author: string
+  duration: number
+  coverImage: string
+  fileURL: string
+}
+
 const Home: React.FC = () => {
   const nowPlayingID = useReactiveVar<string>(currentTrackIdVar)
 
-  const { data, loading } = useQuery<AllSoundtracksQuery, AllSoundtracksVariables>(
+  const ITEMS_PER_PAGE = 15
+
+  const [tracks, setTracks] = useState<Track[]>([])
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false)
+  const [firstLoading, setFirstLoading] = useState<boolean>(true)
+
+  const intersectionObserver = useRef<IntersectionObserver>()
+
+  const [getTracks, { loading }] = useLazyQuery<AllSoundtracksQuery, AllSoundtracksVariables>(
     AllSoundtracksDocument,
     {
       variables: {
-        page: 1
+        page: currentPage
+      },
+      onCompleted: (data) => {
+        setTracks((prev) => [...prev, ...data.soundtracks.soundtracks])
+        setHasNextPage(data.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
       }
     }
   )
 
-  if (loading) {
+  useEffect(() => {
+    getTracks()
+  }, [currentPage])
+
+  const lastTrackRef = useCallback(
+    (track: any) => {
+      if (loading) return
+      if (intersectionObserver.current) intersectionObserver.current.disconnect()
+
+      intersectionObserver.current = new IntersectionObserver((tracks) => {
+        if (tracks[0].isIntersecting && hasNextPage) {
+          console.log('We are near the last post')
+          setFirstLoading(false)
+          setCurrentPage((prev) => prev + 1)
+        }
+      })
+
+      if (track) intersectionObserver.current.observe(track)
+    },
+    [loading, hasNextPage]
+  )
+
+  console.log(tracks)
+
+  if (firstLoading && loading) {
     return <div>Loading</div>
   }
 
@@ -57,18 +103,36 @@ const Home: React.FC = () => {
     <Container>
       <NowPlaying />
       <List $isPlay={!!nowPlayingID}>
-        {data?.soundtracks.soundtracks.map((track) => (
-          <PlaylistItem
-            key={track.id}
-            id={track.id}
-            title={track.title}
-            author={track.author}
-            duration={track.duration}
-            coverImage={track.coverImage}
-            fileURL={track.fileURL}
-            isPlaying={nowPlayingID === track.id}
-          />
-        ))}
+        {tracks.map((track, index) => {
+          if (tracks.length === index + 1) {
+            return (
+              <PlaylistItem
+                ref={lastTrackRef}
+                key={track.id}
+                id={track.id}
+                title={track.title}
+                author={track.author}
+                duration={track.duration}
+                coverImage={track.coverImage}
+                fileURL={track.fileURL}
+                isPlaying={nowPlayingID === track.id}
+              />
+            )
+          }
+
+          return (
+            <PlaylistItem
+              key={track.id}
+              id={track.id}
+              title={track.title}
+              author={track.author}
+              duration={track.duration}
+              coverImage={track.coverImage}
+              fileURL={track.fileURL}
+              isPlaying={nowPlayingID === track.id}
+            />
+          )
+        })}
       </List>
     </Container>
   )
