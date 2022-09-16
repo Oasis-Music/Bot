@@ -2,6 +2,7 @@ package graph
 
 import (
 	"oasis/backend/internal/domain/services/soundtrack"
+	"oasis/backend/internal/domain/services/user"
 )
 
 // This file will not be regenerated automatically.
@@ -10,4 +11,5 @@ import (
 
 type Resolver struct {
 	SoundtrackService soundtrack.SoundtrackService
+	UserService       user.UserService
 }

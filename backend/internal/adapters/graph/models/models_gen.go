@@ -6,11 +6,16 @@ type SoundtrackResult interface {
 	IsSoundtrackResult()
 }
 
+type UserResult interface {
+	IsUserResult()
+}
+
 type NotFound struct {
 	Message string `json:"message"`
 }
 
 func (NotFound) IsSoundtrackResult() {}
+func (NotFound) IsUserResult()       {}
 
 type Soundtrack struct {
 	ID         string `json:"id"`
@@ -32,3 +37,11 @@ type SoundtracksFilter struct {
 type SoundtracksResponse struct {
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
+
+type User struct {
+	ID         string `json:"id"`
+	TelegramID string `json:"telegramId"`
+	CreatedAt  string `json:"createdAt"`
+}
+
+func (User) IsUserResult() {}

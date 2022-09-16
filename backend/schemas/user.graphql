@@ -1,0 +1,11 @@
+type User {
+  id: ID!
+  telegramId: String!
+  createdAt: Date!
+}
+
+union UserResult = User | NotFound
+
+extend type Query {
+  user(id: ID!): UserResult
+}

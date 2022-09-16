@@ -15,3 +15,9 @@ type SoundtrackDTO struct {
 	CreatorID  string
 	CreatedAt  time.Time
 }
+
+type UserDTO struct {
+	ID        int32
+	TgID      string
+	CreatedAt time.Time
+}
