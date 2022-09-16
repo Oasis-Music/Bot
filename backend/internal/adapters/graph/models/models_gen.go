@@ -19,6 +19,7 @@ type Soundtrack struct {
 	Duration   int    `json:"duration"`
 	CoverImage string `json:"coverImage"`
 	FileURL    string `json:"fileURL"`
+	CreatorID  string `json:"creatorId"`
 	CreatedAt  string `json:"createdAt"`
 }
 

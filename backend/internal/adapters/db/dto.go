@@ -12,5 +12,6 @@ type SoundtrackDTO struct {
 	Duration   int16
 	CoverImage sql.NullString
 	FileURL    string
+	CreatorID  string
 	CreatedAt  time.Time
 }

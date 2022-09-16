@@ -5,6 +5,7 @@ type Soundtrack {
   duration: Int!
   coverImage: String!
   fileURL: String!
+  creatorId: String!
   createdAt: Date!
 }
 

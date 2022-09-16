@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS soundtracks;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE soundtracks (
     id SERIAL PRIMARY KEY,
@@ -7,8 +8,16 @@ CREATE TABLE soundtracks (
     duration SMALLINT NOT NULL,
     coverImage TEXT,
     fileURL TEXT NOT NULL,
+    creator_id TEXT NOT NULL DEFAULT 'ozark',
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    tg_id TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
+);
+
 
 INSERT INTO
     soundtracks (
@@ -159,3 +168,6 @@ VALUES
         'kapital_cover.jpeg',
         'kaaaapital.mp3'
     );
+
+
+INSERT INTO users (tg_id) VALUES ('-_-_-_-_-');

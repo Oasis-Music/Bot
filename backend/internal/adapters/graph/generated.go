@@ -56,6 +56,7 @@ type ComplexityRoot struct {
 		Author     func(childComplexity int) int
 		CoverImage func(childComplexity int) int
 		CreatedAt  func(childComplexity int) int
+		CreatorID  func(childComplexity int) int
 		Duration   func(childComplexity int) int
 		FileURL    func(childComplexity int) int
 		ID         func(childComplexity int) int
@@ -138,6 +139,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Soundtrack.CreatedAt(childComplexity), true
+
+	case "Soundtrack.creatorId":
+		if e.complexity.Soundtrack.CreatorID == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.CreatorID(childComplexity), true
 
 	case "Soundtrack.duration":
 		if e.complexity.Soundtrack.Duration == nil {
@@ -244,6 +252,7 @@ type NotFound {
   duration: Int!
   coverImage: String!
   fileURL: String!
+  creatorId: String!
   createdAt: Date!
 }
 
@@ -900,6 +909,50 @@ func (ec *executionContext) fieldContext_Soundtrack_fileURL(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Soundtrack_creatorId(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_creatorId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CreatorID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_creatorId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Soundtrack_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Soundtrack_createdAt(ctx, field)
 	if err != nil {
@@ -995,6 +1048,8 @@ func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(ctx con
 				return ec.fieldContext_Soundtrack_coverImage(ctx, field)
 			case "fileURL":
 				return ec.fieldContext_Soundtrack_fileURL(ctx, field)
+			case "creatorId":
+				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
 			}
@@ -2997,6 +3052,13 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 		case "fileURL":
 
 			out.Values[i] = ec._Soundtrack_fileURL(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "creatorId":
+
+			out.Values[i] = ec._Soundtrack_creatorId(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
