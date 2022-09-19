@@ -1,7 +1,8 @@
-DROP TABLE IF EXISTS soundtracks;
+DROP TABLE IF EXISTS soundtrack;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user_soundtrack;
 
-CREATE TABLE soundtracks (
+CREATE TABLE soundtrack (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     author TEXT NOT NULL,
@@ -19,8 +20,14 @@ CREATE TABLE users (
 );
 
 
+CREATE TABLE user_soundtrack (
+	user_id INT REFERENCES users(id) ON DELETE CASCADE,
+	soundtrack_id INT REFERENCES soundtrack(id) ON DELETE CASCADE,
+	PRIMARY KEY (user_id, soundtrack_id)
+);
+
 INSERT INTO
-    soundtracks (
+    soundtrack (
         title,
         author,
         duration,
@@ -170,4 +177,18 @@ VALUES
     );
 
 
-INSERT INTO users (tg_id) VALUES ('-_-_-_-_-');
+INSERT INTO users (tg_id)
+VALUES ('test_id_1'),
+       ('test_id_2'),
+       ('test_id_3');
+
+
+INSERT INTO user_soundtrack (user_id, soundtrack_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 5),
+       (1, 6),
+       (1, 10), -- next
+       (2, 9),
+       (2, 13),
+       (2, 18);
