@@ -1,14 +1,14 @@
-DROP TABLE IF EXISTS soundtrack;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS user_soundtrack;
+DROP TABLE IF EXISTS soundtrack CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_soundtrack CASCADE;
 
 CREATE TABLE soundtrack (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     author TEXT NOT NULL,
     duration SMALLINT NOT NULL,
-    coverImage TEXT,
-    fileURL TEXT NOT NULL,
+    cover_image TEXT,
+    file_url TEXT NOT NULL,
     creator_id TEXT NOT NULL DEFAULT 'ozark',
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
@@ -31,8 +31,8 @@ INSERT INTO
         title,
         author,
         duration,
-        coverImage,
-        fileURL
+        cover_image,
+        file_url
     )
 VALUES
     (

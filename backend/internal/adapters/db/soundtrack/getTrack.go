@@ -10,8 +10,8 @@ SELECT id,
 	title,
 	author,
 	duration,
-	coverImage,
-	fileURL,
+	cover_image,
+	file_url,
 	creator_id,
 	created_at
 FROM soundtrack

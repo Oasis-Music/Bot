@@ -13,8 +13,8 @@ const (
        soundtrack.title,
        soundtrack.author,
        soundtrack.duration,
-       soundtrack.coverimage,
-       soundtrack.fileurl,
+       soundtrack.cover_image,
+       soundtrack.file_url,
        soundtrack.created_at
 	FROM soundtrack
 	JOIN user_soundtrack ON user_soundtrack.soundtrack_id = soundtrack.id
