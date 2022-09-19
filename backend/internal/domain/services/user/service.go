@@ -8,6 +8,7 @@ import (
 
 type UserService interface {
 	GetUser(ctx context.Context, id string) (models.UserResult, error)
+	GetUsersTraks(ctx context.Context, id string, filter models.UserTracksFilter) (models.UserTracksResult, error)
 }
 
 type userService struct {

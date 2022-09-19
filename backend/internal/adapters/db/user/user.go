@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/adapters/graph/models"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -13,6 +14,7 @@ type userStorage struct {
 
 type UserStorage interface {
 	GetUser(ctx context.Context, id int32) (db.UserDTO, error)
+	GetUsersTraks(ctx context.Context, id int32, filter models.UserTracksFilter) ([]db.SoundtrackDTO, error)
 }
 
 func NewUserStorage(db *pgxpool.Pool) UserStorage {

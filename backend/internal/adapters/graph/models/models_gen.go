@@ -10,12 +10,17 @@ type UserResult interface {
 	IsUserResult()
 }
 
+type UserTracksResult interface {
+	IsUserTracksResult()
+}
+
 type NotFound struct {
 	Message string `json:"message"`
 }
 
 func (NotFound) IsSoundtrackResult() {}
 func (NotFound) IsUserResult()       {}
+func (NotFound) IsUserTracksResult() {}
 
 type Soundtrack struct {
 	ID         string `json:"id"`
@@ -45,3 +50,13 @@ type User struct {
 }
 
 func (User) IsUserResult() {}
+
+type UserTracksFilter struct {
+	Page int `json:"page"`
+}
+
+type UserTracksResponse struct {
+	Soundtracks []Soundtrack `json:"soundtracks"`
+}
+
+func (UserTracksResponse) IsUserTracksResult() {}

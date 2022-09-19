@@ -5,7 +5,17 @@ type User {
 }
 
 union UserResult = User | NotFound
+union UserTracksResult = UserTracksResponse | NotFound
 
 extend type Query {
   user(id: ID!): UserResult
+  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
+}
+
+input UserTracksFilter {
+  page: Int!
+}
+
+type UserTracksResponse {
+  soundtracks: [Soundtrack!]!
 }

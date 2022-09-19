@@ -16,7 +16,7 @@ const (
 		coverimage,
 		fileurl,
 		created_at
-	FROM soundtracks
+	FROM soundtrack
 	`
 	ITEMS_PER_PAGE     = 15
 	PAGINATION_ERR_MSG = "invalid page"

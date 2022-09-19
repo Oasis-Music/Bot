@@ -14,7 +14,7 @@ SELECT id,
 	fileURL,
 	creator_id,
 	created_at
-FROM soundtracks
+FROM soundtrack
 WHERE id = $1;
 `
 

@@ -12,3 +12,8 @@ import (
 func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult, error) {
 	return r.UserService.GetUser(ctx, id)
 }
+
+// UserTracks is the resolver for the userTracks field.
+func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models.UserTracksFilter) (models.UserTracksResult, error) {
+	return r.UserService.GetUsersTraks(ctx, id, filter)
+}
