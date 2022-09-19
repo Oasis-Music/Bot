@@ -21,3 +21,8 @@ type UserDTO struct {
 	TgID      string
 	CreatedAt time.Time
 }
+
+type AddTrackParams struct {
+	TrackId int32
+	UserId  int32
+}

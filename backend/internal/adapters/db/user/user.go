@@ -15,6 +15,7 @@ type userStorage struct {
 type UserStorage interface {
 	GetUser(ctx context.Context, id int32) (db.UserDTO, error)
 	GetUsersTraks(ctx context.Context, id int32, filter models.UserTracksFilter) ([]db.SoundtrackDTO, error)
+	AddTrack(ctx context.Context, params db.AddTrackParams) error
 }
 
 func NewUserStorage(db *pgxpool.Pool) UserStorage {

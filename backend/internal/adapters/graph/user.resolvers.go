@@ -8,6 +8,11 @@ import (
 	"oasis/backend/internal/adapters/graph/models"
 )
 
+// AddTrackToUser is the resolver for the addTrackToUser field.
+func (r *mutationResolver) AddTrackToUser(ctx context.Context, input models.AddTrackToUserInput) (bool, error) {
+	return r.UserService.AddTrack(ctx, input)
+}
+
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult, error) {
 	return r.UserService.GetUser(ctx, id)

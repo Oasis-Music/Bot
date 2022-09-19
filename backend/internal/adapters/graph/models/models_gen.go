@@ -14,6 +14,11 @@ type UserTracksResult interface {
 	IsUserTracksResult()
 }
 
+type AddTrackToUserInput struct {
+	TrackID string `json:"trackId"`
+	UserID  string `json:"userId"`
+}
+
 type NotFound struct {
 	Message string `json:"message"`
 }

@@ -12,10 +12,20 @@ extend type Query {
   userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
 }
 
+# AddTrackToUserResponse
+extend type Mutation {
+  addTrackToUser(input: AddTrackToUserInput!): Boolean!
+}
+
 input UserTracksFilter {
   page: Int!
 }
 
 type UserTracksResponse {
   soundtracks: [Soundtrack!]!
+}
+
+input AddTrackToUserInput {
+  userId: String!
+  trackId: String!
 }
