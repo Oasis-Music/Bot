@@ -24,7 +24,11 @@ const spin = keyframes`
   }
 `
 
-export const ImageWrapper = styled.div`
+interface ImageWrapperStyles {
+  $stopPlaying: boolean
+}
+
+export const ImageWrapper = styled.div<ImageWrapperStyles>`
   ${prop}
   position: relative;
   border-radius: 15px;
@@ -61,9 +65,19 @@ export const ImageWrapper = styled.div`
     transition: opacity 0.5s;
     animation: ${spin} 2.5s linear infinite;
   }
+
   @media ${({ theme }) => theme.media.hxs} {
     max-width: 270px;
   }
+  ${({ $stopPlaying }) =>
+    $stopPlaying &&
+    css`
+      &::before,
+      &::after {
+        opacity: 0;
+        animation: none;
+      }
+    `}
 `
 
 export const Title = styled.h1`
