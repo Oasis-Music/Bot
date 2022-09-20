@@ -10,7 +10,7 @@ export const Container = styled.nav`
   justify-content: center;
 `
 
-export const SearchButton = styled(IconButton)`
+export const ControlButton = styled(IconButton)`
   && {
     background: none;
     color: #fff;

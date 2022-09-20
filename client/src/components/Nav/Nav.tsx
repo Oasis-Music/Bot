@@ -1,6 +1,6 @@
 import React from 'react'
 import SvgIcon from '../../shared/SvgIcon'
-import { Container, SearchButton } from './Nav.styled'
+import { Container, ControlButton } from './Nav.styled'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
 import { ReactComponent as CogIcon } from '../../assets/svg/cog.svg'
@@ -22,22 +22,22 @@ const Nav: React.FC = () => {
 
   return (
     <Container>
-      <SearchButton onClick={searchClickHandler}>
+      <ControlButton onClick={searchClickHandler}>
         <SvgIcon>
           <SearchIcon />
         </SvgIcon>
-      </SearchButton>
-      <SearchButton onClick={playlistClickHandler}>
+      </ControlButton>
+      <ControlButton onClick={playlistClickHandler}>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>
-      </SearchButton>
+      </ControlButton>
       {process.env.NODE_ENV === 'development' && (
-        <SearchButton onClick={cogClickHandler}>
+        <ControlButton onClick={cogClickHandler}>
           <SvgIcon>
             <CogIcon />
           </SvgIcon>
-        </SearchButton>
+        </ControlButton>
       )}
     </Container>
   )
