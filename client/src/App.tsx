@@ -15,7 +15,7 @@ const App: React.FC = () => {
         <Route path="/" element={<AppLayout />}>
           <Route element={<PrivateRoute />}>
             <Route index element={<Home />} />
-            <Route path="/ui" element={<UI />} />
+            {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
             <Route path="/test" element={<Test />} />
           </Route>
         </Route>

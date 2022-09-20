@@ -32,11 +32,13 @@ const Nav: React.FC = () => {
           <MusicListIcon />
         </SvgIcon>
       </SearchButton>
-      <SearchButton onClick={cogClickHandler}>
-        <SvgIcon>
-          <CogIcon />
-        </SvgIcon>
-      </SearchButton>
+      {process.env.NODE_ENV === 'development' && (
+        <SearchButton onClick={cogClickHandler}>
+          <SvgIcon>
+            <CogIcon />
+          </SvgIcon>
+        </SearchButton>
+      )}
     </Container>
   )
 }
