@@ -50,6 +50,7 @@ const ImageWrapper = styled.div`
 const InfoBox = styled.div`
   font-size: 2.7vh;
   padding-top: 0.7vh;
+  max-width: 275px;
   @media ${({ theme }) => theme.media.hxs} {
     padding-top: 7px;
     font-size: 16px;
@@ -63,6 +64,9 @@ const Title = styled.h3`
 const Author = styled.p`
   margin: 0;
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const PlayBottonWrapper = styled.div`
