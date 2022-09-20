@@ -15,8 +15,13 @@ type UserTracksResult interface {
 }
 
 type AddTrackToUserInput struct {
-	TrackID string `json:"trackId"`
 	UserID  string `json:"userId"`
+	TrackID string `json:"trackId"`
+}
+
+type DeleteTrackFromUserInput struct {
+	UserID  string `json:"userId"`
+	TrackID string `json:"trackId"`
 }
 
 type NotFound struct {

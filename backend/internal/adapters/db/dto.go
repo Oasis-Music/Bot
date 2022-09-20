@@ -26,3 +26,8 @@ type AddTrackParams struct {
 	TrackId int32
 	UserId  int32
 }
+
+type DeleteTrackParams struct {
+	TrackId int32
+	UserId  int32
+}

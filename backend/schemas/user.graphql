@@ -15,6 +15,7 @@ extend type Query {
 # AddTrackToUserResponse
 extend type Mutation {
   addTrackToUser(input: AddTrackToUserInput!): Boolean!
+  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
 }
 
 input UserTracksFilter {
@@ -28,4 +29,9 @@ type UserTracksResponse {
 input AddTrackToUserInput {
   userId: String!
   trackId: String!
+}
+
+input DeleteTrackFromUserInput {
+  userId: ID!
+  trackId: ID!
 }
