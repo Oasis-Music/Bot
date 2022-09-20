@@ -24,8 +24,8 @@ type App struct {
 
 func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 
-	soundtrackComposite := composites.NewSoundtrackComposite(db)
-	userComposite := composites.NewUserComposite(db)
+	soundtrackComposite := composites.NewSoundtrackComposite(db, config)
+	userComposite := composites.NewUserComposite(db, config)
 
 	rootComposite := composites.RootComposite{
 		SoundtrackComposite: soundtrackComposite,

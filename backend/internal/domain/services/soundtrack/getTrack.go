@@ -3,9 +3,7 @@ package soundtrack
 import (
 	"context"
 	"errors"
-	"log"
 	"oasis/backend/internal/adapters/graph/models"
-	"oasis/backend/internal/utils"
 	"strconv"
 
 	"github.com/jackc/pgx/v4"
@@ -28,20 +26,10 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 		return nil, err
 	}
 
-	coverPath := utils.GetEnv("COVER_PATH")
-	if coverPath == "" {
-		log.Fatal("COVER_PATH is not specified")
-	}
-
-	audioPath := utils.GetEnv("AUDIO_PATH")
-	if coverPath == "" {
-		log.Fatal("AUDIO_PATH is not specified")
-	}
-
 	var coverImg string
 
 	if soundtrack.CoverImage.Valid {
-		coverImg = coverPath + soundtrack.CoverImage.String
+		coverImg = s.config.ExternalAPI.CoverImageBaseURL + soundtrack.CoverImage.String
 	}
 
 	return &models.Soundtrack{
@@ -50,7 +38,7 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 		Author:     soundtrack.Author,
 		Duration:   int(soundtrack.Duration),
 		CoverImage: coverImg,
-		FileURL:    audioPath + soundtrack.FileURL,
+		FileURL:    s.config.ExternalAPI.AudioBaseURL + soundtrack.FileURL,
 		CreatorID:  soundtrack.CreatorID,
 		CreatedAt:  soundtrack.CreatedAt.UTC().String(),
 	}, nil

@@ -10,6 +10,7 @@ type AppConfig struct {
 	EntryPort   string
 	Database    PostgresConfig
 	Telegram    TelegramConfig
+	ExternalAPI ExternalAPIConfig
 }
 
 func NewAppConfig() *AppConfig {
@@ -17,11 +18,13 @@ func NewAppConfig() *AppConfig {
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 	databaseCfg := GetDatabaseConfig()
 	telegramCfg := GetTelegramConfig()
+	externalApiCfg := GetExternalAPIConfig()
 	return &AppConfig{
 		Environment: ENVIRONMENT,
 		EntryPort:   ENTRY_PORT,
 		Database:    databaseCfg,
 		Telegram:    telegramCfg,
+		ExternalAPI: externalApiCfg,
 	}
 }
 
@@ -66,5 +69,28 @@ func GetTelegramConfig() TelegramConfig {
 		ApiURL:    host,
 		Token:     token,
 		EventPool: 100, // TODO: add to .env
+	}
+}
+
+type ExternalAPIConfig struct {
+	AudioBaseURL      string
+	CoverImageBaseURL string
+}
+
+func GetExternalAPIConfig() ExternalAPIConfig {
+
+	coverPath := utils.GetEnv("COVER_PATH")
+	if coverPath == "" {
+		log.Fatal("COVER_PATH is not specified")
+	}
+
+	audioPath := utils.GetEnv("AUDIO_PATH")
+	if audioPath == "" {
+		log.Fatal("AUDIO_PATH is not specified")
+	}
+
+	return ExternalAPIConfig{
+		AudioBaseURL:      audioPath,
+		CoverImageBaseURL: coverPath,
 	}
 }

@@ -3,9 +3,7 @@ package user
 import (
 	"context"
 	"errors"
-	"log"
 	"oasis/backend/internal/adapters/graph/models"
-	"oasis/backend/internal/utils"
 	"strconv"
 )
 
@@ -28,16 +26,6 @@ func (u *userService) GetUsersTraks(ctx context.Context, userID string, filter m
 		}, nil
 	}
 
-	coverPath := utils.GetEnv("COVER_PATH")
-	if coverPath == "" {
-		log.Fatal("COVER_PATH is not specified")
-	}
-
-	audioPath := utils.GetEnv("AUDIO_PATH")
-	if audioPath == "" {
-		log.Fatal("AUDIO_PATH is not specified")
-	}
-
 	var soundtracks []models.Soundtrack
 
 	for _, item := range items {
@@ -45,7 +33,7 @@ func (u *userService) GetUsersTraks(ctx context.Context, userID string, filter m
 		var coverImg string
 
 		if item.CoverImage.Valid {
-			coverImg = coverPath + item.CoverImage.String
+			coverImg = u.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
 		}
 
 		soundtracks = append(soundtracks, models.Soundtrack{
@@ -54,7 +42,7 @@ func (u *userService) GetUsersTraks(ctx context.Context, userID string, filter m
 			Author:     item.Author,
 			Duration:   int(item.Duration),
 			CoverImage: coverImg,
-			FileURL:    audioPath + item.FileURL,
+			FileURL:    u.config.ExternalAPI.AudioBaseURL + item.FileURL,
 			CreatedAt:  item.CreatedAt.UTC().String(),
 		})
 	}
