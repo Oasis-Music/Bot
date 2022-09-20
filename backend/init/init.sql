@@ -92,6 +92,13 @@ VALUES
         'callmyname.mp3'
     ),
     (
+        'Новая Волна',
+        'Morgenshtern, DJ Smash',
+        159,
+        'new_wave.jpeg',
+        'morgenshtern-dj-smash-novaya-volna.mp3'
+    ),
+    (
         'Minor',
         'Miyagi & Andy Panda',
         153,
@@ -174,6 +181,69 @@ VALUES
         195,
         'kapital_cover.jpeg',
         'kaaaapital.mp3'
+    ),
+    (
+        'Серпантин',
+        'Markul',
+        186,
+        'markul_v1.jpg',
+        'markul-serpantin.mp3'
+    ),
+    (
+        'СКОЛЬКО СТОИТ ЛЮБОВЬ',
+        'MORGENSHTERN, The Limba, NILETTO, Boombl4',
+        214,
+        'scolco_stoit_lubov.jpg',
+        'skolko-stoit-lyubov.mp3'
+    ),
+    (
+        'Conclusion The Transplant',
+        'Nicholas Britell',
+        429,
+        'conclusion.jpeg',
+        'Nicholas-Britell-Conclusion-The-Transplant.mp3'
+    ),
+    (
+        'Ламбада',
+        'T-Fest, Скриптонит',
+        191,
+        'lambada.jpeg',
+        't-fest-skriptonit-lambada.mp3'
+    ),
+    (
+        'Грустная Песня',
+        'THRILL PILL, Егор Крид, MORGENSHTERN',
+        226,
+        'syka_hochet_deneg.jpeg',
+        'grustnaya-pesnya.mp3'
+    ),
+    (
+        'Black',
+        'Gazirovka',
+        165,
+        'gazirovka_black.jpeg',
+        'gazirovka-black.mp3'
+    ),
+    (
+        'Малиновый Закат',
+        'Макс Корж',
+        178,
+        'malinovy_zakat.jpeg',
+        'maks-korzh-malinovyjj-zakat.mp3'
+    ),
+    (
+        'Шантаж',
+        'Макс Корж',
+        194,
+        'shantazh.jpeg',
+        'maks-korzh-shantazh.mp3'
+    ),
+    (
+        'Башня из слоновой кости',
+        'Oxxxymiron',
+        214,
+        'gorgorod.jpeg',
+        'bashnya_iz_slonovojj_kosti.mp3'
     );
 
 
