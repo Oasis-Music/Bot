@@ -1,0 +1,37 @@
+type User {
+  id: ID!
+  telegramId: String!
+  createdAt: Date!
+}
+
+union UserResult = User | NotFound
+union UserTracksResult = UserTracksResponse | NotFound
+
+extend type Query {
+  user(id: ID!): UserResult
+  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
+}
+
+# AddTrackToUserResponse
+extend type Mutation {
+  addTrackToUser(input: AddTrackToUserInput!): Boolean!
+  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
+}
+
+input UserTracksFilter {
+  page: Int!
+}
+
+type UserTracksResponse {
+  soundtracks: [Soundtrack!]!
+}
+
+input AddTrackToUserInput {
+  userId: String!
+  trackId: String!
+}
+
+input DeleteTrackFromUserInput {
+  userId: ID!
+  trackId: ID!
+}

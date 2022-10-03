@@ -4,6 +4,7 @@ import (
 	"context"
 	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/adapters/graph/models"
+	"oasis/backend/internal/config"
 )
 
 type SoundtrackService interface {
@@ -12,11 +13,13 @@ type SoundtrackService interface {
 }
 
 type soundtrackService struct {
+	config  *config.AppConfig
 	storage soundtrack.SoundtrackStorage
 }
 
-func NewSoundtrackService(storage soundtrack.SoundtrackStorage) SoundtrackService {
+func NewSoundtrackService(storage soundtrack.SoundtrackStorage, config *config.AppConfig) SoundtrackService {
 	return &soundtrackService{
+		config:  config,
 		storage: storage,
 	}
 }

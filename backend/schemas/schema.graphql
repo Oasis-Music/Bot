@@ -1,5 +1,5 @@
 type Query
-# type Mutation
+type Mutation
 
 scalar Date
 

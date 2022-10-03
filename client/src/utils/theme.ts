@@ -37,7 +37,7 @@ const breakpoints = {
   tablet: 800,
   laptop: 1000,
   desktop: 1400,
-  hxs: 600
+  hxs: 700
 }
 
 const styledTheme: ITheme = {

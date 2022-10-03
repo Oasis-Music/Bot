@@ -6,11 +6,31 @@ type SoundtrackResult interface {
 	IsSoundtrackResult()
 }
 
+type UserResult interface {
+	IsUserResult()
+}
+
+type UserTracksResult interface {
+	IsUserTracksResult()
+}
+
+type AddTrackToUserInput struct {
+	UserID  string `json:"userId"`
+	TrackID string `json:"trackId"`
+}
+
+type DeleteTrackFromUserInput struct {
+	UserID  string `json:"userId"`
+	TrackID string `json:"trackId"`
+}
+
 type NotFound struct {
 	Message string `json:"message"`
 }
 
 func (NotFound) IsSoundtrackResult() {}
+func (NotFound) IsUserResult()       {}
+func (NotFound) IsUserTracksResult() {}
 
 type Soundtrack struct {
 	ID         string `json:"id"`
@@ -19,6 +39,7 @@ type Soundtrack struct {
 	Duration   int    `json:"duration"`
 	CoverImage string `json:"coverImage"`
 	FileURL    string `json:"fileURL"`
+	CreatorID  string `json:"creatorId"`
 	CreatedAt  string `json:"createdAt"`
 }
 
@@ -31,3 +52,21 @@ type SoundtracksFilter struct {
 type SoundtracksResponse struct {
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
+
+type User struct {
+	ID         string `json:"id"`
+	TelegramID string `json:"telegramId"`
+	CreatedAt  string `json:"createdAt"`
+}
+
+func (User) IsUserResult() {}
+
+type UserTracksFilter struct {
+	Page int `json:"page"`
+}
+
+type UserTracksResponse struct {
+	Soundtracks []Soundtrack `json:"soundtracks"`
+}
+
+func (UserTracksResponse) IsUserTracksResult() {}

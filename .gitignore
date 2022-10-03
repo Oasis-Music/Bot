@@ -1,4 +1,5 @@
 client/node_modules
+client/build
 backend/.env.prod
 client/src/assets/music
 /.pnp

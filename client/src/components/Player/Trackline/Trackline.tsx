@@ -3,17 +3,21 @@ import WaveSurfer from 'wavesurfer.js'
 import Controls from './Controls/Controls'
 import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
 import { timeFormater } from '../../../utils/helpers'
+import { useReactiveVar } from '@apollo/client'
+import { isPlayingVar } from '../../../apollo/cache/variables'
+import { SoundtrackMutations } from '../../../apollo/cache/mutations'
 
 interface TracklineProps {
   soundtrack: string
 }
 
 const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
-  const [play, setPlay] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [loop, setLoop] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [duration, setDuration] = useState<string>('0:00')
+
+  const isPlay = useReactiveVar(isPlayingVar)
 
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer>()
 
@@ -55,7 +59,7 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
   }, [soundtrack])
 
   const buttonHandler = () => {
-    setPlay(!play)
+    SoundtrackMutations.playPouse()
     if (wavesurfer) {
       wavesurfer.playPause()
     }
@@ -75,7 +79,7 @@ const Trackline: React.FC<TracklineProps> = ({ soundtrack }) => {
         <span>{duration}</span>
       </TimeBox>
       <Controls
-        isPlay={play}
+        isPlay={isPlay}
         readyForPlay={readyForPlay}
         isLoop={loop}
         onPlayPause={buttonHandler}

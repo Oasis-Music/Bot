@@ -9,7 +9,7 @@ export const Container = styled.div`
 
 export const Title = styled.span`
   color: #cbcbcb;
-  font-size: 3.5vh;
+  font-size: 3.3vh;
   font-weight: 500;
   @media ${({ theme }) => theme.media.hxs} {
     font-size: 18px;

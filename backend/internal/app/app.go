@@ -24,10 +24,12 @@ type App struct {
 
 func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 
-	soundtrackComposite := composites.NewSoundtrackComposite(db)
+	soundtrackComposite := composites.NewSoundtrackComposite(db, config)
+	userComposite := composites.NewUserComposite(db, config)
 
 	rootComposite := composites.RootComposite{
 		SoundtrackComposite: soundtrackComposite,
+		UserComposite:       userComposite,
 	}
 
 	r := router.NewRouter(config, db, rootComposite)

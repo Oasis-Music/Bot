@@ -2,13 +2,15 @@ import styled from 'styled-components'
 import IconButton from '../../shared/IconButton'
 
 export const Container = styled.nav`
+  z-index: 400;
+  position: relative;
   background-color: #070c13;
   display: flex;
   align-items: center;
   justify-content: center;
 `
 
-export const SearchButton = styled(IconButton)`
+export const ControlButton = styled(IconButton)`
   && {
     background: none;
     color: #fff;

@@ -17,6 +17,7 @@ func NewHandler(db *pgxpool.Pool, rootComposite composites.RootComposite) http.H
 
 	resolver := &Resolver{
 		SoundtrackService: rootComposite.SoundtrackComposite.Service,
+		UserService:       rootComposite.UserComposite.Service,
 	}
 
 	config := Config{

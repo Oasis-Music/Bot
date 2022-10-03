@@ -2,9 +2,7 @@ package soundtrack
 
 import (
 	"context"
-	"log"
 	"oasis/backend/internal/adapters/graph/models"
-	"oasis/backend/internal/utils"
 	"strconv"
 )
 
@@ -15,16 +13,6 @@ func (s *soundtrackService) GetSoundtracks(ctx context.Context, filter models.So
 		return nil, err
 	}
 
-	coverPath := utils.GetEnv("COVER_PATH")
-	if coverPath == "" {
-		log.Fatal("COVER_PATH is not specified")
-	}
-
-	audioPath := utils.GetEnv("AUDIO_PATH")
-	if audioPath == "" {
-		log.Fatal("AUDIO_PATH is not specified")
-	}
-
 	var soundtracks []models.Soundtrack
 
 	for _, item := range items {
@@ -32,7 +20,7 @@ func (s *soundtrackService) GetSoundtracks(ctx context.Context, filter models.So
 		var coverImg string
 
 		if item.CoverImage.Valid {
-			coverImg = coverPath + item.CoverImage.String
+			coverImg = s.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
 		}
 
 		soundtracks = append(soundtracks, models.Soundtrack{
@@ -41,7 +29,7 @@ func (s *soundtrackService) GetSoundtracks(ctx context.Context, filter models.So
 			Author:     item.Author,
 			Duration:   int(item.Duration),
 			CoverImage: coverImg,
-			FileURL:    audioPath + item.FileURL,
+			FileURL:    s.config.ExternalAPI.AudioBaseURL + item.FileURL,
 			CreatedAt:  item.CreatedAt.UTC().String(),
 		})
 	}

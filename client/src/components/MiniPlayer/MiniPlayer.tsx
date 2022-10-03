@@ -1,24 +1,36 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import styled, { css } from 'styled-components'
 import IconButton from '../../shared/IconButton'
 import ImagePlaceholder from '../../shared/ImagePlaceholder'
 import { ReactComponent as PlayIcon } from '../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../assets/svg/pause.svg'
 import SvgIcon from '../../shared/SvgIcon'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../apollo/cache/variables'
+import { currentTrackVar, isPlayingVar, currentTrackIdVar } from '../../apollo/cache/variables'
+import { SoundtrackMutations } from '../../apollo/cache/mutations'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
 }
 
-const Container = styled.div`
+interface containerStylesProps {
+  $isPlaying: boolean
+}
+
+const Container = styled.div<containerStylesProps>`
   display: flex;
   z-index: 100;
   background-color: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 5px 20px 5px 7px;
+  transform: translateY(100%);
+  transition: transform 0.3s;
+  ${({ $isPlaying }) =>
+    $isPlaying &&
+    css`
+      transform: translateY(0);
+    `}
 `
 
 const InnerContainer = styled.div`
@@ -38,6 +50,7 @@ const ImageWrapper = styled.div`
 const InfoBox = styled.div`
   font-size: 2.7vh;
   padding-top: 0.7vh;
+  max-width: 275px;
   @media ${({ theme }) => theme.media.hxs} {
     padding-top: 7px;
     font-size: 16px;
@@ -51,6 +64,9 @@ const Title = styled.h3`
 const Author = styled.p`
   margin: 0;
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const PlayBottonWrapper = styled.div`
@@ -81,16 +97,16 @@ const PlayBotton = styled(IconButton)`
 `
 
 const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
-  const [isPlay, setIsPlay] = useState<boolean>(true)
-
+  const isPlay = useReactiveVar(isPlayingVar)
+  const trackId = useReactiveVar(currentTrackIdVar)
   const track = useReactiveVar(currentTrackVar)
 
   const playButtonHandler = () => {
-    setIsPlay(!isPlay)
+    SoundtrackMutations.playPouse()
   }
 
   return (
-    <Container>
+    <Container $isPlaying={!!trackId}>
       <InnerContainer onClick={onPlayerOpen}>
         <ImageWrapper>
           <ImagePlaceholder src={track.coverImage} plain altText={track.title} />

@@ -10,7 +10,7 @@ const Loader = styled.svg<LoaderStyledProps>`
   width: ${({ $fallback }) => ($fallback ? 34 : 18)}px;
   height: ${({ $fallback }) => ($fallback ? 40 : 18)}px;
   & > rect {
-    fill: ${({ $dark }) => ($dark ? '#343434' : 'yellow')};
+    fill: ${({ $dark }) => ($dark ? '#343434' : '#fff')};
   }
 `
 
