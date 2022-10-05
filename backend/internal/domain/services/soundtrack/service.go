@@ -10,6 +10,7 @@ import (
 type SoundtrackService interface {
 	GetTrack(ctx context.Context, id string) (models.SoundtrackResult, error)
 	GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
+	AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error)
 }
 
 type soundtrackService struct {

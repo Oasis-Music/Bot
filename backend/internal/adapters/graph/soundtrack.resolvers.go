@@ -8,6 +8,11 @@ import (
 	"oasis/backend/internal/adapters/graph/models"
 )
 
+// AddSoundtrack is the resolver for the addSoundtrack field.
+func (r *mutationResolver) AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
+	return r.SoundtrackService.AddSoundtrack(ctx, input)
+}
+
 // Soundtrack is the resolver for the soundtrack field.
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
 	return r.SoundtrackService.GetTrack(ctx, id)

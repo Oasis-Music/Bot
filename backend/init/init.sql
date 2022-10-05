@@ -9,6 +9,7 @@ CREATE TABLE soundtrack (
     duration SMALLINT NOT NULL,
     cover_image TEXT,
     file_url TEXT NOT NULL,
+    is_validated BOOLEAN NOT NULL DEFAULT false,
     creator_id TEXT NOT NULL DEFAULT 'ozark',
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
@@ -16,6 +17,7 @@ CREATE TABLE soundtrack (
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     tg_id TEXT NOT NULL,
+    last_visit_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
 

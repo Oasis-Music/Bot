@@ -15,6 +15,7 @@ type soundtrackStorage struct {
 type SoundtrackStorage interface {
 	GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
 	GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) ([]db.SoundtrackDTO, error)
+	AddSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error)
 }
 
 func NewSoundtrackStorage(db *pgxpool.Pool) SoundtrackStorage {

@@ -31,3 +31,13 @@ type DeleteTrackParams struct {
 	TrackId int32
 	UserId  int32
 }
+
+type NewSoundtrackParams struct {
+	Title       string
+	Author      string
+	Duration    int16
+	CoverImage  sql.NullString
+	FileURL     string
+	IsValidated bool
+	CreatorID   string
+}

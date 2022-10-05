@@ -5,6 +5,7 @@ type Soundtrack {
   duration: Int!
   coverImage: String!
   fileURL: String!
+  validated: Boolean!
   creatorId: String!
   createdAt: Date!
 }
@@ -16,10 +17,21 @@ extend type Query {
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
 }
 
+extend type Mutation {
+  addSoundtrack(input: AddSoundtrackInput!): Boolean!
+}
+
 input SoundtracksFilter {
   page: Int!
 }
 
 type SoundtracksResponse {
   soundtracks: [Soundtrack!]!
+}
+
+input AddSoundtrackInput {
+  title: String!
+  author: String!
+  coverImage: Upload!
+  audiofile: Upload!
 }

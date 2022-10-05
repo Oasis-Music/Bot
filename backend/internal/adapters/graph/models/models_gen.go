@@ -2,6 +2,10 @@
 
 package models
 
+import (
+	"github.com/99designs/gqlgen/graphql"
+)
+
 type SoundtrackResult interface {
 	IsSoundtrackResult()
 }
@@ -12,6 +16,13 @@ type UserResult interface {
 
 type UserTracksResult interface {
 	IsUserTracksResult()
+}
+
+type AddSoundtrackInput struct {
+	Title      string         `json:"title"`
+	Author     string         `json:"author"`
+	CoverImage graphql.Upload `json:"coverImage"`
+	Audiofile  graphql.Upload `json:"audiofile"`
 }
 
 type AddTrackToUserInput struct {
@@ -39,6 +50,7 @@ type Soundtrack struct {
 	Duration   int    `json:"duration"`
 	CoverImage string `json:"coverImage"`
 	FileURL    string `json:"fileURL"`
+	Validated  bool   `json:"validated"`
 	CreatorID  string `json:"creatorId"`
 	CreatedAt  string `json:"createdAt"`
 }
