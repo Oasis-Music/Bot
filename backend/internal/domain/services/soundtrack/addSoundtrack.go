@@ -7,172 +7,51 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 
 	"oasis/backend/internal/adapters/db"
 	"oasis/backend/internal/adapters/graph/models"
-
-	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func (s *soundtrackService) AddSoundtrackX(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
+type Tags map[string]interface{}
 
-	tempDirLoc := os.TempDir()
+type ProbeData struct {
+	Format *Format `json:"format"`
+}
 
-	// absPath, err := filepath.Abs("./temp")
-
-	tempFile, err := os.CreateTemp(tempDirLoc, "audio-*.mp3")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer tempFile.Close()
-
-	buf, err := io.ReadAll(input.Audiofile.File)
-	if err != nil {
-		fmt.Println(err)
-	}
-	tempFile.Write(buf)
-
-	// defer os.Remove(tempFile.Name())
-
-	fmt.Println("Open:", tempFile.Name())
-
-	pr1, pw1 := io.Pipe()
-	pr2, pw2 := io.Pipe()
-
-	_, err = pw2.Write(buf)
-	if err != nil {
-		fmt.Println(err)
-		return false, err
-	}
-
-	pw2.Close()
-
-	// ffmpeg -y -i FILE -map 0:a -c:a copy -map_metadata -1 FILE
-	ffErr := ffmpeg.Input("pipe:").
-		Output("pipe:", ffmpeg.KwArgs{"map": "0:a", "c:a": "copy", "map_metadata": -1}).WithInput(pr2).
-		OverWriteOutput().ErrorToStdOut().WithOutput(pw1).Run()
-
-	pr1.Close()
-
-	if ffErr != nil {
-		fmt.Println(ffErr)
-	}
-
-	var resultBuffer = bytes.NewBuffer(make([]byte, 5<<20))
-
-	resultBuffer.ReadFrom(pr1)
-
-	finalTempFile, err := os.CreateTemp(tempDirLoc, "pipe-audio-*.mp3")
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer tempFile.Close()
-
-	data, err := ffmpeg.Probe(tempDirLoc + "/" + finalTempFile.Name())
-	// data, err := ffmpeg.Probe(tempFile.Name())
-
-	if err != nil {
-		panic(err)
-	}
-
-	log.Println("got audio info", data)
-
-	type AudioInfo struct {
-		Streams []struct {
-			CodecType string `json:"codec_type"`
-			CodecName string `json:"codec_name"`
-		} `json:"streams"`
-		Format struct {
-			Duration string `json:"duration"`
-		} `json:"format"`
-	}
-	ai := &AudioInfo{}
-	err = json.Unmarshal([]byte(data), ai)
-	if err != nil {
-		panic(err)
-	}
-
-	duration := ai.Format.Duration
-	codecType := ai.Streams[0].CodecType
-	codecName := ai.Streams[0].CodecName
-
-	fmt.Printf("Final info --> CodecType: %s, CodecName: %s, duration: %s\n", codecType, codecName, duration)
-
-	/*
-		title: String!
-		author: String!
-		coverImage: Upload!
-		file: Upload!
-
-		-------------------
-
-		Title       string +
-		Author      string +
-		Duration    int16
-		CoverImage  sql.NullString
-		FileURL     string
-		IsValidated bool
-		CreatorID   string
-	*/
-
-	var dbParams db.NewSoundtrackParams
-
-	dbParams.Title = input.Title
-	dbParams.Author = input.Author
-
-	// TODO: fill
-
-	dbParams.Duration = int16(100)
-	dbParams.CoverImage = sql.NullString{}
-	dbParams.FileURL = "uknown"
-	dbParams.IsValidated = false
-	dbParams.CreatorID = "sys"
-
-	id, err := s.storage.AddSoundtrack(ctx, dbParams)
-	if err != nil {
-		return false, err
-	}
-
-	fmt.Println("Got ID:", id)
-
-	return true, nil
+type Format struct {
+	Filename         string  `json:"filename"`
+	NBStreams        int     `json:"nb_streams"`
+	NBPrograms       int     `json:"nb_programs"`
+	FormatName       string  `json:"format_name"`
+	FormatLongName   string  `json:"format_long_name"`
+	StartTimeSeconds float64 `json:"start_time,string"`
+	DurationSeconds  float64 `json:"duration,string"`
+	Size             string  `json:"size"`
+	BitRate          string  `json:"bit_rate"`
+	ProbeScore       int     `json:"probe_score"`
+	TagList          Tags    `json:"tags"`
 }
 
 func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
 
-	// buf, err := io.ReadAll(input.Audiofile.File)
-	// if err != nil {
-	// 	fmt.Println("0:", err)
-	// 	fmt.Println(err)
-	// }
-
-	buf := bytes.NewBuffer(make([]byte, 5<<20))
-
-	if _, err := io.Copy(buf, input.Audiofile.File); err != nil {
-		fmt.Println("io.copy:", err)
+	buf, err := io.ReadAll(input.Audiofile.File)
+	if err != nil {
+		fmt.Println("io.ReadAll:", err)
 		return false, err
 	}
 
-	// ffmpeg -y -i FILE -map 0:a -c:a copy -map_metadata -1 FILE
 	// cat test.mp3 | ffmpeg -y -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 | cat > out.mp3
-
 	cmd := exec.Command("ffmpeg", "-y", "-hide_banner", "-i", "pipe:0", "-f", "mp3", "-map", "0:a", "-c:a", "copy", "-map_metadata", "-1", "pipe:1")
 
-	var resultBuffer = bytes.NewBuffer(make([]byte, 5<<20))
+	var resultBuffer = bytes.NewBuffer(make([]byte, 0))
+
+	r, w := io.Pipe()
 
 	cmd.Stderr = os.Stderr
+	cmd.Stdin = r
 	cmd.Stdout = resultBuffer
-
-	stdin, err := cmd.StdinPipe()
-	if err != nil {
-		fmt.Println("1:", err)
-		return false, err
-	}
 
 	err = cmd.Start()
 	if err != nil {
@@ -180,17 +59,12 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 		return false, err
 	}
 
-	_, err = stdin.Write(buf)
+	_, err = w.Write(buf)
 	if err != nil {
-		fmt.Println("3:", err)
+		fmt.Println("w.Write", err)
 		return false, err
 	}
-
-	err = stdin.Close()
-	if err != nil {
-		fmt.Println("4:", err)
-		return false, err
-	}
+	w.Close()
 
 	err = cmd.Wait()
 	if err != nil {
@@ -199,47 +73,43 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	}
 
 	tempDirLoc := os.TempDir()
-
-	// absPath, err := filepath.Abs("./temp")
-
-	tempFile, err := os.CreateTemp(tempDirLoc, "pipe_audio-*.mp3")
+	tempFile, err := os.CreateTemp(tempDirLoc, "oasis_audio-*.mp3")
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	defer tempFile.Close()
 
 	tempFile.Write(resultBuffer.Bytes())
 
-	data, err := ffmpeg.Probe(tempFile.Name())
-	// data, err := ffmpeg.Probe(tempFile.Name())
+	fmt.Println("ffprobe open: ", tempFile.Name())
 
-	if err != nil {
-		panic(err)
+	// ffprobe -v quiet -print_format json -show_format -
+	probe := exec.Command("ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", tempFile.Name())
+
+	var ffprobeBuf bytes.Buffer
+
+	probe.Stdout = &ffprobeBuf
+
+	if err := probe.Start(); err != nil {
+		fmt.Println(err)
+		return false, err
 	}
 
-	log.Println("got audio info", data)
-
-	type AudioInfo struct {
-		Streams []struct {
-			CodecType string `json:"codec_type"`
-			CodecName string `json:"codec_name"`
-		} `json:"streams"`
-		Format struct {
-			Duration string `json:"duration"`
-		} `json:"format"`
-	}
-	ai := &AudioInfo{}
-	err = json.Unmarshal([]byte(data), ai)
-	if err != nil {
-		panic(err)
+	if err := probe.Wait(); err != nil {
+		fmt.Println(err)
+		return false, err
 	}
 
-	duration := ai.Format.Duration
-	codecType := ai.Streams[0].CodecType
-	codecName := ai.Streams[0].CodecName
+	var data ProbeData
 
-	fmt.Printf("Final info --> CodecType: %s, CodecName: %s, duration: %s\n", codecType, codecName, duration)
+	if err := json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
+		fmt.Println(err)
+		return false, err
+	}
+
+	fmt.Printf("Final info --> FormatName: %s, Duration: %v\n", data.Format.FormatName, data.Format.DurationSeconds)
+
+	defer os.Remove(tempFile.Name())
 
 	/*
 		title: String!
