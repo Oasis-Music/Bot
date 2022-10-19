@@ -5,6 +5,7 @@ import PrivateRoute from './shared/PrivateRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 const Home = lazy(() => import('./pages/Home'))
+const Upload = lazy(() => import('./pages/Upload'))
 const UI = lazy(() => import('./pages/UI'))
 const Test = lazy(() => import('./pages/Test'))
 
@@ -15,6 +16,7 @@ const App: React.FC = () => {
         <Route path="/" element={<AppLayout />}>
           <Route element={<PrivateRoute />}>
             <Route index element={<Home />} />
+            <Route path="/upload" element={<Upload />} />
             {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
             <Route path="/test" element={<Test />} />
           </Route>
