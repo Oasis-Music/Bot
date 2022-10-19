@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import MiniPlayer from '../MiniPlayer/MiniPlayer'
 import Nav from '../Nav/Nav'
 import Player from '../Player'
+import { useWindowRatio } from '../../hooks/useWindowRatio'
 
 const Box = styled.div`
   position: relative;
@@ -17,6 +18,7 @@ export const Wrapper = styled.div`
 `
 
 const AppLayout: React.FC = () => {
+  useWindowRatio()
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
 
   const handlePlayerOpen = () => {
