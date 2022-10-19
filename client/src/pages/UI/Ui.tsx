@@ -2,7 +2,7 @@ import React from 'react'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 
-// import TextInputs from './TextInputs/TextInputs'
+import FormUI from './Form/Form'
 import Buttons from './Buttons/Buttons'
 
 const UISchema = yup.object({
@@ -36,7 +36,7 @@ const UI: React.FC = () => {
         >
           {() => (
             <Form>
-              {/* <TextInputs /> */}
+              <FormUI />
               <Buttons />
             </Form>
           )}
