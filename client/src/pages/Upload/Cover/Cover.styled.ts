@@ -5,7 +5,8 @@ import SvgIcon from '../../../shared/SvgIcon'
 export const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #3d3d33;
+  box-sizing: border-box;
+  /* background-color: #3d3d33; */
   padding: 40px 50px 0 50px;
 `
 

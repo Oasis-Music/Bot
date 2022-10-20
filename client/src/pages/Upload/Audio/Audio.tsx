@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from '../../../shared/Button'
 
 const Container = styled.div`
-  background-color: #bf00ff;
+  /* background-color: #bf00ff; */
   height: 100vh;
 `
 
@@ -14,7 +14,7 @@ interface AudioProps {
 const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
   return (
     <Container>
-      <p>Audio</p>
+      <span>Audio</span>
       <Button disableShadow fullWidth onClick={onPrevStep}>
         Prev
       </Button>

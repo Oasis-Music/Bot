@@ -1,37 +1,31 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-
 import Info from './Info/Info'
 import Cover from './Cover/Cover'
 import Audio from './Audio/Audio'
+import { useWindowRatio } from '../../hooks'
 
-interface sty {
+interface WrapperStyles {
   $page: number
 }
 
-const Container = styled.div<sty>`
-  width: 100%;
-  background-color: #101318;
-  display: flex;
-  transform: ${(props) => `translate3d(${props.$page}px, 0, 0)`};
-  transition: transform 0.3s;
-  /* overflow: hidden; */
-  & > div {
-    width: 100vw;
-    height: 500px;
-    flex-shrink: 0;
-    box-sizing: border-box;
-  }
+const Container = styled.div`
+  overflow: hidden;
 `
 
-interface SlideStyles {
-  $color: string
-}
+const Wrapper = styled.div<WrapperStyles>`
+  background-color: #101318;
+  display: flex;
+  transform: ${(props) => `translate3d(-${props.$page}px, 0, 0)`};
+  transition: transform 0.3s;
+`
 
-const Slide = styled.div<SlideStyles>`
-  /* width: calc(100 * var(--vw)); */
-  width: 100vw;
-  background-color: ${(props) => props.$color};
+const Slide = styled.div`
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background-color: #101318;
 `
 
 interface Track {
@@ -45,6 +39,7 @@ interface Track {
 
 const Upload: React.FC = () => {
   const [page, setPage] = useState<number>(0)
+  const [windowWidth] = useWindowRatio()
 
   const slideNext = () => {
     setPage((prev) => prev + 1)
@@ -54,24 +49,19 @@ const Upload: React.FC = () => {
     setPage((prev) => prev - 1)
   }
 
-  // useEffect(() => {
-  //   const t = setInterval(() => {
-  //     slideNext()
-  //   }, 5000)
-
-  //   return () => {
-  //     clearInterval(t)
-  //   }
-  // }, [])
-
   return (
-    <Container $page={-page * window.innerWidth}>
-      <Info onNextStep={slideNext} />
-      <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
-      <Audio onPrevStep={slidePrev} />
-      {/* <Slide $color="orange">1</Slide>
-      <Slide $color="gold">2</Slide>
-      <Slide $color="blue">3</Slide> */}
+    <Container>
+      <Wrapper $page={page * window.innerWidth}>
+        <Slide style={{ width: `${windowWidth}px` }}>
+          <Info onNextStep={slideNext} />
+        </Slide>
+        <Slide style={{ width: `${windowWidth}px` }}>
+          <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
+        </Slide>
+        <Slide style={{ width: `${windowWidth}px` }}>
+          <Audio onPrevStep={slidePrev} />
+        </Slide>
+      </Wrapper>
     </Container>
   )
 }
