@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import Info from './Info/Info'
 import Cover from './Cover/Cover'
 import Audio from './Audio/Audio'
+import { Formik, Form } from 'formik'
 import { useWindowRatio } from '../../hooks'
+import { createTrackStepsSchema } from '../../utils/validationSchemas'
 
 interface WrapperStyles {
   $page: number
@@ -37,31 +39,52 @@ interface Track {
   fileURL: string
 }
 
+interface SubmitValues {
+  title: string
+  author: string
+  coverImage: any
+}
+
 const Upload: React.FC = () => {
-  const [page, setPage] = useState<number>(0)
+  const [page, setPage] = useState<number>(1)
   const [windowWidth] = useWindowRatio()
 
-  const slideNext = () => {
-    setPage((prev) => prev + 1)
-  }
+  const slideNext = () => setPage((prev) => prev + 1)
 
-  const slidePrev = () => {
-    setPage((prev) => prev - 1)
+  const slidePrev = () => setPage((prev) => prev - 1)
+
+  const handleSubmit = (values: SubmitValues) => {
+    console.log(values)
   }
 
   return (
     <Container>
-      <Wrapper $page={page * window.innerWidth}>
-        <Slide style={{ width: `${windowWidth}px` }}>
-          <Info onNextStep={slideNext} />
-        </Slide>
-        <Slide style={{ width: `${windowWidth}px` }}>
-          <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
-        </Slide>
-        <Slide style={{ width: `${windowWidth}px` }}>
-          <Audio onPrevStep={slidePrev} />
-        </Slide>
-      </Wrapper>
+      <Formik
+        validateOnMount
+        onSubmit={handleSubmit}
+        validationSchema={createTrackStepsSchema[page]}
+        initialValues={{
+          title: 'xxx',
+          author: 'xxx',
+          coverImage: undefined
+        }}
+      >
+        {() => (
+          <Form>
+            <Wrapper $page={page * window.innerWidth}>
+              <Slide style={{ width: `${windowWidth}px` }}>
+                <Info onNextStep={slideNext} />
+              </Slide>
+              <Slide style={{ width: `${windowWidth}px` }}>
+                <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
+              </Slide>
+              <Slide style={{ width: `${windowWidth}px` }}>
+                <Audio onPrevStep={slidePrev} />
+              </Slide>
+            </Wrapper>
+          </Form>
+        )}
+      </Formik>
     </Container>
   )
 }

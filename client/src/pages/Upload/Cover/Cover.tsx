@@ -8,11 +8,13 @@ import SvgIcon from '../../../shared/SvgIcon'
 import { ReactComponent as CoverPlaceholderIcon } from '../../../assets/svg/cover_placeholder.svg'
 import {
   Container,
+  StepTitle,
   Title,
   ContainerUpload,
   Preview,
   Plug,
   PlugIcon,
+  PlugInfo,
   DeleteButton
 } from './Cover.styled'
 
@@ -84,7 +86,8 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
 
   return (
     <Container>
-      <Title>Обложка</Title>
+      <StepTitle>Шаг #2</StepTitle>
+      <Title>Добавить изображение обложки</Title>
       <ContainerUpload
         {...{
           isDragActive,
@@ -101,6 +104,14 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
             <PlugIcon>
               <CoverPlaceholderIcon />
             </PlugIcon>
+            <PlugInfo>
+              <p>Перетащи файл сюда или нажмите на область</p>
+              <ul>
+                <li>Не более 1 mb</li>
+                <li>jpeg или jpg</li>
+                <li>До 1000px&#215;1000px</li>
+              </ul>
+            </PlugInfo>
           </Plug>
         )}
         {isDragReject && <span>Типом файла может быть только: .jpeg, .jpg</span>}
@@ -112,9 +123,9 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
           </DeleteButton>
         )}
       </ContainerUpload>
-      <Button disableShadow fullWidth onClick={onPrevStep}>
+      {/* <Button disableShadow fullWidth onClick={onPrevStep}>
         Prev
-      </Button>
+      </Button> */}
       <Button disableShadow fullWidth onClick={onNextStep}>
         Next
       </Button>

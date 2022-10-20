@@ -3,18 +3,25 @@ import IconButton from '../../../shared/IconButton'
 import SvgIcon from '../../../shared/SvgIcon'
 
 export const Container = styled.div`
+  color: #fff;
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
-  /* background-color: #3d3d33; */
-  padding: 40px 50px 0 50px;
+  padding: 20px 10px 0 10px;
 `
 
-export const Title = styled.h2`
-  text-align: center;
-  color: #fff;
+export const StepTitle = styled.h2`
   margin: 0;
-  margin-bottom: 15px;
+  margin-left: 10px;
+  margin-bottom: 20px;
+  text-align: start;
+`
+
+export const Title = styled.p`
+  color: #aaaaaa;
+  margin: 0;
+  margin-left: 10px;
+  margin-bottom: 20px;
 `
 
 interface containerStyles {
@@ -40,7 +47,7 @@ const getColor = (props: containerStyles) => {
 export const ContainerUpload = styled.div<containerStyles>`
   box-sizing: border-box;
   position: relative;
-  border: 3px dashed;
+  border: 2px dashed;
   border-color: #b5b5b5;
   border-radius: 8px;
   width: 100%;
@@ -51,6 +58,8 @@ export const ContainerUpload = styled.div<containerStyles>`
   outline: none;
   transition: border 0.3s;
   border-color: ${(props) => getColor(props)};
+  margin: 0 auto;
+  margin-bottom: 20px;
 `
 
 export const Preview = styled.img`
@@ -66,12 +75,25 @@ export const Plug = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   font-size: 60px;
   align-items: center;
+  border-radius: 8px;
 `
 
 export const PlugIcon = styled(SvgIcon)`
   /* font-size: 60px; */
+`
+
+export const PlugInfo = styled.div`
+  font-size: 14px;
+  & > p {
+    padding: 0 5px;
+    text-align: center;
+  }
+  & > ul {
+    list-style: disc;
+  }
 `
 
 export const DeleteButton = styled(IconButton)`
