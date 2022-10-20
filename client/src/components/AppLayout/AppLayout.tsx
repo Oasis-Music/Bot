@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import MiniPlayer from '../MiniPlayer/MiniPlayer'
 import Nav from '../Nav/Nav'
@@ -19,6 +19,7 @@ export const Wrapper = styled.div`
 
 const AppLayout: React.FC = () => {
   useWindowCSSRatio()
+  const location = useLocation()
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
 
   const handlePlayerOpen = () => {
@@ -33,10 +34,12 @@ const AppLayout: React.FC = () => {
       <main>
         <Outlet />
       </main>
-      <Wrapper>
-        <MiniPlayer onPlayerOpen={handlePlayerOpen} />
-        <Nav />
-      </Wrapper>
+      {location.pathname !== '/upload' && (
+        <Wrapper>
+          <MiniPlayer onPlayerOpen={handlePlayerOpen} />
+          <Nav />
+        </Wrapper>
+      )}
       <Player isOpen={isPlayerOpen} onClose={handlePlayerClose} />
     </Box>
   )
