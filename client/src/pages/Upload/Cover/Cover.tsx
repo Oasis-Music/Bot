@@ -68,7 +68,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
     accept: {
       'image/*': ['.jpeg', '.jpg']
     },
-    maxSize: 700000, // 700KB
+    maxSize: 716800, // 700KB
     maxFiles: 1,
     multiple: false,
     onDrop: handleFileDrop,
