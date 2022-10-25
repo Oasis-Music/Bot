@@ -20,6 +20,7 @@ interface BottonProps {
   disabled?: boolean
   fullWidth?: boolean
   disableShadow?: boolean // TODO: rename to withoutShadow
+  tabIndex?: number
   onClick?(event: React.MouseEvent<HTMLButtonElement>): void
 }
 
