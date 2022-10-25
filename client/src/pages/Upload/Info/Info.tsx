@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import Button from '../../../shared/Button'
 import TextInput from '../../../shared/FormFields/TextInput'
@@ -30,6 +30,7 @@ const InputWrapper = styled.div`
 
 const NextBotton = styled(Button)`
   && {
+    outline: none;
     display: block;
     margin: 0 auto;
   }
@@ -41,6 +42,14 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ onNextStep }) => {
   const { isValid, errors } = useFormikContext()
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const handleContinueClick = () => {
+    if (ref.current) {
+      ref.current.blur()
+    }
+    onNextStep()
+  }
 
   return (
     <Container>
@@ -50,7 +59,13 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
         <TextInput name="title" placeholder="Название" />
         <TextInput name="author" placeholder="Автор" />
       </InputWrapper>
-      <NextBotton disabled={!isValid} color="secondary" disableShadow onClick={onNextStep}>
+      <NextBotton
+        ref={ref}
+        disabled={!isValid}
+        color="secondary"
+        disableShadow
+        onClick={handleContinueClick}
+      >
         Продолжить
       </NextBotton>
       <div color="white">{JSON.stringify(errors)}</div>

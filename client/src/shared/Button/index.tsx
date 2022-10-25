@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 import Loader from '../Loader'
 
@@ -21,6 +21,7 @@ interface BottonProps {
   fullWidth?: boolean
   disableShadow?: boolean // TODO: rename to withoutShadow
   tabIndex?: number
+  ref?: React.RefObject<HTMLButtonElement> | null
   onClick?(event: React.MouseEvent<HTMLButtonElement>): void
 }
 
@@ -46,6 +47,9 @@ const BaseButton = styled.button<BaseButtonProps>`
     cursor: not-allowed;
     pointer-events: initial;
     opacity: 0.7;
+  }
+  &:focus {
+    outline: none;
   }
   ${({ $withoutShadow }) =>
     $withoutShadow
@@ -100,34 +104,36 @@ const BaseButton = styled.button<BaseButtonProps>`
 
 const ButtonText = styled.span``
 
-const Button: React.FC<BottonProps> = ({
-  loading,
-  children,
-  color = ButtonColor.primary,
-  disableShadow = false,
-  startIcon,
-  endIcon,
-  type = 'button',
-  fullWidth,
-  ...otherProps
-}: BottonProps) => {
-  return (
-    <BaseButton
-      $color={color as ButtonColor}
-      $withoutShadow={!disableShadow}
-      $fullWidth={fullWidth}
-      type={type}
-      {...otherProps}
-    >
-      {startIcon}
-      {loading ? (
-        <Loader dark={color !== ButtonColor.primary} />
-      ) : (
-        <ButtonText>{children}</ButtonText>
-      )}
-      {endIcon}
-    </BaseButton>
-  )
-}
+const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
+  {
+    loading,
+    children,
+    color = ButtonColor.primary,
+    disableShadow = false,
+    startIcon,
+    endIcon,
+    type = 'button',
+    fullWidth,
+    ...otherProps
+  },
+  ref
+) => (
+  <BaseButton
+    ref={ref}
+    $color={color as ButtonColor}
+    $withoutShadow={!disableShadow}
+    $fullWidth={fullWidth}
+    type={type}
+    {...otherProps}
+  >
+    {startIcon}
+    {loading ? (
+      <Loader dark={color !== ButtonColor.primary} />
+    ) : (
+      <ButtonText>{children}</ButtonText>
+    )}
+    {endIcon}
+  </BaseButton>
+)
 
-export default Button
+export default forwardRef(Button)
