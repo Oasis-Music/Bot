@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
 import Info from './Info/Info'
 import Cover from './Cover/Cover'
 import Audio from './Audio/Audio'
+import { useMutation } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { useWindowRatio } from '../../hooks'
 import { createTrackStepsSchema } from '../../utils/validationSchemas'
+import {
+  AddSoundtrackMutation,
+  AddSoundtrackVariables,
+  AddSoundtrackDocument
+} from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
 
 interface WrapperStyles {
   $page: number
@@ -43,30 +49,66 @@ interface SubmitValues {
   title: string
   author: string
   coverImage: any
+  audiofile: any
 }
 
 const Upload: React.FC = () => {
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(0)
   const [windowWidth] = useWindowRatio()
 
-  const slideNext = () => setPage((prev) => prev + 1)
+  const [addSoundtrack] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
+    AddSoundtrackDocument,
+    {
+      onCompleted: (data) => {
+        console.log(data)
+      },
+      onError: (err) => {
+        console.log(err)
+      }
+    }
+  )
 
-  const slidePrev = () => setPage((prev) => prev - 1)
+  const slideNext = () => {
+    if (page === 2) return
+    setPage((prev) => prev + 1)
+  }
+
+  const slidePrev = () => {
+    if (page === 0) return
+    setPage((prev) => prev - 1)
+  }
 
   const handleSubmit = (values: SubmitValues) => {
+    if (page === 2) {
+      addSoundtrack({
+        variables: {
+          title: values.title,
+          author: values.author,
+          coverImage: values.coverImage,
+          audiofile: values.audiofile
+        }
+      })
+    } else {
+      slideNext()
+    }
     console.log(values)
   }
+
+  const curentSchema = useMemo(() => {
+    return createTrackStepsSchema[page]
+  }, [page])
 
   return (
     <Container>
       <Formik
         validateOnMount
         onSubmit={handleSubmit}
-        validationSchema={createTrackStepsSchema[page]}
+        validationSchema={curentSchema}
         initialValues={{
-          title: 'xxx',
-          author: 'xxx',
-          coverImage: undefined
+          title: '',
+          author: '',
+          coverImage: null,
+          audiofile: null
         }}
       >
         {() => (

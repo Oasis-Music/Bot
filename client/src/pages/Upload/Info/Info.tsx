@@ -40,7 +40,7 @@ interface InfoProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onNextStep }) => {
-  const { isValid } = useFormikContext()
+  const { isValid, errors } = useFormikContext()
 
   return (
     <Container>
@@ -53,6 +53,7 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
       <NextBotton disabled={!isValid} color="secondary" disableShadow onClick={onNextStep}>
         Продолжить
       </NextBotton>
+      <div color="white">{JSON.stringify(errors)}</div>
     </Container>
   )
 }

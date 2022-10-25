@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import Button from '../../../shared/Button'
 import { timeFormater } from '../../../utils/helpers'
 import { UploadWrapper, WaveWrapper } from './Audio.styled'
+import { useFormikContext } from 'formik'
 
 const Container = styled.div`
   /* background-color: #bf00ff; */
@@ -16,6 +17,7 @@ interface AudioProps {
 }
 
 const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
+  const { setFieldValue, errors } = useFormikContext()
   const [mainPhoto, setMainPhoto] = useState<File | null>()
 
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
@@ -78,6 +80,8 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
 
           // Load the blob into Wavesurfer
           wavesurfer?.loadBlob(blob)
+
+          setFieldValue('audiofile', file)
         }
       }
 
@@ -129,6 +133,9 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
       <WaveWrapper>
         <div id="waveformupload" />
       </WaveWrapper>
+      <Button type="submit" disableShadow fullWidth>
+        Upload
+      </Button>
       <Button disableShadow fullWidth onClick={onPrevStep}>
         Prev
       </Button>

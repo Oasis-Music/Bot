@@ -39,7 +39,30 @@ directive @connection(
   filter: [String!]
 ) on FIELD
 
+input AddSoundtrackInput {
+  title: String!
+  author: String!
+  coverImage: Upload!
+  audiofile: Upload!
+}
+
+input AddTrackToUserInput {
+  userId: String!
+  trackId: String!
+}
+
 scalar Date
+
+input DeleteTrackFromUserInput {
+  userId: ID!
+  trackId: ID!
+}
+
+type Mutation {
+  addSoundtrack(input: AddSoundtrackInput!): Boolean!
+  addTrackToUser(input: AddTrackToUserInput!): Boolean!
+  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
+}
 
 type NotFound {
   message: String!
@@ -48,6 +71,8 @@ type NotFound {
 type Query {
   soundtrack(id: ID!): SoundtrackResult
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+  user(id: ID!): UserResult
+  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
 }
 
 type Soundtrack {
@@ -57,6 +82,8 @@ type Soundtrack {
   duration: Int!
   coverImage: String!
   fileURL: String!
+  validated: Boolean!
+  creatorId: String!
   createdAt: Date!
 }
 
@@ -69,3 +96,23 @@ input SoundtracksFilter {
 type SoundtracksResponse {
   soundtracks: [Soundtrack!]!
 }
+
+scalar Upload
+
+type User {
+  id: ID!
+  telegramId: String!
+  createdAt: Date!
+}
+
+union UserResult = User | NotFound
+
+input UserTracksFilter {
+  page: Int!
+}
+
+type UserTracksResponse {
+  soundtracks: [Soundtrack!]!
+}
+
+union UserTracksResult = UserTracksResponse | NotFound

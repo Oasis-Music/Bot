@@ -17,6 +17,7 @@ import {
   PlugInfo,
   DeleteButton
 } from './Cover.styled'
+import { useFormikContext } from 'formik'
 
 interface UploadedFile extends File {
   preview: string
@@ -28,13 +29,14 @@ interface CoverProps {
 }
 
 const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
-  const [mainPhoto, setMainPhoto] = useState<UploadedFile | null>()
+  const { setFieldValue, errors } = useFormikContext()
+  const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
 
   useEffect(() => {
-    console.log('Mount: Cover')
-
     return () => {
-      console.log('Unmount: Cover')
+      if (mainPhoto) {
+        URL.revokeObjectURL(mainPhoto.preview)
+      }
     }
   }, [])
 
@@ -50,7 +52,9 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
       file.preview = URL.createObjectURL(s as Blob)
 
       //   onMainPhotoUpload(file)
+
       setMainPhoto(file)
+      setFieldValue('coverImage', file)
     }
   }
 
@@ -66,7 +70,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     accept: {
-      'image/*': ['.jpeg', '.jpg']
+      'image/jpeg': ['.jpg']
     },
     maxSize: 716800, // 700KB
     maxFiles: 1,
@@ -81,7 +85,8 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     URL.revokeObjectURL(mainPhoto!.preview)
     // onMainPhotoUpload(null)
-    setMainPhoto(null)
+    setMainPhoto(undefined)
+    setFieldValue('coverImage', null)
   }
 
   return (
@@ -123,12 +128,19 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
           </DeleteButton>
         )}
       </ContainerUpload>
-      {/* <Button disableShadow fullWidth onClick={onPrevStep}>
+      <Button tabIndex={-1} disableShadow fullWidth onClick={onPrevStep}>
         Prev
-      </Button> */}
-      <Button disableShadow fullWidth onClick={onNextStep}>
+      </Button>
+      <Button
+        tabIndex={-1}
+        disableShadow
+        disabled={!!!mainPhoto?.name}
+        fullWidth
+        onClick={onNextStep}
+      >
         Next
       </Button>
+      <div color="white">{JSON.stringify(errors)}</div>
     </Container>
   )
 }

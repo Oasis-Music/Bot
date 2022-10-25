@@ -17,6 +17,9 @@ export const createTrackStepsSchema = [
   }),
   yup.object().shape({
     coverImage: yup.mixed().required()
+  }),
+  yup.object().shape({
+    audiofile: yup.mixed().required()
   })
 ]
 

@@ -11,6 +11,43 @@ export type Scalars = {
   Int: number
   Float: number
   Date: any
+  Upload: any
+}
+
+export type AddSoundtrackInput = {
+  audiofile: Scalars['Upload']
+  author: Scalars['String']
+  coverImage: Scalars['Upload']
+  title: Scalars['String']
+}
+
+export type AddTrackToUserInput = {
+  trackId: Scalars['String']
+  userId: Scalars['String']
+}
+
+export type DeleteTrackFromUserInput = {
+  trackId: Scalars['ID']
+  userId: Scalars['ID']
+}
+
+export type Mutation = {
+  __typename?: 'Mutation'
+  addSoundtrack: Scalars['Boolean']
+  addTrackToUser: Scalars['Boolean']
+  deleteTrackFromUser: Scalars['Boolean']
+}
+
+export type MutationAddSoundtrackArgs = {
+  input: AddSoundtrackInput
+}
+
+export type MutationAddTrackToUserArgs = {
+  input: AddTrackToUserInput
+}
+
+export type MutationDeleteTrackFromUserArgs = {
+  input: DeleteTrackFromUserInput
 }
 
 export type NotFound = {
@@ -22,6 +59,8 @@ export type Query = {
   __typename?: 'Query'
   soundtrack?: Maybe<SoundtrackResult>
   soundtracks: SoundtracksResponse
+  user?: Maybe<UserResult>
+  userTracks: UserTracksResult
 }
 
 export type QuerySoundtrackArgs = {
@@ -32,15 +71,26 @@ export type QuerySoundtracksArgs = {
   filter: SoundtracksFilter
 }
 
+export type QueryUserArgs = {
+  id: Scalars['ID']
+}
+
+export type QueryUserTracksArgs = {
+  filter: UserTracksFilter
+  id: Scalars['ID']
+}
+
 export type Soundtrack = {
   __typename?: 'Soundtrack'
   author: Scalars['String']
   coverImage: Scalars['String']
   createdAt: Scalars['Date']
+  creatorId: Scalars['String']
   duration: Scalars['Int']
   fileURL: Scalars['String']
   id: Scalars['ID']
   title: Scalars['String']
+  validated: Scalars['Boolean']
 }
 
 export type SoundtrackResult = NotFound | Soundtrack
@@ -54,6 +104,26 @@ export type SoundtracksResponse = {
   soundtracks: Array<Soundtrack>
 }
 
+export type User = {
+  __typename?: 'User'
+  createdAt: Scalars['Date']
+  id: Scalars['ID']
+  telegramId: Scalars['String']
+}
+
+export type UserResult = NotFound | User
+
+export type UserTracksFilter = {
+  page: Scalars['Int']
+}
+
+export type UserTracksResponse = {
+  __typename?: 'UserTracksResponse'
+  soundtracks: Array<Soundtrack>
+}
+
+export type UserTracksResult = NotFound | UserTracksResponse
+
 export interface PossibleTypesResultData {
   possibleTypes: {
     [key: string]: string[]
@@ -61,7 +131,9 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
-    SoundtrackResult: ['NotFound', 'Soundtrack']
+    SoundtrackResult: ['NotFound', 'Soundtrack'],
+    UserResult: ['NotFound', 'User'],
+    UserTracksResult: ['NotFound', 'UserTracksResponse']
   }
 }
 export default result

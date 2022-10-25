@@ -1,14 +1,15 @@
-import { ApolloClient, HttpLink, ApolloLink, from } from '@apollo/client'
+import { ApolloClient, ApolloLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
+import { createUploadLink } from 'apollo-upload-client'
 import { cache } from './cache/cache'
 import { decodeToken, promiseToObservable } from '../utils/helpers'
 // import { UserMutations } from './cache/mutations'
 
-// 'https://api.bags2on.com.ua/graphql'
 const GRAPHQL_URL = process.env.REACT_APP_API_URL + 'graphql'
 const withDevTools = process.env.NODE_ENV === 'development'
 
-const httpLink = new HttpLink({ uri: GRAPHQL_URL })
+// this link fully covers HttpLink
+const uploadLink = createUploadLink({ uri: GRAPHQL_URL })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const token = localStorage.getItem('token') || ''
@@ -73,7 +74,7 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
 
 const client = new ApolloClient({
   cache,
-  link: from([authMiddleware, refreshLink, httpLink]),
+  link: from([authMiddleware, refreshLink, uploadLink]),
   connectToDevTools: withDevTools
 })
 
