@@ -60,7 +60,7 @@ interface SubmitValues {
 }
 
 const Upload: React.FC = () => {
-  const [step, setPage] = useState<number>(0)
+  const [step, setStep] = useState<number>(0)
   const [windowWidth] = useWindowRatio()
 
   const [addSoundtrack] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
@@ -77,12 +77,12 @@ const Upload: React.FC = () => {
 
   const slideNext = () => {
     if (step === 2) return
-    setPage((prev) => prev + 1)
+    setStep((prev) => prev + 1)
   }
 
   const slidePrev = () => {
     if (step === 0) return
-    setPage((prev) => prev - 1)
+    setStep((prev) => prev - 1)
   }
 
   const handleSubmit = (values: SubmitValues) => {
