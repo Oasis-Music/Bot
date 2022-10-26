@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../../../shared/Button'
 import TextInput from '../../../shared/FormFields/TextInput'
+import blushEmoji from '../../../assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
 
 const Container = styled.div`
@@ -11,13 +13,20 @@ const Container = styled.div`
 
 const StepTitle = styled.h2`
   margin: 0;
-  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
   margin-left: 10px;
   text-align: start;
 `
 
+const EmojiImg = styled.img`
+  width: 30px;
+  margin-left: 5px;
+`
+
 const Title = styled.p`
-  color: #aaaaaa;
+  color: #ababab;
   margin: 0;
   margin-left: 10px;
   margin-bottom: 40px;
@@ -30,9 +39,24 @@ const InputWrapper = styled.div`
 
 const NextBotton = styled(Button)`
   && {
+    width: 100%;
+    max-width: 210px;
     outline: none;
     display: block;
     margin: 0 auto;
+    margin-bottom: 17px;
+  }
+`
+
+const BackLink = styled(Link)`
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  display: block;
+  text-align: center;
+  font-weight: 500;
+  &:focus {
+    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
@@ -41,7 +65,7 @@ interface InfoProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onNextStep }) => {
-  const { isValid, errors } = useFormikContext()
+  const { isValid } = useFormikContext()
   const ref = useRef<HTMLButtonElement>(null)
 
   const handleContinueClick = () => {
@@ -53,8 +77,11 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
 
   return (
     <Container>
-      <StepTitle>Шаг #1</StepTitle>
-      <Title>Добавить немного информации о треке</Title>
+      <StepTitle>
+        <span>Шаг #1</span>
+        <EmojiImg src={blushEmoji} alt="смайлик -улыбка" />
+      </StepTitle>
+      <Title>Добавь немного информации о треке</Title>
       <InputWrapper>
         <TextInput name="title" placeholder="Название" />
         <TextInput name="author" placeholder="Автор" />
@@ -68,7 +95,8 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
       >
         Продолжить
       </NextBotton>
-      <div color="white">{JSON.stringify(errors)}</div>
+      <BackLink to={'/'}>На главную</BackLink>
+      {/* <div color="white">{JSON.stringify(errors)}</div> */}
     </Container>
   )
 }
