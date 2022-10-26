@@ -12,6 +12,7 @@ enum ButtonColor {
 interface BottonProps {
   to?: string
   color?: 'primary' | 'secondary' | 'success' | 'danger'
+  type?: 'button' | 'reset' | 'submit'
   children: React.ReactNode
   loading?: boolean
   disabled?: boolean
@@ -93,10 +94,16 @@ const IconButton: React.FC<BottonProps> = ({
   children,
   color = ButtonColor.primary,
   withoutShadow = false,
+  type = 'button',
   ...otherProps
 }: BottonProps) => {
   return (
-    <BaseButton $color={color as ButtonColor} $withoutShadow={!withoutShadow} {...otherProps}>
+    <BaseButton
+      $color={color as ButtonColor}
+      $withoutShadow={!withoutShadow}
+      type={type}
+      {...otherProps}
+    >
       {loading ? <Loader dark={color !== ButtonColor.primary} /> : children}
     </BaseButton>
   )
