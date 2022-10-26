@@ -14,7 +14,7 @@ import {
 } from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
 
 interface WrapperStyles {
-  $page: number
+  $shift: number
 }
 
 const Container = styled.div`
@@ -22,18 +22,25 @@ const Container = styled.div`
 `
 
 const Wrapper = styled.div<WrapperStyles>`
-  background-color: #101318;
   display: flex;
-  transform: ${(props) => `translate3d(-${props.$page}px, 0, 0)`};
+  transform: ${({ $shift }) => `translate3d(-${$shift}px, 0, 0)`};
   transition: transform 0.3s;
 `
 
-const Slide = styled.div`
-  width: 100%;
-  height: 100%;
+interface SlideStyles {
+  $width: number
+  $active?: boolean
+}
+
+const Slide = styled.div<SlideStyles>`
+  width: ${({ $width }) => `${$width}px`};
+  height: 100vh;
   flex-shrink: 0;
   box-sizing: border-box;
   background-color: #101318;
+  & > div {
+    display: ${({ $active }) => ($active ? 'block' : 'none')};
+  }
 `
 
 interface Track {
@@ -53,7 +60,7 @@ interface SubmitValues {
 }
 
 const Upload: React.FC = () => {
-  const [page, setPage] = useState<number>(0)
+  const [step, setPage] = useState<number>(0)
   const [windowWidth] = useWindowRatio()
 
   const [addSoundtrack] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
@@ -69,17 +76,17 @@ const Upload: React.FC = () => {
   )
 
   const slideNext = () => {
-    if (page === 2) return
+    if (step === 2) return
     setPage((prev) => prev + 1)
   }
 
   const slidePrev = () => {
-    if (page === 0) return
+    if (step === 0) return
     setPage((prev) => prev - 1)
   }
 
   const handleSubmit = (values: SubmitValues) => {
-    if (page === 2) {
+    if (step === 2) {
       addSoundtrack({
         variables: {
           title: values.title,
@@ -95,8 +102,8 @@ const Upload: React.FC = () => {
   }
 
   const curentSchema = useMemo(() => {
-    return createTrackStepsSchema[page]
-  }, [page])
+    return createTrackStepsSchema[step]
+  }, [step])
 
   return (
     <Container>
@@ -113,14 +120,14 @@ const Upload: React.FC = () => {
       >
         {() => (
           <Form>
-            <Wrapper $page={page * window.innerWidth}>
-              <Slide style={{ width: `${windowWidth}px` }}>
+            <Wrapper $shift={step * window.innerWidth}>
+              <Slide $active={0 === step} $width={windowWidth}>
                 <Info onNextStep={slideNext} />
               </Slide>
-              <Slide style={{ width: `${windowWidth}px` }}>
+              <Slide $active={1 === step} $width={windowWidth}>
                 <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
               </Slide>
-              <Slide style={{ width: `${windowWidth}px` }}>
+              <Slide $active={2 === step} $width={windowWidth}>
                 <Audio onPrevStep={slidePrev} />
               </Slide>
             </Wrapper>
