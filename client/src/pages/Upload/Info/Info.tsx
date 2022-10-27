@@ -1,10 +1,10 @@
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../../../shared/Button'
 import TextInput from '../../../shared/FormFields/TextInput'
 import blushEmoji from '../../../assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
+import { BackLink } from '../StepControls'
 
 const Container = styled.div`
   color: #fff;
@@ -45,18 +45,6 @@ const NextBotton = styled(Button)`
     display: block;
     margin: 0 auto;
     margin-bottom: 17px;
-  }
-`
-
-const BackLink = styled(Link)`
-  outline: none;
-  color: #fff;
-  font-size: 15px;
-  display: block;
-  text-align: center;
-  font-weight: 500;
-  &:focus {
-    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
