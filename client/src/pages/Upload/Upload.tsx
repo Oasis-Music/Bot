@@ -18,7 +18,9 @@ interface WrapperStyles {
 }
 
 const Container = styled.div`
-  overflow: hidden;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 const Wrapper = styled.div<WrapperStyles>`
@@ -34,7 +36,7 @@ interface SlideStyles {
 
 const Slide = styled.div<SlideStyles>`
   width: ${({ $width }) => `${$width}px`};
-  height: 100vh;
+  min-height: 100vh;
   flex-shrink: 0;
   box-sizing: border-box;
   background-color: #101318;
