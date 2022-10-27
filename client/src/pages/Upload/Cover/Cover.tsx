@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
-// import clsx from 'clsx'
-import Button from '../../../shared/Button'
-
-import { useDropzone } from 'react-dropzone'
+import { useSpring, animated } from 'react-spring'
+import { useDropzone, FileRejection } from 'react-dropzone'
 import { ReactComponent as DeleteIcon } from '../../../assets/svg/trash.svg'
-import SvgIcon from '../../../shared/SvgIcon'
 import { ReactComponent as CoverPlaceholderIcon } from '../../../assets/svg/cover_placeholder.svg'
 import {
   Container,
@@ -15,22 +12,39 @@ import {
   Plug,
   PlugIcon,
   PlugInfo,
+  ErrorMessage,
   DeleteButton
 } from './Cover.styled'
 import { useFormikContext } from 'formik'
-
-interface UploadedFile extends File {
-  preview: string
-}
+import SvgIcon from '../../../shared/SvgIcon'
+import StepControls from '../StepControls'
 
 interface CoverProps {
   onNextStep(): void
   onPrevStep(): void
 }
 
+const MAX_COVER_SIZE = 700
+
+interface UploadedFile extends File {
+  preview: string
+}
+
+function dropzoneCodeToMsg(code: string): string {
+  switch (code) {
+    case 'file-invalid-type':
+      return '* тип файла только: .jpeg, .jpg'
+    case 'file-too-large':
+      return `* файл весит больше ${MAX_COVER_SIZE} KB`
+    default:
+      return '* что-то пошло не так'
+  }
+}
+
 const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
-  const { setFieldValue, errors } = useFormikContext()
+  const { setFieldValue } = useFormikContext()
   const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
+  const [dropError, setDropError] = useState<string>('')
 
   useEffect(() => {
     return () => {
@@ -40,39 +54,58 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
     }
   }, [])
 
+  const fadeStyles = useSpring({
+    config: { duration: 250 },
+    from: { opacity: 0 },
+    to: {
+      opacity: dropError ? 1 : 0
+    }
+  })
+
   const handleFileDrop = (acceptedFiles: globalThis.File[]) => {
     if (mainPhoto) URL.revokeObjectURL(mainPhoto.preview)
 
     if (acceptedFiles.length) {
-      const uploaded: unknown = acceptedFiles[0] // Type assertions
-      const file = uploaded as UploadedFile
+      if (dropError) setDropError('')
 
-      const s: unknown = file
+      const file = acceptedFiles[0] as UploadedFile
+      file.preview = URL.createObjectURL(file)
 
-      file.preview = URL.createObjectURL(s as Blob)
+      const image = new Image()
+      image.src = file.preview
+      image.onload = () => {
+        const w = image.width,
+          h = image.height
 
-      //   onMainPhotoUpload(file)
+        if (w !== h) {
+          setDropError('* ширина и высота должны быть одинаковы')
+          return
+        }
+
+        if (w > 1000) {
+          setDropError('* разрешение больше чем 1000×1000 px')
+        }
+      }
 
       setMainPhoto(file)
       setFieldValue('coverImage', file)
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDropReject = (rejectedFiles: any) => {
-    console.log(rejectedFiles)
-    const { errors } = rejectedFiles[0]
+  const handleDropReject = (fileRejections: FileRejection[]) => {
+    console.log(fileRejections)
+    const { errors } = fileRejections[0]
+    console.log('e', errors)
     const { code } = errors[0]
-    // code: "file-too-large"
     console.log(code)
-    // TODO custom error on drop rejected
+    setDropError(dropzoneCodeToMsg(code))
   }
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
     accept: {
       'image/jpeg': ['.jpg']
     },
-    maxSize: 716800, // 700KB
+    maxSize: 716800,
     maxFiles: 1,
     multiple: false,
     onDrop: handleFileDrop,
@@ -81,10 +114,10 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
 
   const handleRemoveClick = (event: React.MouseEvent<HTMLElement>): void => {
     event.stopPropagation()
+    setDropError('')
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     URL.revokeObjectURL(mainPhoto!.preview)
-    // onMainPhotoUpload(null)
     setMainPhoto(undefined)
     setFieldValue('coverImage', null)
   }
@@ -92,7 +125,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
   return (
     <Container>
       <StepTitle>Шаг #2</StepTitle>
-      <Title>Добавить изображение обложки</Title>
+      <Title>Добавь изображение обложки</Title>
       <ContainerUpload
         {...{
           isDragActive,
@@ -100,26 +133,31 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
           isDragReject
         }}
         {...getRootProps()}
+        isError={dropError}
+        $droped={!!mainPhoto?.size}
       >
         <input {...getInputProps()} />
         {mainPhoto ? (
-          <Preview src={mainPhoto?.preview} alt="Загруженное фото создаваемого товара" />
+          <Preview
+            src={mainPhoto.preview}
+            alt="Загруженное обложки трека"
+            onLoad={() => URL.revokeObjectURL(mainPhoto.preview)}
+          />
         ) : (
           <Plug>
             <PlugIcon>
               <CoverPlaceholderIcon />
             </PlugIcon>
             <PlugInfo>
-              <p>Перетащи файл сюда или нажмите на область</p>
+              <p>Перетащи файл сюда или нажми на область</p>
               <ul>
-                <li>Не более 1 mb</li>
-                <li>jpeg или jpg</li>
-                <li>До 1000px&#215;1000px</li>
+                <li>Не более&nbsp;{MAX_COVER_SIZE}&nbsp;KB</li>
+                <li>Формат JPEG</li>
+                <li>До 1000&#215;1000 px</li>
               </ul>
             </PlugInfo>
           </Plug>
         )}
-        {isDragReject && <span>Типом файла может быть только: .jpeg, .jpg</span>}
         {mainPhoto && (
           <DeleteButton withoutShadow onClick={handleRemoveClick}>
             <SvgIcon>
@@ -128,19 +166,16 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
           </DeleteButton>
         )}
       </ContainerUpload>
-      <Button tabIndex={-1} disableShadow fullWidth onClick={onPrevStep}>
-        Prev
-      </Button>
-      <Button
-        tabIndex={-1}
-        disableShadow
-        disabled={!!!mainPhoto?.name}
-        fullWidth
-        onClick={onNextStep}
-      >
-        Next
-      </Button>
-      <div color="white">{JSON.stringify(errors)}</div>
+      <animated.div style={fadeStyles}>
+        <ErrorMessage>{dropError}</ErrorMessage>
+      </animated.div>
+      <StepControls
+        disabled={!!!mainPhoto?.size || !!dropError}
+        nextText="Продолжить"
+        onBack={onPrevStep}
+        onNext={onNextStep}
+      />
+      {/* <div color="white">{JSON.stringify(errors)}</div> */}
     </Container>
   )
 }
