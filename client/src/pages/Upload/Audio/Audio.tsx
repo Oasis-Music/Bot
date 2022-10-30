@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react'
-import styled from 'styled-components'
 import WaveSurfer from 'wavesurfer.js'
-import Button from '../../../shared/Button'
 import SvgIcon from '../../../shared/SvgIcon'
 import { ReactComponent as PlayIcon } from '../../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../../assets/svg/pause.svg'
 import { timeFormater } from '../../../utils/helpers'
-import { WaveWrapper, PlayBotton } from './Audio.styled'
+import {
+  Container,
+  Title,
+  StepTitle,
+  WaveWrapper,
+  Waves,
+  PlayBottonWrapper,
+  PlayBotton
+} from './Audio.styled'
 import { useFormikContext } from 'formik'
-
 import Dropzone from './Dropzone/Dropzone'
-
-const Container = styled.div``
+import StepControls from '../StepControls'
 
 interface AudioProps {
   onPrevStep(): void
@@ -50,7 +54,7 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
       wavesurfer.current.on('ready', function () {
         setDuration(timeFormater(wavesurfer.current?.getDuration() || 0))
         setReadyForPlay(true)
-        // obj.play()
+        // play()
       })
 
       wavesurfer.current.on('audioprocess', function () {
@@ -76,26 +80,35 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
     }
   }
 
+  const handleStopPlaying = () => {
+    setPlay(false)
+    setReadyForPlay(false)
+    if (wavesurfer.current) {
+      wavesurfer.current.pause()
+    }
+  }
+
   return (
     <Container>
+      <StepTitle>Шаг #3</StepTitle>
+      <Title>Добавь аудиофайл</Title>
       <Dropzone
         audio={audio}
         wavesurfer={wavesurfer.current}
+        onStop={handleStopPlaying}
         onSetAudio={setAudio}
         onFormValue={handleSetAudioFormValue}
       />
       <WaveWrapper>
-        <PlayBotton disabled={!readyForPlay} withoutShadow onClick={playHandler}>
-          <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
-        </PlayBotton>
-        <div ref={waveContainerRef} />
+        <Waves $isFile={readyForPlay} ref={waveContainerRef} />
+
+        <PlayBottonWrapper>
+          <PlayBotton disabled={!readyForPlay} withoutShadow onClick={playHandler}>
+            <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
+          </PlayBotton>
+        </PlayBottonWrapper>
       </WaveWrapper>
-      <Button type="submit" disabled={!readyForPlay} disableShadow fullWidth>
-        Upload
-      </Button>
-      <Button disableShadow fullWidth onClick={onPrevStep}>
-        Prev
-      </Button>
+      <StepControls disabled={!readyForPlay} nextText="Загрузить" onBack={onPrevStep} />
     </Container>
   )
 }

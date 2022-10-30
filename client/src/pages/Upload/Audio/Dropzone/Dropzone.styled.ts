@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import SvgIcon from '../../../../shared/SvgIcon'
 
 interface containerStyles {
+  isError: boolean
   dragActive: boolean
   isDragAccept: boolean
   isDragReject: boolean
@@ -17,6 +18,9 @@ const getColor = (props: containerStyles) => {
   if (props.isDragReject) {
     return '#ff1744'
   }
+  if (props.isError) {
+    return '#ff1744'
+  }
 
   return '#eeeeee'
 }
@@ -27,40 +31,54 @@ export const ContainerUpload = styled.div<containerStyles>`
   border: 2px dashed;
   border-color: #b5b5b5;
   border-radius: 8px;
-  width: 100%;
-  height: 100%;
-  max-width: 240px;
-  max-height: 240px;
+  width: 85vw;
   margin: 0 auto;
   outline: none;
   transition: border 0.3s;
   border-color: ${(props) => getColor(props)};
   margin: 0 auto;
-  margin-bottom: 20px;
+  margin-bottom: 2vh;
 `
 
 export const Plug = styled.div`
   color: #fff;
-  height: 100%;
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  font-size: 60px;
   align-items: center;
   border-radius: 8px;
 `
 
 export const PlugIcon = styled(SvgIcon)`
-  /* font-size: 60px; */
+  padding: 3vh 2vh;
+  font-size: 9vh;
 `
 
 export const PlugInfo = styled.div`
-  font-size: 14px;
+  padding-bottom: 1.5vh;
   & > p {
+    font-size: 2.4vh;
     padding: 0 5px;
     text-align: center;
+    margin-top: 1.5vh;
+    margin-bottom: 1.5vh;
   }
   & > ul {
+    font-size: 2.3vh;
+    color: #b5b5b5;
     list-style: disc;
+    display: table;
+    margin: 0 auto;
   }
+`
+
+export const ErrorMessage = styled.p`
+  color: #ff182e;
+  text-align: center;
+  font-size: 14px;
+  line-height: 14px;
+  margin: 0;
+  margin-top: 10px;
+  height: 13px;
+  transition: all 0.3s linear;
+  margin-bottom: 3vh;
 `

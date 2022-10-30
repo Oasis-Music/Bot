@@ -1,23 +1,58 @@
-import React from 'react'
-import { useDropzone } from 'react-dropzone'
+import React, { useState } from 'react'
+import { useSpring, animated } from 'react-spring'
+import { useDropzone, FileRejection } from 'react-dropzone'
 import { ReactComponent as AudioPlaceholderIcon } from '../../../../assets/svg/audio_placeholder.svg'
+import { ReactComponent as CheckIcon } from '../../../../assets/svg/check-circle.svg'
 
-import { ContainerUpload, Plug, PlugIcon, PlugInfo } from './Dropzone.styled'
+import { ContainerUpload, Plug, PlugIcon, PlugInfo, ErrorMessage } from './Dropzone.styled'
 
 interface DropzoneProps {
   audio: File | null
   wavesurfer: WaveSurfer | null
-  onSetAudio(f: File): void
+  onStop(): void
+  onSetAudio(f: File | null): void
   onFormValue(f: File): void
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({ audio, wavesurfer, onSetAudio, onFormValue }) => {
+const MAX_AUDIO_SIZE = 10
+
+function dropzoneCodeToMsg(code: string): string {
+  switch (code) {
+    case 'file-invalid-type':
+      return '* тип файла только mp3'
+    case 'file-too-large':
+      return `* файл весит больше ${MAX_AUDIO_SIZE} mb`
+    default:
+      return '* что-то пошло не так'
+  }
+}
+
+const Dropzone: React.FC<DropzoneProps> = ({
+  audio,
+  wavesurfer,
+  onStop,
+  onSetAudio,
+  onFormValue
+}) => {
+  const [dropError, setDropError] = useState<string>('')
+
+  const fadeStyles = useSpring({
+    config: { duration: 250 },
+    from: { opacity: 0 },
+    to: {
+      opacity: dropError ? 1 : 0
+    }
+  })
+
   const handleFileDrop = (acceptedFiles: globalThis.File[]) => {
-    if (audio) wavesurfer?.destroy()
+    if (audio) {
+      if (wavesurfer?.isPlaying) onStop()
+      wavesurfer?.empty()
+    }
 
     if (acceptedFiles.length) {
-      const uploaded: unknown = acceptedFiles[0]
-      const file = uploaded as File
+      if (dropError) setDropError('')
+      const file = acceptedFiles[0] as File
 
       onSetAudio(file)
 
@@ -37,6 +72,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, wavesurfer, onSetAudio, onFo
 
       reader.onerror = function (evt) {
         console.error('An error ocurred reading the file: ', evt)
+        setDropError('Ошибка чтения файла')
       }
 
       // Read File as an ArrayBuffer
@@ -44,14 +80,14 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, wavesurfer, onSetAudio, onFo
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDropReject = (rejectedFiles: any) => {
-    console.log(rejectedFiles)
-    const { errors } = rejectedFiles[0]
+  const handleDropReject = (fileRejections: FileRejection[]) => {
+    console.log(fileRejections)
+    const { errors } = fileRejections[0]
+    console.log('e', errors)
     const { code } = errors[0]
-    // code: "file-too-large"
     console.log(code)
-    // TODO custom error on drop rejected
+    setDropError(dropzoneCodeToMsg(code))
+    onSetAudio(null)
   }
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
@@ -66,30 +102,32 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, wavesurfer, onSetAudio, onFo
   })
 
   return (
-    <ContainerUpload
-      {...{
-        isDragActive,
-        isDragAccept,
-        isDragReject
-      }}
-      {...getRootProps()}
-    >
-      <input {...getInputProps()} />
-      <Plug>
-        <PlugIcon>
-          <AudioPlaceholderIcon />
-        </PlugIcon>
-        <PlugInfo>
-          <p>Перетащи аудио сюда или нажмите на область</p>
-          <ul>
-            <li>Не более 8 mb</li>
-            <li>MP3</li>
-          </ul>
-        </PlugInfo>
-      </Plug>
-
-      {isDragReject && <span>Типом файла может быть только: .mp3</span>}
-    </ContainerUpload>
+    <>
+      <ContainerUpload
+        {...{
+          isDragActive,
+          isDragAccept,
+          isDragReject
+        }}
+        {...getRootProps()}
+        isError={dropError}
+      >
+        <input {...getInputProps()} />
+        <Plug>
+          <PlugIcon>{audio?.size ? <CheckIcon /> : <AudioPlaceholderIcon />}</PlugIcon>
+          <PlugInfo>
+            <p>Перетащи mp3 сюда или нажми на область</p>
+            <ul>
+              <li>Не более 10 MB</li>
+              <li>Формат MP3</li>
+            </ul>
+          </PlugInfo>
+        </Plug>
+      </ContainerUpload>
+      <animated.div style={fadeStyles}>
+        <ErrorMessage>{dropError}</ErrorMessage>
+      </animated.div>
+    </>
   )
 }
 
