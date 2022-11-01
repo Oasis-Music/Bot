@@ -12,6 +12,9 @@ import {
   AddSoundtrackVariables,
   AddSoundtrackDocument
 } from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
+import Feedback from './modals/Feedback'
+import history from '../../utils/history'
+import routeNames from '../../utils/routeNames'
 
 enum Step {
   INFO = 0,
@@ -58,8 +61,19 @@ interface FormValues {
   audiofile: unknown
 }
 
+type feedbackModal = {
+  open: boolean
+  type: 'success' | 'fail'
+}
+
 const Upload: React.FC = () => {
   const [step, setStep] = useState<number>(Step.INFO)
+
+  const [feedbackModal, setFeedbackModal] = useState<feedbackModal>({
+    open: false,
+    type: 'success'
+  })
+
   const [windowWidth] = useWindowRatio()
 
   const [addSoundtrack, { loading }] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
@@ -67,9 +81,16 @@ const Upload: React.FC = () => {
     {
       onCompleted: (data) => {
         console.log(data)
+        setFeedbackModal({
+          type: 'success',
+          open: true
+        })
       },
-      onError: (err) => {
-        console.log(err)
+      onError: () => {
+        setFeedbackModal({
+          type: 'fail',
+          open: true
+        })
       }
     }
   )
@@ -97,6 +118,17 @@ const Upload: React.FC = () => {
   const curentSchema = useMemo(() => {
     return createTrackStepsSchema[step]
   }, [step])
+
+  const handleFeedbackOk = () => {
+    history.push(routeNames.player)
+  }
+
+  const handleFeedbackErr = () => {
+    setFeedbackModal((prev) => ({
+      ...prev,
+      open: false
+    }))
+  }
 
   return (
     <Container>
@@ -127,6 +159,12 @@ const Upload: React.FC = () => {
           </Form>
         )}
       </Formik>
+      <Feedback
+        type={feedbackModal.type}
+        isOpen={feedbackModal.open}
+        onSubmit={handleFeedbackOk}
+        onRetry={handleFeedbackErr}
+      />
     </Container>
   )
 }

@@ -7,6 +7,7 @@ import client from './apollo/apollo'
 import App from './App'
 import history from './utils/history'
 import { ThemeProvider } from 'styled-components'
+import { ModalProvider } from 'styled-react-modal'
 // import reportWebVitals from './reportWebVitals'
 
 import 'normalize.css'
@@ -15,10 +16,12 @@ const Application: React.FC = () => {
   return (
     <HistoryRouter history={history}>
       <ThemeProvider theme={theme}>
-        <ApolloProvider client={client}>
-          <GlobalStyles />
-          <App />
-        </ApolloProvider>
+        <ModalProvider>
+          <ApolloProvider client={client}>
+            <GlobalStyles />
+            <App />
+          </ApolloProvider>
+        </ModalProvider>
       </ThemeProvider>
     </HistoryRouter>
   )
