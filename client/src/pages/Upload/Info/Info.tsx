@@ -52,8 +52,13 @@ interface InfoProps {
   onNextStep(): void
 }
 
+interface FieldProps {
+  title: string
+  author: string
+}
+
 const Info: React.FC<InfoProps> = ({ onNextStep }) => {
-  const { isValid } = useFormikContext()
+  const { errors } = useFormikContext<FieldProps>()
   const ref = useRef<HTMLButtonElement>(null)
 
   const handleContinueClick = () => {
@@ -76,7 +81,7 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
       </InputWrapper>
       <NextBotton
         ref={ref}
-        disabled={!isValid}
+        disabled={Boolean(errors.title && errors.author)}
         color="secondary"
         disableShadow
         onClick={handleContinueClick}
@@ -84,7 +89,6 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
         Продолжить
       </NextBotton>
       <BackLink to={'/'}>На главную</BackLink>
-      {/* <div color="white">{JSON.stringify(errors)}</div> */}
     </Container>
   )
 }
