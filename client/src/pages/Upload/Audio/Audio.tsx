@@ -21,9 +21,10 @@ import StepControls from '../StepControls'
 interface AudioProps {
   loading: boolean
   onPrevStep(): void
+  onAlert(): void
 }
 
-const Audio: React.FC<AudioProps> = ({ loading, onPrevStep }) => {
+const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
   const waveContainerRef = useRef(null)
   const wavesurfer = useRef<WaveSurfer | null>(null)
   const [audio, setAudio] = useState<File | null>(null)
@@ -120,6 +121,7 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep }) => {
         loading={loading}
         nextText="Загрузить"
         onBack={onPrevStep}
+        onAlert={onAlert}
       />
     </Container>
   )

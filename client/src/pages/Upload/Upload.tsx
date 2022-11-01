@@ -13,6 +13,7 @@ import {
   AddSoundtrackDocument
 } from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
 import Feedback from './modals/Feedback'
+import Alert from './modals/Alert'
 import history from '../../utils/history'
 import routeNames from '../../utils/routeNames'
 
@@ -69,6 +70,7 @@ type feedbackModal = {
 const Upload: React.FC = () => {
   const [step, setStep] = useState<number>(Step.INFO)
 
+  const [isAlertOpen, setAlertOpen] = useState<boolean>(false)
   const [feedbackModal, setFeedbackModal] = useState<feedbackModal>({
     open: false,
     type: 'success'
@@ -120,7 +122,7 @@ const Upload: React.FC = () => {
   }, [step])
 
   const handleFeedbackOk = () => {
-    history.push(routeNames.player)
+    history.push(routeNames.root)
   }
 
   const handleFeedbackErr = () => {
@@ -128,6 +130,18 @@ const Upload: React.FC = () => {
       ...prev,
       open: false
     }))
+  }
+
+  const handleAlertInvoke = () => {
+    setAlertOpen((prev) => !prev)
+  }
+
+  const handleAlertStay = () => {
+    setAlertOpen(false)
+  }
+
+  const handleAlertLeave = () => {
+    history.push(routeNames.root)
   }
 
   return (
@@ -147,13 +161,13 @@ const Upload: React.FC = () => {
           <Form>
             <Wrapper $shift={step * window.innerWidth}>
               <Slide $active={Step.INFO === step} $width={windowWidth}>
-                <Info onNextStep={slideNext} />
+                <Info onNextStep={slideNext} onAlert={handleAlertInvoke} />
               </Slide>
               <Slide $active={Step.COVER === step} $width={windowWidth}>
-                <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
+                <Cover onPrevStep={slidePrev} onNextStep={slideNext} onAlert={handleAlertInvoke} />
               </Slide>
               <Slide $active={Step.AUDIO === step} $width={windowWidth}>
-                <Audio loading={loading} onPrevStep={slidePrev} />
+                <Audio loading={loading} onPrevStep={slidePrev} onAlert={handleAlertInvoke} />
               </Slide>
             </Wrapper>
           </Form>
@@ -165,6 +179,7 @@ const Upload: React.FC = () => {
         onSubmit={handleFeedbackOk}
         onRetry={handleFeedbackErr}
       />
+      <Alert isOpen={isAlertOpen} onStay={handleAlertStay} onLeave={handleAlertLeave} />
     </Container>
   )
 }

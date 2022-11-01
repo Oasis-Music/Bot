@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import SvgIcon from '../../shared/SvgIcon'
 import Button from '../../shared/Button'
 import IconButton from '../../shared/IconButton'
-import { Link } from 'react-router-dom'
 import { ReactComponent as ArrowIcon } from '../../assets/svg/angle-arrow.svg'
+import { useFormikContext } from 'formik'
+import history from '../../utils/history'
+import routeNames from '../../utils/routeNames'
 
 interface StepControlsProps {
   disabled: boolean
@@ -13,16 +15,21 @@ interface StepControlsProps {
   actionButtonType?: 'button' | 'submit'
   onBack(): void
   onNext?(): void
+  onAlert(): void
 }
 
-export const BackLink = styled(Link)`
+export const BackLinkButton = styled(Button)`
   display: block;
   outline: none;
   color: #fff;
   font-size: 15px;
-  text-align: center;
   font-weight: 500;
+  margin: 0 auto;
   margin-bottom: 10px;
+  text-decoration: underline;
+  padding: 0;
+  border: none;
+  background: none;
   &:focus {
     color: ${({ theme }) => theme.colors.primary};
   }
@@ -63,8 +70,20 @@ const StepControls: React.FC<StepControlsProps> = ({
   disabled,
   actionButtonType = 'button',
   onBack,
-  onNext
+  onNext,
+  onAlert
 }) => {
+  const { dirty, submitCount } = useFormikContext()
+
+  const handleLinkButtonClick = () => {
+    if (dirty && submitCount === 0) {
+      onAlert()
+      return
+    }
+
+    history.push(routeNames.root)
+  }
+
   return (
     <>
       <ButtonWrapper>
@@ -86,7 +105,9 @@ const StepControls: React.FC<StepControlsProps> = ({
           {nextText}
         </NextButton>
       </ButtonWrapper>
-      <BackLink to={'/'}>На главную</BackLink>
+      <BackLinkButton disableShadow onClick={handleLinkButtonClick}>
+        На главную
+      </BackLinkButton>
     </>
   )
 }

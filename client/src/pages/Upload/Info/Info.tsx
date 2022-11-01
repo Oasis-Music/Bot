@@ -4,7 +4,14 @@ import Button from '../../../shared/Button'
 import TextInput from '../../../shared/FormFields/TextInput'
 import blushEmoji from '../../../assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
-import { BackLink } from '../StepControls'
+import { BackLinkButton } from '../StepControls'
+import history from '../../../utils/history'
+import routeNames from '../../../utils/routeNames'
+
+interface InfoProps {
+  onNextStep(): void
+  onAlert(): void
+}
 
 const Container = styled.div`
   color: #fff;
@@ -48,17 +55,13 @@ const NextBotton = styled(Button)`
   }
 `
 
-interface InfoProps {
-  onNextStep(): void
-}
-
 interface FieldProps {
   title: string
   author: string
 }
 
-const Info: React.FC<InfoProps> = ({ onNextStep }) => {
-  const { errors } = useFormikContext<FieldProps>()
+const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
+  const { errors, dirty, submitCount } = useFormikContext<FieldProps>()
   const ref = useRef<HTMLButtonElement>(null)
 
   const handleContinueClick = () => {
@@ -66,6 +69,15 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
       ref.current.blur()
     }
     onNextStep()
+  }
+
+  const handlePageLeave = () => {
+    if (dirty && submitCount === 0) {
+      onAlert()
+      return
+    }
+
+    history.push(routeNames.root)
   }
 
   return (
@@ -88,7 +100,7 @@ const Info: React.FC<InfoProps> = ({ onNextStep }) => {
       >
         Продолжить
       </NextBotton>
-      <BackLink to={'/'}>На главную</BackLink>
+      <BackLinkButton onClick={handlePageLeave}>На главную</BackLinkButton>
     </Container>
   )
 }

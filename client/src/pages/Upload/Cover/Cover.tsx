@@ -22,6 +22,7 @@ import StepControls from '../StepControls'
 interface CoverProps {
   onNextStep(): void
   onPrevStep(): void
+  onAlert(): void
 }
 
 const MAX_COVER_SIZE = 700
@@ -41,7 +42,7 @@ function dropzoneCodeToMsg(code: string): string {
   }
 }
 
-const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
+const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
   const { setFieldValue } = useFormikContext()
   const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
   const [dropError, setDropError] = useState<string>('')
@@ -174,8 +175,8 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep }) => {
         nextText="Продолжить"
         onBack={onPrevStep}
         onNext={onNextStep}
+        onAlert={onAlert}
       />
-      {/* <div color="white">{JSON.stringify(errors)}</div> */}
     </Container>
   )
 }
