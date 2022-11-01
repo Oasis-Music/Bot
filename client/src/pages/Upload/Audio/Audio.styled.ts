@@ -36,16 +36,24 @@ export const Waves = styled.div<WavesStyles>`
   position: relative;
   &::before {
     content: '';
-    width: 100%;
-    height: 5px;
-    border-radius: 15px;
-    background-color: #0093e9;
-    background-image: linear-gradient(292deg, #0093e9 0%, #80d0c7 100%);
     position: absolute;
+    width: 100%;
+    height: 0;
     top: 40%;
+    border-bottom: 2px dashed #575763;
     visibility: ${({ $isFile }) => ($isFile ? 'hidden' : 'visible')};
     opacity: ${({ $isFile }) => ($isFile ? '0' : '1')};
   }
+`
+
+export const TimeBox = styled.div`
+  display: flex;
+  margin-top: 9px;
+  padding: 0 19px;
+  color: #b1b1b1;
+  font-weight: 500;
+  font-size: 14px;
+  justify-content: space-between;
 `
 
 export const PlayBottonWrapper = styled.div`

@@ -10,6 +10,7 @@ import {
   StepTitle,
   WaveWrapper,
   Waves,
+  TimeBox,
   PlayBottonWrapper,
   PlayBotton
 } from './Audio.styled'
@@ -18,19 +19,18 @@ import Dropzone from './Dropzone/Dropzone'
 import StepControls from '../StepControls'
 
 interface AudioProps {
+  loading: boolean
   onPrevStep(): void
 }
 
-const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
+const Audio: React.FC<AudioProps> = ({ loading, onPrevStep }) => {
   const waveContainerRef = useRef(null)
   const wavesurfer = useRef<WaveSurfer | null>(null)
   const [audio, setAudio] = useState<File | null>(null)
-  // const [wavesurfer, setWavesurfer] = useState<WaveSurfer>()
   const { setFieldValue } = useFormikContext()
 
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [isPlay, setPlay] = useState<boolean>(false)
-  const [loop, setLoop] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [duration, setDuration] = useState<string>('0:00')
 
@@ -54,11 +54,14 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
       wavesurfer.current.on('ready', function () {
         setDuration(timeFormater(wavesurfer.current?.getDuration() || 0))
         setReadyForPlay(true)
-        // play()
       })
 
       wavesurfer.current.on('audioprocess', function () {
         setCurrentTime(timeFormater(wavesurfer.current?.getCurrentTime() || 0))
+      })
+
+      wavesurfer.current.on('finish', function () {
+        setPlay(false)
       })
     }
 
@@ -101,14 +104,23 @@ const Audio: React.FC<AudioProps> = ({ onPrevStep }) => {
       />
       <WaveWrapper>
         <Waves $isFile={readyForPlay} ref={waveContainerRef} />
-
+        <TimeBox>
+          <span>{currentTime}</span>
+          <span>{duration}</span>
+        </TimeBox>
         <PlayBottonWrapper>
           <PlayBotton disabled={!readyForPlay} withoutShadow onClick={playHandler}>
             <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
           </PlayBotton>
         </PlayBottonWrapper>
       </WaveWrapper>
-      <StepControls disabled={!readyForPlay} nextText="Загрузить" onBack={onPrevStep} />
+      <StepControls
+        actionButtonType="submit"
+        disabled={!readyForPlay}
+        loading={loading}
+        nextText="Загрузить"
+        onBack={onPrevStep}
+      />
     </Container>
   )
 }

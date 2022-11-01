@@ -13,6 +13,12 @@ import {
   AddSoundtrackDocument
 } from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
 
+enum Step {
+  INFO = 0,
+  COVER,
+  AUDIO
+}
+
 interface WrapperStyles {
   $shift: number
 }
@@ -29,12 +35,12 @@ const Wrapper = styled.div<WrapperStyles>`
   transition: transform 0.3s;
 `
 
-interface SlideStyles {
+interface slideStyles {
   $width: number
   $active?: boolean
 }
 
-const Slide = styled.div<SlideStyles>`
+const Slide = styled.div<slideStyles>`
   width: ${({ $width }) => `${$width}px`};
   min-height: 100vh;
   flex-shrink: 0;
@@ -45,27 +51,18 @@ const Slide = styled.div<SlideStyles>`
   }
 `
 
-interface Track {
-  id: string
+interface FormValues {
   title: string
   author: string
-  duration: number
-  coverImage: string
-  fileURL: string
-}
-
-interface SubmitValues {
-  title: string
-  author: string
-  coverImage: any
-  audiofile: any
+  coverImage: unknown
+  audiofile: unknown
 }
 
 const Upload: React.FC = () => {
-  const [step, setStep] = useState<number>(0)
+  const [step, setStep] = useState<number>(Step.INFO)
   const [windowWidth] = useWindowRatio()
 
-  const [addSoundtrack] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
+  const [addSoundtrack, { loading }] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
     AddSoundtrackDocument,
     {
       onCompleted: (data) => {
@@ -87,20 +84,14 @@ const Upload: React.FC = () => {
     setStep((prev) => prev - 1)
   }
 
-  const handleSubmit = (values: SubmitValues) => {
+  const handleSubmit = (values: FormValues) => {
     if (step === 2) {
       addSoundtrack({
-        variables: {
-          title: values.title,
-          author: values.author,
-          coverImage: values.coverImage,
-          audiofile: values.audiofile
-        }
+        variables: { ...values }
       })
     } else {
       slideNext()
     }
-    console.log(values)
   }
 
   const curentSchema = useMemo(() => {
@@ -123,14 +114,14 @@ const Upload: React.FC = () => {
         {() => (
           <Form>
             <Wrapper $shift={step * window.innerWidth}>
-              <Slide $active={0 === step} $width={windowWidth}>
+              <Slide $active={Step.INFO === step} $width={windowWidth}>
                 <Info onNextStep={slideNext} />
               </Slide>
-              <Slide $active={1 === step} $width={windowWidth}>
+              <Slide $active={Step.COVER === step} $width={windowWidth}>
                 <Cover onPrevStep={slidePrev} onNextStep={slideNext} />
               </Slide>
-              <Slide $active={2 === step} $width={windowWidth}>
-                <Audio onPrevStep={slidePrev} />
+              <Slide $active={Step.AUDIO === step} $width={windowWidth}>
+                <Audio loading={loading} onPrevStep={slidePrev} />
               </Slide>
             </Wrapper>
           </Form>

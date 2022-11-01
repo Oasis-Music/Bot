@@ -7,8 +7,10 @@ import { Link } from 'react-router-dom'
 import { ReactComponent as ArrowIcon } from '../../assets/svg/angle-arrow.svg'
 
 interface StepControlsProps {
-  nextText: string
   disabled: boolean
+  nextText: string
+  loading?: boolean
+  actionButtonType?: 'button' | 'submit'
   onBack(): void
   onNext?(): void
 }
@@ -55,7 +57,14 @@ export const NextButton = styled(Button)`
   flex-basis: 70%;
 `
 
-const StepControls: React.FC<StepControlsProps> = ({ nextText, disabled, onBack, onNext }) => {
+const StepControls: React.FC<StepControlsProps> = ({
+  nextText,
+  loading,
+  disabled,
+  actionButtonType = 'button',
+  onBack,
+  onNext
+}) => {
   return (
     <>
       <ButtonWrapper>
@@ -65,6 +74,8 @@ const StepControls: React.FC<StepControlsProps> = ({ nextText, disabled, onBack,
           </SvgIcon>
         </BackButton>
         <NextButton
+          loading={loading}
+          type={actionButtonType}
           color="secondary"
           tabIndex={-1}
           disableShadow
