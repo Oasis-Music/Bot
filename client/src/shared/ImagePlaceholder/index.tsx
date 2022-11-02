@@ -99,12 +99,12 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
 
   const plainPlug = <ShineBox $plain={plain} />
 
-  const plug: React.ReactNode = plain ? plainPlug : placeholderPlug
+  const plug = plain ? plainPlug : placeholderPlug
 
   return (
     <Box $plain={plain}>
       <ProgressiveImage src={src} placeholder="">
-        {(src: string, loading: boolean) => {
+        {(src, loading) => {
           return loading ? plug : <Image $plain={plain} src={src} alt={altText} />
         }}
       </ProgressiveImage>
