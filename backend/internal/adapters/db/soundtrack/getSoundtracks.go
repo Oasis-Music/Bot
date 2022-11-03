@@ -66,8 +66,7 @@ func (s *soundtrackStorage) GetSoundtracks(ctx context.Context, filter models.So
 func queryBuilder(query string, filter models.SoundtracksFilter) (string, error) {
 	page := filter.Page - 1
 
-	query += fmt.Sprintf(" ORDER BY id LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
+	query += fmt.Sprintf(" ORDER BY id DESC LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
 
 	return query, nil
-
 }
