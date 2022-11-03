@@ -1,12 +1,8 @@
 import { createBrowserHistory } from 'history'
 
-type route = 'root' | 'upload' | 'ui' | 'search' | 'test'
+type RouteName = 'root' | 'upload' | 'ui' | 'search' | 'test'
 
-type routeNamesMap = {
-  [name in route]: string
-}
-
-export const routeNames: routeNamesMap = {
+export const routeNames: Record<RouteName, string> = {
   root: '/',
   upload: '/upload',
   ui: '/ui',
