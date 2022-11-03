@@ -1,11 +1,11 @@
 import React from 'react'
+import history from '../../utils/history'
+import routeNames from '../../utils/routeNames'
 import SvgIcon from '../../shared/SvgIcon'
-import { Container, ControlButton } from './Nav.styled'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
 import { ReactComponent as CogIcon } from '../../assets/svg/cog.svg'
-
-import history from '../../utils/history'
+import { Container, ControlButton, AddTrackLink } from './Nav.styled'
 
 const Nav: React.FC = () => {
   const searchClickHandler = () => {
@@ -39,6 +39,9 @@ const Nav: React.FC = () => {
           </SvgIcon>
         </ControlButton>
       )}
+      <AddTrackLink to={routeNames.upload}>
+        <span>Добавить трек</span>
+      </AddTrackLink>
     </Container>
   )
 }
