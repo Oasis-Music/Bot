@@ -5,8 +5,7 @@ import TextInput from '../../../shared/FormFields/TextInput'
 import blushEmoji from '../../../assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
 import { BackLinkButton } from '../StepControls'
-import history from '../../../utils/history'
-import routeNames from '../../../utils/routeNames'
+import history, { routeNames } from '../../../utils/history'
 
 interface InfoProps {
   onNextStep(): void

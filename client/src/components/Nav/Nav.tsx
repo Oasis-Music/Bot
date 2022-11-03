@@ -1,6 +1,5 @@
 import React from 'react'
-import history from '../../utils/history'
-import routeNames from '../../utils/routeNames'
+import history, { routeNames } from '../../utils/history'
 import SvgIcon from '../../shared/SvgIcon'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
@@ -9,15 +8,15 @@ import { Container, ControlButton, AddTrackLink } from './Nav.styled'
 
 const Nav: React.FC = () => {
   const searchClickHandler = () => {
-    history.push('/search')
+    history.push(routeNames.search)
   }
 
   const playlistClickHandler = () => {
-    history.push('/')
+    history.push(routeNames.root)
   }
 
   const cogClickHandler = () => {
-    history.push('/test')
+    history.push(routeNames.test)
   }
 
   return (

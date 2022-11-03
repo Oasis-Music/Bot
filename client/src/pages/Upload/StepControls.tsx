@@ -5,8 +5,7 @@ import Button from '../../shared/Button'
 import IconButton from '../../shared/IconButton'
 import { ReactComponent as ArrowIcon } from '../../assets/svg/angle-arrow.svg'
 import { useFormikContext } from 'formik'
-import history from '../../utils/history'
-import routeNames from '../../utils/routeNames'
+import history, { routeNames } from '../../utils/history'
 
 interface StepControlsProps {
   disabled: boolean

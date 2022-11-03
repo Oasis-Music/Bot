@@ -1,5 +1,5 @@
 import React from 'react'
-import routeNames from '../../utils/routeNames'
+import { routeNames } from '../../utils/history'
 // import { GET_AUTHENTICATION_STATE } from '../../apollo/cache/queries/user'
 // import { useQuery } from '@apollo/client'
 import { Navigate, Outlet } from 'react-router-dom'
@@ -13,7 +13,7 @@ const PrivateRoute: React.FC = () => {
   //   const isAuth = data?.isAuthenticated
   const isAuth = true
 
-  return isAuth ? <Outlet /> : <Navigate to={routeNames.auth} />
+  return isAuth ? <Outlet /> : <Navigate to={routeNames.root} />
 }
 
 export default PrivateRoute

@@ -14,8 +14,7 @@ import {
 } from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
 import Feedback from './modals/Feedback'
 import Alert from './modals/Alert'
-import history from '../../utils/history'
-import routeNames from '../../utils/routeNames'
+import history, { routeNames } from '../../utils/history'
 
 enum Step {
   INFO = 0,
