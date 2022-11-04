@@ -8,6 +8,7 @@ const Home = lazy(() => import('./pages/Home'))
 const Upload = lazy(() => import('./pages/Upload'))
 const UI = lazy(() => import('./pages/UI'))
 const Test = lazy(() => import('./pages/Test'))
+const Terms = lazy(() => import('./pages/Terms'))
 
 const App: React.FC = () => {
   return (
@@ -17,8 +18,9 @@ const App: React.FC = () => {
           <Route element={<PrivateRoute />}>
             <Route index element={<Home />} />
             <Route path="/upload" element={<Upload />} />
-            {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
             <Route path="/test" element={<Test />} />
+            <Route path="/terms" element={<Terms />} />
+            {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
