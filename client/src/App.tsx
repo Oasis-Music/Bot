@@ -19,9 +19,9 @@ const App: React.FC = () => {
             <Route index element={<Home />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/test" element={<Test />} />
-            <Route path="/terms" element={<Terms />} />
             {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
           </Route>
+          <Route path="/terms" element={<Terms />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
