@@ -20,15 +20,19 @@ interface containerStylesProps {
 const Container = styled.div<containerStylesProps>`
   display: flex;
   z-index: 100;
+  height: 0;
   background-color: #fff;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   padding: 5px 20px 5px 7px;
   transform: translateY(100%);
   transition: transform 0.3s;
+  visibility: hidden;
   ${({ $isPlaying }) =>
     $isPlaying &&
     css`
+      visibility: visible;
+      height: auto;
       transform: translateY(0);
     `}
 `

@@ -64,6 +64,11 @@ const styledTheme: ITheme = {
 export default styledTheme
 
 export const GlobalStyles = createGlobalStyle`
+
+  body {
+    background-color: #101318;
+  }
+
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
