@@ -92,7 +92,7 @@ const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
       </InputWrapper>
       <NextBotton
         ref={ref}
-        disabled={Boolean(errors.title && errors.author)}
+        disabled={!!(errors.title || errors.author)}
         color="secondary"
         disableShadow
         onClick={handleContinueClick}
