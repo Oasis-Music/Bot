@@ -24,7 +24,7 @@ interface ContainerProps {
 export const Container = styled.section<ContainerProps>`
   display: flex;
   position: relative;
-  padding: 4vh 1vh 2vh 3vh;
+  padding: 3vh 1vh 2vh 3vh;
   padding-bottom: ${({ $isAdded }) => ($isAdded ? '0' : '2vh')};
   margin-bottom: 3vh;
   &::after {
@@ -38,9 +38,9 @@ export const Container = styled.section<ContainerProps>`
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  @media ${({ theme }) => theme.media.hxs} {
+  @media ${({ theme }) => theme.media.hsd} {
     padding: 35px 13px 15px 17px;
-    margin-bottom: 30px;
+    padding-top: 2vh;
   }
 `
 
@@ -82,7 +82,7 @@ export const AuthorTitle = styled.p`
   }
 `
 
-export const AddBotton = styled(Button)`
+export const SaveBotton = styled(Button)`
   color: #080808;
   max-width: 220px;
   padding: 2vh 2.5vh;
@@ -108,9 +108,6 @@ export const AddBotton = styled(Button)`
 
   @media ${({ theme }) => theme.media.hsd} {
     padding: 7px 10px;
-  }
-
-  @media ${({ theme }) => theme.media.hxs} {
     font-size: 14px;
     max-width: 100%;
   }
@@ -119,7 +116,7 @@ export const AddBotton = styled(Button)`
 export const AddIcon = styled(SvgIcon)`
   font-size: 2.5vh;
   margin-right: 5px;
-  @media ${({ theme }) => theme.media.hxs} {
+  @media ${({ theme }) => theme.media.hsd} {
     font-size: 12px;
   }
 `

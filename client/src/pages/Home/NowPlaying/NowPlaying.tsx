@@ -10,7 +10,7 @@ import {
   Details,
   TrackTitle,
   AuthorTitle,
-  AddBotton,
+  SaveBotton,
   AddIcon,
   DeleteBotton,
   DownloadBotton,
@@ -58,7 +58,7 @@ const NowPlaying: React.FC = () => {
             </CopyInfoBotton>
           </ControlsWrapper>
         ) : (
-          <AddBotton
+          <SaveBotton
             fullWidth
             disableShadow
             onClick={addButtonHandler}
@@ -69,7 +69,7 @@ const NowPlaying: React.FC = () => {
             }
           >
             Сохранить
-          </AddBotton>
+          </SaveBotton>
         )}
       </Details>
     </Container>
