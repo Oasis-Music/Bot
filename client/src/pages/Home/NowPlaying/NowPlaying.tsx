@@ -31,9 +31,11 @@ const NowPlaying: React.FC = () => {
 
   return (
     <Container $isAdded={isAdded}>
-      <ImageWrapper>
-        <ImagePlaceholder src={track.coverImage} altText={track.title} />
-      </ImageWrapper>
+      <div>
+        <ImageWrapper>
+          <ImagePlaceholder src={track.coverImage} altText={track.title} />
+        </ImageWrapper>
+      </div>
       <Details>
         <TrackTitle>{track.title}</TrackTitle>
         <AuthorTitle>{track.author}</AuthorTitle>
@@ -66,7 +68,7 @@ const NowPlaying: React.FC = () => {
               </AddIcon>
             }
           >
-            Добавить
+            Сохранить
           </AddBotton>
         )}
       </Details>

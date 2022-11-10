@@ -45,71 +45,73 @@ export const Container = styled.section<ContainerProps>`
 `
 
 export const ImageWrapper = styled.div`
-  width: 21vh;
-  height: 21vh;
+  width: 23vh;
+  height: 23vh;
   margin-right: 17px;
   border-radius: 15px;
-  border: 1px solid #fff;
-  @media ${({ theme }) => theme.media.hxs} {
-    width: 150px;
-    height: 150px;
+  border: 2px solid #d6d6d6;
+  @media ${({ theme }) => theme.media.hsm} {
+    width: 123px;
+    height: 123px;
   }
 `
 
 export const Details = styled.div`
   flex-grow: 1;
-  padding: 2vh 0.5vh 1.2vh 0;
-  @media ${({ theme }) => theme.media.hxs} {
-    padding: 23px 7px 10px 0;
-  }
+  padding-top: 1.7vh;
 `
 
 export const TrackTitle = styled.h1`
-  font-size: 3.5vh;
+  font-size: 3vh;
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
-  margin-bottom: 5px;
-  @media ${({ theme }) => theme.media.hxs} {
+  margin-bottom: 7px;
+  @media ${({ theme }) => theme.media.hsm} {
     font-size: 17px;
   }
 `
 export const AuthorTitle = styled.p`
-  font-size: 3vh;
+  font-size: 2.4vh;
   color: #878787;
-  font-weight: 400;
+  font-weight: 500;
   margin: 0;
-  @media ${({ theme }) => theme.media.hxs} {
+  @media ${({ theme }) => theme.media.hsm} {
     font-size: 14px;
   }
 `
 
 export const AddBotton = styled(Button)`
-  && {
-    color: #080808;
-    max-width: 220px;
-    padding: 2vh 2.5vh;
+  color: #080808;
+  max-width: 220px;
+  padding: 2vh 2.5vh;
+  background-color: #fff;
+  font-size: 2.7vh;
+  border: none;
+  margin-top: 4vh;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
+    0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
+
+  &:disabled {
+    box-shadow: none;
+  }
+
+  &:hover:not(:disabled) {
     background-color: #fff;
-    font-size: 2.7vh;
-    border: none;
+  }
+
+  @media ${({ theme }) => theme.media.hsm} {
+    padding: 1.5vh 2vh;
     margin-top: 2.7vh;
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
-      0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
+  }
 
-    &:disabled {
-      box-shadow: none;
-    }
+  @media ${({ theme }) => theme.media.hsd} {
+    padding: 7px 10px;
+  }
 
-    &:hover:not(:disabled) {
-      background-color: #fff;
-    }
-
-    @media ${({ theme }) => theme.media.hxs} {
-      margin-top: 27px;
-      font-size: 15px;
-      padding: 10px 15px;
-      max-width: 100%;
-    }
+  @media ${({ theme }) => theme.media.hxs} {
+    font-size: 14px;
+    max-width: 100%;
   }
 `
 
