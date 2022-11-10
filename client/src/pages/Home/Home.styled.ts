@@ -12,7 +12,7 @@ interface listStyleProps {
 }
 
 export const List = styled.ul<listStyleProps>`
-  height: ${({ $isPlay }) => ($isPlay ? 'calc(60vh - 52px)' : '60vh')};
+  height: ${({ $isPlay }) => ($isPlay ? 'calc(60vh - 60px)' : '60vh')};
   overflow-y: auto;
   &::-webkit-scrollbar-track {
     background-color: transparent;
@@ -24,8 +24,12 @@ export const List = styled.ul<listStyleProps>`
     border-radius: 12px;
     background-color: #9f9f9f !important;
   }
+  @media ${({ theme }) => theme.media.hsd} {
+    height: 100%;
+    padding-bottom: ${({ $isPlay }) => ($isPlay ? '20vh' : '10vh')};
+  }
   @media ${({ theme }) => theme.media.hxs} {
-    max-height: calc(100% - 265px);
+    padding-bottom: ${({ $isPlay }) => ($isPlay ? '19vh' : '7vh')};
   }
 `
 
