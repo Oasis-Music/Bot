@@ -7,9 +7,10 @@ import { ReactComponent as RandomIcon } from '../../../../assets/svg/random.svg'
 import SvgIcon from '../../../../shared/SvgIcon'
 import {
   Container,
-  PlayBotton,
-  PrevBotton,
-  NextBotton,
+  PlayButtonBox,
+  PlayButton,
+  PrevButton,
+  NextButton,
   PrevArrowIcon,
   LoopButton,
   RandomButton
@@ -38,21 +39,23 @@ const Controls: React.FC<ControlsProps> = ({
         </SvgIcon>
       </RandomButton>
       {/*  */}
-      <PrevBotton withoutShadow color="primary">
+      <PrevButton withoutShadow color="primary">
         <PrevArrowIcon>
           <ArrowAltIcon />
         </PrevArrowIcon>
-      </PrevBotton>
+      </PrevButton>
       {/*  */}
-      <PlayBotton disabled={!readyForPlay} withoutShadow onClick={onPlayPause}>
-        <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
-      </PlayBotton>
+      <PlayButtonBox>
+        <PlayButton disabled={!readyForPlay} withoutShadow onClick={onPlayPause}>
+          <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
+        </PlayButton>
+      </PlayButtonBox>
       {/*  */}
-      <NextBotton withoutShadow>
+      <NextButton withoutShadow>
         <SvgIcon>
           <ArrowAltIcon />
         </SvgIcon>
-      </NextBotton>
+      </NextButton>
       {/*  */}
       <LoopButton $loop={isLoop} onClick={onLoop} withoutShadow>
         <SvgIcon>

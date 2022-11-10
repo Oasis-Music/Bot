@@ -22,6 +22,7 @@ const Container = styled.div<containerStylesProps>`
   left: 0;
   height: 100%;
   background-color: #101318;
+  overflow-y: auto;
   z-index: 999;
   transform: translateY(100%);
   transition: transform 0.3s;
