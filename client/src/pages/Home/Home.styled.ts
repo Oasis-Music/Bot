@@ -29,7 +29,7 @@ export const List = styled.ul<listStyleProps>`
     padding-bottom: ${({ $isPlay }) => ($isPlay ? '20vh' : '10vh')};
   }
   @media ${({ theme }) => theme.media.hxs} {
-    padding-bottom: ${({ $isPlay }) => ($isPlay ? '19vh' : '7vh')};
+    padding-bottom: ${({ $isPlay }) => ($isPlay ? '17vh' : '7vh')};
   }
 `
 
