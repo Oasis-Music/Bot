@@ -16,7 +16,7 @@ interface StyleProps {
 
 const PlugIcon = styled(SvgIcon)`
   color: #515151;
-  font-size: 40px;
+  font-size: inherit;
 `
 
 const Box = styled.picture<StyleProps>`

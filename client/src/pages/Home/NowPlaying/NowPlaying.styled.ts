@@ -47,6 +47,7 @@ export const Container = styled.section<ContainerProps>`
 export const ImageWrapper = styled.div`
   width: 23vh;
   height: 23vh;
+  font-size: 4.5vh;
   margin-right: 17px;
   border-radius: 15px;
   border: 2px solid #d6d6d6;

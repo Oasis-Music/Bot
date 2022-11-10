@@ -23,6 +23,7 @@ const Container = styled.li`
 `
 
 const ImageWrapper = styled.div`
+  font-size: 2vh;
   margin-right: 7px;
   width: 50px;
   height: 50px;
@@ -71,7 +72,7 @@ const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemPr
   return (
     <Container ref={ref ? ref : undefined} onClick={trackClickHandler}>
       <ImageWrapper>
-        <ImagePlaceholder plain src={coverImage} altText={title} />
+        <ImagePlaceholder src={coverImage} altText={title} />
       </ImageWrapper>
       <InfoBox>
         <TrackTitle>{title}</TrackTitle>

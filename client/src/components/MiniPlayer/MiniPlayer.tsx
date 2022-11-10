@@ -43,6 +43,7 @@ const InnerContainer = styled.div`
 `
 
 const ImageWrapper = styled.div`
+  font-size: 2.5vh;
   margin-right: 7px;
   width: 10vh;
   @media ${({ theme }) => theme.media.hxs} {
@@ -113,7 +114,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
     <Container $isPlaying={!!trackId}>
       <InnerContainer onClick={onPlayerOpen}>
         <ImageWrapper>
-          <ImagePlaceholder src={track.coverImage} plain altText={track.title} />
+          <ImagePlaceholder src={track.coverImage} altText={track.title} />
         </ImageWrapper>
         <InfoBox>
           <Title>{track.title}</Title>
