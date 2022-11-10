@@ -25,6 +25,7 @@ export interface ITheme {
     laptop: string
     desktop: string
     hsm: string
+    hsd: string
     hxs: string
   }
 }
@@ -38,7 +39,8 @@ const breakpoints = {
   tablet: 800,
   laptop: 1000,
   desktop: 1400,
-  hsm: 559,
+  hsm: 550,
+  hsd: 600,
   hxs: 700
 }
 
@@ -57,6 +59,7 @@ const styledTheme: ITheme = {
     laptop: `(min-width: ${breakpoints.laptop}px)`,
     desktop: `(min-width: ${breakpoints.desktop}px)`,
     hsm: `(min-height: ${breakpoints.hsm}px)`,
+    hsd: `(min-height: ${breakpoints.hsd}px)`,
     hxs: `(min-height: ${breakpoints.hxs}px)`
   }
 }
