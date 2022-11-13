@@ -7,10 +7,10 @@ import { ReactComponent as PlayIcon } from '../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../assets/svg/pause.svg'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, isPlayingVar, currentTrackIdVar } from '../../apollo/cache/variables'
-import { SoundtrackMutations } from '../../apollo/cache/mutations'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
+  onPlayPause(): void
 }
 
 interface containerStylesProps {
@@ -107,14 +107,10 @@ const PlayBotton = styled(IconButton)`
   }
 `
 
-const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
+const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen, onPlayPause }) => {
   const isPlay = useReactiveVar(isPlayingVar)
   const trackId = useReactiveVar(currentTrackIdVar)
   const track = useReactiveVar(currentTrackVar)
-
-  const playButtonHandler = () => {
-    SoundtrackMutations.playPouse()
-  }
 
   return (
     <Container $isPlaying={!!trackId}>
@@ -128,7 +124,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen }) => {
         </InfoBox>
       </InnerContainer>
       <PlayBottonWrapper>
-        <PlayBotton onClick={playButtonHandler}>
+        <PlayBotton onClick={onPlayPause}>
           <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayBotton>
       </PlayBottonWrapper>

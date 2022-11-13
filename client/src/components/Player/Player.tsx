@@ -6,9 +6,13 @@ import Trackline from './Trackline/Trackline'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
 
-interface PlayerProps {
+interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
+  currentTime: string
+  duration: string
   isOpen: boolean
+  isReadyForPlay: boolean
   onClose(): void
+  onPlayPause(): void
 }
 
 interface containerStylesProps {
@@ -33,16 +37,25 @@ const Container = styled.div<containerStylesProps>`
     `}
 `
 
-const Player: React.FC<PlayerProps> = ({ isOpen, onClose }) => {
+const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
+  { isOpen, currentTime, duration, onClose, isReadyForPlay, onPlayPause },
+  waveContainerRef
+) => {
   const track = useReactiveVar(currentTrackVar)
 
   return (
     <Container $open={isOpen}>
       <TopControls id={track.id} onClose={onClose} />
       <Details title={track.title} author={track.author} coverImageURL={track.coverImage} />
-      <Trackline soundtrack={track.fileURL} />
+      <Trackline
+        ref={waveContainerRef}
+        currentTime={currentTime}
+        duration={duration}
+        isReadyForPlay={isReadyForPlay}
+        onPlayPause={onPlayPause}
+      />
     </Container>
   )
 }
 
-export default Player
+export default React.forwardRef(Player)
