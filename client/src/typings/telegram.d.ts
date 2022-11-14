@@ -70,6 +70,10 @@ export declare namespace TelegramWebApp {
      * A method that closes the Web App.
      */
     close(): void
+    /**
+     * A method that enables a confirmation dialog while the user is trying to close the Web App.
+     */
+    enableClosingConfirmation(): void
   }
 
   interface ThemeParams {
