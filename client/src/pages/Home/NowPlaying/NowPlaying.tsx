@@ -59,6 +59,7 @@ const NowPlaying: React.FC = () => {
           </ControlsWrapper>
         ) : (
           <SaveBotton
+            disabled={!!!track.id}
             fullWidth
             disableShadow
             onClick={addButtonHandler}
