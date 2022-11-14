@@ -8,7 +8,7 @@ CREATE TABLE soundtrack (
     author TEXT NOT NULL,
     duration SMALLINT NOT NULL,
     cover_image TEXT,
-    file_url TEXT NOT NULL,
+    audio_file TEXT NOT NULL,
     is_validated BOOLEAN NOT NULL DEFAULT false,
     creator_id TEXT NOT NULL DEFAULT 'ozark',
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
@@ -34,7 +34,7 @@ INSERT INTO
         author,
         duration,
         cover_image,
-        file_url
+        audio_file
     )
 VALUES
     (

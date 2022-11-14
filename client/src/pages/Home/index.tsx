@@ -25,8 +25,8 @@ interface Track {
   title: string
   author: string
   duration: number
-  coverImage: string
-  fileURL: string
+  coverURL: string
+  audioURL: string
 }
 
 function ErrorPlug() {
@@ -122,8 +122,8 @@ const Home: React.FC = () => {
               title={track.title}
               author={track.author}
               duration={track.duration}
-              coverImage={track.coverImage}
-              fileURL={track.fileURL}
+              coverImage={track.coverURL}
+              fileURL={track.audioURL}
               isPlaying={nowPlayingID === track.id}
             />
           ))}

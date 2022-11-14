@@ -15,8 +15,8 @@ export type GetTrackByIdQuery = {
         title: string
         author: string
         duration: number
-        coverImage: string
-        fileURL: string
+        coverURL: string
+        audioURL: string
         createdAt: string
       }
     | null
@@ -44,8 +44,8 @@ export const GetTrackByIdDocument = gql`
         title
         author
         duration
-        coverImage
-        fileURL
+        coverURL
+        audioURL
         createdAt
       }
       ... on NotFound {

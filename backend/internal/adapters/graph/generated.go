@@ -62,15 +62,15 @@ type ComplexityRoot struct {
 	}
 
 	Soundtrack struct {
-		Author     func(childComplexity int) int
-		CoverImage func(childComplexity int) int
-		CreatedAt  func(childComplexity int) int
-		CreatorID  func(childComplexity int) int
-		Duration   func(childComplexity int) int
-		FileURL    func(childComplexity int) int
-		ID         func(childComplexity int) int
-		Title      func(childComplexity int) int
-		Validated  func(childComplexity int) int
+		AudioURL  func(childComplexity int) int
+		Author    func(childComplexity int) int
+		CoverURL  func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		CreatorID func(childComplexity int) int
+		Duration  func(childComplexity int) int
+		ID        func(childComplexity int) int
+		Title     func(childComplexity int) int
+		Validated func(childComplexity int) int
 	}
 
 	SoundtracksResponse struct {
@@ -206,6 +206,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.UserTracks(childComplexity, args["id"].(string), args["filter"].(models.UserTracksFilter)), true
 
+	case "Soundtrack.audioURL":
+		if e.complexity.Soundtrack.AudioURL == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.AudioURL(childComplexity), true
+
 	case "Soundtrack.author":
 		if e.complexity.Soundtrack.Author == nil {
 			break
@@ -213,12 +220,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Soundtrack.Author(childComplexity), true
 
-	case "Soundtrack.coverImage":
-		if e.complexity.Soundtrack.CoverImage == nil {
+	case "Soundtrack.coverURL":
+		if e.complexity.Soundtrack.CoverURL == nil {
 			break
 		}
 
-		return e.complexity.Soundtrack.CoverImage(childComplexity), true
+		return e.complexity.Soundtrack.CoverURL(childComplexity), true
 
 	case "Soundtrack.createdAt":
 		if e.complexity.Soundtrack.CreatedAt == nil {
@@ -240,13 +247,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Soundtrack.Duration(childComplexity), true
-
-	case "Soundtrack.fileURL":
-		if e.complexity.Soundtrack.FileURL == nil {
-			break
-		}
-
-		return e.complexity.Soundtrack.FileURL(childComplexity), true
 
 	case "Soundtrack.id":
 		if e.complexity.Soundtrack.ID == nil {
@@ -392,8 +392,10 @@ type NotFound {
   title: String!
   author: String!
   duration: Int!
-  coverImage: String!
-  fileURL: String!
+  coverURL: String!
+  audioURL: String!
+  # coverImage: String!
+  # fileURL: String!
   validated: Boolean!
   creatorId: String!
   createdAt: Date!
@@ -1369,8 +1371,8 @@ func (ec *executionContext) fieldContext_Soundtrack_duration(ctx context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _Soundtrack_coverImage(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Soundtrack_coverImage(ctx, field)
+func (ec *executionContext) _Soundtrack_coverURL(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_coverURL(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1383,7 +1385,7 @@ func (ec *executionContext) _Soundtrack_coverImage(ctx context.Context, field gr
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.CoverImage, nil
+		return obj.CoverURL, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1400,7 +1402,7 @@ func (ec *executionContext) _Soundtrack_coverImage(ctx context.Context, field gr
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Soundtrack_coverImage(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Soundtrack_coverURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Soundtrack",
 		Field:      field,
@@ -1413,8 +1415,8 @@ func (ec *executionContext) fieldContext_Soundtrack_coverImage(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Soundtrack_fileURL(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Soundtrack_fileURL(ctx, field)
+func (ec *executionContext) _Soundtrack_audioURL(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_audioURL(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1427,7 +1429,7 @@ func (ec *executionContext) _Soundtrack_fileURL(ctx context.Context, field graph
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.FileURL, nil
+		return obj.AudioURL, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1444,7 +1446,7 @@ func (ec *executionContext) _Soundtrack_fileURL(ctx context.Context, field graph
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Soundtrack_fileURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Soundtrack_audioURL(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Soundtrack",
 		Field:      field,
@@ -1636,10 +1638,10 @@ func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(ctx con
 				return ec.fieldContext_Soundtrack_author(ctx, field)
 			case "duration":
 				return ec.fieldContext_Soundtrack_duration(ctx, field)
-			case "coverImage":
-				return ec.fieldContext_Soundtrack_coverImage(ctx, field)
-			case "fileURL":
-				return ec.fieldContext_Soundtrack_fileURL(ctx, field)
+			case "coverURL":
+				return ec.fieldContext_Soundtrack_coverURL(ctx, field)
+			case "audioURL":
+				return ec.fieldContext_Soundtrack_audioURL(ctx, field)
 			case "validated":
 				return ec.fieldContext_Soundtrack_validated(ctx, field)
 			case "creatorId":
@@ -1832,10 +1834,10 @@ func (ec *executionContext) fieldContext_UserTracksResponse_soundtracks(ctx cont
 				return ec.fieldContext_Soundtrack_author(ctx, field)
 			case "duration":
 				return ec.fieldContext_Soundtrack_duration(ctx, field)
-			case "coverImage":
-				return ec.fieldContext_Soundtrack_coverImage(ctx, field)
-			case "fileURL":
-				return ec.fieldContext_Soundtrack_fileURL(ctx, field)
+			case "coverURL":
+				return ec.fieldContext_Soundtrack_coverURL(ctx, field)
+			case "audioURL":
+				return ec.fieldContext_Soundtrack_audioURL(ctx, field)
 			case "validated":
 				return ec.fieldContext_Soundtrack_validated(ctx, field)
 			case "creatorId":
@@ -4130,16 +4132,16 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "coverImage":
+		case "coverURL":
 
-			out.Values[i] = ec._Soundtrack_coverImage(ctx, field, obj)
+			out.Values[i] = ec._Soundtrack_coverURL(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "fileURL":
+		case "audioURL":
 
-			out.Values[i] = ec._Soundtrack_fileURL(ctx, field, obj)
+			out.Values[i] = ec._Soundtrack_audioURL(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++

@@ -6,8 +6,8 @@ query getTrackByID($id: ID!) {
       title
       author
       duration
-      coverImage
-      fileURL
+      coverURL
+      audioURL
       createdAt
     }
     ... on NotFound {

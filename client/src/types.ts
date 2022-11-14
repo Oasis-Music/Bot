@@ -82,12 +82,12 @@ export type QueryUserTracksArgs = {
 
 export type Soundtrack = {
   __typename?: 'Soundtrack'
+  audioURL: Scalars['String']
   author: Scalars['String']
-  coverImage: Scalars['String']
+  coverURL: Scalars['String']
   createdAt: Scalars['Date']
   creatorId: Scalars['String']
   duration: Scalars['Int']
-  fileURL: Scalars['String']
   id: Scalars['ID']
   title: Scalars['String']
   validated: Scalars['Boolean']

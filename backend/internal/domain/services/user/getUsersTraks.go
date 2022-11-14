@@ -37,13 +37,13 @@ func (u *userService) GetUsersTraks(ctx context.Context, userID string, filter m
 		}
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:         strconv.Itoa(int(item.ID)),
-			Title:      item.Title,
-			Author:     item.Author,
-			Duration:   int(item.Duration),
-			CoverImage: coverImg,
-			FileURL:    u.config.ExternalAPI.AudioBaseURL + item.FileURL,
-			CreatedAt:  item.CreatedAt.UTC().String(),
+			ID:        strconv.Itoa(int(item.ID)),
+			Title:     item.Title,
+			Author:    item.Author,
+			Duration:  int(item.Duration),
+			CoverURL:  coverImg,
+			AudioURL:  u.config.ExternalAPI.AudioBaseURL + item.AudioFile,
+			CreatedAt: item.CreatedAt.UTC().String(),
 		})
 	}
 

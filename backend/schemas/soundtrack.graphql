@@ -3,8 +3,10 @@ type Soundtrack {
   title: String!
   author: String!
   duration: Int!
-  coverImage: String!
-  fileURL: String!
+  coverURL: String!
+  audioURL: String!
+  # coverImage: String!
+  # fileURL: String!
   validated: Boolean!
   creatorId: String!
   createdAt: Date!

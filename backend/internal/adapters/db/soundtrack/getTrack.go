@@ -11,7 +11,7 @@ SELECT id,
 	author,
 	duration,
 	cover_image,
-	file_url,
+	audio_file,
 	creator_id,
 	created_at
 FROM soundtrack
@@ -29,7 +29,7 @@ func (s *soundtrackStorage) GetTrack(ctx context.Context, id int32) (db.Soundtra
 		&dto.Author,
 		&dto.Duration,
 		&dto.CoverImage,
-		&dto.FileURL,
+		&dto.AudioFile,
 		&dto.CreatorID,
 		&dto.CreatedAt,
 	)

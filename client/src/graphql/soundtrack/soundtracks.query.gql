@@ -5,8 +5,8 @@ query allSoundtracks($page: Int!) {
       title
       author
       duration
-      coverImage
-      fileURL
+      coverURL
+      audioURL
     }
   }
 }

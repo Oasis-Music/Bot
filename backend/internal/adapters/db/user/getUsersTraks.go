@@ -14,7 +14,7 @@ const (
        soundtrack.author,
        soundtrack.duration,
        soundtrack.cover_image,
-       soundtrack.file_url,
+       soundtrack.audio_file,
        soundtrack.created_at
 	FROM soundtrack
 	JOIN user_soundtrack ON user_soundtrack.soundtrack_id = soundtrack.id
@@ -48,7 +48,7 @@ func (s *userStorage) GetUsersTraks(ctx context.Context, id int32, filter models
 			&t.Author,
 			&t.Duration,
 			&t.CoverImage,
-			&t.FileURL,
+			&t.AudioFile,
 			&t.CreatedAt,
 		); err != nil {
 			return nil, err

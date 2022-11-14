@@ -14,7 +14,7 @@ const (
 		author,
 		duration,
 		cover_image,
-		file_url,
+		audio_file,
 		created_at
 	FROM soundtrack
 	`
@@ -45,7 +45,7 @@ func (s *soundtrackStorage) GetSoundtracks(ctx context.Context, filter models.So
 			&i.Author,
 			&i.Duration,
 			&i.CoverImage,
-			&i.FileURL,
+			&i.AudioFile,
 			&i.CreatedAt,
 		); err != nil {
 			return nil, err

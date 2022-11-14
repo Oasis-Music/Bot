@@ -33,13 +33,13 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 	}
 
 	return &models.Soundtrack{
-		ID:         strconv.Itoa(int(soundtrack.ID)),
-		Title:      soundtrack.Title,
-		Author:     soundtrack.Author,
-		Duration:   int(soundtrack.Duration),
-		CoverImage: coverImg,
-		FileURL:    s.config.ExternalAPI.AudioBaseURL + soundtrack.FileURL,
-		CreatorID:  soundtrack.CreatorID,
-		CreatedAt:  soundtrack.CreatedAt.UTC().String(),
+		ID:        strconv.Itoa(int(soundtrack.ID)),
+		Title:     soundtrack.Title,
+		Author:    soundtrack.Author,
+		Duration:  int(soundtrack.Duration),
+		CoverURL:  coverImg,
+		AudioURL:  s.config.ExternalAPI.AudioBaseURL + soundtrack.AudioFile,
+		CreatorID: soundtrack.CreatorID,
+		CreatedAt: soundtrack.CreatedAt.UTC().String(),
 	}, nil
 }

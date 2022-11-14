@@ -11,7 +11,7 @@ const ADD_NEW_SOUNDTRACK = `
 		author,
 		duration,
 		cover_image,
-		file_url,
+		audio_file,
 		is_validated,
 		creator_id
 	) VALUES (
