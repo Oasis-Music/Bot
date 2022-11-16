@@ -29,6 +29,11 @@ func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models
 	return r.UserService.GetUsersTraks(ctx, id, filter)
 }
 
+// AuthorizeUser is the resolver for the authorizeUser field.
+func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
+	return r.UserService.AuthorizeUser(ctx, initData)
+}
+
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
 // one last chance to move it out of harms way if you want. There are two reasons this happens:

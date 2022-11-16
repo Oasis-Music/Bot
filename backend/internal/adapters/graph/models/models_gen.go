@@ -30,6 +30,10 @@ type AddTrackToUserInput struct {
 	TrackID string `json:"trackId"`
 }
 
+type AuthorizationResponse struct {
+	Token string `json:"token"`
+}
+
 type DeleteTrackFromUserInput struct {
 	UserID  string `json:"userId"`
 	TrackID string `json:"trackId"`

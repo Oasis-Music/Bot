@@ -10,6 +10,7 @@ union UserTracksResult = UserTracksResponse | NotFound
 extend type Query {
   user(id: ID!): UserResult
   userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
+  authorizeUser(initData: String!): AuthorizationResponse!
 }
 
 # AddTrackToUserResponse
@@ -34,4 +35,8 @@ input AddTrackToUserInput {
 input DeleteTrackFromUserInput {
   userId: ID!
   trackId: ID!
+}
+
+type AuthorizationResponse {
+  token: String!
 }
