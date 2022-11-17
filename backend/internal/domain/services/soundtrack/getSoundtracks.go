@@ -17,10 +17,11 @@ func (s *soundtrackService) GetSoundtracks(ctx context.Context, filter models.So
 
 	for _, item := range items {
 
-		var coverImg string
+		var coverImg *string
 
 		if item.CoverImage.Valid {
-			coverImg = s.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
+			path := s.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
+			coverImg = &path
 		}
 
 		soundtracks = append(soundtracks, models.Soundtrack{

@@ -30,10 +30,11 @@ func (u *userService) GetUsersTraks(ctx context.Context, userID string, filter m
 
 	for _, item := range items {
 
-		var coverImg string
+		var coverImg *string
 
 		if item.CoverImage.Valid {
-			coverImg = u.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
+			path := u.config.ExternalAPI.CoverImageBaseURL + item.CoverImage.String
+			coverImg = &path
 		}
 
 		soundtracks = append(soundtracks, models.Soundtrack{

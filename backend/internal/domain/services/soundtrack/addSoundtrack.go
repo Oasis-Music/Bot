@@ -3,7 +3,6 @@ package soundtrack
 import (
 	"bytes"
 	"context"
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,6 +14,7 @@ import (
 	"os/exec"
 
 	"oasis/backend/internal/adapters/db"
+	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"oasis/backend/internal/adapters/graph/models"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -140,11 +140,7 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	dbParams.Author = input.Author
 	dbParams.Duration = duration
 
-	// TODO: fill
-	dbParams.CoverImage = sql.NullString{
-		Valid:  true,
-		String: coverImageURL,
-	}
+	dbParams.CoverImage = dbnull.NewNullString(coverImageURL, true)
 	dbParams.AudioFile = soundtrackURL
 	dbParams.IsValidated = false
 	dbParams.CreatorID = "sys"

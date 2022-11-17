@@ -1,7 +1,6 @@
 package db
 
 import (
-	"database/sql"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"time"
 )
@@ -11,7 +10,7 @@ type SoundtrackDTO struct {
 	Title      string
 	Author     string
 	Duration   int16
-	CoverImage sql.NullString
+	CoverImage dbnull.NullString
 	AudioFile  string
 	CreatorID  string
 	CreatedAt  time.Time
@@ -42,7 +41,7 @@ type NewSoundtrackParams struct {
 	Title       string
 	Author      string
 	Duration    int16
-	CoverImage  sql.NullString
+	CoverImage  dbnull.NullString
 	AudioFile   string
 	IsValidated bool
 	CreatorID   string

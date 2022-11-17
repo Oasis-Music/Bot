@@ -26,10 +26,11 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 		return nil, err
 	}
 
-	var coverImg string
+	var coverImg *string
 
 	if soundtrack.CoverImage.Valid {
-		coverImg = s.config.ExternalAPI.CoverImageBaseURL + soundtrack.CoverImage.String
+		path := s.config.ExternalAPI.CoverImageBaseURL + soundtrack.CoverImage.String
+		coverImg = &path
 	}
 
 	return &models.Soundtrack{

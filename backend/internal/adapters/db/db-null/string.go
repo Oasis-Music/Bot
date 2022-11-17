@@ -6,6 +6,15 @@ type NullString struct {
 	sql.NullString
 }
 
+func NewNullString(s string, valid bool) NullString {
+	return NullString{
+		NullString: sql.NullString{
+			String: s,
+			Valid:  valid,
+		},
+	}
+}
+
 func (n NullString) ValueOrDefault() string {
 	if !n.Valid {
 		return ""

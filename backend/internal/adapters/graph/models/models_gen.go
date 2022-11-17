@@ -50,15 +50,15 @@ func (NotFound) IsUserResult() {}
 func (NotFound) IsUserTracksResult() {}
 
 type Soundtrack struct {
-	ID        string `json:"id"`
-	Title     string `json:"title"`
-	Author    string `json:"author"`
-	Duration  int    `json:"duration"`
-	CoverURL  string `json:"coverURL"`
-	AudioURL  string `json:"audioURL"`
-	Validated bool   `json:"validated"`
-	CreatorID string `json:"creatorId"`
-	CreatedAt string `json:"createdAt"`
+	ID        string  `json:"id"`
+	Title     string  `json:"title"`
+	Author    string  `json:"author"`
+	Duration  int     `json:"duration"`
+	CoverURL  *string `json:"coverURL"`
+	AudioURL  string  `json:"audioURL"`
+	Validated bool    `json:"validated"`
+	CreatorID string  `json:"creatorId"`
+	CreatedAt string  `json:"createdAt"`
 }
 
 func (Soundtrack) IsSoundtrackResult() {}
