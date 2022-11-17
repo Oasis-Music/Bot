@@ -145,7 +145,7 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 		Valid:  true,
 		String: coverImageURL,
 	}
-	dbParams.FileURL = soundtrackURL
+	dbParams.AudioFile = soundtrackURL
 	dbParams.IsValidated = false
 	dbParams.CreatorID = "sys"
 

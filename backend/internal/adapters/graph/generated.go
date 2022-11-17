@@ -459,8 +459,6 @@ type NotFound {
   duration: Int!
   coverURL: String!
   audioURL: String!
-  # coverImage: String!
-  # fileURL: String!
   validated: Boolean!
   creatorId: String!
   createdAt: Date!

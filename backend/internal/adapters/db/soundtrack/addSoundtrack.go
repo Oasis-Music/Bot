@@ -26,7 +26,7 @@ func (s *soundtrackStorage) AddSoundtrack(ctx context.Context, params db.NewSoun
 		params.Author,
 		params.Duration,
 		params.CoverImage,
-		params.FileURL,
+		params.AudioFile,
 		params.IsValidated,
 		params.CreatorID,
 	)

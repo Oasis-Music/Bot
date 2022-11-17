@@ -12,10 +12,9 @@ type SoundtrackDTO struct {
 	Author     string
 	Duration   int16
 	CoverImage sql.NullString
-	// FileURL    string
-	AudioFile string
-	CreatorID string
-	CreatedAt time.Time
+	AudioFile  string
+	CreatorID  string
+	CreatedAt  time.Time
 }
 
 type UserDTO struct {
@@ -44,7 +43,7 @@ type NewSoundtrackParams struct {
 	Author      string
 	Duration    int16
 	CoverImage  sql.NullString
-	FileURL     string
+	AudioFile   string
 	IsValidated bool
 	CreatorID   string
 }
