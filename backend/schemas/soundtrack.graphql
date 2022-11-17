@@ -32,6 +32,6 @@ type SoundtracksResponse {
 input AddSoundtrackInput {
   title: String!
   author: String!
-  coverImage: Upload!
+  coverImage: Upload
   audiofile: Upload!
 }

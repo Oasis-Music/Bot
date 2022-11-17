@@ -19,10 +19,10 @@ type UserTracksResult interface {
 }
 
 type AddSoundtrackInput struct {
-	Title      string         `json:"title"`
-	Author     string         `json:"author"`
-	CoverImage graphql.Upload `json:"coverImage"`
-	Audiofile  graphql.Upload `json:"audiofile"`
+	Title      string          `json:"title"`
+	Author     string          `json:"author"`
+	CoverImage *graphql.Upload `json:"coverImage"`
+	Audiofile  graphql.Upload  `json:"audiofile"`
 }
 
 type AddTrackToUserInput struct {

@@ -140,7 +140,13 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	dbParams.Author = input.Author
 	dbParams.Duration = duration
 
-	dbParams.CoverImage = dbnull.NewNullString(coverImageURL, true)
+	dbCoverParam := dbnull.NewNullString("", false)
+
+	if coverImageURL != nil {
+		dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
+	}
+
+	dbParams.CoverImage = dbCoverParam
 	dbParams.AudioFile = soundtrackURL
 	dbParams.IsValidated = false
 	dbParams.CreatorID = "sys"
@@ -155,7 +161,7 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	return true, nil
 }
 
-func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage graphql.Upload) (string, string, error) {
+func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *graphql.Upload) (string, *string, error) {
 
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)
@@ -163,34 +169,36 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 	audioField, err := writer.CreateFormFile("soundtrack", "new_track.mp3")
 	if err != nil {
 		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		return "", nil, errors.New("failed to save media")
 
 	}
 	audioField.Write(audio.Bytes())
 
-	coverImg, err := io.ReadAll(coverImage.File)
-	if err != nil {
-		fmt.Println("io.ReadAll cover:", err)
-		return "", "", errors.New("failed to save media")
-	}
+	if coverImage != nil {
+		coverImg, err := io.ReadAll(coverImage.File)
+		if err != nil {
+			fmt.Println("io.ReadAll cover:", err)
+			return "", nil, errors.New("failed to save media")
+		}
 
-	coverImageField, err := writer.CreateFormFile("cover", coverImage.Filename)
-	if err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		coverImageField, err := writer.CreateFormFile("cover", coverImage.Filename)
+		if err != nil {
+			fmt.Println(err)
+			return "", nil, errors.New("failed to save media")
 
+		}
+		coverImageField.Write(coverImg)
 	}
-	coverImageField.Write(coverImg)
 
 	if err := writer.Close(); err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		fmt.Println("writer.Close()", err)
+		return "", nil, errors.New("failed to save media")
 	}
 
 	req, err := http.NewRequest(http.MethodPost, "http://localhost:5000/createTrack", &body)
 	if err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		fmt.Println("build /createTrack", err)
+		return "", nil, errors.New("failed to save media")
 
 	}
 
@@ -198,30 +206,31 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		fmt.Println("make request", err)
+		return "", nil, errors.New("failed to save media")
 
 	}
 
 	respBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
-
+		fmt.Println("read a r.Body", err)
+		return "", nil, errors.New("failed to save media")
 	}
 
 	defer res.Body.Close()
 
 	type responseData struct {
-		AudioPath      string `json:"audioPath"`
-		CoverImagePath string `json:"coverPath"`
+		AudioPath      string  `json:"audioPath"`
+		CoverImagePath *string `json:"coverPath,omitempty"`
 	}
+
+	fmt.Println("block storage answer: ", string(respBody))
 
 	var data responseData
 
 	if err := json.Unmarshal(respBody, &data); err != nil {
-		fmt.Println(err)
-		return "", "", errors.New("failed to save media")
+		fmt.Println("json.Unmarshal", err)
+		return "", nil, errors.New("failed to save media")
 	}
 
 	return data.AudioPath, data.CoverImagePath, nil
