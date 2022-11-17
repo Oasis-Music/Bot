@@ -11,8 +11,6 @@ import (
 	"net/url"
 	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/domain/entity"
-	"sort"
-	"strings"
 )
 
 const TelegramSeed = "WebAppData"
@@ -20,7 +18,6 @@ const TelegramSeed = "WebAppData"
 var errInitDataInvalid = errors.New("initData string invalid")
 
 func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
-
 	if initData == "" {
 		return nil, errInitDataInvalid
 	}
@@ -31,43 +28,21 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		return nil, errInitDataInvalid
 	}
 
-	hash := urlA.Get("hash")
+	tgHash := urlA.Get("hash")
 
-	if hash == "" {
+	if tgHash == "" {
 		fmt.Println(err)
 		return nil, errInitDataInvalid
 	}
 
-	unscString, err := url.PathUnescape(initData)
-	if err != nil {
-		fmt.Println(err)
-		return nil, errInitDataInvalid
-	}
+	validString := "auth_date=" + urlA.Get("auth_date") + "\n" +
+		"query_id=" + urlA.Get("query_id") +
+		"\n" + "user=" + urlA.Get("user")
 
-	// fmt.Println(unscString)
+	gen := signData([]byte(u.config.Telegram.Token), []byte(TelegramSeed))
+	hash := hex.EncodeToString(signData([]byte(validString), gen))
 
-	splited := strings.Split(unscString, "&")
-
-	validKeys := make([]string, 0, 3)
-
-	for _, v := range splited {
-		key, _, _ := strings.Cut(v, "=")
-		if key != "hash" {
-			validKeys = append(validKeys, v)
-		}
-	}
-
-	sort.Strings(validKeys)
-
-	validString := strings.Join(validKeys, "\n")
-
-	tgSeed := []byte(TelegramSeed)
-	tgToken := []byte(u.config.Telegram.Token)
-
-	gen := signData(tgToken, tgSeed)
-	finalHash := hex.EncodeToString(signData([]byte(validString), gen))
-
-	if finalHash == hash {
+	if hash == tgHash {
 
 		var userData entity.UserInitData
 
