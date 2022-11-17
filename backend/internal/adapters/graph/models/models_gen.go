@@ -72,9 +72,14 @@ type SoundtracksResponse struct {
 }
 
 type User struct {
-	ID         string `json:"id"`
-	TelegramID string `json:"telegramId"`
-	CreatedAt  string `json:"createdAt"`
+	ID           string  `json:"id"`
+	TelegramID   string  `json:"telegramId"`
+	FirstName    string  `json:"firstName"`
+	LastName     *string `json:"lastName"`
+	Username     *string `json:"username"`
+	LanguageCode *string `json:"languageCode"`
+	VisitedAt    string  `json:"visitedAt"`
+	CreatedAt    string  `json:"createdAt"`
 }
 
 func (User) IsUserResult() {}

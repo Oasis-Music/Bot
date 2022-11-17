@@ -16,8 +16,12 @@ CREATE TABLE soundtrack (
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    tg_id TEXT NOT NULL,
-    last_visit_date TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    telegram_id BIGINT NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT,
+    username TEXT,
+    language_code TEXT,
+    visited_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
 );
 
@@ -249,10 +253,17 @@ VALUES
     );
 
 
-INSERT INTO users (tg_id)
-VALUES ('test_id_1'),
-       ('test_id_2'),
-       ('test_id_3');
+INSERT INTO 
+    users (
+        telegram_id,
+        first_name,
+        last_name,
+        username,
+        language_code
+    )    
+VALUES (13612537, 'Spongebob', 'Squarepants', null, 'en'),
+       (22365362, 'Patrick', 'Star', null, 'en'),
+       (33255452, 'Plankton', null, 'arrogantgenius', 'en');
 
 
 INSERT INTO user_soundtrack (user_id, soundtrack_id)

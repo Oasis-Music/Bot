@@ -26,8 +26,13 @@ func (u *userService) GetUser(ctx context.Context, id string) (models.UserResult
 	}
 
 	return &models.User{
-		ID:         strconv.Itoa(int(user.ID)),
-		TelegramID: user.TgID,
-		CreatedAt:  user.CreatedAt.UTC().String(),
+		ID:           strconv.Itoa(int(user.ID)),
+		TelegramID:   strconv.FormatInt(user.TelegramID, 10),
+		FirstName:    user.FirstName,
+		LastName:     user.LastName.ValueOrNil(),
+		Username:     user.Username.ValueOrNil(),
+		LanguageCode: user.LanguageCode.ValueOrNil(),
+		VisitedAt:    user.VisitedAt.UTC().String(),
+		CreatedAt:    user.CreatedAt.UTC().String(),
 	}, nil
 }

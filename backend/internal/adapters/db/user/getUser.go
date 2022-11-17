@@ -6,8 +6,14 @@ import (
 )
 
 const GET_USER_QUERY = `
-SELECT id,
-	tg_id,
+SELECT 
+	id,
+	telegram_id,
+	first_name,
+	last_name,
+	username,
+	language_code,
+	visited_at,
 	created_at
 FROM users
 WHERE id = $1;
@@ -20,7 +26,12 @@ func (s *userStorage) GetUser(ctx context.Context, id int32) (db.UserDTO, error)
 	var dto db.UserDTO
 	err := row.Scan(
 		&dto.ID,
-		&dto.TgID,
+		&dto.TelegramID,
+		&dto.FirstName,
+		&dto.LastName,
+		&dto.Username,
+		&dto.LanguageCode,
+		&dto.VisitedAt,
 		&dto.CreatedAt,
 	)
 

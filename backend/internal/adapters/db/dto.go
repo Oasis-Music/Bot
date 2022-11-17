@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"time"
 )
 
@@ -18,9 +19,14 @@ type SoundtrackDTO struct {
 }
 
 type UserDTO struct {
-	ID        int32
-	TgID      string
-	CreatedAt time.Time
+	ID           int32
+	TelegramID   int64
+	FirstName    string
+	LastName     dbnull.NullString
+	Username     dbnull.NullString
+	LanguageCode dbnull.NullString
+	VisitedAt    time.Time
+	CreatedAt    time.Time
 }
 
 type AddTrackParams struct {
