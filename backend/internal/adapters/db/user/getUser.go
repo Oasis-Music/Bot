@@ -17,7 +17,7 @@ FROM users
 WHERE id = $1;
 `
 
-func (s *userStorage) GetUser(ctx context.Context, id int32) (db.UserDTO, error) {
+func (s *userStorage) GetUser(ctx context.Context, id int64) (db.UserDTO, error) {
 
 	row := s.database.QueryRow(context.Background(), GET_USER_QUERY, id)
 

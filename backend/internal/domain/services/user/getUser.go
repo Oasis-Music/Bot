@@ -10,12 +10,12 @@ import (
 )
 
 func (u *userService) GetUser(ctx context.Context, id string) (models.UserResult, error) {
-	i, err := strconv.Atoi(id)
+	i, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
 		return nil, errors.New("invalid ID")
 	}
 
-	user, err := u.storage.GetUser(ctx, int32(i))
+	user, err := u.storage.GetUser(ctx, i)
 
 	if err == pgx.ErrNoRows {
 		return models.NotFound{
