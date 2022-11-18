@@ -10,7 +10,7 @@ import (
 
 func (u *userService) AddTrack(ctx context.Context, input models.AddTrackToUserInput) (bool, error) {
 
-	userId, err := strconv.Atoi(input.UserID)
+	userId, err := strconv.ParseInt(input.UserID, 10, 64)
 	if err != nil {
 		return false, errors.New("invalid user ID")
 	}
@@ -21,7 +21,7 @@ func (u *userService) AddTrack(ctx context.Context, input models.AddTrackToUserI
 	}
 
 	err = u.storage.AddTrack(ctx, db.AddTrackParams{
-		UserId:  int32(userId),
+		UserId:  userId,
 		TrackId: int32(trackId),
 	})
 

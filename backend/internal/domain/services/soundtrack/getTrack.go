@@ -40,7 +40,7 @@ func (s *soundtrackService) GetTrack(ctx context.Context, id string) (models.Sou
 		Duration:  int(soundtrack.Duration),
 		CoverURL:  coverImg,
 		AudioURL:  s.config.ExternalAPI.AudioBaseURL + soundtrack.AudioFile,
-		CreatorID: soundtrack.CreatorID,
+		CreatorID: strconv.FormatInt(soundtrack.CreatorID, 10),
 		CreatedAt: soundtrack.CreatedAt.UTC().String(),
 	}, nil
 }

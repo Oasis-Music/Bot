@@ -12,13 +12,12 @@ type SoundtrackDTO struct {
 	Duration   int16
 	CoverImage dbnull.NullString
 	AudioFile  string
-	CreatorID  string
+	CreatorID  int64
 	CreatedAt  time.Time
 }
 
 type UserDTO struct {
-	ID           int32
-	TelegramID   int64
+	ID           int64
 	FirstName    string
 	LastName     dbnull.NullString
 	Username     dbnull.NullString
@@ -29,12 +28,12 @@ type UserDTO struct {
 
 type AddTrackParams struct {
 	TrackId int32
-	UserId  int32
+	UserId  int64
 }
 
 type DeleteTrackParams struct {
 	TrackId int32
-	UserId  int32
+	UserId  int64
 }
 
 type NewSoundtrackParams struct {
@@ -45,4 +44,17 @@ type NewSoundtrackParams struct {
 	AudioFile   string
 	IsValidated bool
 	CreatorID   string
+}
+
+type CreateUserParams struct {
+	ID           int64
+	FirstName    string
+	LastName     dbnull.NullString
+	Username     dbnull.NullString
+	LanguageCode dbnull.NullString
+}
+
+type CreateUserRow struct {
+	ID        int64
+	FirstName string
 }

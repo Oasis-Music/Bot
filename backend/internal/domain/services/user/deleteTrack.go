@@ -10,7 +10,7 @@ import (
 
 func (u *userService) DeleteTrack(ctx context.Context, input models.DeleteTrackFromUserInput) (bool, error) {
 
-	userId, err := strconv.Atoi(input.UserID)
+	userId, err := strconv.ParseInt(input.UserID, 10, 64)
 	if err != nil {
 		return false, errors.New("invalid user ID")
 	}
@@ -21,7 +21,7 @@ func (u *userService) DeleteTrack(ctx context.Context, input models.DeleteTrackF
 	}
 
 	affectedRows, err := u.storage.DeleteTrack(ctx, db.DeleteTrackParams{
-		UserId:  int32(userId),
+		UserId:  userId,
 		TrackId: int32(trackId),
 	})
 

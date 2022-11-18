@@ -73,7 +73,6 @@ type SoundtracksResponse struct {
 
 type User struct {
 	ID           string  `json:"id"`
-	TelegramID   string  `json:"telegramId"`
 	FirstName    string  `json:"firstName"`
 	LastName     *string `json:"lastName"`
 	Username     *string `json:"username"`

@@ -1,6 +1,5 @@
 type User {
   id: ID!
-  telegramId: String!
   firstName: String!
   lastName: String
   username: String

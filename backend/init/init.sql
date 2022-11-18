@@ -2,21 +2,8 @@ DROP TABLE IF EXISTS soundtrack CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS user_soundtrack CASCADE;
 
-CREATE TABLE soundtrack (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    author TEXT NOT NULL,
-    duration SMALLINT NOT NULL,
-    cover_image TEXT,
-    audio_file TEXT NOT NULL,
-    is_validated BOOLEAN NOT NULL DEFAULT false,
-    creator_id TEXT NOT NULL DEFAULT 'ozark',
-    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
-);
-
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    telegram_id BIGINT NOT NULL,
+    id BIGINT PRIMARY KEY, -- telegram user id
     first_name TEXT NOT NULL,
     last_name TEXT,
     username TEXT,
@@ -26,8 +13,28 @@ CREATE TABLE users (
 );
 
 
+INSERT INTO users (id, first_name, last_name, username, language_code)
+VALUES (1, 'Spongebob', 'Squarepants', null, 'en'),
+       (2, 'Patrick', 'Star', NULL, 'en'),
+       (3, 'Plankton', null, 'arrogantgenius', 'en');
+
+
+CREATE TABLE soundtrack (
+    id SERIAL PRIMARY KEY,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    duration SMALLINT NOT NULL,
+    cover_image TEXT,
+    audio_file TEXT NOT NULL,
+    is_validated BOOLEAN NOT NULL DEFAULT false,
+    creator_id BIGINT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
+    FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE SET DEFAULT
+);
+
+
 CREATE TABLE user_soundtrack (
-	user_id INT REFERENCES users(id) ON DELETE CASCADE,
+	user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
 	soundtrack_id INT REFERENCES soundtrack(id) ON DELETE CASCADE,
 	PRIMARY KEY (user_id, soundtrack_id)
 );
@@ -215,8 +222,21 @@ VALUES
         191,
         'lambada.jpeg',
         't-fest-skriptonit-lambada.mp3'
-    ),
+    );
+
+
+INSERT INTO
+    soundtrack (
+        creator_id,
+        title,
+        author,
+        duration,
+        cover_image,
+        audio_file
+    )
+VALUES
     (
+        2,
         'Грустная Песня',
         'THRILL PILL, Егор Крид, MORGENSHTERN',
         226,
@@ -224,6 +244,7 @@ VALUES
         'grustnaya-pesnya.mp3'
     ),
     (
+        2,
         'Black',
         'Gazirovka',
         165,
@@ -231,6 +252,7 @@ VALUES
         'gazirovka-black.mp3'
     ),
     (
+        2,
         'Малиновый Закат',
         'Макс Корж',
         178,
@@ -238,6 +260,7 @@ VALUES
         'maks-korzh-malinovyjj-zakat.mp3'
     ),
     (
+        2,
         'Шантаж',
         'Макс Корж',
         194,
@@ -245,25 +268,13 @@ VALUES
         'maks-korzh-shantazh.mp3'
     ),
     (
+        2,
         'Башня из слоновой кости',
         'Oxxxymiron',
         214,
         'gorgorod.jpeg',
         'bashnya_iz_slonovojj_kosti.mp3'
     );
-
-
-INSERT INTO 
-    users (
-        telegram_id,
-        first_name,
-        last_name,
-        username,
-        language_code
-    )    
-VALUES (13612537, 'Spongebob', 'Squarepants', null, 'en'),
-       (22365362, 'Patrick', 'Star', null, 'en'),
-       (33255452, 'Plankton', null, 'arrogantgenius', 'en');
 
 
 INSERT INTO user_soundtrack (user_id, soundtrack_id)
