@@ -13,6 +13,7 @@ type userStorage struct {
 }
 
 type UserStorage interface {
+	UpdateUserVisitDate(ctx context.Context, id int64) error
 	UpdateUser(ctx context.Context, params db.UpdateUserParams) (db.UpdateUserRow, error)
 	CreateUser(ctx context.Context, params db.CreateUserParams) (db.CreateUserRow, error)
 	GetUser(ctx context.Context, id int64) (db.UserDTO, error)

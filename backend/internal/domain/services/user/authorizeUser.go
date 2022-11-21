@@ -112,6 +112,12 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 
 	} else {
 		fmt.Println("user data has not changed")
+
+		err = u.storage.UpdateUserVisitDate(ctx, user.ID)
+		if err != nil {
+			fmt.Println("last visit date update:", err)
+			return nil, errIternal
+		}
 	}
 
 	return &models.AuthorizationResponse{
