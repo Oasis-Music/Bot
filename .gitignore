@@ -2,6 +2,7 @@ client/node_modules
 client/build
 backend/.env.prod
 client/src/assets/music
+/todo.txt
 /.pnp
 .pnp.js
 
