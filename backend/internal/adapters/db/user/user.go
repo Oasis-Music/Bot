@@ -13,6 +13,7 @@ type userStorage struct {
 }
 
 type UserStorage interface {
+	UpdateUser(ctx context.Context, params db.UpdateUserParams) (db.UpdateUserRow, error)
 	CreateUser(ctx context.Context, params db.CreateUserParams) (db.CreateUserRow, error)
 	GetUser(ctx context.Context, id int64) (db.UserDTO, error)
 	GetUsersTraks(ctx context.Context, id int32, filter models.UserTracksFilter) ([]db.SoundtrackDTO, error)

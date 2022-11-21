@@ -13,6 +13,7 @@ import (
 	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/domain/entity"
+	"time"
 
 	"github.com/jackc/pgx/v4"
 )
@@ -53,9 +54,7 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 
 	var userData entity.UserInitData
 
-	// TODO: delete after done
-	if err := json.Unmarshal([]byte(`{"id":12,"first_name":"Bob","last_name":"Squarepants","username":"","language_code":""}`), &userData); err != nil {
-		// if err := json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
+	if err := json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
 		fmt.Println(err)
 		return nil, errInitDataInvalid
 	}
@@ -100,15 +99,19 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		return nil, errIternal
 	}
 
-	isChanged, updatedUser := isInitDataDifferent(userData, user)
+	isChanged, updatedUserData := isInitDataDifferent(userData, user)
 	if isChanged {
-		fmt.Println("user data has been updated: ", updatedUser)
-		fmt.Println("prev ", user)
+		fmt.Println("user data is different")
+		_, err := u.storage.UpdateUser(ctx, updatedUserData)
+		if err != nil {
+			fmt.Println(err)
+			return nil, errIternal
+		}
+
+		fmt.Println("user data has been updated")
+
 	} else {
-
-		fmt.Println("user data has not changed", updatedUser)
-		fmt.Println("prev ", user)
-
+		fmt.Println("user data has not changed")
 	}
 
 	return &models.AuthorizationResponse{
@@ -123,17 +126,18 @@ func signData(msg, key []byte) []byte {
 	return mac.Sum(nil)
 }
 
-func isInitDataDifferent(tgUser entity.UserInitData, dbUser db.UserDTO) (bool, db.CreateUserParams) {
+func isInitDataDifferent(tgUser entity.UserInitData, dbUser db.UserDTO) (bool, db.UpdateUserParams) {
 
 	var isChanged bool
 
-	// TODO: storage update params
-	var updatedUser db.CreateUserParams
-
-	updatedUser.FirstName = dbUser.FirstName
-	updatedUser.LastName = dbUser.LastName
-	updatedUser.Username = dbUser.Username
-	updatedUser.LanguageCode = dbUser.LanguageCode
+	updatedUser := db.UpdateUserParams{
+		ID:           dbUser.ID,
+		FirstName:    dbUser.FirstName,
+		LastName:     dbUser.LastName,
+		Username:     dbUser.Username,
+		LanguageCode: dbUser.LanguageCode,
+		VisitedAt:    time.Now(),
+	}
 
 	if tgUser.FirstName != dbUser.FirstName {
 		isChanged = true

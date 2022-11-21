@@ -58,3 +58,17 @@ type CreateUserRow struct {
 	ID        int64
 	FirstName string
 }
+
+type UpdateUserParams struct {
+	ID           int64
+	FirstName    string
+	LastName     dbnull.NullString
+	Username     dbnull.NullString
+	LanguageCode dbnull.NullString
+	VisitedAt    time.Time
+}
+
+type UpdateUserRow struct {
+	ID        int64
+	FirstName string
+}
