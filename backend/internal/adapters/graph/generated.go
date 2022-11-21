@@ -41,11 +41,13 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
 	AuthorizationResponse struct {
-		Token func(childComplexity int) int
+		RefreshToken func(childComplexity int) int
+		Token        func(childComplexity int) int
 	}
 
 	Mutation struct {
@@ -124,6 +126,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "AuthorizationResponse.refreshToken":
+		if e.complexity.AuthorizationResponse.RefreshToken == nil {
+			break
+		}
+
+		return e.complexity.AuthorizationResponse.RefreshToken(childComplexity), true
 
 	case "AuthorizationResponse.token":
 		if e.complexity.AuthorizationResponse.Token == nil {
@@ -400,7 +409,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			}
 			first = false
 			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
-			data := ec._Mutation(ctx, rc.Operation.SelectionSet)
+			data := ec._mutationMiddleware(ctx, rc.Operation, func(ctx context.Context) (interface{}, error) {
+				return ec._Mutation(ctx, rc.Operation.SelectionSet), nil
+			})
 			var buf bytes.Buffer
 			data.MarshalGQL(&buf)
 
@@ -434,11 +445,18 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../../../schemas/schema.graphql", Input: `type Query
+	{Name: "../../../schemas/schema.graphql", Input: `directive @hasRole(role: [Role!]!) on FIELD_DEFINITION | MUTATION
+
+type Query
 type Mutation
 
 scalar Date
 scalar Upload
+
+enum Role {
+  ADMIN
+  USER
+}
 
 type NotFound {
   message: String!
@@ -452,7 +470,7 @@ type NotFound {
   coverURL: String
   audioURL: String!
   validated: Boolean!
-  creatorId: String!
+  creatorId: String! @hasRole(role: ADMIN)
   createdAt: Date!
 }
 
@@ -527,6 +545,7 @@ input DeleteTrackFromUserInput {
 
 type AuthorizationResponse {
   token: String!
+  refreshToken: String!
 }
 `, BuiltIn: false},
 }
@@ -535,6 +554,21 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // endregion ************************** generated!.gotpl **************************
 
 // region    ***************************** args.gotpl *****************************
+
+func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []models.Role
+	if tmp, ok := rawArgs["role"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
+		arg0, err = ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["role"] = arg0
+	return args, nil
+}
 
 func (ec *executionContext) field_Mutation_addSoundtrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
@@ -714,6 +748,39 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    ************************** directives.gotpl **************************
 
+func (ec *executionContext) _mutationMiddleware(ctx context.Context, obj *ast.OperationDefinition, next func(ctx context.Context) (interface{}, error)) graphql.Marshaler {
+
+	for _, d := range obj.Directives {
+		switch d.Name {
+		case "hasRole":
+			rawArgs := d.ArgumentMap(ec.Variables)
+			args, err := ec.dir_hasRole_args(ctx, rawArgs)
+			if err != nil {
+				ec.Error(ctx, err)
+				return graphql.Null
+			}
+			n := next
+			next = func(ctx context.Context) (interface{}, error) {
+				if ec.directives.HasRole == nil {
+					return nil, errors.New("directive hasRole is not implemented")
+				}
+				return ec.directives.HasRole(ctx, obj, n, args["role"].([]models.Role))
+			}
+		}
+	}
+	tmp, err := next(ctx)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if data, ok := tmp.(graphql.Marshaler); ok {
+		return data
+	}
+	ec.Errorf(ctx, `unexpected type %T from directive, should be graphql.Marshaler`, tmp)
+	return graphql.Null
+
+}
+
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
@@ -750,6 +817,50 @@ func (ec *executionContext) _AuthorizationResponse_token(ctx context.Context, fi
 }
 
 func (ec *executionContext) fieldContext_AuthorizationResponse_token(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AuthorizationResponse",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _AuthorizationResponse_refreshToken(ctx context.Context, field graphql.CollectedField, obj *models.AuthorizationResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_AuthorizationResponse_refreshToken(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.RefreshToken, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_AuthorizationResponse_refreshToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "AuthorizationResponse",
 		Field:      field,
@@ -1230,6 +1341,8 @@ func (ec *executionContext) fieldContext_Query_authorizeUser(ctx context.Context
 			switch field.Name {
 			case "token":
 				return ec.fieldContext_AuthorizationResponse_token(ctx, field)
+			case "refreshToken":
+				return ec.fieldContext_AuthorizationResponse_refreshToken(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AuthorizationResponse", field.Name)
 		},
@@ -1695,8 +1808,32 @@ func (ec *executionContext) _Soundtrack_creatorId(ctx context.Context, field gra
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.CreatorID, nil
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return obj.CreatorID, nil
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, obj, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(string); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be string`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4244,6 +4381,13 @@ func (ec *executionContext) _AuthorizationResponse(ctx context.Context, sel ast.
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "refreshToken":
+
+			out.Values[i] = ec._AuthorizationResponse_refreshToken(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5094,6 +5238,77 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+	var res models.Role
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
+	var vSlice []interface{}
+	if v != nil {
+		vSlice = graphql.CoerceList(v)
+	}
+	var err error
+	res := make([]models.Role, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalNSoundtrack2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrack(ctx context.Context, sel ast.SelectionSet, v models.Soundtrack) graphql.Marshaler {

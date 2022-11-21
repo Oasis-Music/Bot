@@ -1,8 +1,15 @@
+directive @hasRole(role: [Role!]!) on FIELD_DEFINITION | MUTATION
+
 type Query
 type Mutation
 
 scalar Date
 scalar Upload
+
+enum Role {
+  ADMIN
+  USER
+}
 
 type NotFound {
   message: String!

@@ -1,19 +1,26 @@
 package graph
 
 import (
+	"context"
+	"fmt"
 	"net/http"
+
+	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/composites"
+	"oasis/backend/internal/domain/services/user"
 	"oasis/backend/internal/utils"
 	"time"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewHandler(db *pgxpool.Pool, rootComposite composites.RootComposite) http.Handler {
+type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
+
+func NewHandler(userService *user.UserService, rootComposite composites.RootComposite) http.Handler {
 
 	resolver := &Resolver{
 		SoundtrackService: rootComposite.SoundtrackComposite.Service,
@@ -23,6 +30,8 @@ func NewHandler(db *pgxpool.Pool, rootComposite composites.RootComposite) http.H
 	config := Config{
 		Resolvers: resolver,
 	}
+
+	config.Directives.HasRole = hasRoleDirectiveHandler(userService)
 
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 
@@ -46,4 +55,12 @@ func NewHandler(db *pgxpool.Pool, rootComposite composites.RootComposite) http.H
 	})
 
 	return srv
+}
+
+func hasRoleDirectiveHandler(userService *user.UserService) directiveHandler {
+	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
+		fmt.Println("Required roles: ", role)
+
+		return next(ctx)
+	}
 }

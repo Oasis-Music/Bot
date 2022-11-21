@@ -2,6 +2,7 @@ package app
 
 import (
 	"oasis/backend/internal/adapters/router"
+	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
 
@@ -24,15 +25,17 @@ type App struct {
 
 func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 
+	authService := auth.NewAuthService(config, db)
+
 	soundtrackComposite := composites.NewSoundtrackComposite(db, config)
-	userComposite := composites.NewUserComposite(db, config)
+	userComposite := composites.NewUserComposite(db, config, authService)
 
 	rootComposite := composites.RootComposite{
 		SoundtrackComposite: soundtrackComposite,
 		UserComposite:       userComposite,
 	}
 
-	r := router.NewRouter(config, db, rootComposite)
+	r := router.NewRouter(config, db, authService, rootComposite)
 
 	return &App{
 		config: config,

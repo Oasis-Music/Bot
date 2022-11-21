@@ -6,7 +6,7 @@ type Soundtrack {
   coverURL: String
   audioURL: String!
   validated: Boolean!
-  creatorId: String!
+  creatorId: String! @hasRole(role: ADMIN)
   createdAt: Date!
 }
 

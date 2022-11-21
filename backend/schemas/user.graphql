@@ -43,4 +43,5 @@ input DeleteTrackFromUserInput {
 
 type AuthorizationResponse {
   token: String!
+  refreshToken: String!
 }

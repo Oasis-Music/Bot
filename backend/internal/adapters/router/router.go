@@ -2,6 +2,7 @@ package router
 
 import (
 	"oasis/backend/internal/adapters/graph"
+	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
 
@@ -11,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewRouter(config *config.AppConfig, db *pgxpool.Pool, rootComposite composites.RootComposite) chi.Router {
+func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.AuthService, rootComposite composites.RootComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -22,7 +23,7 @@ func NewRouter(config *config.AppConfig, db *pgxpool.Pool, rootComposite composi
 
 	r.Group(func(r chi.Router) {
 		// r.Use(auth.AuthMiddleware)
-		r.Handle("/graphql", graph.NewHandler(db, rootComposite))
+		r.Handle("/graphql", graph.NewHandler(&rootComposite.UserComposite.Service, rootComposite))
 	})
 
 	if config.Environment == "development" {

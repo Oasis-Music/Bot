@@ -6,25 +6,41 @@ import (
 )
 
 type AppConfig struct {
-	Environment string
-	EntryPort   string
-	Database    PostgresConfig
-	Telegram    TelegramConfig
-	ExternalAPI ExternalAPIConfig
+	Environment      string
+	EntryPort        string
+	JwtSecret        string
+	RefreshJwtSecret string
+	Database         PostgresConfig
+	Telegram         TelegramConfig
+	ExternalAPI      ExternalAPIConfig
 }
 
 func NewAppConfig() *AppConfig {
+	/*   internal   */
 	ENTRY_PORT := utils.GetEnv("ENTRY_PORT")
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
+
+	jwtSecret := utils.GetEnv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("jwt secret is not specified")
+	}
+	jwtRefreshSecret := utils.GetEnv("REFRESH_JWT_SECRET")
+	if jwtRefreshSecret == "" {
+		log.Fatal("jwt refresh secret is not specified")
+	}
+
 	databaseCfg := GetDatabaseConfig()
 	telegramCfg := GetTelegramConfig()
 	externalApiCfg := GetExternalAPIConfig()
+
 	return &AppConfig{
-		Environment: ENVIRONMENT,
-		EntryPort:   ENTRY_PORT,
-		Database:    databaseCfg,
-		Telegram:    telegramCfg,
-		ExternalAPI: externalApiCfg,
+		Environment:      ENVIRONMENT,
+		EntryPort:        ENTRY_PORT,
+		JwtSecret:        jwtSecret,
+		RefreshJwtSecret: jwtRefreshSecret,
+		Database:         databaseCfg,
+		Telegram:         telegramCfg,
+		ExternalAPI:      externalApiCfg,
 	}
 }
 
