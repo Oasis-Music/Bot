@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS soundtrack CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS user_soundtrack CASCADE;
+DROP TABLE IF EXISTS auth_token CASCADE;
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY, -- telegram user id
@@ -37,6 +38,12 @@ CREATE TABLE user_soundtrack (
 	user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
 	soundtrack_id INT REFERENCES soundtrack(id) ON DELETE CASCADE,
 	PRIMARY KEY (user_id, soundtrack_id)
+);
+
+
+CREATE TABLE auth_token (
+    id BIGSERIAL PRIMARY KEY,
+    token_id text NOT NULL
 );
 
 INSERT INTO

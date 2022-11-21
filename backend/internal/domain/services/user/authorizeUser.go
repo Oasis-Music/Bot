@@ -59,11 +59,11 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		return nil, errInitDataInvalid
 	}
 
-	fmt.Printf("received user: %d first_name: %q\n", userData.Id, userData.FirstName)
+	fmt.Printf("received user: %d\n", userData.Id)
 
 	user, err := u.storage.GetUser(ctx, userData.Id)
 	if err == pgx.ErrNoRows {
-		fmt.Println("User not found, create")
+		fmt.Println("user not found, create...")
 
 		var dBNewUser db.CreateUserParams
 
@@ -88,10 +88,17 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 			return nil, err
 		}
 
-		fmt.Println("Created new user: ", newUser)
+		fmt.Printf("created new user: %s\n", newUser.FirstName)
+
+		at, rt, err := u.genTokenPairandSave(ctx, newUser.ID, newUser.FirstName)
+		if err != nil {
+			fmt.Println("last visit date update:", err)
+			return nil, errIternal
+		}
 
 		return &models.AuthorizationResponse{
-			Token: "Successfully authorized",
+			Token:        at,
+			RefreshToken: rt,
 		}, nil
 
 	} else if err != nil {
@@ -120,8 +127,21 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		}
 	}
 
+	firstName := user.FirstName
+
+	if isChanged {
+		firstName = updatedUserData.FirstName
+	}
+
+	at, rt, err := u.genTokenPairandSave(ctx, user.ID, firstName)
+	if err != nil {
+		fmt.Println("last visit date update:", err)
+		return nil, errIternal
+	}
+
 	return &models.AuthorizationResponse{
-		Token: "Successfully authorized",
+		Token:        at,
+		RefreshToken: rt,
 	}, nil
 
 }
@@ -172,4 +192,21 @@ func isInitDataDifferent(tgUser entity.UserInitData, dbUser db.UserDTO) (bool, d
 	}
 
 	return isChanged, updatedUser
+}
+
+func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
+
+	rawTokenPair, err := u.auth.CreateJwtPair(userID, firstName)
+	if err != nil {
+		fmt.Println("token parir gen", err)
+		return "", "", err
+	}
+
+	err = u.auth.SaveRefreshToken(ctx, rawTokenPair)
+	if err != nil {
+		fmt.Println("refresh token save", err)
+		return "", "", err
+	}
+
+	return rawTokenPair.AccessToken, rawTokenPair.RefreshToken, nil
 }
