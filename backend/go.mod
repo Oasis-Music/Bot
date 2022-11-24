@@ -32,4 +32,5 @@ require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/go-chi/cors v1.2.1
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/vektah/gqlparser v1.3.1
 )

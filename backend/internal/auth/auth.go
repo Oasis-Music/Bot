@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"net/http"
 	authStorage "oasis/backend/internal/adapters/db/auth"
 	"oasis/backend/internal/config"
 
@@ -9,14 +10,15 @@ import (
 )
 
 type authService struct {
-	storage          authStorage.AuthStorage
-	jwtSecret        []byte
-	refreshJwtSecret []byte
+	storage           authStorage.AuthStorage
+	accessTokenSecret []byte
+	refreshJwtSecret  []byte
 }
 
 type AuthService interface {
 	SaveRefreshToken(ctx context.Context, token RawTokenPair) error
 	CreateJwtPair(userID int64, firstName string) (RawTokenPair, error)
+	AuthMiddleware(next http.Handler) http.Handler
 }
 
 func NewAuthService(config *config.AppConfig, db *pgxpool.Pool) AuthService {
@@ -24,8 +26,8 @@ func NewAuthService(config *config.AppConfig, db *pgxpool.Pool) AuthService {
 	storage := authStorage.NewAuthStorage(db)
 
 	return &authService{
-		storage:          storage,
-		jwtSecret:        []byte(config.JwtSecret),
-		refreshJwtSecret: []byte(config.RefreshJwtSecret),
+		storage:           storage,
+		accessTokenSecret: []byte(config.JwtSecret),
+		refreshJwtSecret:  []byte(config.RefreshJwtSecret),
 	}
 }

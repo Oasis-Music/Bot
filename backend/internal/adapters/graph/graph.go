@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"oasis/backend/internal/adapters/graph/models"
+	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
 	"oasis/backend/internal/domain/services/user"
 	"oasis/backend/internal/utils"
@@ -16,6 +17,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
+	"github.com/vektah/gqlparser/gqlerror"
 )
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
@@ -60,6 +62,19 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 func hasRoleDirectiveHandler(userService *user.UserService) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
 		fmt.Println("Required roles: ", role)
+
+		userID := ctx.Value(auth.UserID).(string)
+
+		fmt.Printf("request from %q\n", userID)
+
+		if userID == auth.UnknownUserID {
+			return nil, &gqlerror.Error{
+				Message: "not authorized",
+				Extensions: map[string]interface{}{
+					"code": "401", // TODO: got 200 OK in response, why?
+				},
+			}
+		}
 
 		return next(ctx)
 	}

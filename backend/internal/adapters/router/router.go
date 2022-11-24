@@ -22,7 +22,7 @@ func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.Auth
 	}))
 
 	r.Group(func(r chi.Router) {
-		// r.Use(auth.AuthMiddleware)
+		r.Use(authService.AuthMiddleware)
 		r.Handle("/graphql", graph.NewHandler(&rootComposite.UserComposite.Service, rootComposite))
 	})
 
