@@ -12,6 +12,8 @@ import (
 	"github.com/google/uuid"
 )
 
+var ErrJwtInternal = errors.New("failed to authorize")
+
 func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPair, error) {
 
 	idString := strconv.FormatInt(userID, 10)
@@ -35,8 +37,8 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 
 	refreshToken, err := rt.SignedString(a.refreshJwtSecret)
 	if err != nil {
-		// TODO: create error
-		return r, err
+		fmt.Println("RT: ", err)
+		return r, ErrJwtInternal
 	}
 
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessToken{
@@ -51,8 +53,8 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 
 	accessToken, err := at.SignedString(a.accessTokenSecret)
 	if err != nil {
-		// TODO: create error
-		return r, err
+		fmt.Println("AT: ", err)
+		return r, ErrJwtInternal
 	}
 
 	r.AccessToken = accessToken
