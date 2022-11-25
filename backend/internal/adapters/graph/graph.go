@@ -69,9 +69,9 @@ func hasRoleDirectiveHandler(userService *user.UserService) directiveHandler {
 
 		if userID == auth.UnknownUserID {
 			return nil, &gqlerror.Error{
-				Message: "not authorized",
+				Message: "unauthorized user",
 				Extensions: map[string]interface{}{
-					"code": "401", // TODO: got 200 OK in response, why?
+					"code": "401",
 				},
 			}
 		}
