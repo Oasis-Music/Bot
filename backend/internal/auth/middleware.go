@@ -13,7 +13,7 @@ func (a *authService) AuthMiddleware(next http.Handler) http.Handler {
 
 		processToken := func(r *http.Request) {
 
-			token, err := a.ParseToken(rawToken)
+			token, err := a.ParseAccessToken(rawToken)
 			if err != nil {
 				ctx = context.WithValue(ctx, UserID, UnknownUserID)
 				return

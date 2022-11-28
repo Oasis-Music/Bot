@@ -10,13 +10,15 @@ import (
 )
 
 type UserComposite struct {
-	Service user.UserService
+	WARNSotage userStorage.UserStorage
+	Service    user.UserService
 }
 
 func NewUserComposite(db *pgxpool.Pool, config *config.AppConfig, authService auth.AuthService) UserComposite {
 	storage := userStorage.NewUserStorage(db)
 	service := user.NewUserService(storage, config, authService)
 	return UserComposite{
-		Service: service,
+		Service:    service,
+		WARNSotage: storage,
 	}
 }

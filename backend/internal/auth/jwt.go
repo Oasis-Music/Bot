@@ -21,7 +21,9 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 	r := RawTokenPair{
 		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Minute)),
 		AtID:        uuid.New().String(),
-		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 7)),
+		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Minute)),
+		// TODO:
+		// RtExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 7)),
 	}
 
 	r.RtID = r.AtID + "-" + idString
@@ -35,7 +37,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 		},
 	})
 
-	refreshToken, err := rt.SignedString(a.refreshJwtSecret)
+	refreshToken, err := rt.SignedString(a.refreshTokenSecret)
 	if err != nil {
 		fmt.Println("RT: ", err)
 		return r, ErrJwtInternal
@@ -81,12 +83,11 @@ func (a *authService) extractHeaderToken(r *http.Request) (string, error) {
 	return token, nil
 }
 
-func (a *authService) ParseToken(tokenString string) (*accessToken, error) {
+func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 	/*
-		If you want use custom claims: DON'T USE jwt.Parse() - it tries to cast float64 to int64 in the "exp" field.
-		https://github.com/dgrijalva/jwt-go/issues/186
+		INFO: with custom claims: DON'T USE jwt.Parse() - it tries to cast float64 to int64 in the "exp" field.
 	*/
-	token, err := jwt.ParseWithClaims(tokenString, &accessToken{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(rawToken, &accessToken{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(a.accessTokenSecret), nil
 	})
 
@@ -96,7 +97,24 @@ func (a *authService) ParseToken(tokenString string) (*accessToken, error) {
 	}
 
 	claims, ok := token.Claims.(*accessToken)
-	if !ok {
+	if !(ok && token.Valid) {
+		return nil, errors.New("fail to get data from token")
+	}
+
+	return claims, nil
+}
+
+func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) {
+	token, err := jwt.ParseWithClaims(rawToken, &refreshToken{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(a.refreshTokenSecret), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*refreshToken)
+	if !(ok && token.Valid) {
 		return nil, errors.New("fail to get data from token")
 	}
 

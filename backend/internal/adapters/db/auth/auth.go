@@ -11,7 +11,8 @@ type authStorage struct {
 }
 
 type AuthStorage interface {
-	SaveRefreshToken(ctx context.Context, tokenID string) error
+	DeleteRefreshToken(ctx context.Context, id string) error
+	SaveRefreshToken(ctx context.Context, id string) error
 }
 
 func NewAuthStorage(db *pgxpool.Pool) AuthStorage {

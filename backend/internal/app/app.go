@@ -1,6 +1,7 @@
 package app
 
 import (
+	httpAPI "oasis/backend/internal/adapters/api/http"
 	"oasis/backend/internal/adapters/router"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
@@ -36,6 +37,9 @@ func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 	}
 
 	r := router.NewRouter(config, db, authService, rootComposite)
+
+	httpHandler := httpAPI.NewHandler(authService, userComposite.WARNSotage)
+	httpHandler.Register(r)
 
 	return &App{
 		config: config,
