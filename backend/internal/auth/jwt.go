@@ -110,6 +110,14 @@ func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) 
 	})
 
 	if err != nil {
+		if errors.Is(err, jwt.ErrTokenExpired) {
+			claims, ok := token.Claims.(*refreshToken)
+			if !ok {
+				return nil, errors.New("fail to get data from token")
+			}
+
+			return claims, jwt.ErrTokenExpired
+		}
 		return nil, err
 	}
 

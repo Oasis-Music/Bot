@@ -2,10 +2,13 @@ package http
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"strconv"
+
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
@@ -27,13 +30,14 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	token, err := h.authService.ParseRefreshToken(rt)
 	if err != nil {
-
-		// err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
-		// if err != nil {
-		// 	fmt.Println(err)
-		// }
-
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		if errors.Is(err, jwt.ErrTokenExpired) {
+			err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
+			if err != nil {
+				http.Error(w, "internal error", http.StatusInternalServerError)
+				return
+			}
+		}
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 
