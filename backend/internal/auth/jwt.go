@@ -88,7 +88,7 @@ func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 		INFO: with custom claims: DON'T USE jwt.Parse() - it tries to cast float64 to int64 in the "exp" field.
 	*/
 	token, err := jwt.ParseWithClaims(rawToken, &accessToken{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(a.accessTokenSecret), nil
+		return a.accessTokenSecret, nil
 	})
 
 	if err != nil {
@@ -106,7 +106,7 @@ func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 
 func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) {
 	token, err := jwt.ParseWithClaims(rawToken, &refreshToken{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(a.refreshTokenSecret), nil
+		return a.refreshTokenSecret, nil
 	})
 
 	if err != nil {
