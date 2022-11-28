@@ -42,8 +42,8 @@ CREATE TABLE user_soundtrack (
 
 
 CREATE TABLE auth_token (
-    id BIGSERIAL PRIMARY KEY,
-    token_id text NOT NULL
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    token_id TEXT NOT NULL
 );
 
 INSERT INTO
