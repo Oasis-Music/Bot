@@ -3,16 +3,16 @@ package config
 import (
 	"log"
 	"oasis/backend/internal/utils"
+	"strconv"
 )
 
 type AppConfig struct {
-	Environment      string
-	EntryPort        string
-	JwtSecret        string
-	RefreshJwtSecret string
-	Database         PostgresConfig
-	Telegram         TelegramConfig
-	ExternalAPI      ExternalAPIConfig
+	Environment string
+	EntryPort   string
+	Auth        AuthConfig
+	Database    PostgresConfig
+	Telegram    TelegramConfig
+	ExternalAPI ExternalAPIConfig
 }
 
 func NewAppConfig() *AppConfig {
@@ -20,27 +20,18 @@ func NewAppConfig() *AppConfig {
 	ENTRY_PORT := utils.GetEnv("ENTRY_PORT")
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 
-	jwtSecret := utils.GetEnv("JWT_SECRET")
-	if jwtSecret == "" {
-		log.Fatal("jwt secret is not specified")
-	}
-	jwtRefreshSecret := utils.GetEnv("REFRESH_JWT_SECRET")
-	if jwtRefreshSecret == "" {
-		log.Fatal("jwt refresh secret is not specified")
-	}
-
+	authCfg := GetAuthConfig()
 	databaseCfg := GetDatabaseConfig()
 	telegramCfg := GetTelegramConfig()
 	externalApiCfg := GetExternalAPIConfig()
 
 	return &AppConfig{
-		Environment:      ENVIRONMENT,
-		EntryPort:        ENTRY_PORT,
-		JwtSecret:        jwtSecret,
-		RefreshJwtSecret: jwtRefreshSecret,
-		Database:         databaseCfg,
-		Telegram:         telegramCfg,
-		ExternalAPI:      externalApiCfg,
+		Environment: ENVIRONMENT,
+		EntryPort:   ENTRY_PORT,
+		Auth:        authCfg,
+		Database:    databaseCfg,
+		Telegram:    telegramCfg,
+		ExternalAPI: externalApiCfg,
 	}
 }
 
@@ -108,5 +99,42 @@ func GetExternalAPIConfig() ExternalAPIConfig {
 	return ExternalAPIConfig{
 		AudioBaseURL:      audioPath,
 		CoverImageBaseURL: coverPath,
+	}
+}
+
+type AuthConfig struct {
+	ATsecret string
+	RTsecret string
+	ATexpMin int
+	RTexpMin int
+}
+
+func GetAuthConfig() AuthConfig {
+
+	atSecret := utils.GetEnv("AT_SECRET")
+	if atSecret == "" {
+		log.Fatal("AT_SECRET is not specified")
+	}
+
+	rtSecret := utils.GetEnv("RT_SECRET")
+	if rtSecret == "" {
+		log.Fatal("RT_SECRET is not specified")
+	}
+
+	atExp, err := strconv.Atoi(utils.GetEnv("AT_EXP_MIN"))
+	if err != nil {
+		log.Fatal("AT_EXP_MIN is not specified")
+	}
+
+	rtExp, err := strconv.Atoi(utils.GetEnv("RT_EXP_MIN"))
+	if err != nil {
+		log.Fatal("RT_EXP_MIN is not specified")
+	}
+
+	return AuthConfig{
+		ATsecret: atSecret,
+		RTsecret: rtSecret,
+		ATexpMin: atExp,
+		RTexpMin: rtExp,
 	}
 }

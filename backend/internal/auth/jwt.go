@@ -19,11 +19,9 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 	idString := strconv.FormatInt(userID, 10)
 
 	r := RawTokenPair{
-		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Minute)),
+		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpDur)),
 		AtID:        uuid.New().String(),
-		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Minute)),
-		// TODO:
-		// RtExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24 * 7)),
+		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.rtExpDur)),
 	}
 
 	r.RtID = r.AtID + "-" + idString
@@ -37,7 +35,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 		},
 	})
 
-	refreshToken, err := rt.SignedString(a.refreshTokenSecret)
+	refreshToken, err := rt.SignedString(a.rtSecret)
 	if err != nil {
 		fmt.Println("RT: ", err)
 		return r, ErrJwtInternal
@@ -53,7 +51,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 		},
 	})
 
-	accessToken, err := at.SignedString(a.accessTokenSecret)
+	accessToken, err := at.SignedString(a.atSecret)
 	if err != nil {
 		fmt.Println("AT: ", err)
 		return r, ErrJwtInternal
@@ -88,7 +86,7 @@ func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 		INFO: with custom claims: DON'T USE jwt.Parse() - it tries to cast float64 to int64 in the "exp" field.
 	*/
 	token, err := jwt.ParseWithClaims(rawToken, &accessToken{}, func(token *jwt.Token) (interface{}, error) {
-		return a.accessTokenSecret, nil
+		return a.atSecret, nil
 	})
 
 	if err != nil {
@@ -106,7 +104,7 @@ func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 
 func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) {
 	token, err := jwt.ParseWithClaims(rawToken, &refreshToken{}, func(token *jwt.Token) (interface{}, error) {
-		return a.refreshTokenSecret, nil
+		return a.rtSecret, nil
 	})
 
 	if err != nil {
