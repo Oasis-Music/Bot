@@ -43,8 +43,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "wrong token", http.StatusInternalServerError)
+		http.Error(w, "expired token", http.StatusUnauthorized)
 		return
 	}
 
