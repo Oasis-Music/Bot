@@ -6,12 +6,12 @@ DROP TABLE IF EXISTS roles CASCADE;
 
 CREATE TABLE roles (
     id SERIAL PRIMARY KEY,
-    role TEXT NOT NULL,
+    role_name TEXT NOT NULL,
     permission TEXT
 );
 
-INSERT INTO roles (role, permission) VALUES ('admin', '*');
-INSERT INTO roles (role, permission) VALUES ('user', 'track.');
+INSERT INTO roles (role_name, permission) VALUES ('admin', '*');
+INSERT INTO roles (role_name, permission) VALUES ('user', 'track.');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY, -- telegram user id
