@@ -1,4 +1,4 @@
-directive @hasRole(role: [Role!]!) on FIELD_DEFINITION | MUTATION
+directive @hasRole(role: [Role!]!) on FIELD_DEFINITION | MUTATION | QUERY
 
 type Query
 type Mutation

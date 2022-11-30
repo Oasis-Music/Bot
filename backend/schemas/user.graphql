@@ -12,8 +12,9 @@ union UserResult = User | NotFound
 union UserTracksResult = UserTracksResponse | NotFound
 
 extend type Query {
-  user(id: ID!): UserResult
+  user(id: ID!): UserResult @hasRole(role: ADMIN)
   userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
+    @hasRole(role: [USER, ADMIN])
   authorizeUser(initData: String!): AuthorizationResponse!
 }
 
