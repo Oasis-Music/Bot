@@ -5,13 +5,12 @@ DROP TABLE IF EXISTS auth_token CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 
 CREATE TABLE roles (
-    id SERIAL PRIMARY KEY,
-    role_name TEXT NOT NULL,
+    role_code TEXT PRIMARY KEY,
     permission TEXT
 );
 
-INSERT INTO roles (role_name, permission) VALUES ('admin', '*');
-INSERT INTO roles (role_name, permission) VALUES ('user', 'track.');
+INSERT INTO roles (role_code, permission) VALUES ('admin', '*');
+INSERT INTO roles (role_code, permission) VALUES ('user', 'track.');
 
 CREATE TABLE users (
     id BIGINT PRIMARY KEY, -- telegram user id
@@ -19,17 +18,20 @@ CREATE TABLE users (
     last_name TEXT,
     username TEXT,
     language_code TEXT,
-    role INT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user',  
     visited_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
-    FOREIGN KEY (role) REFERENCES roles(id) ON DELETE CASCADE
+    FOREIGN KEY (role) REFERENCES roles(role_code) ON DELETE CASCADE
 );
 
 
 INSERT INTO users (id, first_name, last_name, username, language_code, role)
-VALUES (1, 'Spongebob', 'Squarepants', null, 'en', 1),
-       (2, 'Patrick', 'Star', NULL, 'en', 2),
-       (3, 'Plankton', null, 'arrogantgenius', 'en', 2);
+VALUES (1, 'Spongebob', 'Squarepants', null, 'en', 'admin');
+
+INSERT INTO users (id, first_name, last_name, username, language_code)
+VALUES (2, 'Spongebob', 'Squarepants', null, 'en'),
+       (3, 'Plankton', null, 'arrogantgenius', 'en');
+
 
 
 CREATE TABLE soundtrack (

@@ -12,7 +12,8 @@ INSERT INTO users
 			first_name,
 			last_name,
 			username,
-			language_code
+			language_code,
+			role
 		)
 		VALUES
 		(
@@ -20,7 +21,8 @@ INSERT INTO users
 			$2,
 			$3,
 			$4,
-			$5
+			$5,
+			$6
 		)
 	RETURNING id, first_name;
 `
@@ -33,6 +35,7 @@ func (s *userStorage) CreateUser(ctx context.Context, params db.CreateUserParams
 		params.LastName,
 		params.Username,
 		params.LanguageCode,
+		params.Role,
 	)
 	var i db.CreateUserRow
 	err := row.Scan(&i.ID, &i.FirstName)

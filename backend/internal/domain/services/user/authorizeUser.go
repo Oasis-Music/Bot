@@ -69,6 +69,7 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 
 		dBNewUser.ID = userData.Id
 		dBNewUser.FirstName = userData.FirstName
+		dBNewUser.Role = db.UserRole
 
 		if userData.LastName != "" {
 			dBNewUser.LastName = dbnull.NewNullString(userData.LastName, true)

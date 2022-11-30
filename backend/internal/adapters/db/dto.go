@@ -1,9 +1,29 @@
 package db
 
 import (
+	"fmt"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"time"
 )
+
+type RoleType string
+
+const (
+	AdminRole RoleType = "admin"
+	UserRole  RoleType = "user"
+)
+
+func (r *RoleType) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*r = RoleType(s)
+	case string:
+		*r = RoleType(s)
+	default:
+		return fmt.Errorf("unsupported type for RoleType: %T", src)
+	}
+	return nil
+}
 
 type SoundtrackDTO struct {
 	ID         int32
@@ -22,6 +42,7 @@ type UserDTO struct {
 	LastName     dbnull.NullString
 	Username     dbnull.NullString
 	LanguageCode dbnull.NullString
+	Role         RoleType
 	VisitedAt    time.Time
 	CreatedAt    time.Time
 }
@@ -52,6 +73,7 @@ type CreateUserParams struct {
 	LastName     dbnull.NullString
 	Username     dbnull.NullString
 	LanguageCode dbnull.NullString
+	Role         RoleType
 }
 
 type CreateUserRow struct {
