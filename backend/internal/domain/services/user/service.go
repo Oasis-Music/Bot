@@ -9,6 +9,7 @@ import (
 )
 
 type UserService interface {
+	GetRole(ctx context.Context, id string) (string, error)
 	AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error)
 	GetUser(ctx context.Context, id string) (models.UserResult, error)
 	GetUsersTraks(ctx context.Context, id string, filter models.UserTracksFilter) (models.UserTracksResult, error)

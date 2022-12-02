@@ -2,8 +2,8 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"strings"
 
 	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/auth"
@@ -33,7 +33,7 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 		Resolvers: resolver,
 	}
 
-	config.Directives.HasRole = hasRoleDirectiveHandler(userService)
+	config.Directives.HasRole = hasRoleDirectiveHandler(rootComposite.UserComposite.Service)
 
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 
@@ -59,13 +59,10 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 	return srv
 }
 
-func hasRoleDirectiveHandler(userService *user.UserService) directiveHandler {
+func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
-		fmt.Println("Required roles: ", role)
 
 		userID := ctx.Value(auth.UserID).(string)
-
-		fmt.Printf("request from %q\n", userID)
 
 		if userID == auth.UnknownUserID {
 			return nil, &gqlerror.Error{
@@ -76,6 +73,34 @@ func hasRoleDirectiveHandler(userService *user.UserService) directiveHandler {
 			}
 		}
 
+		userRole, err := userService.GetRole(ctx, userID)
+		if err != nil {
+			return nil, &gqlerror.Error{
+				Message: "failed to identify user role",
+				Extensions: map[string]interface{}{
+					"code": "400",
+				},
+			}
+		}
+
+		if !isRoleSuitable(role, userRole) {
+			return nil, &gqlerror.Error{
+				Message: "access denied",
+				Extensions: map[string]interface{}{
+					"code": "400",
+				},
+			}
+		}
+
 		return next(ctx)
 	}
+}
+
+func isRoleSuitable(roles []models.Role, userRole string) bool {
+	for _, r := range roles {
+		if r.String() == strings.ToUpper(userRole) {
+			return true
+		}
+	}
+	return false
 }
