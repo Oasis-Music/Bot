@@ -19,7 +19,7 @@ import (
 
 const telegramSeed = "WebAppData"
 
-func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
+func (u *userService) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
 		return nil, ErrInitDataInvalid
 	}

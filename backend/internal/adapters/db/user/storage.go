@@ -17,9 +17,9 @@ type UserStorage interface {
 	UpdateUser(ctx context.Context, params db.UpdateUserParams) (db.UpdateUserRow, error)
 	CreateUser(ctx context.Context, params db.CreateUserParams) (db.CreateUserRow, error)
 	GetUser(ctx context.Context, id int64) (db.UserDTO, error)
-	GetUsersTraks(ctx context.Context, id int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error)
-	AddTrack(ctx context.Context, params db.AddTrackParams) error
-	DeleteTrack(ctx context.Context, params db.DeleteTrackParams) (int64, error)
+	GetUserTracks(ctx context.Context, id int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error)
+	AttachSoundtrack(ctx context.Context, params db.AttachSoundtrackParams) error
+	UnattachSoundtrack(ctx context.Context, params db.UnattachSoundtrackParams) (int64, error)
 }
 
 func NewUserStorage(db *pgxpool.Pool) UserStorage {

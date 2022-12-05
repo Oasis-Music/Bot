@@ -35,12 +35,12 @@ type UserInitData struct {
 	LanguageCode string `json:"language_code"`
 }
 
-type AddTrackToUserParams struct {
+type AttachSoundtrackToUserParams struct {
 	UserID  int64
 	TrackID int32
 }
 
-type DeleteTrackFromUserParams struct {
+type UnattachSoundtrackFromUserParams struct {
 	UserID  int64
 	TrackID int32
 }

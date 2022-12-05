@@ -12,7 +12,7 @@ const ADD_TRACK_QUERY = `
 INSERT INTO user_soundtrack (user_id, soundtrack_id) VALUES ($1, $2);
 `
 
-func (s *userStorage) AddTrack(ctx context.Context, arg db.AddTrackParams) error {
+func (s *userStorage) AttachSoundtrack(ctx context.Context, arg db.AttachSoundtrackParams) error {
 
 	var pgerr *pgconn.PgError
 

@@ -26,7 +26,7 @@ func (r *mutationResolver) AddTrackToUser(ctx context.Context, input models.AddT
 		return false, errors.New("invalid track ID")
 	}
 
-	return r.UserService.AddTrack(ctx, entityDomain.AddTrackToUserParams{
+	return r.UserService.AttachSoundtrack(ctx, entityDomain.AttachSoundtrackToUserParams{
 		UserID:  userId,
 		TrackID: int32(trackId),
 	})
@@ -45,7 +45,7 @@ func (r *mutationResolver) DeleteTrackFromUser(ctx context.Context, input models
 		return false, errors.New("invalid track ID")
 	}
 
-	return r.UserService.DeleteTrack(ctx, entityDomain.DeleteTrackFromUserParams{
+	return r.UserService.UnattachSoundtrack(ctx, entityDomain.UnattachSoundtrackFromUserParams{
 		UserID:  userId,
 		TrackID: int32(trackId),
 	})
@@ -86,9 +86,7 @@ func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models
 		return nil, errors.New("invalid user id")
 	}
 
-	// TODO: check Page is >= 1
-
-	tracks, err := r.UserService.GetUsersTraks(ctx, userId, entityDomain.UserTracksFilter{
+	tracks, err := r.UserService.GetSoundtracks(ctx, userId, entityDomain.UserTracksFilter{
 		Page: filter.Page,
 	})
 	if errors.Is(err, userUc.ErrUserTracksNotFound) {
@@ -121,7 +119,7 @@ func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models
 
 // AuthorizeUser is the resolver for the authorizeUser field.
 func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
-	authResp, err := r.UserService.AuthorizeUser(ctx, initData)
+	authResp, err := r.UserService.Authorize(ctx, initData)
 	if err != nil {
 		return nil, err
 	}

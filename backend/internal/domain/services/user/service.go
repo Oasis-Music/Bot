@@ -9,12 +9,12 @@ import (
 )
 
 type UserService interface {
-	GetRole(ctx context.Context, id int64) (string, error)
-	AuthorizeUser(ctx context.Context, initData string) (*entity.UserAuthorization, error)
+	Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error)
 	GetUser(ctx context.Context, id int64) (*entity.User, error)
-	GetUsersTraks(ctx context.Context, id int64, filter entity.UserTracksFilter) (*entity.UserTracks, error)
-	AddTrack(ctx context.Context, input entity.AddTrackToUserParams) (bool, error)
-	DeleteTrack(ctx context.Context, input entity.DeleteTrackFromUserParams) (bool, error)
+	GetRole(ctx context.Context, id int64) (string, error)
+	GetSoundtracks(ctx context.Context, id int64, filter entity.UserTracksFilter) (*entity.UserTracks, error)
+	AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error)
+	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
 }
 
 type userService struct {

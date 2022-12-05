@@ -25,7 +25,7 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *userStorage) GetUsersTraks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error) {
+func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error) {
 
 	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, filter)
 	if err != nil {

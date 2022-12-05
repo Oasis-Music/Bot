@@ -6,9 +6,9 @@ import (
 	"oasis/backend/internal/domain/entity"
 )
 
-func (u *userService) DeleteTrack(ctx context.Context, input entity.DeleteTrackFromUserParams) (bool, error) {
+func (u *userService) UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error) {
 
-	affectedRows, err := u.storage.DeleteTrack(ctx, db.DeleteTrackParams{
+	affectedRows, err := u.storage.UnattachSoundtrack(ctx, db.UnattachSoundtrackParams{
 		UserId:  input.UserID,
 		TrackId: input.TrackID,
 	})

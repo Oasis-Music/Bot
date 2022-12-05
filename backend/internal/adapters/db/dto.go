@@ -47,12 +47,12 @@ type UserDTO struct {
 	CreatedAt    time.Time
 }
 
-type AddTrackParams struct {
+type AttachSoundtrackParams struct {
 	TrackId int32
 	UserId  int64
 }
 
-type DeleteTrackParams struct {
+type UnattachSoundtrackParams struct {
 	TrackId int32
 	UserId  int64
 }

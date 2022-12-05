@@ -7,9 +7,9 @@ import (
 	"oasis/backend/internal/domain/entity"
 )
 
-func (u *userService) GetUsersTraks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
+func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
 
-	tracks, err := u.storage.GetUsersTraks(ctx, userID, db.UserTracksFilterParams{
+	tracks, err := u.storage.GetUserTracks(ctx, userID, db.UserTracksFilterParams{
 		Page: filter.Page,
 	})
 	if err != nil {

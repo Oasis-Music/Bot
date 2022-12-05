@@ -6,9 +6,9 @@ import (
 	"oasis/backend/internal/domain/entity"
 )
 
-func (u *userService) AddTrack(ctx context.Context, input entity.AddTrackToUserParams) (bool, error) {
+func (u *userService) AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error) {
 
-	err := u.storage.AddTrack(ctx, db.AddTrackParams{
+	err := u.storage.AttachSoundtrack(ctx, db.AttachSoundtrackParams{
 		UserId:  input.UserID,
 		TrackId: input.TrackID,
 	})
