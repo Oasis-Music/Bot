@@ -26,8 +26,8 @@ omit_slice_element_pointers: true # []T instead of []*T
 # Optional: set to speed up generation time by not performing a final validation pass.
 # skip_validation: true
 
-autobind:
-  - "oasis/backend/internal/domain/entity"
+# autobind:
+# - "oasis/backend/internal/domain/entity"
 
 # This section declares type mapping between the GraphQL and go type systems
 #

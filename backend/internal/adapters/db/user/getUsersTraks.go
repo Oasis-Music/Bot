@@ -2,9 +2,9 @@ package user
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"oasis/backend/internal/adapters/db"
-	"oasis/backend/internal/adapters/graph/models"
 )
 
 const (
@@ -25,14 +25,14 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *userStorage) GetUsersTraks(ctx context.Context, id int32, filter models.UserTracksFilter) ([]db.SoundtrackDTO, error) {
+func (s *userStorage) GetUsersTraks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error) {
 
 	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
-	rows, err := s.database.Query(context.Background(), query, id)
+	rows, err := s.database.Query(context.Background(), query, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,12 @@ func (s *userStorage) GetUsersTraks(ctx context.Context, id int32, filter models
 	return tracks, nil
 }
 
-func queryBuilder(query string, filter models.UserTracksFilter) (string, error) {
+func queryBuilder(query string, filter db.UserTracksFilterParams) (string, error) {
+
+	if filter.Page <= 0 {
+		return "", errors.New("param 'page' must not be negative or zero")
+	}
+
 	page := filter.Page - 1
 
 	query += fmt.Sprintf(" ORDER BY id LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)

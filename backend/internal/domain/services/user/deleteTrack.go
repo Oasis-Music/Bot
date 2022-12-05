@@ -2,35 +2,23 @@ package user
 
 import (
 	"context"
-	"errors"
 	"oasis/backend/internal/adapters/db"
-	"oasis/backend/internal/adapters/graph/models"
-	"strconv"
+	"oasis/backend/internal/domain/entity"
 )
 
-func (u *userService) DeleteTrack(ctx context.Context, input models.DeleteTrackFromUserInput) (bool, error) {
-
-	userId, err := strconv.ParseInt(input.UserID, 10, 64)
-	if err != nil {
-		return false, errors.New("invalid user ID")
-	}
-
-	trackId, err := strconv.Atoi(input.TrackID)
-	if err != nil {
-		return false, errors.New("invalid track ID")
-	}
+func (u *userService) DeleteTrack(ctx context.Context, input entity.DeleteTrackFromUserParams) (bool, error) {
 
 	affectedRows, err := u.storage.DeleteTrack(ctx, db.DeleteTrackParams{
-		UserId:  userId,
-		TrackId: int32(trackId),
+		UserId:  input.UserID,
+		TrackId: input.TrackID,
 	})
 
 	if err != nil {
-		return false, err
+		return false, ErrTrackUnattachment
 	}
 
 	if affectedRows == 0 {
-		return false, errors.New("track not found")
+		return false, ErrUserOrTrackNotPresent
 	}
 
 	return true, nil

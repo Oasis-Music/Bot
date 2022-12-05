@@ -4,6 +4,7 @@ type User {
   lastName: String
   username: String
   languageCode: String
+  role: String!
   visitedAt: Date!
   createdAt: Date!
 }

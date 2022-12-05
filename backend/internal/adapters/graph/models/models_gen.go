@@ -82,6 +82,7 @@ type User struct {
 	LastName     *string `json:"lastName"`
 	Username     *string `json:"username"`
 	LanguageCode *string `json:"languageCode"`
+	Role         string  `json:"role"`
 	VisitedAt    string  `json:"visitedAt"`
 	CreatedAt    string  `json:"createdAt"`
 }

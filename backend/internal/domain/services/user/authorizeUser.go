@@ -11,41 +11,37 @@ import (
 	"net/url"
 	"oasis/backend/internal/adapters/db"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
-	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/domain/entity"
 	"time"
 
 	"github.com/jackc/pgx/v4"
 )
 
-const TelegramSeed = "WebAppData"
+const telegramSeed = "WebAppData"
 
-var errInitDataInvalid = errors.New("initData string invalid")
-var errIternal = errors.New("fail: internal error")
-
-func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
+func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
-		return nil, errInitDataInvalid
+		return nil, ErrInitDataInvalid
 	}
 
 	urlA, err := url.ParseQuery(initData)
 	if err != nil {
 		fmt.Println(err)
-		return nil, errInitDataInvalid
+		return nil, ErrInitDataInvalid
 	}
 
 	tgHash := urlA.Get("hash")
 
 	if tgHash == "" {
 		fmt.Println(err)
-		return nil, errInitDataInvalid
+		return nil, ErrInitDataInvalid
 	}
 
 	validString := "auth_date=" + urlA.Get("auth_date") + "\n" +
 		"query_id=" + urlA.Get("query_id") +
 		"\n" + "user=" + urlA.Get("user")
 
-	gen := signData([]byte(u.config.Telegram.Token), []byte(TelegramSeed))
+	gen := signData([]byte(u.config.Telegram.Token), []byte(telegramSeed))
 	hash := hex.EncodeToString(signData([]byte(validString), gen))
 
 	if hash != tgHash {
@@ -56,7 +52,7 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 
 	if err := json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
 		fmt.Println(err)
-		return nil, errInitDataInvalid
+		return nil, ErrInitDataInvalid
 	}
 
 	fmt.Printf("received user: %d\n", userData.Id)
@@ -94,17 +90,17 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		at, rt, err := u.genTokenPairandSave(ctx, newUser.ID, newUser.FirstName)
 		if err != nil {
 			fmt.Println("last visit date update:", err)
-			return nil, errIternal
+			return nil, ErrIternalAuthorizationError
 		}
 
-		return &models.AuthorizationResponse{
-			Token:        at,
+		return &entity.UserAuthorization{
+			AccessToken:  at,
 			RefreshToken: rt,
 		}, nil
 
 	} else if err != nil {
 		fmt.Println("Failed to get a user", err)
-		return nil, errIternal
+		return nil, ErrIternalAuthorizationError
 	}
 
 	isChanged, updatedUserData := isInitDataDifferent(userData, user)
@@ -113,7 +109,7 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		_, err := u.storage.UpdateUser(ctx, updatedUserData)
 		if err != nil {
 			fmt.Println(err)
-			return nil, errIternal
+			return nil, ErrIternalAuthorizationError
 		}
 
 		fmt.Println("user data has been updated")
@@ -124,7 +120,7 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 		err = u.storage.UpdateUserVisitDate(ctx, user.ID)
 		if err != nil {
 			fmt.Println("last visit date update:", err)
-			return nil, errIternal
+			return nil, ErrIternalAuthorizationError
 		}
 	}
 
@@ -137,11 +133,11 @@ func (u *userService) AuthorizeUser(ctx context.Context, initData string) (*mode
 	at, rt, err := u.genTokenPairandSave(ctx, user.ID, firstName)
 	if err != nil {
 		fmt.Println("last visit date update:", err)
-		return nil, errIternal
+		return nil, ErrIternalAuthorizationError
 	}
 
-	return &models.AuthorizationResponse{
-		Token:        at,
+	return &entity.UserAuthorization{
+		AccessToken:  at,
 		RefreshToken: rt,
 	}, nil
 

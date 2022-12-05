@@ -11,6 +11,7 @@ SELECT id,
 	last_name,
 	username,
 	language_code,
+	role,
 	visited_at,
 	created_at
 FROM users
@@ -28,6 +29,7 @@ func (s *userStorage) GetUser(ctx context.Context, id int64) (db.UserDTO, error)
 		&dto.LastName,
 		&dto.Username,
 		&dto.LanguageCode,
+		&dto.Role,
 		&dto.VisitedAt,
 		&dto.CreatedAt,
 	)

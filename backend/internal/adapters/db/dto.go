@@ -94,3 +94,7 @@ type UpdateUserRow struct {
 	ID        int64
 	FirstName string
 }
+
+type UserTracksFilterParams struct {
+	Page int
+}

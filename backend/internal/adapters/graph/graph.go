@@ -2,7 +2,9 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"oasis/backend/internal/adapters/graph/models"
@@ -62,15 +64,20 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
 
-		userID := ctx.Value(auth.UserID).(string)
+		userId := ctx.Value(auth.UserID).(string)
 
-		if userID == auth.UnknownUserID {
+		if userId == auth.UnknownUserID {
 			return nil, &gqlerror.Error{
 				Message: "unauthorized user",
 				Extensions: map[string]interface{}{
 					"code": "401",
 				},
 			}
+		}
+
+		userID, err := strconv.ParseInt(userId, 10, 64)
+		if err != nil {
+			return nil, errors.New("wrong user id")
 		}
 
 		userRole, err := userService.GetRole(ctx, userID)
