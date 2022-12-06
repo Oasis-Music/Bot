@@ -18,7 +18,7 @@ FROM soundtrack
 WHERE id = $1;
 `
 
-func (s *soundtrackStorage) GetTrack(ctx context.Context, id int32) (db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetSoundtrack(ctx context.Context, id int32) (db.SoundtrackDTO, error) {
 
 	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id)
 

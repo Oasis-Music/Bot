@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type Soundtrack struct {
 	ID         int32
@@ -12,4 +14,19 @@ type Soundtrack struct {
 	Validated  bool
 	CreatorID  int64
 	CreatedAt  time.Time
+}
+
+type NewSoundtrack struct {
+	Title      string
+	Author     string
+	CoverImage *Upload
+	Audiofile  Upload
+}
+
+type SoundtrackFilter struct {
+	Page int
+}
+
+type SoundtrackList struct {
+	Soundtracks []Soundtrack
 }

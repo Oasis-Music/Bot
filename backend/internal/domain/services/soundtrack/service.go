@@ -3,14 +3,14 @@ package soundtrack
 import (
 	"context"
 	"oasis/backend/internal/adapters/db/soundtrack"
-	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/config"
+	"oasis/backend/internal/domain/entity"
 )
 
 type SoundtrackService interface {
-	GetTrack(ctx context.Context, id string) (models.SoundtrackResult, error)
-	GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
-	AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error)
+	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error)
+	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
+	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
 }
 
 type soundtrackService struct {

@@ -20,7 +20,7 @@ const ADD_NEW_SOUNDTRACK = `
 	RETURNING id
 `
 
-func (s *soundtrackStorage) AddSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error) {
+func (s *soundtrackStorage) CreateSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error) {
 	row := s.database.QueryRow(context.Background(), ADD_NEW_SOUNDTRACK,
 		params.Title,
 		params.Author,

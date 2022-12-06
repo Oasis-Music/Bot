@@ -2,9 +2,9 @@ package soundtrack
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"oasis/backend/internal/adapters/db"
-	"oasis/backend/internal/adapters/graph/models"
 )
 
 const (
@@ -22,7 +22,7 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *soundtrackStorage) GetSoundtracks(ctx context.Context, filter models.SoundtracksFilter) ([]db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.SoundtrackFilterParams) ([]db.SoundtrackDTO, error) {
 
 	query, err := queryBuilder(ALL_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
@@ -63,7 +63,12 @@ func (s *soundtrackStorage) GetSoundtracks(ctx context.Context, filter models.So
 	return items, nil
 }
 
-func queryBuilder(query string, filter models.SoundtracksFilter) (string, error) {
+func queryBuilder(query string, filter db.SoundtrackFilterParams) (string, error) {
+
+	if filter.Page <= 0 {
+		return "", errors.New("param 'page' must not be negative or zero")
+	}
+
 	page := filter.Page - 1
 
 	query += fmt.Sprintf(" ORDER BY id DESC LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)

@@ -64,7 +64,7 @@ type NewSoundtrackParams struct {
 	CoverImage  dbnull.NullString
 	AudioFile   string
 	IsValidated bool
-	CreatorID   string
+	CreatorID   int64
 }
 
 type CreateUserParams struct {
@@ -96,5 +96,9 @@ type UpdateUserRow struct {
 }
 
 type UserTracksFilterParams struct {
+	Page int
+}
+
+type SoundtrackFilterParams struct {
 	Page int
 }

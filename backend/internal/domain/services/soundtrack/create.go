@@ -15,9 +15,7 @@ import (
 
 	"oasis/backend/internal/adapters/db"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
-	"oasis/backend/internal/adapters/graph/models"
-
-	"github.com/99designs/gqlgen/graphql"
+	"oasis/backend/internal/domain/entity"
 )
 
 type Tags map[string]interface{}
@@ -47,7 +45,7 @@ func trackDurationToInt16(d float64) (int16, error) {
 	return int16(math.Round(d)), nil
 }
 
-func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
+func (s *soundtrackService) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error) {
 
 	buf, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
@@ -149,10 +147,11 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	dbParams.CoverImage = dbCoverParam
 	dbParams.AudioFile = soundtrackURL
 	dbParams.IsValidated = false
-	dbParams.CreatorID = "sys"
+	dbParams.CreatorID = 1 // TODO: save valid user ID
 
-	id, err := s.storage.AddSoundtrack(ctx, dbParams)
+	id, err := s.storage.CreateSoundtrack(ctx, dbParams)
 	if err != nil {
+		fmt.Println(err)
 		return false, err
 	}
 
@@ -161,7 +160,7 @@ func (s *soundtrackService) AddSoundtrack(ctx context.Context, input models.AddS
 	return true, nil
 }
 
-func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *graphql.Upload) (string, *string, error) {
+func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
 
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)
