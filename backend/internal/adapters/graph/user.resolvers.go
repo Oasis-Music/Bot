@@ -6,7 +6,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 	"oasis/backend/internal/adapters/graph/models"
 	entityDomain "oasis/backend/internal/domain/entity"
 	userUc "oasis/backend/internal/domain/services/user"
@@ -15,7 +14,6 @@ import (
 
 // AddTrackToUser is the resolver for the addTrackToUser field.
 func (r *mutationResolver) AddTrackToUser(ctx context.Context, input models.AddTrackToUserInput) (bool, error) {
-
 	userId, err := strconv.ParseInt(input.UserID, 10, 64)
 	if err != nil {
 		return false, errors.New("invalid user ID")
@@ -34,7 +32,6 @@ func (r *mutationResolver) AddTrackToUser(ctx context.Context, input models.AddT
 
 // DeleteTrackFromUser is the resolver for the deleteTrackFromUser field.
 func (r *mutationResolver) DeleteTrackFromUser(ctx context.Context, input models.DeleteTrackFromUserInput) (bool, error) {
-
 	userId, err := strconv.ParseInt(input.UserID, 10, 64)
 	if err != nil {
 		return false, errors.New("invalid user ID")
@@ -128,14 +125,4 @@ func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*mo
 		Token:        authResp.AccessToken,
 		RefreshToken: authResp.RefreshToken,
 	}, nil
-}
-
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
-func (r *mutationResolver) DeleteTrack(ctx context.Context, userID string, trackID string) (bool, error) {
-	panic(fmt.Errorf("not implemented"))
 }

@@ -19,6 +19,7 @@ extend type Query {
 
 extend type Mutation {
   addSoundtrack(input: AddSoundtrackInput!): Boolean!
+  deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
 input SoundtracksFilter {

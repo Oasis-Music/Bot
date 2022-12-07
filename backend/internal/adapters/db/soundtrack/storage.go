@@ -12,6 +12,7 @@ type soundtrackStorage struct {
 }
 
 type SoundtrackStorage interface {
+	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
 	GetSoundtrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
 	GetAllSoundtracks(ctx context.Context, filter db.SoundtrackFilterParams) ([]db.SoundtrackDTO, error)
 	CreateSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error)

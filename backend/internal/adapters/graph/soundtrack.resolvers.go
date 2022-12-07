@@ -15,19 +15,26 @@ import (
 
 // AddSoundtrack is the resolver for the addSoundtrack field.
 func (r *mutationResolver) AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
-
 	return r.SoundtrackService.CreateSoundtrack(ctx, entity.NewSoundtrack{
 		Title:      input.Title,
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),
 		Audiofile:  entity.Upload(input.Audiofile),
 	})
+}
 
+// DeleteSoundtrack is the resolver for the deleteSoundtrack field.
+func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (bool, error) {
+	trackId, err := utils.StrToInt32(id)
+	if err != nil {
+		return false, errors.New("invalid track id")
+	}
+
+	return r.SoundtrackService.DeleteSoundtrack(ctx, trackId)
 }
 
 // Soundtrack is the resolver for the soundtrack field.
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
-
 	trackId, err := strconv.ParseInt(id, 10, 32)
 	if err != nil {
 		return nil, errors.New("invalid track id")
@@ -52,7 +59,6 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		CreatorID: strconv.FormatInt(track.CreatorID, 10),
 		CreatedAt: track.CreatedAt.UTC().String(),
 	}, nil
-
 }
 
 // Soundtracks is the resolver for the soundtracks field.

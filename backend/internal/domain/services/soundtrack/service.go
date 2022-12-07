@@ -8,6 +8,7 @@ import (
 )
 
 type SoundtrackService interface {
+	DeleteSoundtrack(ctx context.Context, id int32) (bool, error)
 	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error)
 	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
 	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
