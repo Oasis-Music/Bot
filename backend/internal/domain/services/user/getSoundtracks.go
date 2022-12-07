@@ -9,6 +9,10 @@ import (
 
 func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
 
+	if err := u.checkPermission(ctx, userID); err != nil {
+		return nil, err
+	}
+
 	tracks, err := u.storage.GetUserTracks(ctx, userID, db.UserTracksFilterParams{
 		Page: filter.Page,
 	})

@@ -2,10 +2,16 @@ package user
 
 import (
 	"context"
+	"errors"
 	"oasis/backend/internal/adapters/db/user"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
 	"oasis/backend/internal/domain/entity"
+	"strconv"
+)
+
+const (
+	adminRole = "admin"
 )
 
 type UserService interface {
@@ -29,4 +35,22 @@ func NewUserService(storage user.UserStorage, config *config.AppConfig, authServ
 		config:  config,
 		auth:    authService,
 	}
+}
+
+func (u *userService) checkPermission(ctx context.Context, userID int64) error {
+
+	requestingUserRole := ctx.Value(auth.UserRole).(string)
+
+	if requestingUserRole == adminRole {
+		return nil
+	}
+
+	requestingUser := ctx.Value(auth.UserID).(string)
+
+	tokenUserId, _ := strconv.ParseInt(requestingUser, 10, 64) // INFO: 0 int64 is not real user ID
+	if tokenUserId != userID {
+		return errors.New("you have no access")
+	}
+
+	return nil
 }
