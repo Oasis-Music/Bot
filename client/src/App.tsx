@@ -9,6 +9,7 @@ const Upload = lazy(() => import('./pages/Upload'))
 const UI = lazy(() => import('./pages/UI'))
 const Test = lazy(() => import('./pages/Test'))
 const Terms = lazy(() => import('./pages/Terms'))
+const Auth = lazy(() => import('./pages/Auth'))
 
 const App: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
           </Route>
           <Route path="/terms" element={<Terms />} />
         </Route>
+        <Route path="/auth" element={<Auth />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Suspense>

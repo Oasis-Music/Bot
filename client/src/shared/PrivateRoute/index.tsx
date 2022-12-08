@@ -13,7 +13,7 @@ const PrivateRoute: React.FC = () => {
   //   const isAuth = data?.isAuthenticated
   const isAuth = true
 
-  return isAuth ? <Outlet /> : <Navigate to={routeNames.root} />
+  return isAuth ? <Outlet /> : <Navigate to={routeNames.auth} />
 }
 
 export default PrivateRoute
