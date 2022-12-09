@@ -31,6 +31,11 @@ interface BaseButtonProps {
   $color: ButtonColor
 }
 
+const LoaderWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
 const BaseButton = styled.button<BaseButtonProps>`
   display: inline-flex;
   align-items: center;
@@ -43,6 +48,7 @@ const BaseButton = styled.button<BaseButtonProps>`
   border-radius: 8px;
   border: 1px solid;
   transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
   &:disabled {
     cursor: not-allowed;
     pointer-events: initial;
@@ -128,7 +134,9 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
   >
     {startIcon}
     {loading ? (
-      <Loader dark={color !== ButtonColor.primary} />
+      <LoaderWrapper>
+        <Loader dark={color !== ButtonColor.primary} />
+      </LoaderWrapper>
     ) : (
       <ButtonText>{children}</ButtonText>
     )}
