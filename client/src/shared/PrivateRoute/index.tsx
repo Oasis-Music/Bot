@@ -1,18 +1,11 @@
 import React from 'react'
 import { routeNames } from '../../utils/history'
-// import { GET_AUTHENTICATION_STATE } from '../../apollo/cache/queries/user'
-// import { useQuery } from '@apollo/client'
+import { useReactiveVar } from '@apollo/client'
+import { isAuthenticatedVar } from '../../apollo/cache/variables'
 import { Navigate, Outlet } from 'react-router-dom'
 
-// interface authState {
-//   isAuthenticated: boolean
-// }
-
 const PrivateRoute: React.FC = () => {
-  //   const { data } = useQuery<authState>(GET_AUTHENTICATION_STATE)
-  //   const isAuth = data?.isAuthenticated
-  const isAuth = false
-
+  const isAuth = useReactiveVar(isAuthenticatedVar)
   return isAuth ? <Outlet /> : <Navigate to={routeNames.auth} />
 }
 
