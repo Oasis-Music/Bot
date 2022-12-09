@@ -43,7 +43,15 @@ export const SubmitBotton = styled(Button)`
   outline: none;
   display: block;
   margin: 0 auto;
-  margin-bottom: 5vh;
+  margin-bottom: 7px;
+`
+
+export const ErrorMessage = styled.p`
+  height: 15px;
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+  color: #ff182e;
 `
 
 export const TermsTitle = styled.p`
@@ -51,7 +59,9 @@ export const TermsTitle = styled.p`
   font-weight: 500;
   text-align: center;
   margin-bottom: 4vh;
+  margin-top: 1vh;
   & > a {
+    text-decoration: none;
     color: ${({ theme }) => theme.colors.primary};
   }
 `
