@@ -23,8 +23,6 @@ export const Wrapper = styled.div`
 `
 
 const AppLayout: React.FC = () => {
-  useWindowCSSRatio()
-
   const track = useReactiveVar(currentTrackVar)
 
   const location = useLocation()

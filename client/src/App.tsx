@@ -3,6 +3,7 @@ import AppLayout from './components/AppLayout/AppLayout'
 import Fallback from './components/Fallback/Fallback'
 import PrivateRoute from './shared/PrivateRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useWindowCSSRatio } from './hooks'
 
 const Home = lazy(() => import('./pages/Home'))
 const Upload = lazy(() => import('./pages/Upload'))
@@ -12,6 +13,8 @@ const Terms = lazy(() => import('./pages/Terms'))
 const Auth = lazy(() => import('./pages/Auth'))
 
 const App: React.FC = () => {
+  useWindowCSSRatio()
+
   return (
     <Suspense fallback={<Fallback />}>
       <Routes>
