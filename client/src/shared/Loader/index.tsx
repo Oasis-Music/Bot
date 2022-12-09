@@ -7,6 +7,7 @@ interface LoaderStyledProps {
 }
 
 const Loader = styled.svg<LoaderStyledProps>`
+  display: block;
   width: ${({ $fallback }) => ($fallback ? 34 : 18)}px;
   height: ${({ $fallback }) => ($fallback ? 40 : 18)}px;
   & > rect {
