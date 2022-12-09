@@ -1,6 +1,4 @@
 import React from 'react'
-import { useLazyQuery } from '@apollo/client'
-
 import {
   Container,
   MainBox,
@@ -10,32 +8,48 @@ import {
   ReportLink,
   TermsTitle
 } from './Auth.styled'
-import handv_img from '../../assets/rastr/hand-v.png'
-import { Link } from 'react-router-dom'
 import {
   AuthorizeUserQuery,
   AuthorizeUserQueryVariables,
   AuthorizeUserDocument
 } from '../../graphql/user/_gen_/authorizeUser.query'
+import { useLazyQuery, useReactiveVar } from '@apollo/client'
+import { UserMutations } from '../../apollo/cache/mutations'
+import { isAuthenticatedVar } from '../../apollo/cache/variables'
+import { Link, Navigate } from 'react-router-dom'
+import history, { routeNames } from '../../utils/history'
+import handv_img from '../../assets/rastr/hand-v.png'
 
 const buttonText = 'Войти'
 
 const Auth: React.FC = () => {
-  const [authorize, { loading, error }] = useLazyQuery<
-    AuthorizeUserQuery,
-    AuthorizeUserQueryVariables
-  >(AuthorizeUserDocument)
+  const isAuth = useReactiveVar(isAuthenticatedVar)
+  if (isAuth) {
+    return <Navigate to={routeNames.root} />
+  }
 
-  React.useEffect(() => {
+  const [authorize, { loading }] = useLazyQuery<AuthorizeUserQuery, AuthorizeUserQueryVariables>(
+    AuthorizeUserDocument,
+    {
+      onCompleted(data) {
+        const ok = UserMutations.processAccessToken(data.authorizeUser.token)
+        if (ok) {
+          localStorage.setItem('rt', data.authorizeUser.refreshToken)
+          history.push(routeNames.root)
+        }
+      },
+      onError(error) {
+        console.log(error)
+      }
+    }
+  )
+
+  const handleSubmitClick = () => {
     authorize({
       variables: {
         initData: Telegram.WebApp.initData
       }
     })
-  }, [])
-
-  const handleSubmitClick = () => {
-    console.log('submit')
   }
 
   return (
@@ -45,7 +59,7 @@ const Auth: React.FC = () => {
           <span>Добро пожаловать</span>
           <EmojiImg src={handv_img} alt="смайлик - мир" />
         </HeadTitle>
-        <SubmitBotton color="secondary" onClick={handleSubmitClick}>
+        <SubmitBotton color="secondary" loading={loading} onClick={handleSubmitClick}>
           {buttonText}
         </SubmitBotton>
         <TermsTitle>
