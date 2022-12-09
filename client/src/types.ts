@@ -17,13 +17,19 @@ export type Scalars = {
 export type AddSoundtrackInput = {
   audiofile: Scalars['Upload']
   author: Scalars['String']
-  coverImage: Scalars['Upload']
+  coverImage?: InputMaybe<Scalars['Upload']>
   title: Scalars['String']
 }
 
 export type AddTrackToUserInput = {
   trackId: Scalars['String']
   userId: Scalars['String']
+}
+
+export type AuthorizationResponse = {
+  __typename?: 'AuthorizationResponse'
+  refreshToken: Scalars['String']
+  token: Scalars['String']
 }
 
 export type DeleteTrackFromUserInput = {
@@ -35,6 +41,7 @@ export type Mutation = {
   __typename?: 'Mutation'
   addSoundtrack: Scalars['Boolean']
   addTrackToUser: Scalars['Boolean']
+  deleteSoundtrack: Scalars['Boolean']
   deleteTrackFromUser: Scalars['Boolean']
 }
 
@@ -44,6 +51,10 @@ export type MutationAddSoundtrackArgs = {
 
 export type MutationAddTrackToUserArgs = {
   input: AddTrackToUserInput
+}
+
+export type MutationDeleteSoundtrackArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationDeleteTrackFromUserArgs = {
@@ -57,10 +68,15 @@ export type NotFound = {
 
 export type Query = {
   __typename?: 'Query'
+  authorizeUser: AuthorizationResponse
   soundtrack?: Maybe<SoundtrackResult>
   soundtracks: SoundtracksResponse
   user?: Maybe<UserResult>
   userTracks: UserTracksResult
+}
+
+export type QueryAuthorizeUserArgs = {
+  initData: Scalars['String']
 }
 
 export type QuerySoundtrackArgs = {
@@ -80,11 +96,16 @@ export type QueryUserTracksArgs = {
   id: Scalars['ID']
 }
 
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
+
 export type Soundtrack = {
   __typename?: 'Soundtrack'
   audioURL: Scalars['String']
   author: Scalars['String']
-  coverURL: Scalars['String']
+  coverURL?: Maybe<Scalars['String']>
   createdAt: Scalars['Date']
   creatorId: Scalars['String']
   duration: Scalars['Int']
@@ -107,8 +128,13 @@ export type SoundtracksResponse = {
 export type User = {
   __typename?: 'User'
   createdAt: Scalars['Date']
+  firstName: Scalars['String']
   id: Scalars['ID']
-  telegramId: Scalars['String']
+  languageCode?: Maybe<Scalars['String']>
+  lastName?: Maybe<Scalars['String']>
+  role: Scalars['String']
+  username?: Maybe<Scalars['String']>
+  visitedAt: Scalars['Date']
 }
 
 export type UserResult = NotFound | User

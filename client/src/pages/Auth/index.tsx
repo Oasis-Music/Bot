@@ -1,4 +1,6 @@
 import React from 'react'
+import { useLazyQuery } from '@apollo/client'
+
 import {
   Container,
   MainBox,
@@ -10,10 +12,28 @@ import {
 } from './Auth.styled'
 import handv_img from '../../assets/rastr/hand-v.png'
 import { Link } from 'react-router-dom'
+import {
+  AuthorizeUserQuery,
+  AuthorizeUserQueryVariables,
+  AuthorizeUserDocument
+} from '../../graphql/user/_gen_/authorizeUser.query'
 
 const buttonText = 'Войти'
 
 const Auth: React.FC = () => {
+  const [authorize, { loading, error }] = useLazyQuery<
+    AuthorizeUserQuery,
+    AuthorizeUserQueryVariables
+  >(AuthorizeUserDocument)
+
+  React.useEffect(() => {
+    authorize({
+      variables: {
+        initData: Telegram.WebApp.initData
+      }
+    })
+  }, [])
+
   const handleSubmitClick = () => {
     console.log('submit')
   }

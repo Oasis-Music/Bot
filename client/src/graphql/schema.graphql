@@ -1,3 +1,5 @@
+directive @hasRole(role: [Role!]!) on FIELD_DEFINITION | MUTATION | QUERY
+
 """
 The @specifiedBy built-in directive is used within the type system definition
 language to provide a scalar specification URL for specifying the behavior of
@@ -42,13 +44,18 @@ directive @connection(
 input AddSoundtrackInput {
   title: String!
   author: String!
-  coverImage: Upload!
+  coverImage: Upload
   audiofile: Upload!
 }
 
 input AddTrackToUserInput {
   userId: String!
   trackId: String!
+}
+
+type AuthorizationResponse {
+  token: String!
+  refreshToken: String!
 }
 
 scalar Date
@@ -60,6 +67,7 @@ input DeleteTrackFromUserInput {
 
 type Mutation {
   addSoundtrack(input: AddSoundtrackInput!): Boolean!
+  deleteSoundtrack(id: ID!): Boolean!
   addTrackToUser(input: AddTrackToUserInput!): Boolean!
   deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
 }
@@ -73,6 +81,12 @@ type Query {
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
   user(id: ID!): UserResult
   userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
+  authorizeUser(initData: String!): AuthorizationResponse!
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 type Soundtrack {
@@ -80,7 +94,7 @@ type Soundtrack {
   title: String!
   author: String!
   duration: Int!
-  coverURL: String!
+  coverURL: String
   audioURL: String!
   validated: Boolean!
   creatorId: String!
@@ -101,7 +115,12 @@ scalar Upload
 
 type User {
   id: ID!
-  telegramId: String!
+  firstName: String!
+  lastName: String
+  username: String
+  languageCode: String
+  role: String!
+  visitedAt: Date!
   createdAt: Date!
 }
 

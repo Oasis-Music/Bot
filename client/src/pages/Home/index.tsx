@@ -25,7 +25,7 @@ interface Track {
   title: string
   author: string
   duration: number
-  coverURL: string
+  coverURL?: string | null
   audioURL: string
 }
 
@@ -122,7 +122,7 @@ const Home: React.FC = () => {
               title={track.title}
               author={track.author}
               duration={track.duration}
-              coverImage={track.coverURL}
+              coverImage={track.coverURL || ''}
               fileURL={track.audioURL}
               isPlaying={nowPlayingID === track.id}
             />

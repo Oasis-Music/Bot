@@ -11,7 +11,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 const PrivateRoute: React.FC = () => {
   //   const { data } = useQuery<authState>(GET_AUTHENTICATION_STATE)
   //   const isAuth = data?.isAuthenticated
-  const isAuth = true
+  const isAuth = false
 
   return isAuth ? <Outlet /> : <Navigate to={routeNames.auth} />
 }

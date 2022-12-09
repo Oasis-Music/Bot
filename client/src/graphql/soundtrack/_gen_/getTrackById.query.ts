@@ -15,7 +15,7 @@ export type GetTrackByIdQuery = {
         title: string
         author: string
         duration: number
-        coverURL: string
+        coverURL?: string | null
         audioURL: string
         createdAt: string
       }
