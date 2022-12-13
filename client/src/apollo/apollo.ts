@@ -12,7 +12,7 @@ const withDevTools = process.env.NODE_ENV === 'development'
 const uploadLink = createUploadLink({ uri: GRAPHQL_URL })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem('token') || ''
+  const token = localStorage.getItem('at') || ''
 
   operation.setContext(({ headers = {} }) => ({
     headers: {

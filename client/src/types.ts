@@ -146,6 +146,7 @@ export type UserTracksFilter = {
 export type UserTracksResponse = {
   __typename?: 'UserTracksResponse'
   soundtracks: Array<Soundtrack>
+  total: Scalars['Int']
 }
 
 export type UserTracksResult = NotFound | UserTracksResponse

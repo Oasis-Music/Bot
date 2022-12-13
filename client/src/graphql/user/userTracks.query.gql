@@ -1,0 +1,19 @@
+query UserTracks($id: ID!, $page: Int!) {
+  userTracks(id: $id, filter: { page: $page }) {
+    __typename
+    ... on UserTracksResponse {
+      total
+      soundtracks {
+        id
+        title
+        author
+        duration
+        coverURL
+        audioURL
+      }
+    }
+    ... on NotFound {
+      message
+    }
+  }
+}

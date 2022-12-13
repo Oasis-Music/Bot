@@ -2,22 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
-import thinkEmojiImage from '../../assets/rastr/thinking.png'
-import { currentTrackIdVar } from '../../apollo/cache/variables'
+import { currentTrackIdVar, userVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
-  AllSoundtracksQuery,
-  AllSoundtracksVariables,
-  AllSoundtracksDocument
-} from '../../graphql/soundtrack/_gen_/soundtracks.query'
-import {
-  Container,
-  List,
-  MountLoader,
-  ErrorPlugWrapper,
-  ErrorPlugBox,
-  ErrorImg
-} from './Home.styled'
+  UserTracksQuery,
+  UserTracksVariables,
+  UserTracksDocument
+} from '../../graphql/user/_gen_/userTracks.query'
+import { Container, List, MountLoader } from './Home.styled'
+import { NoDataPlug, ErrorPlug } from './Plugs'
 
 // TODO: share
 interface Track {
@@ -29,44 +22,39 @@ interface Track {
   audioURL: string
 }
 
-function ErrorPlug() {
-  return (
-    <ErrorPlugWrapper>
-      <ErrorPlugBox>
-        <ErrorImg src={thinkEmojiImage} />
-        <div>
-          <h1>Ой!</h1>
-          <p>Похоже произошла ошибка, попробуйте повторить попытку</p>
-        </div>
-      </ErrorPlugBox>
-    </ErrorPlugWrapper>
-  )
-}
-
 const Home: React.FC = () => {
-  const nowPlayingID = useReactiveVar<string>(currentTrackIdVar)
+  const nowPlayingID = useReactiveVar(currentTrackIdVar)
+  const currentUser = useReactiveVar(userVar)
 
   const ITEMS_PER_PAGE = 15
 
   const [tracks, setTracks] = useState<Track[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
+  const [totalTracks, setTotalTracks] = useState<number>(1)
   const [firstLoad, setFirstLoad] = useState<boolean>(true)
 
   const intersectionObserver = useRef<IntersectionObserver>()
 
-  const [getTracks, { loading, error }] = useLazyQuery<
-    AllSoundtracksQuery,
-    AllSoundtracksVariables
-  >(AllSoundtracksDocument, {
-    variables: {
-      page: currentPage
-    },
-    onCompleted: (data) => {
-      setTracks((prev) => [...prev, ...data.soundtracks.soundtracks])
-      setHasNextPage(data.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
+  const [getTracks, { loading, error }] = useLazyQuery<UserTracksQuery, UserTracksVariables>(
+    UserTracksDocument,
+    {
+      variables: {
+        id: currentUser.id,
+        page: currentPage
+      },
+      onCompleted(q) {
+        if (q.userTracks.__typename === 'NotFound') {
+          return
+        }
+        const newTracks = q.userTracks.soundtracks
+
+        setTracks((prev) => [...prev, ...newTracks])
+        setHasNextPage(q.userTracks.soundtracks.length === ITEMS_PER_PAGE)
+        setTotalTracks(q.userTracks.total)
+      }
     }
-  })
+  )
 
   useEffect(() => {
     getTracks()
@@ -103,6 +91,15 @@ const Home: React.FC = () => {
       <Container>
         <NowPlaying />
         <ErrorPlug />
+      </Container>
+    )
+  }
+
+  if (!totalTracks) {
+    return (
+      <Container>
+        <NowPlaying />
+        <NoDataPlug />
       </Container>
     )
   }

@@ -131,6 +131,7 @@ input UserTracksFilter {
 }
 
 type UserTracksResponse {
+  total: Int!
   soundtracks: [Soundtrack!]!
 }
 
