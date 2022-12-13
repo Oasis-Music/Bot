@@ -4,7 +4,7 @@ import SvgIcon from '../../shared/SvgIcon'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
 import { ReactComponent as CogIcon } from '../../assets/svg/cog.svg'
-import { Container, ControlButton, AddTrackLink } from './Nav.styled'
+import { Container, ControlButton, UploadTrackLink } from './Nav.styled'
 
 const Nav: React.FC = () => {
   const searchClickHandler = () => {
@@ -38,9 +38,9 @@ const Nav: React.FC = () => {
           </SvgIcon>
         </ControlButton>
       )}
-      <AddTrackLink to={routeNames.upload}>
-        <span>Добавить трек</span>
-      </AddTrackLink>
+      <UploadTrackLink to={routeNames.upload}>
+        <span>Загрузить трек</span>
+      </UploadTrackLink>
     </Container>
   )
 }

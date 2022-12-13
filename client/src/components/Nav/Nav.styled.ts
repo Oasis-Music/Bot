@@ -32,7 +32,7 @@ const spinBorder = keyframes`
   }
 `
 
-export const AddTrackLink = styled(Link)`
+export const UploadTrackLink = styled(Link)`
   cursor: pointer;
   user-select: none;
   position: relative;
