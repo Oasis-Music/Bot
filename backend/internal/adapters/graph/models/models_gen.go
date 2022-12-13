@@ -94,6 +94,7 @@ type UserTracksFilter struct {
 }
 
 type UserTracksResponse struct {
+	Total       int          `json:"total"`
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
 

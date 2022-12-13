@@ -13,7 +13,7 @@ func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter e
 		return nil, err
 	}
 
-	tracks, err := u.storage.GetUserTracks(ctx, userID, db.UserTracksFilterParams{
+	result, err := u.storage.GetUserTracks(ctx, userID, db.UserTracksFilterParams{
 		Page: filter.Page,
 	})
 	if err != nil {
@@ -22,13 +22,13 @@ func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter e
 	}
 
 	// INFO: without ErrNoRows -> https://github.com/jackc/pgx/issues/465
-	if len(tracks) == 0 {
+	if len(result.Soundtracks) == 0 {
 		return nil, ErrUserTracksNotFound
 	}
 
 	var soundtracks []entity.Soundtrack
 
-	for _, track := range tracks {
+	for _, track := range result.Soundtracks {
 
 		var coverImg *string
 
@@ -49,6 +49,7 @@ func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter e
 	}
 
 	return &entity.UserTracks{
+		Total:       result.Total,
 		Soundtracks: soundtracks,
 	}, nil
 }

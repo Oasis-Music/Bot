@@ -9,23 +9,36 @@ import (
 
 const (
 	USER_SOUNDTRACKS_QUERY = `
-	SELECT soundtrack.id,
-       soundtrack.title,
-       soundtrack.author,
-       soundtrack.duration,
-       soundtrack.cover_image,
-       soundtrack.audio_file,
-       soundtrack.created_at
-	FROM soundtrack
-	JOIN user_soundtrack ON user_soundtrack.soundtrack_id = soundtrack.id
-	JOIN users ON user_soundtrack.user_id = users.id
-	WHERE user_soundtrack.user_id = $1
+	WITH s AS
+	(SELECT s.id,
+		s.title,
+		s.author,
+		s.duration,
+		s.cover_image,
+		s.audio_file,
+		s.created_at,
+		count(s.id) over() AS total
+	FROM soundtrack s
+		WHERE EXISTS
+	   	(SELECT
+			FROM user_soundtrack us
+			WHERE us.soundtrack_id = s.id
+		AND us.user_id = $1) )
+   	SELECT s.id,
+		s.title,
+		s.author,
+		s.duration,
+		s.cover_image,
+		s.audio_file,
+		s.created_at,
+		s.total
+   	FROM s
 	`
 	ITEMS_PER_PAGE     = 15
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) ([]db.SoundtrackDTO, error) {
+func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) (*db.UserTracksResult, error) {
 
 	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
@@ -40,6 +53,9 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 	defer rows.Close()
 
 	var tracks []db.SoundtrackDTO
+
+	var total int64
+
 	for rows.Next() {
 		var t db.SoundtrackDTO
 		if err := rows.Scan(
@@ -50,6 +66,7 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 			&t.CoverImage,
 			&t.AudioFile,
 			&t.CreatedAt,
+			&total,
 		); err != nil {
 			return nil, err
 		}
@@ -60,7 +77,10 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 		return nil, err
 	}
 
-	return tracks, nil
+	return &db.UserTracksResult{
+		Total:       total,
+		Soundtracks: tracks,
+	}, nil
 }
 
 func queryBuilder(query string, filter db.UserTracksFilterParams) (string, error) {

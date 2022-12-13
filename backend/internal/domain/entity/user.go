@@ -23,6 +23,7 @@ type UserTracksFilter struct {
 }
 
 type UserTracks struct {
+	Total       int64
 	Soundtracks []Soundtrack
 }
 

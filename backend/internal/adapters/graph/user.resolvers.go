@@ -87,11 +87,14 @@ func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models
 		Page: filter.Page,
 	})
 	if errors.Is(err, userUc.ErrUserTracksNotFound) {
+		return models.UserTracksResponse{
+			Total:       0,
+			Soundtracks: nil,
+		}, nil
+	} else if err != nil {
 		return models.NotFound{
 			Message: err.Error(),
 		}, nil
-	} else if err != nil {
-		return nil, err
 	}
 
 	var soundtracks []models.Soundtrack
@@ -110,6 +113,7 @@ func (r *queryResolver) UserTracks(ctx context.Context, id string, filter models
 	}
 
 	return models.UserTracksResponse{
+		Total:       int(tracks.Total),
 		Soundtracks: soundtracks,
 	}, nil
 }
