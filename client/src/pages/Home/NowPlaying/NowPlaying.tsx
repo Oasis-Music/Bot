@@ -21,8 +21,12 @@ import SvgIcon from '../../../shared/SvgIcon'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../../apollo/cache/variables'
 
-const NowPlaying: React.FC = () => {
-  const [isAdded, setIsAdded] = useState<boolean>(false)
+interface NowPlayingProps {
+  isAttached: boolean
+}
+
+const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
+  const [isAdded, setIsAdded] = useState<boolean>(isAttached)
   const track = useReactiveVar(currentTrackVar)
 
   const addButtonHandler = () => {

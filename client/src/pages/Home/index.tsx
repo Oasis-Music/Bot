@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
-import { currentTrackIdVar, userVar } from '../../apollo/cache/variables'
+import { currentTrackIdVar, userVar, currentTrackVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
   UserTracksQuery,
@@ -24,6 +24,7 @@ interface Track {
 
 const Home: React.FC = () => {
   const nowPlayingID = useReactiveVar(currentTrackIdVar)
+  const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
 
   const ITEMS_PER_PAGE = 15
@@ -89,7 +90,7 @@ const Home: React.FC = () => {
   if (error) {
     return (
       <Container>
-        <NowPlaying />
+        <NowPlaying isAttached={false} />
         <ErrorPlug />
       </Container>
     )
@@ -98,7 +99,7 @@ const Home: React.FC = () => {
   if (!totalTracks) {
     return (
       <Container>
-        <NowPlaying />
+        <NowPlaying isAttached={false} />
         <NoDataPlug />
       </Container>
     )
@@ -106,7 +107,7 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <NowPlaying />
+      <NowPlaying isAttached={false} />
       {isMountLoad ? (
         mountPlug
       ) : (

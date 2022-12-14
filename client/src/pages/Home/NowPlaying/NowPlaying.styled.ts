@@ -4,8 +4,10 @@ import IconButton from '../../../shared/IconButton'
 import SvgIcon from '../../../shared/SvgIcon'
 
 const buttonsStyles = css`
-  color: #838383;
-  padding: 15px;
+  flex-grow: 1;
+  border-radius: 0;
+  color: #505050;
+  padding: 10px 5px;
   background: none;
   box-shadow: none;
   &:active {
@@ -124,33 +126,26 @@ export const AddIcon = styled(SvgIcon)`
 export const ControlsWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1vh;
+  margin-top: 2vh;
+  background-color: #fff;
+  border-radius: 20px;
+  max-width: 175px;
   @media ${({ theme }) => theme.media.hxs} {
     margin-top: 10px;
   }
 `
 
 export const DeleteBotton = styled(IconButton)`
-  && {
-    ${buttonsStyles}
-    padding: 0;
-    font-size: 14px;
-  }
+  ${buttonsStyles}
+  font-size: 16px;
 `
 
 export const DownloadBotton = styled(IconButton)`
-  && {
-    ${buttonsStyles}
-    padding-top: 16px;
-    font-size: 19px;
-  }
+  ${buttonsStyles}
+  font-size: 17px;
 `
 
 export const CopyInfoBotton = styled(IconButton)`
-  && {
-    ${buttonsStyles}
-    padding: 0;
-    padding-top: 1px;
-    font-size: 15px;
-  }
+  ${buttonsStyles}
+  font-size: 16px;
 `
