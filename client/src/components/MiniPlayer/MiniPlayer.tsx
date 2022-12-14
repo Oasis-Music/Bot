@@ -6,7 +6,7 @@ import SvgIcon from '../../shared/SvgIcon'
 import { ReactComponent as PlayIcon } from '../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../assets/svg/pause.svg'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar, isPlayingVar, currentTrackIdVar } from '../../apollo/cache/variables'
+import { currentTrackVar } from '../../apollo/cache/variables'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
@@ -108,24 +108,22 @@ const PlayBotton = styled(IconButton)`
 `
 
 const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen, onPlayPause }) => {
-  const isPlay = useReactiveVar(isPlayingVar)
-  const trackId = useReactiveVar(currentTrackIdVar)
-  const track = useReactiveVar(currentTrackVar)
+  const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
-    <Container $isPlaying={!!trackId}>
+    <Container $isPlaying={!!currentTrack.id}>
       <InnerContainer onClick={onPlayerOpen}>
         <ImageWrapper>
-          <ImagePlaceholder src={track.coverImage} altText={track.title} />
+          <ImagePlaceholder src={currentTrack.coverImage} altText={currentTrack.title} />
         </ImageWrapper>
         <InfoBox>
-          <Title>{track.title}</Title>
-          <Author>{track.author}</Author>
+          <Title>{currentTrack.title}</Title>
+          <Author>{currentTrack.author}</Author>
         </InfoBox>
       </InnerContainer>
       <PlayBottonWrapper>
         <PlayBotton onClick={onPlayPause}>
-          <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
+          <SvgIcon>{currentTrack.isPlaying ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayBotton>
       </PlayBottonWrapper>
     </Container>

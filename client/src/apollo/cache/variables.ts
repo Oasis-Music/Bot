@@ -4,8 +4,6 @@ import jwtDecode from 'jwt-decode'
 
 // soundtrack
 export const currentTrackVar = makeVar<CurrentTrack>({} as CurrentTrack)
-export const currentTrackIdVar = makeVar<string>('')
-export const isPlayingVar = makeVar<boolean>(false)
 
 // user
 export const userVar = makeVar<User>({} as User)

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Controls from './Controls/Controls'
 import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
 import { useReactiveVar } from '@apollo/client'
-import { isPlayingVar } from '../../../apollo/cache/variables'
+import { currentTrackVar } from '../../../apollo/cache/variables'
 
 interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string
@@ -17,7 +17,7 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
 ) => {
   const [loop, setLoop] = useState<boolean>(false)
 
-  const isPlay = useReactiveVar(isPlayingVar)
+  const currentTrack = useReactiveVar(currentTrackVar)
 
   const loopButtonHandler = () => {
     setLoop(!loop)
@@ -33,7 +33,7 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
         <span>{duration}</span>
       </TimeBox>
       <Controls
-        isPlay={isPlay}
+        isPlay={currentTrack.isPlaying}
         readyForPlay={isReadyForPlay}
         isLoop={loop}
         onPlayPause={onPlayPause}

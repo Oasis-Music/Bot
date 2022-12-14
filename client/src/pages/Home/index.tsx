@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
-import { currentTrackIdVar, userVar, currentTrackVar } from '../../apollo/cache/variables'
+import { userVar, currentTrackVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
   UserTracksQuery,
@@ -23,7 +23,6 @@ interface Track {
 }
 
 const Home: React.FC = () => {
-  const nowPlayingID = useReactiveVar(currentTrackIdVar)
   const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
 
@@ -111,7 +110,7 @@ const Home: React.FC = () => {
       {isMountLoad ? (
         mountPlug
       ) : (
-        <List $isPlay={!!nowPlayingID}>
+        <List $isPlay={!!currentTrack.id}>
           {tracks.map((track, index) => (
             <PlaylistItem
               ref={tracks.length === index + 1 ? lastTrackRef : undefined}
@@ -122,7 +121,7 @@ const Home: React.FC = () => {
               duration={track.duration}
               coverImage={track.coverURL || ''}
               fileURL={track.audioURL}
-              isPlaying={nowPlayingID === track.id}
+              isPlaying={currentTrack.id === track.id}
             />
           ))}
         </List>

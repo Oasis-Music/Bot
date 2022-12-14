@@ -1,7 +1,7 @@
 import React from 'react'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
-import { isPlayingVar } from '../../../apollo/cache/variables'
 import { Container, ImageWrapper, Title, Author } from './Details.styled'
+import { currentTrackVar } from '../../../apollo/cache/variables'
 import { useReactiveVar } from '@apollo/client'
 
 interface DetailsProps {
@@ -11,11 +11,11 @@ interface DetailsProps {
 }
 
 const Details: React.FC<DetailsProps> = ({ coverImageURL, title, author }) => {
-  const isPlay = useReactiveVar(isPlayingVar)
+  const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
     <Container>
-      <ImageWrapper $stopPlaying={!isPlay}>
+      <ImageWrapper $stopPlaying={!currentTrack.isPlaying}>
         <ImagePlaceholder src={coverImageURL} altText={title} />
       </ImageWrapper>
       <Title>{title}</Title>

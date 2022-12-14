@@ -1,7 +1,10 @@
 import { ReactiveVar } from '@apollo/client'
+import type { CurrentTrack } from '../../types'
 
-export default (isPlayingVar: ReactiveVar<boolean>): (() => void) => {
+export default (currentTrackVar: ReactiveVar<CurrentTrack>): (() => void) => {
   return (): void => {
-    isPlayingVar(!isPlayingVar())
+    const t = currentTrackVar()
+    t.isPlaying = !t.isPlaying
+    currentTrackVar({ ...t })
   }
 }
