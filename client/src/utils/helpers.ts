@@ -1,4 +1,3 @@
-import jwt from 'jwt-decode'
 import { Observable } from '@apollo/client'
 
 export const timeFormater = (value: number): string => {
@@ -6,24 +5,6 @@ export const timeFormater = (value: number): string => {
   const min = String(Math.floor(value / 60))
 
   return min.padStart(1, '0') + ':' + sec.padStart(2, '0')
-}
-
-interface tokenData {
-  id: string
-  name: string
-  picture: string
-  refreshToken: string
-}
-
-export const decodeToken = (): tokenData | undefined => {
-  const token = localStorage.getItem('token') || ''
-  if (!token) return
-  try {
-    const decoded = jwt<tokenData>(token)
-    return decoded
-  } catch (error) {
-    return
-  }
 }
 
 // eslint-disable-next-line

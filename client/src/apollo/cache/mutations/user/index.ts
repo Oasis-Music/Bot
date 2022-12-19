@@ -1,3 +1,4 @@
 import processAccessToken from './processAccessToken'
+import logout from './logout'
 
-export { processAccessToken }
+export { processAccessToken, logout }

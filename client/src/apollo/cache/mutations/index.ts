@@ -1,5 +1,5 @@
 import { setCurrentTrack, playPouse } from './soundtrack'
-import { processAccessToken } from './user'
+import { processAccessToken, logout } from './user'
 
 import { currentTrackVar, userVar, isAuthenticatedVar } from '../variables'
 
@@ -9,5 +9,6 @@ export const SoundtrackMutations = {
 }
 
 export const UserMutations = {
+  logout: logout(userVar, isAuthenticatedVar),
   processAccessToken: processAccessToken(userVar, isAuthenticatedVar)
 }
