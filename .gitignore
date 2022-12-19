@@ -1,12 +1,18 @@
+# client
 client/node_modules
 client/build
-backend/.env.prod
 client/src/assets/music
-/notes
+npm-debug.log*
+
+# backend
+backend/.env.prod
+backend/init/backup.*
+
 /.pnp
 .pnp.js
 
 # testing
+/notes
 /coverage
 
 # production
@@ -18,5 +24,3 @@ client/src/assets/music
 .env.development.local
 .env.test.local
 .env.production.local
-
-npm-debug.log*
