@@ -19,7 +19,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/vektah/gqlparser/gqlerror"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
@@ -68,6 +68,7 @@ func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 
 		if tokenUserId == auth.UnknownUserID {
 			return nil, &gqlerror.Error{
+				Path:    graphql.GetPath(ctx),
 				Message: "unauthorized user",
 				Extensions: map[string]interface{}{
 					"code": "401",
@@ -83,6 +84,7 @@ func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 		userRole, err := userService.GetRole(ctx, userID)
 		if err != nil {
 			return nil, &gqlerror.Error{
+				Path:    graphql.GetPath(ctx),
 				Message: "failed to identify user role",
 				Extensions: map[string]interface{}{
 					"code": "400",
@@ -92,6 +94,7 @@ func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 
 		if !isRoleSuitable(role, userRole) {
 			return nil, &gqlerror.Error{
+				Path:    graphql.GetPath(ctx),
 				Message: "access denied",
 				Extensions: map[string]interface{}{
 					"code": "400",

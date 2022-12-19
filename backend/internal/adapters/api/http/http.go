@@ -23,7 +23,7 @@ type handler struct {
 }
 
 func (h *handler) Register(router chi.Router) {
-	router.Get(refreshPath, h.RefreshToken)
+	router.Post(refreshPath, h.RefreshToken)
 }
 
 func NewHandler(authService auth.AuthService, WARNStorage wranStorage.UserStorage) Handler {
