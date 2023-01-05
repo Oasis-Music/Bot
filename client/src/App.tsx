@@ -6,6 +6,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from './hooks'
 
 const Home = lazy(() => import('./pages/Home'))
+const Explore = lazy(() => import('./pages/Explore'))
 const Upload = lazy(() => import('./pages/Upload'))
 const UI = lazy(() => import('./pages/UI'))
 const Test = lazy(() => import('./pages/Test'))
@@ -21,6 +22,7 @@ const App: React.FC = () => {
         <Route path="/" element={<AppLayout />}>
           <Route element={<PrivateRoute />}>
             <Route index element={<Home />} />
+            <Route path="/explore" element={<Explore />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/test" element={<Test />} />
             {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}

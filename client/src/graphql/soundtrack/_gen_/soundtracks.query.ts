@@ -28,7 +28,7 @@ export type AllSoundtracks_Soundtracks = NonNullable<
 >
 
 export const AllSoundtracksDocument = gql`
-  query allSoundtracks($page: Int!) {
+  query AllSoundtracks($page: Int!) {
     soundtracks(filter: { page: $page }) {
       soundtracks {
         id

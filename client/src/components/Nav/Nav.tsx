@@ -8,7 +8,7 @@ import { Container, ControlButton, UploadTrackLink } from './Nav.styled'
 
 const Nav: React.FC = () => {
   const searchClickHandler = () => {
-    history.push(routeNames.search)
+    history.push(routeNames.explore)
   }
 
   const playlistClickHandler = () => {
