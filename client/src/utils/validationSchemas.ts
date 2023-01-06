@@ -23,4 +23,8 @@ export const createTrackStepsSchema = [
   })
 ]
 
-// export type CreateTrackSchemaType = yup.InferType<typeof createTrackSchema>
+export const ExploreSearchSchema = yup.object({
+  searchQuery: yup.string().trim().required()
+})
+
+export type ExploreSearchSchemaTypes = yup.InferType<typeof ExploreSearchSchema>

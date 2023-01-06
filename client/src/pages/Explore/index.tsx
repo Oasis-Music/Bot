@@ -8,6 +8,7 @@ import {
 
 import TracksList from './TracksList/TracksList'
 import { Track } from './types'
+import Search from '../../components/Search/Search'
 
 const Explore: React.FC = () => {
   const [tracks, setTracks] = useState<Track[]>([])
@@ -42,6 +43,7 @@ const Explore: React.FC = () => {
 
   return (
     <div>
+      <Search />
       <TracksList
         loading={loading}
         hasNextPage={hasNextPage}
