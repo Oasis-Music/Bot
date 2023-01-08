@@ -90,3 +90,37 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 		Soundtracks: soundtracks,
 	}, nil
 }
+
+// SoundtrackByName is the resolver for the soundtrackByName field.
+func (r *queryResolver) SoundtrackByName(ctx context.Context, name string) ([]models.Soundtrack, error) {
+
+	nLn := len(name)
+
+	if nLn == 0 {
+		return nil, errors.New("invalid name value")
+	} else if nLn > 100 {
+		return nil, errors.New("invalid name value: max 100")
+	}
+
+	tracks, err := r.SoundtrackService.GetByName(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+
+	var soundtracks []models.Soundtrack
+
+	for _, track := range tracks {
+
+		soundtracks = append(soundtracks, models.Soundtrack{
+			ID:        utils.FormatInt32(track.ID),
+			Title:     track.Title,
+			Author:    track.Author,
+			Duration:  track.Duration,
+			CoverURL:  track.CoverImage,
+			AudioURL:  track.Audio,
+			CreatedAt: track.CreatedAt.UTC().String(),
+		})
+	}
+
+	return soundtracks, nil
+}

@@ -15,6 +15,7 @@ union SoundtrackResult = Soundtrack | NotFound
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+  soundtrackByName(name: String!): [Soundtrack!]!
 }
 
 extend type Mutation {
