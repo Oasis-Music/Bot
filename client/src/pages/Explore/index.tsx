@@ -5,6 +5,11 @@ import {
   AllSoundtracksVariables,
   AllSoundtracksDocument
 } from '../../graphql/soundtrack/_gen_/soundtracks.query'
+import {
+  SoundtrackByNameQuery,
+  SoundtrackByNameVariables,
+  SoundtrackByNameDocument
+} from '../../graphql/soundtrack/_gen_/soundtrackByName.query'
 
 import TracksList from './TracksList/TracksList'
 import { Track } from './types'
@@ -33,17 +38,34 @@ const Explore: React.FC = () => {
     }
   )
 
-  const handleNextPage = () => {
-    setCurrentPage((prev) => prev + 1)
-  }
+  const [searchTrack] = useLazyQuery<SoundtrackByNameQuery, SoundtrackByNameVariables>(
+    SoundtrackByNameDocument,
+    {
+      onCompleted(queryData) {
+        setTracks(queryData.soundtrackByName)
+      }
+    }
+  )
 
   useEffect(() => {
     getTracks()
   }, [currentPage])
 
+  const handleNextPage = () => {
+    setCurrentPage((prev) => prev + 1)
+  }
+
+  const handleSearchSubmit = (value: string) => {
+    searchTrack({
+      variables: {
+        name: value
+      }
+    })
+  }
+
   return (
     <div>
-      <Search />
+      <Search onSubmit={handleSearchSubmit} />
       <TracksList
         loading={loading}
         hasNextPage={hasNextPage}

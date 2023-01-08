@@ -1,0 +1,11 @@
+query SoundtrackByName($name: String!) {
+  soundtrackByName(name: $name) {
+    id
+    title
+    author
+    duration
+    coverURL
+    audioURL
+    createdAt
+  }
+}

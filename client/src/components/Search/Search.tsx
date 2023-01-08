@@ -5,11 +5,15 @@ import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '../../utils/valid
 import SvgIcon from '../../shared/SvgIcon'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 
-const Search: React.FC = () => {
+interface SearchProps {
+  onSubmit(value: string): void
+}
+
+const Search: React.FC<SearchProps> = ({ onSubmit }) => {
   const initialValues: ExploreSearchSchemaTypes = { searchQuery: '' }
 
-  const handleSearch = (values: ExploreSearchSchemaTypes) => {
-    console.log('search:', values.searchQuery)
+  const handleSearch = (value: ExploreSearchSchemaTypes) => {
+    onSubmit(value.searchQuery.trim())
   }
 
   return (

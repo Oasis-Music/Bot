@@ -70,6 +70,7 @@ export type Query = {
   __typename?: 'Query'
   authorizeUser: AuthorizationResponse
   soundtrack?: Maybe<SoundtrackResult>
+  soundtrackByName: Array<Soundtrack>
   soundtracks: SoundtracksResponse
   user?: Maybe<UserResult>
   userTracks: UserTracksResult
@@ -81,6 +82,10 @@ export type QueryAuthorizeUserArgs = {
 
 export type QuerySoundtrackArgs = {
   id: Scalars['ID']
+}
+
+export type QuerySoundtrackByNameArgs = {
+  name: Scalars['String']
 }
 
 export type QuerySoundtracksArgs = {

@@ -79,6 +79,7 @@ type NotFound {
 type Query {
   soundtrack(id: ID!): SoundtrackResult
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+  soundtrackByName(name: String!): [Soundtrack!]!
   user(id: ID!): UserResult
   userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
   authorizeUser(initData: String!): AuthorizationResponse!
