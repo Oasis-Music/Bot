@@ -83,7 +83,6 @@ const ErrorMessage = styled.p`
 
 const TextInput: React.FC<TextInputProps> = ({
   autoComplete = 'off',
-  maxLength = 50,
   hideErrorMessage = false,
   type = 'text',
   multiline,
@@ -104,9 +103,15 @@ const TextInput: React.FC<TextInputProps> = ({
   return (
     <div>
       {!!multiline ? (
-        <MultilineInput {...field} {...restProps} $error={isErr} />
+        <MultilineInput {...field} {...restProps} $error={isErr} autoComplete={autoComplete} />
       ) : (
-        <BaseInput {...field} {...restProps} $error={isErr} type={type} />
+        <BaseInput
+          {...field}
+          {...restProps}
+          type={type}
+          autoComplete={autoComplete}
+          $error={isErr}
+        />
       )}
       {!hideErrorMessage && (
         <animated.div style={fadeStyles}>

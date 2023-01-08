@@ -1,6 +1,5 @@
 import { ReactiveVar } from '@apollo/client'
-import jwtDecode from 'jwt-decode'
-import type { User, accessToken } from '../../types'
+import type { User } from '../../types'
 
 export default (
   userVar: ReactiveVar<User>,
