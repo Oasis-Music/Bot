@@ -1,0 +1,16 @@
+{
+  "common": {},
+  "errors": {
+    "telegramUserDataErr": "* Telegram user data error",
+    "serverAccessErr": "* service not available please try again later"
+  },
+  "pages": {
+    "auth": {
+      "welcome": "Welcome dear",
+      "enterBtn": "Get in",
+      "terms": "By clicking on «Get in» button, you agree to ",
+      "termsLink": "Terms and Conditions of Use",
+      "report": "Login problems?"
+    }
+  }
+}

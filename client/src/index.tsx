@@ -2,6 +2,7 @@ import React from 'react'
 import theme, { GlobalStyles } from './utils/theme'
 import client from './apollo/apollo'
 import history from './utils/history'
+import { useDetectTelegramLang } from './hooks'
 import { createRoot } from 'react-dom/client'
 import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from 'styled-components'
@@ -12,7 +13,11 @@ import HistoryRouter from './components/HistoryRouter/HistoryRouter'
 
 import 'normalize.css'
 
+import './i18n'
+
 const Application: React.FC = () => {
+  useDetectTelegramLang()
+
   return (
     <HistoryRouter history={history}>
       <ThemeProvider theme={theme}>

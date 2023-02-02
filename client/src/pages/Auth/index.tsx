@@ -19,16 +19,17 @@ import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import { UserMutations } from '../../apollo/cache/mutations'
 import { isAuthenticatedVar } from '../../apollo/cache/variables'
 import { Link, Navigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import history, { routeNames } from '../../utils/history'
 import handv_img from '../../assets/rastr/hand-v.png'
-
-const buttonText = 'Войти'
 
 const Auth: React.FC = () => {
   const isAuth = useReactiveVar(isAuthenticatedVar)
   if (isAuth) {
     return <Navigate to={routeNames.root} />
   }
+
+  const { t } = useTranslation()
 
   const [error, setError] = useState<string>('')
 
@@ -44,10 +45,13 @@ const Auth: React.FC = () => {
       },
       onError(error) {
         if (error.networkError) {
-          setError('* сервер не доступен повторите попытку позже')
+          const msg = t('errors.serverAccessErr')
+          setError(msg)
           return
         }
-        setError('* ошибка данных пользователя Telegram ')
+
+        const msg = t('errors.telegramUserDataErr')
+        setError(msg)
       }
     }
   )
@@ -73,21 +77,21 @@ const Auth: React.FC = () => {
     <Container>
       <MainBox>
         <HeadTitle>
-          <span>Добро пожаловать</span>
+          <span>{t('pages.auth.welcome')}</span>
           <EmojiImg src={handv_img} alt="смайлик - мир" />
         </HeadTitle>
         <SubmitBotton color="secondary" loading={loading} onClick={handleSubmitClick}>
-          {buttonText}
+          {t('pages.auth.enterBtn')}
         </SubmitBotton>
         <animated.div style={fadeStyles}>
           <ErrorMessage>{error}</ErrorMessage>
         </animated.div>
         <TermsTitle>
-          Нажав кнопку «{buttonText}», вы соглашаетесь с &nbsp;
-          <Link to={'#'}>Условиями использования</Link>
+          {t('pages.auth.terms')}
+          <Link to={'#'}>{t('pages.auth.termsLink')}</Link>
           &nbsp;Oasis
         </TermsTitle>
-        <ReportLink to={'#'}>Проблемы со входом?</ReportLink>
+        <ReportLink to={'#'}>{t('pages.auth.report')}</ReportLink>
       </MainBox>
     </Container>
   )
