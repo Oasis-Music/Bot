@@ -87,7 +87,9 @@ const Auth: React.FC = () => {
           <ErrorMessage>{error}</ErrorMessage>
         </animated.div>
         <TermsTitle>
-          {t('pages.auth.terms')}
+          {t('pages.auth.terms', {
+            btn: t('pages.auth.enterBtn')
+          })}
           <Link to={'#'}>{t('pages.auth.termsLink')}</Link>
           &nbsp;Oasis
         </TermsTitle>

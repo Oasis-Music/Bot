@@ -8,7 +8,7 @@
     "auth": {
       "welcome": "Welcome dear",
       "enterBtn": "Get in",
-      "terms": "By clicking on «Get in» button, you agree to ",
+      "terms": "By clicking on «{{btn}}» button, you agree to ",
       "termsLink": "Terms and Conditions of Use",
       "report": "Login problems?"
     }
