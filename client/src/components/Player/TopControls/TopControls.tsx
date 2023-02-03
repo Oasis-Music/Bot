@@ -4,6 +4,7 @@ import { ReactComponent as ArrowIcon } from '../../../assets/svg/angle-arrow.svg
 import { ReactComponent as MusicListIcon } from '../../../assets/svg/list-music.svg'
 
 import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.styled'
+import { useTranslation } from 'react-i18next'
 
 interface TopControlsProps {
   id: string
@@ -11,6 +12,8 @@ interface TopControlsProps {
 }
 
 const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
+  const { t } = useTranslation()
+
   return (
     <Container>
       <MinimizeButton withoutShadow onClick={onClose}>
@@ -18,7 +21,7 @@ const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
           <ArrowIcon />
         </SvgIcon>
       </MinimizeButton>
-      <Title>Сейчас играет</Title>
+      <Title>{t('player.header')}</Title>
       <PlaylistButton withoutShadow>
         <SvgIcon>
           <MusicListIcon />

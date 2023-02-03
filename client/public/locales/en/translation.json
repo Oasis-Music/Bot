@@ -26,5 +26,11 @@
         }
       }
     }
+  },
+  "player": {
+    "header": "Now playing"
+  },
+  "layout": {
+    "upload": "Upload"
   }
 }
