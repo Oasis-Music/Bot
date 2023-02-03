@@ -19,7 +19,7 @@ const Nav: React.FC = () => {
   }
 
   const cogClickHandler = () => {
-    history.push(routeNames.test)
+    history.push(routeNames.settings)
   }
 
   return (
