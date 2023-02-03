@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useTranslation } from 'react-i18next'
 import thinkEmojiImage from '../../assets/rastr/thinking.png'
 
 const PlugWrapper = styled.div`
@@ -39,13 +40,15 @@ const NoDataTextBox = styled.div`
 `
 
 export const ErrorPlug: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <PlugWrapper>
       <PlugBox>
         <Image src={thinkEmojiImage} />
         <div>
-          <h1>Ой!</h1>
-          <p>Похоже произошла ошибка, попробуйте повторить попытку</p>
+          <h1>{t('pages.home.plugs.fetchErr.title')}</h1>
+          <p>{t('pages.home.plugs.fetchErr.subtitle')}</p>
         </div>
       </PlugBox>
     </PlugWrapper>
@@ -53,12 +56,14 @@ export const ErrorPlug: React.FC = () => {
 }
 
 export const NoDataPlug: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <PlugWrapper>
       <PlugBox>
         <NoDataTextBox>
-          <h1>Это твои плейлист </h1>
-          <p>тут будут отображаться добавленные тобой треки</p>
+          <h1>{t('pages.home.plugs.nodata.title')}</h1>
+          <p>{t('pages.home.plugs.nodata.subtitle')}</p>
         </NoDataTextBox>
       </PlugBox>
     </PlugWrapper>

@@ -20,6 +20,7 @@ import {
 import SvgIcon from '../../../shared/SvgIcon'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../../apollo/cache/variables'
+import { useTranslation } from 'react-i18next'
 
 interface NowPlayingProps {
   isAttached: boolean
@@ -29,6 +30,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
   const [isAdded, setIsAdded] = useState<boolean>(isAttached)
   const track = useReactiveVar(currentTrackVar)
 
+  const { t } = useTranslation()
   const addButtonHandler = () => {
     setIsAdded(true)
   }
@@ -73,7 +75,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
               </AddIcon>
             }
           >
-            Сохранить
+            {t('common.save')}
           </SaveBotton>
         )}
       </Details>

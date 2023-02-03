@@ -1,5 +1,7 @@
 {
-  "common": {},
+  "common": {
+    "save": "Save"
+  },
   "errors": {
     "telegramUserDataErr": "* Telegram user data error",
     "serverAccessErr": "* service not available please try again later"
@@ -11,6 +13,18 @@
       "terms": "By clicking on «{{btn}}» button, you agree to ",
       "termsLink": "Terms and Conditions of Use",
       "report": "Login problems?"
+    },
+    "home": {
+      "plugs": {
+        "nodata": {
+          "title": "This is your playlist",
+          "subtitle": "tracks added by you will be displayed here"
+        },
+        "fetchErr": {
+          "title": "Oops!",
+          "subtitle": "Looks like an error occurred, please try again"
+        }
+      }
     }
   }
 }
