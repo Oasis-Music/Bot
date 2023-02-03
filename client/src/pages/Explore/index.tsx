@@ -14,8 +14,10 @@ import {
 import TracksList from './TracksList/TracksList'
 import { Track } from './types'
 import Search from '../../components/Search/Search'
+import { useTranslation } from 'react-i18next'
 
 const Explore: React.FC = () => {
+  const { t } = useTranslation()
   const [tracks, setTracks] = useState<Track[]>([])
 
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -63,9 +65,11 @@ const Explore: React.FC = () => {
     })
   }
 
+  const searchPlaceholder = t('pages.explore.searchInput')
+
   return (
     <div>
-      <Search onSubmit={handleSearchSubmit} />
+      <Search onSubmit={handleSearchSubmit} placeholder={searchPlaceholder} />
       <TracksList
         loading={loading}
         hasNextPage={hasNextPage}

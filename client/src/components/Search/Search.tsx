@@ -6,10 +6,11 @@ import SvgIcon from '../../shared/SvgIcon'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 
 interface SearchProps {
+  placeholder?: string
   onSubmit(value: string): void
 }
 
-const Search: React.FC<SearchProps> = ({ onSubmit }) => {
+const Search: React.FC<SearchProps> = ({ placeholder, onSubmit }) => {
   const initialValues: ExploreSearchSchemaTypes = { searchQuery: '' }
 
   const handleSearch = (value: ExploreSearchSchemaTypes) => {
@@ -25,7 +26,7 @@ const Search: React.FC<SearchProps> = ({ onSubmit }) => {
       >
         {() => (
           <Container noValidate>
-            <SearchField name="searchQuery" autoComplete="off" placeholder="Я ищу..." />
+            <SearchField name="searchQuery" autoComplete="off" placeholder={placeholder} />
             <SearchButton withoutShadow color="secondary" type="submit">
               <SvgIcon>
                 <SearchIcon />

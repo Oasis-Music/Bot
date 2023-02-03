@@ -25,6 +25,9 @@
           "subtitle": "Looks like an error occurred, please try again"
         }
       }
+    },
+    "explore": {
+      "searchInput": "I'm looking for"
     }
   },
   "player": {
