@@ -34,13 +34,11 @@ const Nav: React.FC = () => {
           <MusicListIcon />
         </SvgIcon>
       </ControlButton>
-      {process.env.NODE_ENV === 'development' && (
-        <ControlButton onClick={cogClickHandler}>
-          <SvgIcon>
-            <CogIcon />
-          </SvgIcon>
-        </ControlButton>
-      )}
+      <ControlButton onClick={cogClickHandler}>
+        <SvgIcon>
+          <CogIcon />
+        </SvgIcon>
+      </ControlButton>
       <UploadTrackLink to={routeNames.upload}>
         <span>{t('layout.upload')}</span>
       </UploadTrackLink>
