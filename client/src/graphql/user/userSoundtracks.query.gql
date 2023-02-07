@@ -1,7 +1,7 @@
-query UserTracks($id: ID!, $page: Int!) {
-  userTracks(id: $id, filter: { page: $page }) {
+query UserSoundtracks($id: ID!, $page: Int!) {
+  userSoundtracks(id: $id, filter: { page: $page }) {
     __typename
-    ... on UserTracksResponse {
+    ... on UserSoundtracksResponse {
       total
       soundtracks {
         id

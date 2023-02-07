@@ -1,4 +1,4 @@
-query getTrackByID($id: ID!) {
+query GetSoundtrack($id: ID!) {
   soundtrack(id: $id) {
     __typename
     ... on Soundtrack {

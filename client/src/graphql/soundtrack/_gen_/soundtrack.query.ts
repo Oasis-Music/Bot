@@ -1,11 +1,11 @@
 import * as Types from '../../../types'
 
 import { gql } from '@apollo/client'
-export type GetTrackByIdQueryVariables = Types.Exact<{
+export type GetSoundtrackQueryVariables = Types.Exact<{
   id: Types.Scalars['ID']
 }>
 
-export type GetTrackByIdQuery = {
+export type GetSoundtrackQuery = {
   __typename?: 'Query'
   soundtrack?:
     | { __typename: 'NotFound'; message: string }
@@ -24,19 +24,19 @@ export type GetTrackByIdQuery = {
 
 type DiscriminateUnion<T, U> = T extends U ? T : never
 
-export type GetTrackByIdVariables = GetTrackByIdQueryVariables
-export type GetTrackByIdSoundtrack = NonNullable<GetTrackByIdQuery['soundtrack']>
-export type GetTrackByIdSoundtrackInlineFragment = DiscriminateUnion<
-  NonNullable<GetTrackByIdQuery['soundtrack']>,
+export type GetSoundtrackVariables = GetSoundtrackQueryVariables
+export type GetSoundtrackSoundtrack = NonNullable<GetSoundtrackQuery['soundtrack']>
+export type GetSoundtrackSoundtrackInlineFragment = DiscriminateUnion<
+  NonNullable<GetSoundtrackQuery['soundtrack']>,
   { __typename?: 'Soundtrack' }
 >
-export type GetTrackByIdNotFoundInlineFragment = DiscriminateUnion<
-  NonNullable<GetTrackByIdQuery['soundtrack']>,
+export type GetSoundtrackNotFoundInlineFragment = DiscriminateUnion<
+  NonNullable<GetSoundtrackQuery['soundtrack']>,
   { __typename?: 'NotFound' }
 >
 
-export const GetTrackByIdDocument = gql`
-  query getTrackByID($id: ID!) {
+export const GetSoundtrackDocument = gql`
+  query GetSoundtrack($id: ID!) {
     soundtrack(id: $id) {
       __typename
       ... on Soundtrack {

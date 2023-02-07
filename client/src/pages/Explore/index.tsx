@@ -6,10 +6,10 @@ import {
   AllSoundtracksDocument
 } from '../../graphql/soundtrack/_gen_/soundtracks.query'
 import {
-  SoundtrackByNameQuery,
-  SoundtrackByNameVariables,
-  SoundtrackByNameDocument
-} from '../../graphql/soundtrack/_gen_/soundtrackByName.query'
+  SoundtrackByTitleQuery,
+  SoundtrackByTitleVariables,
+  SoundtrackByTitleDocument
+} from '../../graphql/soundtrack/_gen_/soundtrackByTitle.query'
 
 import TracksList from './TracksList/TracksList'
 import { Track } from './types'
@@ -40,11 +40,11 @@ const Explore: React.FC = () => {
     }
   )
 
-  const [searchTrack] = useLazyQuery<SoundtrackByNameQuery, SoundtrackByNameVariables>(
-    SoundtrackByNameDocument,
+  const [searchTrack] = useLazyQuery<SoundtrackByTitleQuery, SoundtrackByTitleVariables>(
+    SoundtrackByTitleDocument,
     {
       onCompleted(queryData) {
-        setTracks(queryData.soundtrackByName)
+        setTracks(queryData.soundtrackByTitle)
       }
     }
   )
@@ -60,7 +60,7 @@ const Explore: React.FC = () => {
   const handleSearchSubmit = (value: string) => {
     searchTrack({
       variables: {
-        name: value
+        title: value
       }
     })
   }

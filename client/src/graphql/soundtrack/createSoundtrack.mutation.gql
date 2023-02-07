@@ -1,10 +1,10 @@
-mutation AddSoundtrack(
+mutation CreateSoundtrack(
   $title: String!
   $author: String!
-  $coverImage: Upload!
+  $coverImage: Upload
   $audiofile: Upload!
 ) {
-  addSoundtrack(
+  createSoundtrack(
     input: { title: $title, author: $author, coverImage: $coverImage, audiofile: $audiofile }
   )
 }

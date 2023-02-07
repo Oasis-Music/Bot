@@ -8,10 +8,10 @@ import { Formik, Form } from 'formik'
 import { useWindowRatio } from '../../hooks'
 import { createTrackStepsSchema } from '../../utils/validationSchemas'
 import {
-  AddSoundtrackMutation,
-  AddSoundtrackVariables,
-  AddSoundtrackDocument
-} from '../../graphql/soundtrack/_gen_/addSoundtrack.mutation'
+  CreateSoundtrackMutation,
+  CreateSoundtrackVariables,
+  CreateSoundtrackDocument
+} from '../../graphql/soundtrack/_gen_/createSoundtrack.mutation'
 import Feedback from './modals/Feedback'
 import Alert from './modals/Alert'
 import history, { routeNames } from '../../utils/history'
@@ -77,24 +77,24 @@ const Upload: React.FC = () => {
 
   const [windowWidth] = useWindowRatio()
 
-  const [addSoundtrack, { loading }] = useMutation<AddSoundtrackMutation, AddSoundtrackVariables>(
-    AddSoundtrackDocument,
-    {
-      onCompleted: (data) => {
-        console.log(data)
-        setFeedbackModal({
-          type: 'success',
-          open: true
-        })
-      },
-      onError: () => {
-        setFeedbackModal({
-          type: 'fail',
-          open: true
-        })
-      }
+  const [addSoundtrack, { loading }] = useMutation<
+    CreateSoundtrackMutation,
+    CreateSoundtrackVariables
+  >(CreateSoundtrackDocument, {
+    onCompleted: (data) => {
+      console.log(data)
+      setFeedbackModal({
+        type: 'success',
+        open: true
+      })
+    },
+    onError: () => {
+      setFeedbackModal({
+        type: 'fail',
+        open: true
+      })
     }
-  )
+  })
 
   const slideNext = () => {
     if (step === 2) return

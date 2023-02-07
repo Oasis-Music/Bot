@@ -5,10 +5,10 @@ import ScaleLoader from '../../shared/Loader'
 import { userVar, currentTrackVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
-  UserTracksQuery,
-  UserTracksVariables,
-  UserTracksDocument
-} from '../../graphql/user/_gen_/userTracks.query'
+  UserSoundtracksQuery,
+  UserSoundtracksVariables,
+  UserSoundtracksDocument
+} from '../../graphql/user/_gen_/userSoundtracks.query'
 import { Container, List, MountLoader } from './Home.styled'
 import { NoDataPlug, ErrorPlug } from './Plugs'
 
@@ -36,25 +36,25 @@ const Home: React.FC = () => {
 
   const intersectionObserver = useRef<IntersectionObserver>()
 
-  const [getTracks, { loading, error }] = useLazyQuery<UserTracksQuery, UserTracksVariables>(
-    UserTracksDocument,
-    {
-      variables: {
-        id: currentUser.id,
-        page: currentPage
-      },
-      onCompleted(q) {
-        if (q.userTracks.__typename === 'NotFound') {
-          return
-        }
-        const newTracks = q.userTracks.soundtracks
-
-        setTracks((prev) => [...prev, ...newTracks])
-        setHasNextPage(q.userTracks.soundtracks.length === ITEMS_PER_PAGE)
-        setTotalTracks(q.userTracks.total)
+  const [getTracks, { loading, error }] = useLazyQuery<
+    UserSoundtracksQuery,
+    UserSoundtracksVariables
+  >(UserSoundtracksDocument, {
+    variables: {
+      id: currentUser.id,
+      page: currentPage
+    },
+    onCompleted(q) {
+      if (q.userSoundtracks.__typename === 'NotFound') {
+        return
       }
+      const newTracks = q.userSoundtracks.soundtracks
+
+      setTracks((prev) => [...prev, ...newTracks])
+      setHasNextPage(q.userSoundtracks.soundtracks.length === ITEMS_PER_PAGE)
+      setTotalTracks(q.userSoundtracks.total)
     }
-  )
+  })
 
   useEffect(() => {
     getTracks()

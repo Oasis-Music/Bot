@@ -41,14 +41,7 @@ directive @connection(
   filter: [String!]
 ) on FIELD
 
-input AddSoundtrackInput {
-  title: String!
-  author: String!
-  coverImage: Upload
-  audiofile: Upload!
-}
-
-input AddTrackToUserInput {
+input AttachSoundtrackInput {
   userId: String!
   trackId: String!
 }
@@ -58,18 +51,20 @@ type AuthorizationResponse {
   refreshToken: String!
 }
 
-scalar Date
-
-input DeleteTrackFromUserInput {
-  userId: ID!
-  trackId: ID!
+input CreateSoundtrackInput {
+  title: String!
+  author: String!
+  coverImage: Upload
+  audiofile: Upload!
 }
 
+scalar Date
+
 type Mutation {
-  addSoundtrack(input: AddSoundtrackInput!): Boolean!
+  createSoundtrack(input: CreateSoundtrackInput!): Boolean!
   deleteSoundtrack(id: ID!): Boolean!
-  addTrackToUser(input: AddTrackToUserInput!): Boolean!
-  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
+  attachSoundtrack(input: AttachSoundtrackInput!): Boolean!
+  unattachSoundtrack(input: UnattachSoundtrackInput!): Boolean!
 }
 
 type NotFound {
@@ -79,10 +74,10 @@ type NotFound {
 type Query {
   soundtrack(id: ID!): SoundtrackResult
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
-  soundtrackByName(name: String!): [Soundtrack!]!
+  soundtrackByTitle(title: String!): [Soundtrack!]!
   user(id: ID!): UserResult
-  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
   authorizeUser(initData: String!): AuthorizationResponse!
+  userSoundtracks(id: ID!, filter: UserSoundtracksFilter!): UserSoundtracksResult!
 }
 
 enum Role {
@@ -112,6 +107,11 @@ type SoundtracksResponse {
   soundtracks: [Soundtrack!]!
 }
 
+input UnattachSoundtrackInput {
+  userId: ID!
+  trackId: ID!
+}
+
 scalar Upload
 
 type User {
@@ -127,13 +127,13 @@ type User {
 
 union UserResult = User | NotFound
 
-input UserTracksFilter {
+input UserSoundtracksFilter {
   page: Int!
 }
 
-type UserTracksResponse {
+type UserSoundtracksResponse {
   total: Int!
   soundtracks: [Soundtrack!]!
 }
 
-union UserTracksResult = UserTracksResponse | NotFound
+union UserSoundtracksResult = UserSoundtracksResponse | NotFound

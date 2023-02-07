@@ -14,14 +14,7 @@ export type Scalars = {
   Upload: any
 }
 
-export type AddSoundtrackInput = {
-  audiofile: Scalars['Upload']
-  author: Scalars['String']
-  coverImage?: InputMaybe<Scalars['Upload']>
-  title: Scalars['String']
-}
-
-export type AddTrackToUserInput = {
+export type AttachSoundtrackInput = {
   trackId: Scalars['String']
   userId: Scalars['String']
 }
@@ -32,33 +25,35 @@ export type AuthorizationResponse = {
   token: Scalars['String']
 }
 
-export type DeleteTrackFromUserInput = {
-  trackId: Scalars['ID']
-  userId: Scalars['ID']
+export type CreateSoundtrackInput = {
+  audiofile: Scalars['Upload']
+  author: Scalars['String']
+  coverImage?: InputMaybe<Scalars['Upload']>
+  title: Scalars['String']
 }
 
 export type Mutation = {
   __typename?: 'Mutation'
-  addSoundtrack: Scalars['Boolean']
-  addTrackToUser: Scalars['Boolean']
+  attachSoundtrack: Scalars['Boolean']
+  createSoundtrack: Scalars['Boolean']
   deleteSoundtrack: Scalars['Boolean']
-  deleteTrackFromUser: Scalars['Boolean']
+  unattachSoundtrack: Scalars['Boolean']
 }
 
-export type MutationAddSoundtrackArgs = {
-  input: AddSoundtrackInput
+export type MutationAttachSoundtrackArgs = {
+  input: AttachSoundtrackInput
 }
 
-export type MutationAddTrackToUserArgs = {
-  input: AddTrackToUserInput
+export type MutationCreateSoundtrackArgs = {
+  input: CreateSoundtrackInput
 }
 
 export type MutationDeleteSoundtrackArgs = {
   id: Scalars['ID']
 }
 
-export type MutationDeleteTrackFromUserArgs = {
-  input: DeleteTrackFromUserInput
+export type MutationUnattachSoundtrackArgs = {
+  input: UnattachSoundtrackInput
 }
 
 export type NotFound = {
@@ -70,10 +65,10 @@ export type Query = {
   __typename?: 'Query'
   authorizeUser: AuthorizationResponse
   soundtrack?: Maybe<SoundtrackResult>
-  soundtrackByName: Array<Soundtrack>
+  soundtrackByTitle: Array<Soundtrack>
   soundtracks: SoundtracksResponse
   user?: Maybe<UserResult>
-  userTracks: UserTracksResult
+  userSoundtracks: UserSoundtracksResult
 }
 
 export type QueryAuthorizeUserArgs = {
@@ -84,8 +79,8 @@ export type QuerySoundtrackArgs = {
   id: Scalars['ID']
 }
 
-export type QuerySoundtrackByNameArgs = {
-  name: Scalars['String']
+export type QuerySoundtrackByTitleArgs = {
+  title: Scalars['String']
 }
 
 export type QuerySoundtracksArgs = {
@@ -96,8 +91,8 @@ export type QueryUserArgs = {
   id: Scalars['ID']
 }
 
-export type QueryUserTracksArgs = {
-  filter: UserTracksFilter
+export type QueryUserSoundtracksArgs = {
+  filter: UserSoundtracksFilter
   id: Scalars['ID']
 }
 
@@ -130,6 +125,11 @@ export type SoundtracksResponse = {
   soundtracks: Array<Soundtrack>
 }
 
+export type UnattachSoundtrackInput = {
+  trackId: Scalars['ID']
+  userId: Scalars['ID']
+}
+
 export type User = {
   __typename?: 'User'
   createdAt: Scalars['Date']
@@ -144,17 +144,17 @@ export type User = {
 
 export type UserResult = NotFound | User
 
-export type UserTracksFilter = {
+export type UserSoundtracksFilter = {
   page: Scalars['Int']
 }
 
-export type UserTracksResponse = {
-  __typename?: 'UserTracksResponse'
+export type UserSoundtracksResponse = {
+  __typename?: 'UserSoundtracksResponse'
   soundtracks: Array<Soundtrack>
   total: Scalars['Int']
 }
 
-export type UserTracksResult = NotFound | UserTracksResponse
+export type UserSoundtracksResult = NotFound | UserSoundtracksResponse
 
 export interface PossibleTypesResultData {
   possibleTypes: {
@@ -165,7 +165,7 @@ const result: PossibleTypesResultData = {
   possibleTypes: {
     SoundtrackResult: ['NotFound', 'Soundtrack'],
     UserResult: ['NotFound', 'User'],
-    UserTracksResult: ['NotFound', 'UserTracksResponse']
+    UserSoundtracksResult: ['NotFound', 'UserSoundtracksResponse']
   }
 }
 export default result

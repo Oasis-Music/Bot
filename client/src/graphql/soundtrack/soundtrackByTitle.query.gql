@@ -1,5 +1,5 @@
-query SoundtrackByName($name: String!) {
-  soundtrackByName(name: $name) {
+query SoundtrackByTitle($title: String!) {
+  soundtrackByTitle(title: $title) {
     id
     title
     author
