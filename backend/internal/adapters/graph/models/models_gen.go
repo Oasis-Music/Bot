@@ -18,8 +18,8 @@ type UserResult interface {
 	IsUserResult()
 }
 
-type UserTracksResult interface {
-	IsUserTracksResult()
+type UserSoundtracksResult interface {
+	IsUserSoundtracksResult()
 }
 
 type AddSoundtrackInput struct {
@@ -29,7 +29,7 @@ type AddSoundtrackInput struct {
 	Audiofile  graphql.Upload  `json:"audiofile"`
 }
 
-type AddTrackToUserInput struct {
+type AttachSoundtrackInput struct {
 	UserID  string `json:"userId"`
 	TrackID string `json:"trackId"`
 }
@@ -37,11 +37,6 @@ type AddTrackToUserInput struct {
 type AuthorizationResponse struct {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refreshToken"`
-}
-
-type DeleteTrackFromUserInput struct {
-	UserID  string `json:"userId"`
-	TrackID string `json:"trackId"`
 }
 
 type NotFound struct {
@@ -52,7 +47,7 @@ func (NotFound) IsSoundtrackResult() {}
 
 func (NotFound) IsUserResult() {}
 
-func (NotFound) IsUserTracksResult() {}
+func (NotFound) IsUserSoundtracksResult() {}
 
 type Soundtrack struct {
 	ID        string  `json:"id"`
@@ -76,6 +71,11 @@ type SoundtracksResponse struct {
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
 
+type UnattachSoundtrackInput struct {
+	UserID  string `json:"userId"`
+	TrackID string `json:"trackId"`
+}
+
 type User struct {
 	ID           string  `json:"id"`
 	FirstName    string  `json:"firstName"`
@@ -89,16 +89,16 @@ type User struct {
 
 func (User) IsUserResult() {}
 
-type UserTracksFilter struct {
+type UserSoundtracksFilter struct {
 	Page int `json:"page"`
 }
 
-type UserTracksResponse struct {
+type UserSoundtracksResponse struct {
 	Total       int          `json:"total"`
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
 
-func (UserTracksResponse) IsUserTracksResult() {}
+func (UserSoundtracksResponse) IsUserSoundtracksResult() {}
 
 type Role string
 

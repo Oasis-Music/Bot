@@ -10,36 +10,37 @@ type User {
 }
 
 union UserResult = User | NotFound
-union UserTracksResult = UserTracksResponse | NotFound
+union UserSoundtracksResult = UserSoundtracksResponse | NotFound
 
 extend type Query {
   user(id: ID!): UserResult @hasRole(role: ADMIN)
-  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
-    @hasRole(role: [USER, ADMIN])
   authorizeUser(initData: String!): AuthorizationResponse!
+  userSoundtracks(
+    id: ID!
+    filter: UserSoundtracksFilter!
+  ): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
 }
 
-# AddTrackToUserResponse
 extend type Mutation {
-  addTrackToUser(input: AddTrackToUserInput!): Boolean!
-  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
+  attachSoundtrack(input: AttachSoundtrackInput!): Boolean!
+  unattachSoundtrack(input: UnattachSoundtrackInput!): Boolean!
 }
 
-input UserTracksFilter {
+input UserSoundtracksFilter {
   page: Int!
 }
 
-type UserTracksResponse {
+type UserSoundtracksResponse {
   total: Int!
   soundtracks: [Soundtrack!]!
 }
 
-input AddTrackToUserInput {
+input AttachSoundtrackInput {
   userId: String!
   trackId: String!
 }
 
-input DeleteTrackFromUserInput {
+input UnattachSoundtrackInput {
   userId: ID!
   trackId: ID!
 }

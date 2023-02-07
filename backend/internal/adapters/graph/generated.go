@@ -51,10 +51,10 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AddSoundtrack       func(childComplexity int, input models.AddSoundtrackInput) int
-		AddTrackToUser      func(childComplexity int, input models.AddTrackToUserInput) int
-		DeleteSoundtrack    func(childComplexity int, id string) int
-		DeleteTrackFromUser func(childComplexity int, input models.DeleteTrackFromUserInput) int
+		AddSoundtrack      func(childComplexity int, input models.AddSoundtrackInput) int
+		AttachSoundtrack   func(childComplexity int, input models.AttachSoundtrackInput) int
+		DeleteSoundtrack   func(childComplexity int, id string) int
+		UnattachSoundtrack func(childComplexity int, input models.UnattachSoundtrackInput) int
 	}
 
 	NotFound struct {
@@ -67,7 +67,7 @@ type ComplexityRoot struct {
 		SoundtrackByName func(childComplexity int, name string) int
 		Soundtracks      func(childComplexity int, filter models.SoundtracksFilter) int
 		User             func(childComplexity int, id string) int
-		UserTracks       func(childComplexity int, id string, filter models.UserTracksFilter) int
+		UserSoundtracks  func(childComplexity int, id string, filter models.UserSoundtracksFilter) int
 	}
 
 	Soundtrack struct {
@@ -97,7 +97,7 @@ type ComplexityRoot struct {
 		VisitedAt    func(childComplexity int) int
 	}
 
-	UserTracksResponse struct {
+	UserSoundtracksResponse struct {
 		Soundtracks func(childComplexity int) int
 		Total       func(childComplexity int) int
 	}
@@ -106,16 +106,16 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error)
 	DeleteSoundtrack(ctx context.Context, id string) (bool, error)
-	AddTrackToUser(ctx context.Context, input models.AddTrackToUserInput) (bool, error)
-	DeleteTrackFromUser(ctx context.Context, input models.DeleteTrackFromUserInput) (bool, error)
+	AttachSoundtrack(ctx context.Context, input models.AttachSoundtrackInput) (bool, error)
+	UnattachSoundtrack(ctx context.Context, input models.UnattachSoundtrackInput) (bool, error)
 }
 type QueryResolver interface {
 	Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error)
 	Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
 	SoundtrackByName(ctx context.Context, name string) ([]models.Soundtrack, error)
 	User(ctx context.Context, id string) (models.UserResult, error)
-	UserTracks(ctx context.Context, id string, filter models.UserTracksFilter) (models.UserTracksResult, error)
 	AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error)
+	UserSoundtracks(ctx context.Context, id string, filter models.UserSoundtracksFilter) (models.UserSoundtracksResult, error)
 }
 
 type executableSchema struct {
@@ -159,17 +159,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.AddSoundtrack(childComplexity, args["input"].(models.AddSoundtrackInput)), true
 
-	case "Mutation.addTrackToUser":
-		if e.complexity.Mutation.AddTrackToUser == nil {
+	case "Mutation.attachSoundtrack":
+		if e.complexity.Mutation.AttachSoundtrack == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_addTrackToUser_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_attachSoundtrack_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AddTrackToUser(childComplexity, args["input"].(models.AddTrackToUserInput)), true
+		return e.complexity.Mutation.AttachSoundtrack(childComplexity, args["input"].(models.AttachSoundtrackInput)), true
 
 	case "Mutation.deleteSoundtrack":
 		if e.complexity.Mutation.DeleteSoundtrack == nil {
@@ -183,17 +183,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteSoundtrack(childComplexity, args["id"].(string)), true
 
-	case "Mutation.deleteTrackFromUser":
-		if e.complexity.Mutation.DeleteTrackFromUser == nil {
+	case "Mutation.unattachSoundtrack":
+		if e.complexity.Mutation.UnattachSoundtrack == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_deleteTrackFromUser_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_unattachSoundtrack_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DeleteTrackFromUser(childComplexity, args["input"].(models.DeleteTrackFromUserInput)), true
+		return e.complexity.Mutation.UnattachSoundtrack(childComplexity, args["input"].(models.UnattachSoundtrackInput)), true
 
 	case "NotFound.message":
 		if e.complexity.NotFound.Message == nil {
@@ -262,17 +262,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.User(childComplexity, args["id"].(string)), true
 
-	case "Query.userTracks":
-		if e.complexity.Query.UserTracks == nil {
+	case "Query.userSoundtracks":
+		if e.complexity.Query.UserSoundtracks == nil {
 			break
 		}
 
-		args, err := ec.field_Query_userTracks_args(context.TODO(), rawArgs)
+		args, err := ec.field_Query_userSoundtracks_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Query.UserTracks(childComplexity, args["id"].(string), args["filter"].(models.UserTracksFilter)), true
+		return e.complexity.Query.UserSoundtracks(childComplexity, args["id"].(string), args["filter"].(models.UserSoundtracksFilter)), true
 
 	case "Soundtrack.audioURL":
 		if e.complexity.Soundtrack.AudioURL == nil {
@@ -400,19 +400,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.VisitedAt(childComplexity), true
 
-	case "UserTracksResponse.soundtracks":
-		if e.complexity.UserTracksResponse.Soundtracks == nil {
+	case "UserSoundtracksResponse.soundtracks":
+		if e.complexity.UserSoundtracksResponse.Soundtracks == nil {
 			break
 		}
 
-		return e.complexity.UserTracksResponse.Soundtracks(childComplexity), true
+		return e.complexity.UserSoundtracksResponse.Soundtracks(childComplexity), true
 
-	case "UserTracksResponse.total":
-		if e.complexity.UserTracksResponse.Total == nil {
+	case "UserSoundtracksResponse.total":
+		if e.complexity.UserSoundtracksResponse.Total == nil {
 			break
 		}
 
-		return e.complexity.UserTracksResponse.Total(childComplexity), true
+		return e.complexity.UserSoundtracksResponse.Total(childComplexity), true
 
 	}
 	return 0, false
@@ -423,10 +423,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := executionContext{rc, e}
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAddSoundtrackInput,
-		ec.unmarshalInputAddTrackToUserInput,
-		ec.unmarshalInputDeleteTrackFromUserInput,
+		ec.unmarshalInputAttachSoundtrackInput,
 		ec.unmarshalInputSoundtracksFilter,
-		ec.unmarshalInputUserTracksFilter,
+		ec.unmarshalInputUnattachSoundtrackInput,
+		ec.unmarshalInputUserSoundtracksFilter,
 	)
 	first := true
 
@@ -560,36 +560,37 @@ input AddSoundtrackInput {
 }
 
 union UserResult = User | NotFound
-union UserTracksResult = UserTracksResponse | NotFound
+union UserSoundtracksResult = UserSoundtracksResponse | NotFound
 
 extend type Query {
   user(id: ID!): UserResult @hasRole(role: ADMIN)
-  userTracks(id: ID!, filter: UserTracksFilter!): UserTracksResult!
-    @hasRole(role: [USER, ADMIN])
   authorizeUser(initData: String!): AuthorizationResponse!
+  userSoundtracks(
+    id: ID!
+    filter: UserSoundtracksFilter!
+  ): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
 }
 
-# AddTrackToUserResponse
 extend type Mutation {
-  addTrackToUser(input: AddTrackToUserInput!): Boolean!
-  deleteTrackFromUser(input: DeleteTrackFromUserInput!): Boolean!
+  attachSoundtrack(input: AttachSoundtrackInput!): Boolean!
+  unattachSoundtrack(input: UnattachSoundtrackInput!): Boolean!
 }
 
-input UserTracksFilter {
+input UserSoundtracksFilter {
   page: Int!
 }
 
-type UserTracksResponse {
+type UserSoundtracksResponse {
   total: Int!
   soundtracks: [Soundtrack!]!
 }
 
-input AddTrackToUserInput {
+input AttachSoundtrackInput {
   userId: String!
   trackId: String!
 }
 
-input DeleteTrackFromUserInput {
+input UnattachSoundtrackInput {
   userId: ID!
   trackId: ID!
 }
@@ -636,13 +637,13 @@ func (ec *executionContext) field_Mutation_addSoundtrack_args(ctx context.Contex
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_addTrackToUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_attachSoundtrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 models.AddTrackToUserInput
+	var arg0 models.AttachSoundtrackInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNAddTrackToUserInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAddTrackToUserInput(ctx, tmp)
+		arg0, err = ec.unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -666,13 +667,13 @@ func (ec *executionContext) field_Mutation_deleteSoundtrack_args(ctx context.Con
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_deleteTrackFromUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_unattachSoundtrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 models.DeleteTrackFromUserInput
+	var arg0 models.UnattachSoundtrackInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNDeleteTrackFromUserInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐDeleteTrackFromUserInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -756,7 +757,7 @@ func (ec *executionContext) field_Query_soundtracks_args(ctx context.Context, ra
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_userTracks_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_userSoundtracks_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
@@ -768,10 +769,10 @@ func (ec *executionContext) field_Query_userTracks_args(ctx context.Context, raw
 		}
 	}
 	args["id"] = arg0
-	var arg1 models.UserTracksFilter
+	var arg1 models.UserSoundtracksFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg1, err = ec.unmarshalNUserTracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserTracksFilter(ctx, tmp)
+		arg1, err = ec.unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1121,8 +1122,8 @@ func (ec *executionContext) fieldContext_Mutation_deleteSoundtrack(ctx context.C
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_addTrackToUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_addTrackToUser(ctx, field)
+func (ec *executionContext) _Mutation_attachSoundtrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_attachSoundtrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1135,7 +1136,7 @@ func (ec *executionContext) _Mutation_addTrackToUser(ctx context.Context, field 
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AddTrackToUser(rctx, fc.Args["input"].(models.AddTrackToUserInput))
+		return ec.resolvers.Mutation().AttachSoundtrack(rctx, fc.Args["input"].(models.AttachSoundtrackInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1152,7 +1153,7 @@ func (ec *executionContext) _Mutation_addTrackToUser(ctx context.Context, field 
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_addTrackToUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_attachSoundtrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -1169,15 +1170,15 @@ func (ec *executionContext) fieldContext_Mutation_addTrackToUser(ctx context.Con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_addTrackToUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_attachSoundtrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
 	return fc, nil
 }
 
-func (ec *executionContext) _Mutation_deleteTrackFromUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Mutation_deleteTrackFromUser(ctx, field)
+func (ec *executionContext) _Mutation_unattachSoundtrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_unattachSoundtrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1190,7 +1191,7 @@ func (ec *executionContext) _Mutation_deleteTrackFromUser(ctx context.Context, f
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteTrackFromUser(rctx, fc.Args["input"].(models.DeleteTrackFromUserInput))
+		return ec.resolvers.Mutation().UnattachSoundtrack(rctx, fc.Args["input"].(models.UnattachSoundtrackInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1207,7 +1208,7 @@ func (ec *executionContext) _Mutation_deleteTrackFromUser(ctx context.Context, f
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Mutation_deleteTrackFromUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Mutation_unattachSoundtrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Mutation",
 		Field:      field,
@@ -1224,7 +1225,7 @@ func (ec *executionContext) fieldContext_Mutation_deleteTrackFromUser(ctx contex
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_deleteTrackFromUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Mutation_unattachSoundtrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -1537,85 +1538,6 @@ func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_userTracks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_userTracks(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		directive0 := func(rctx context.Context) (interface{}, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().UserTracks(rctx, fc.Args["id"].(string), fc.Args["filter"].(models.UserTracksFilter))
-		}
-		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"USER", "ADMIN"})
-			if err != nil {
-				return nil, err
-			}
-			if ec.directives.HasRole == nil {
-				return nil, errors.New("directive hasRole is not implemented")
-			}
-			return ec.directives.HasRole(ctx, nil, directive0, role)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(models.UserTracksResult); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/adapters/graph/models.UserTracksResult`, tmp)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(models.UserTracksResult)
-	fc.Result = res
-	return ec.marshalNUserTracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserTracksResult(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_userTracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type UserTracksResult does not have child fields")
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_userTracks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_authorizeUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_authorizeUser(ctx, field)
 	if err != nil {
@@ -1671,6 +1593,85 @@ func (ec *executionContext) fieldContext_Query_authorizeUser(ctx context.Context
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_authorizeUser_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_userSoundtracks(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_userSoundtracks(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().UserSoundtracks(rctx, fc.Args["id"].(string), fc.Args["filter"].(models.UserSoundtracksFilter))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"USER", "ADMIN"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(models.UserSoundtracksResult); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/adapters/graph/models.UserSoundtracksResult`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(models.UserSoundtracksResult)
+	fc.Result = res
+	return ec.marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_userSoundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type UserSoundtracksResult does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_userSoundtracks_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -2630,8 +2631,8 @@ func (ec *executionContext) fieldContext_User_createdAt(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _UserTracksResponse_total(ctx context.Context, field graphql.CollectedField, obj *models.UserTracksResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserTracksResponse_total(ctx, field)
+func (ec *executionContext) _UserSoundtracksResponse_total(ctx context.Context, field graphql.CollectedField, obj *models.UserSoundtracksResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSoundtracksResponse_total(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2661,9 +2662,9 @@ func (ec *executionContext) _UserTracksResponse_total(ctx context.Context, field
 	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserTracksResponse_total(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserSoundtracksResponse_total(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "UserTracksResponse",
+		Object:     "UserSoundtracksResponse",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -2674,8 +2675,8 @@ func (ec *executionContext) fieldContext_UserTracksResponse_total(ctx context.Co
 	return fc, nil
 }
 
-func (ec *executionContext) _UserTracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField, obj *models.UserTracksResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_UserTracksResponse_soundtracks(ctx, field)
+func (ec *executionContext) _UserSoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField, obj *models.UserSoundtracksResponse) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_UserSoundtracksResponse_soundtracks(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2705,9 +2706,9 @@ func (ec *executionContext) _UserTracksResponse_soundtracks(ctx context.Context,
 	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_UserTracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_UserSoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "UserTracksResponse",
+		Object:     "UserSoundtracksResponse",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -4563,8 +4564,8 @@ func (ec *executionContext) unmarshalInputAddSoundtrackInput(ctx context.Context
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputAddTrackToUserInput(ctx context.Context, obj interface{}) (models.AddTrackToUserInput, error) {
-	var it models.AddTrackToUserInput
+func (ec *executionContext) unmarshalInputAttachSoundtrackInput(ctx context.Context, obj interface{}) (models.AttachSoundtrackInput, error) {
+	var it models.AttachSoundtrackInput
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -4590,42 +4591,6 @@ func (ec *executionContext) unmarshalInputAddTrackToUserInput(ctx context.Contex
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trackId"))
 			it.TrackID, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputDeleteTrackFromUserInput(ctx context.Context, obj interface{}) (models.DeleteTrackFromUserInput, error) {
-	var it models.DeleteTrackFromUserInput
-	asMap := map[string]interface{}{}
-	for k, v := range obj.(map[string]interface{}) {
-		asMap[k] = v
-	}
-
-	fieldsInOrder := [...]string{"userId", "trackId"}
-	for _, k := range fieldsInOrder {
-		v, ok := asMap[k]
-		if !ok {
-			continue
-		}
-		switch k {
-		case "userId":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
-			it.UserID, err = ec.unmarshalNID2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "trackId":
-			var err error
-
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trackId"))
-			it.TrackID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4663,8 +4628,44 @@ func (ec *executionContext) unmarshalInputSoundtracksFilter(ctx context.Context,
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUserTracksFilter(ctx context.Context, obj interface{}) (models.UserTracksFilter, error) {
-	var it models.UserTracksFilter
+func (ec *executionContext) unmarshalInputUnattachSoundtrackInput(ctx context.Context, obj interface{}) (models.UnattachSoundtrackInput, error) {
+	var it models.UnattachSoundtrackInput
+	asMap := map[string]interface{}{}
+	for k, v := range obj.(map[string]interface{}) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"userId", "trackId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "userId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userId"))
+			it.UserID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "trackId":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trackId"))
+			it.TrackID, err = ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputUserSoundtracksFilter(ctx context.Context, obj interface{}) (models.UserSoundtracksFilter, error) {
+	var it models.UserSoundtracksFilter
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -4741,17 +4742,17 @@ func (ec *executionContext) _UserResult(ctx context.Context, sel ast.SelectionSe
 	}
 }
 
-func (ec *executionContext) _UserTracksResult(ctx context.Context, sel ast.SelectionSet, obj models.UserTracksResult) graphql.Marshaler {
+func (ec *executionContext) _UserSoundtracksResult(ctx context.Context, sel ast.SelectionSet, obj models.UserSoundtracksResult) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
 		return graphql.Null
-	case models.UserTracksResponse:
-		return ec._UserTracksResponse(ctx, sel, &obj)
-	case *models.UserTracksResponse:
+	case models.UserSoundtracksResponse:
+		return ec._UserSoundtracksResponse(ctx, sel, &obj)
+	case *models.UserSoundtracksResponse:
 		if obj == nil {
 			return graphql.Null
 		}
-		return ec._UserTracksResponse(ctx, sel, obj)
+		return ec._UserSoundtracksResponse(ctx, sel, obj)
 	case models.NotFound:
 		return ec._NotFound(ctx, sel, &obj)
 	case *models.NotFound:
@@ -4840,19 +4841,19 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "addTrackToUser":
+		case "attachSoundtrack":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_addTrackToUser(ctx, field)
+				return ec._Mutation_attachSoundtrack(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "deleteTrackFromUser":
+		case "unattachSoundtrack":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_deleteTrackFromUser(ctx, field)
+				return ec._Mutation_unattachSoundtrack(ctx, field)
 			})
 
 			if out.Values[i] == graphql.Null {
@@ -4869,7 +4870,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 	return out
 }
 
-var notFoundImplementors = []string{"NotFound", "SoundtrackResult", "UserResult", "UserTracksResult"}
+var notFoundImplementors = []string{"NotFound", "SoundtrackResult", "UserResult", "UserSoundtracksResult"}
 
 func (ec *executionContext) _NotFound(ctx context.Context, sel ast.SelectionSet, obj *models.NotFound) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, notFoundImplementors)
@@ -5002,7 +5003,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "userTracks":
+		case "authorizeUser":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -5011,7 +5012,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_userTracks(ctx, field)
+				res = ec._Query_authorizeUser(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -5025,7 +5026,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "authorizeUser":
+		case "userSoundtracks":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -5034,7 +5035,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_authorizeUser(ctx, field)
+				res = ec._Query_userSoundtracks(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -5248,26 +5249,26 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 	return out
 }
 
-var userTracksResponseImplementors = []string{"UserTracksResponse", "UserTracksResult"}
+var userSoundtracksResponseImplementors = []string{"UserSoundtracksResponse", "UserSoundtracksResult"}
 
-func (ec *executionContext) _UserTracksResponse(ctx context.Context, sel ast.SelectionSet, obj *models.UserTracksResponse) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, userTracksResponseImplementors)
+func (ec *executionContext) _UserSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, obj *models.UserSoundtracksResponse) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userSoundtracksResponseImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("UserTracksResponse")
+			out.Values[i] = graphql.MarshalString("UserSoundtracksResponse")
 		case "total":
 
-			out.Values[i] = ec._UserTracksResponse_total(ctx, field, obj)
+			out.Values[i] = ec._UserSoundtracksResponse_total(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
 		case "soundtracks":
 
-			out.Values[i] = ec._UserTracksResponse_soundtracks(ctx, field, obj)
+			out.Values[i] = ec._UserSoundtracksResponse_soundtracks(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -5606,8 +5607,8 @@ func (ec *executionContext) unmarshalNAddSoundtrackInput2oasisᚋbackendᚋinter
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNAddTrackToUserInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAddTrackToUserInput(ctx context.Context, v interface{}) (models.AddTrackToUserInput, error) {
-	res, err := ec.unmarshalInputAddTrackToUserInput(ctx, v)
+func (ec *executionContext) unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx context.Context, v interface{}) (models.AttachSoundtrackInput, error) {
+	res, err := ec.unmarshalInputAttachSoundtrackInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -5653,11 +5654,6 @@ func (ec *executionContext) marshalNDate2string(ctx context.Context, sel ast.Sel
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) unmarshalNDeleteTrackFromUserInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐDeleteTrackFromUserInput(ctx context.Context, v interface{}) (models.DeleteTrackFromUserInput, error) {
-	res, err := ec.unmarshalInputDeleteTrackFromUserInput(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -5843,6 +5839,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
+func (ec *executionContext) unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx context.Context, v interface{}) (models.UnattachSoundtrackInput, error) {
+	res, err := ec.unmarshalInputUnattachSoundtrackInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx context.Context, v interface{}) (graphql.Upload, error) {
 	res, err := graphql.UnmarshalUpload(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -5858,19 +5859,19 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	return res
 }
 
-func (ec *executionContext) unmarshalNUserTracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserTracksFilter(ctx context.Context, v interface{}) (models.UserTracksFilter, error) {
-	res, err := ec.unmarshalInputUserTracksFilter(ctx, v)
+func (ec *executionContext) unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx context.Context, v interface{}) (models.UserSoundtracksFilter, error) {
+	res, err := ec.unmarshalInputUserSoundtracksFilter(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUserTracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserTracksResult(ctx context.Context, sel ast.SelectionSet, v models.UserTracksResult) graphql.Marshaler {
+func (ec *executionContext) marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx context.Context, sel ast.SelectionSet, v models.UserSoundtracksResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._UserTracksResult(ctx, sel, v)
+	return ec._UserSoundtracksResult(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

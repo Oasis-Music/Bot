@@ -93,7 +93,6 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 
 // SoundtrackByName is the resolver for the soundtrackByName field.
 func (r *queryResolver) SoundtrackByName(ctx context.Context, name string) ([]models.Soundtrack, error) {
-
 	nLn := len(name)
 
 	if nLn == 0 {
