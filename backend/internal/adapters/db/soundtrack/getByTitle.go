@@ -18,9 +18,9 @@ FROM soundtrack
 WHERE to_tsvector(title) @@ to_tsquery($1) LIMIT 7;
 `
 
-func (s *soundtrackStorage) GetByName(ctx context.Context, name string) ([]db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetByTitle(ctx context.Context, title string) ([]db.SoundtrackDTO, error) {
 
-	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, name)
+	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, title)
 	if err != nil {
 		return nil, err
 	}

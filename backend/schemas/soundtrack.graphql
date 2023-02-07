@@ -15,11 +15,11 @@ union SoundtrackResult = Soundtrack | NotFound
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
-  soundtrackByName(name: String!): [Soundtrack!]!
+  soundtrackByTitle(title: String!): [Soundtrack!]!
 }
 
 extend type Mutation {
-  addSoundtrack(input: AddSoundtrackInput!): Boolean!
+  createSoundtrack(input: CreateSoundtrackInput!): Boolean!
   deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
@@ -31,7 +31,7 @@ type SoundtracksResponse {
   soundtracks: [Soundtrack!]!
 }
 
-input AddSoundtrackInput {
+input CreateSoundtrackInput {
   title: String!
   author: String!
   coverImage: Upload

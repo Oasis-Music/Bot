@@ -12,7 +12,7 @@ type SoundtrackService interface {
 	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error)
 	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
 	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
-	GetByName(ctx context.Context, name string) ([]entity.Soundtrack, error)
+	GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error)
 }
 
 type soundtrackService struct {

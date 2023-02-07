@@ -16,7 +16,7 @@ type SoundtrackStorage interface {
 	GetSoundtrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
 	GetAllSoundtracks(ctx context.Context, filter db.SoundtrackFilterParams) ([]db.SoundtrackDTO, error)
 	CreateSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error)
-	GetByName(ctx context.Context, name string) ([]db.SoundtrackDTO, error)
+	GetByTitle(ctx context.Context, title string) ([]db.SoundtrackDTO, error)
 }
 
 func NewSoundtrackStorage(db *pgxpool.Pool) SoundtrackStorage {

@@ -13,8 +13,8 @@ import (
 	"strconv"
 )
 
-// AddSoundtrack is the resolver for the addSoundtrack field.
-func (r *mutationResolver) AddSoundtrack(ctx context.Context, input models.AddSoundtrackInput) (bool, error) {
+// CreateSoundtrack is the resolver for the createSoundtrack field.
+func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.CreateSoundtrackInput) (bool, error) {
 	return r.SoundtrackService.CreateSoundtrack(ctx, entity.NewSoundtrack{
 		Title:      input.Title,
 		Author:     input.Author,
@@ -92,16 +92,16 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 }
 
 // SoundtrackByName is the resolver for the soundtrackByName field.
-func (r *queryResolver) SoundtrackByName(ctx context.Context, name string) ([]models.Soundtrack, error) {
-	nLn := len(name)
+func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]models.Soundtrack, error) {
+	nLn := len(title)
 
 	if nLn == 0 {
-		return nil, errors.New("invalid name value")
+		return nil, errors.New("invalid title value")
 	} else if nLn > 100 {
-		return nil, errors.New("invalid name value: max 100")
+		return nil, errors.New("invalid title value: max 100")
 	}
 
-	tracks, err := r.SoundtrackService.GetByName(ctx, name)
+	tracks, err := r.SoundtrackService.GetByTitle(ctx, title)
 	if err != nil {
 		return nil, err
 	}

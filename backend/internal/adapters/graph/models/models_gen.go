@@ -22,13 +22,6 @@ type UserSoundtracksResult interface {
 	IsUserSoundtracksResult()
 }
 
-type AddSoundtrackInput struct {
-	Title      string          `json:"title"`
-	Author     string          `json:"author"`
-	CoverImage *graphql.Upload `json:"coverImage"`
-	Audiofile  graphql.Upload  `json:"audiofile"`
-}
-
 type AttachSoundtrackInput struct {
 	UserID  string `json:"userId"`
 	TrackID string `json:"trackId"`
@@ -37,6 +30,13 @@ type AttachSoundtrackInput struct {
 type AuthorizationResponse struct {
 	Token        string `json:"token"`
 	RefreshToken string `json:"refreshToken"`
+}
+
+type CreateSoundtrackInput struct {
+	Title      string          `json:"title"`
+	Author     string          `json:"author"`
+	CoverImage *graphql.Upload `json:"coverImage"`
+	Audiofile  graphql.Upload  `json:"audiofile"`
 }
 
 type NotFound struct {

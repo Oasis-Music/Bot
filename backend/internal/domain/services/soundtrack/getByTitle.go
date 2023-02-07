@@ -5,9 +5,9 @@ import (
 	"oasis/backend/internal/domain/entity"
 )
 
-func (s *soundtrackService) GetByName(ctx context.Context, name string) ([]entity.Soundtrack, error) {
+func (s *soundtrackService) GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error) {
 
-	tracks, err := s.storage.GetByName(ctx, name)
+	tracks, err := s.storage.GetByTitle(ctx, title)
 	if err != nil {
 		return nil, ErrGetAllSoundtracks
 	}
