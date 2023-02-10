@@ -10,7 +10,9 @@ import (
 
 func (s *soundtrackService) GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
 
-	track, err := s.storage.GetSoundtrack(ctx, id)
+	userID := s.extractCtxUserId(ctx)
+
+	track, err := s.storage.GetSoundtrack(ctx, id, userID)
 
 	if err == pgx.ErrNoRows {
 		return nil, ErrSoundtrackNotFound
@@ -33,6 +35,7 @@ func (s *soundtrackService) GetSoundtrack(ctx context.Context, id int32) (*entit
 		Duration:   int(track.Duration),
 		CoverImage: coverImg,
 		Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+		Attached:   track.Attached,
 		CreatorID:  track.CreatorID,
 		CreatedAt:  track.CreatedAt,
 	}, nil

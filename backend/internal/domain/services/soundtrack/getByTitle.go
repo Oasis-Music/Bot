@@ -7,7 +7,9 @@ import (
 
 func (s *soundtrackService) GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error) {
 
-	tracks, err := s.storage.GetByTitle(ctx, title)
+	userID := s.extractCtxUserId(ctx)
+
+	tracks, err := s.storage.GetByTitle(ctx, title, userID)
 	if err != nil {
 		return nil, ErrGetAllSoundtracks
 	}
@@ -30,6 +32,7 @@ func (s *soundtrackService) GetByTitle(ctx context.Context, title string) ([]ent
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
 		})
 	}

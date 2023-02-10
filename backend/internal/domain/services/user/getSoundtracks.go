@@ -44,6 +44,7 @@ func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter e
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
 			Audio:      u.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Attached:   true, // soundtracks from user playlist attached by default
 			CreatedAt:  track.CreatedAt,
 		})
 	}

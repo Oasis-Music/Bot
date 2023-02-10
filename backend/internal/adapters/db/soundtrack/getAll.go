@@ -15,7 +15,8 @@ const (
 		duration,
 		cover_image,
 		audio_file,
-		created_at
+		created_at,
+		EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $1) as attached
 	FROM soundtrack
 	`
 	ITEMS_PER_PAGE     = 15
@@ -29,7 +30,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 		fmt.Println(err)
 	}
 
-	rows, err := s.database.Query(context.Background(), query)
+	rows, err := s.database.Query(context.Background(), query, filter.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +48,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 			&i.CoverImage,
 			&i.AudioFile,
 			&i.CreatedAt,
+			&i.Attached,
 		); err != nil {
 			return nil, err
 		}

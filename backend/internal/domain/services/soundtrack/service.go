@@ -3,8 +3,10 @@ package soundtrack
 import (
 	"context"
 	"oasis/backend/internal/adapters/db/soundtrack"
+	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
 	"oasis/backend/internal/domain/entity"
+	"strconv"
 )
 
 type SoundtrackService interface {
@@ -25,4 +27,23 @@ func NewSoundtrackService(storage soundtrack.SoundtrackStorage, config *config.A
 		config:  config,
 		storage: storage,
 	}
+}
+
+func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
+
+	var userID int64 = -1
+
+	ctxUserId := ctx.Value(auth.UserID).(string)
+	if ctxUserId == auth.UnknownUserID {
+		return userID
+	}
+
+	val, err := strconv.ParseInt(ctxUserId, 10, 64)
+	if err != nil {
+		return userID
+	}
+
+	userID = val
+
+	return userID
 }

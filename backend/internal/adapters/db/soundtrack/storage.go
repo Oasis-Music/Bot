@@ -13,10 +13,10 @@ type soundtrackStorage struct {
 
 type SoundtrackStorage interface {
 	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
-	GetSoundtrack(ctx context.Context, id int32) (db.SoundtrackDTO, error)
+	GetSoundtrack(ctx context.Context, id int32, userID int64) (db.SoundtrackDTO, error)
 	GetAllSoundtracks(ctx context.Context, filter db.SoundtrackFilterParams) ([]db.SoundtrackDTO, error)
 	CreateSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error)
-	GetByTitle(ctx context.Context, title string) ([]db.SoundtrackDTO, error)
+	GetByTitle(ctx context.Context, title string, userID int64) ([]db.SoundtrackDTO, error)
 }
 
 func NewSoundtrackStorage(db *pgxpool.Pool) SoundtrackStorage {

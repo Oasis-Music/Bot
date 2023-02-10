@@ -32,6 +32,7 @@ type SoundtrackDTO struct {
 	Duration   int16
 	CoverImage dbnull.NullString
 	AudioFile  string
+	Attached   bool
 	CreatorID  int64
 	CreatedAt  time.Time
 }
@@ -100,5 +101,6 @@ type UserTracksFilterParams struct {
 }
 
 type SoundtrackFilterParams struct {
-	Page int
+	Page   int
+	UserID int64
 }

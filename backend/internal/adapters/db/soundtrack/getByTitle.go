@@ -13,14 +13,15 @@ SELECT id,
 	cover_image,
 	audio_file,
 	creator_id,
-	created_at
+	created_at,
+	EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) as attached
 FROM soundtrack
 WHERE to_tsvector(title) @@ to_tsquery($1) LIMIT 7;
 `
 
-func (s *soundtrackStorage) GetByTitle(ctx context.Context, title string) ([]db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetByTitle(ctx context.Context, title string, userID int64) ([]db.SoundtrackDTO, error) {
 
-	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, title)
+	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, title, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +41,7 @@ func (s *soundtrackStorage) GetByTitle(ctx context.Context, title string) ([]db.
 			&t.AudioFile,
 			&t.CreatorID,
 			&t.CreatedAt,
+			&t.Attached,
 		); err != nil {
 			return nil, err
 		}

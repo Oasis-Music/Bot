@@ -13,14 +13,15 @@ SELECT id,
 	cover_image,
 	audio_file,
 	creator_id,
-	created_at
+	created_at,
+	EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) as attached
 FROM soundtrack
 WHERE id = $1;
 `
 
-func (s *soundtrackStorage) GetSoundtrack(ctx context.Context, id int32) (db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetSoundtrack(ctx context.Context, id int32, userID int64) (db.SoundtrackDTO, error) {
 
-	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id)
+	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id, userID)
 
 	var dto db.SoundtrackDTO
 	err := row.Scan(
@@ -32,6 +33,7 @@ func (s *soundtrackStorage) GetSoundtrack(ctx context.Context, id int32) (db.Sou
 		&dto.AudioFile,
 		&dto.CreatorID,
 		&dto.CreatedAt,
+		&dto.Attached,
 	)
 
 	return dto, err

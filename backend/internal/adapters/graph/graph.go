@@ -116,3 +116,15 @@ func isRoleSuitable(roles []models.Role, userRole string) bool {
 	}
 	return false
 }
+
+func isUnderUserContext(ctx context.Context) bool {
+	var withUser bool
+
+	ctxUserId := ctx.Value(auth.UserID).(string)
+
+	if ctxUserId != auth.UnknownUserID {
+		withUser = true
+	}
+
+	return withUser
+}

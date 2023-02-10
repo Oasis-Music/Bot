@@ -12,6 +12,7 @@ type Soundtrack struct {
 	CoverImage *string
 	Audio      string
 	Validated  bool
+	Attached   bool
 	CreatorID  int64
 	CreatedAt  time.Time
 }

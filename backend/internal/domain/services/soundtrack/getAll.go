@@ -8,8 +8,11 @@ import (
 
 func (s *soundtrackService) GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
 
+	userID := s.extractCtxUserId(ctx)
+
 	tracks, err := s.storage.GetAllSoundtracks(ctx, db.SoundtrackFilterParams{
-		Page: filter.Page,
+		Page:   filter.Page,
+		UserID: userID,
 	})
 	if err != nil {
 		return nil, ErrGetAllSoundtracks
@@ -33,6 +36,7 @@ func (s *soundtrackService) GetAllSoundtracks(ctx context.Context, filter entity
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
 		})
 	}

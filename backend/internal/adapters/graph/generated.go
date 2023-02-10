@@ -71,6 +71,7 @@ type ComplexityRoot struct {
 	}
 
 	Soundtrack struct {
+		Attached  func(childComplexity int) int
 		AudioURL  func(childComplexity int) int
 		Author    func(childComplexity int) int
 		CoverURL  func(childComplexity int) int
@@ -273,6 +274,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.UserSoundtracks(childComplexity, args["id"].(string), args["filter"].(models.UserSoundtracksFilter)), true
+
+	case "Soundtrack.attached":
+		if e.complexity.Soundtrack.Attached == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.Attached(childComplexity), true
 
 	case "Soundtrack.audioURL":
 		if e.complexity.Soundtrack.AudioURL == nil {
@@ -518,6 +526,7 @@ type NotFound {
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
   createdAt: Date!
+  attached: Boolean
 }
 
 union SoundtrackResult = Soundtrack | NotFound
@@ -1444,6 +1453,8 @@ func (ec *executionContext) fieldContext_Query_soundtrackByTitle(ctx context.Con
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
+			case "attached":
+				return ec.fieldContext_Soundtrack_attached(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Soundtrack", field.Name)
 		},
@@ -2224,6 +2235,47 @@ func (ec *executionContext) fieldContext_Soundtrack_createdAt(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Soundtrack_attached(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_attached(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Attached, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*bool)
+	fc.Result = res
+	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_attached(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _SoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField, obj *models.SoundtracksResponse) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_SoundtracksResponse_soundtracks(ctx, field)
 	if err != nil {
@@ -2281,6 +2333,8 @@ func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(ctx con
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
+			case "attached":
+				return ec.fieldContext_Soundtrack_attached(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Soundtrack", field.Name)
 		},
@@ -2732,6 +2786,8 @@ func (ec *executionContext) fieldContext_UserSoundtracksResponse_soundtracks(ctx
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
+			case "attached":
+				return ec.fieldContext_Soundtrack_attached(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Soundtrack", field.Name)
 		},
@@ -5142,6 +5198,10 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "attached":
+
+			out.Values[i] = ec._Soundtrack_attached(ctx, field, obj)
+
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
