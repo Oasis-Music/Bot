@@ -8,3 +8,5 @@ backup:
 	pg_dump -U postgres cristal > ./init/backup.bak
 restore:
 	psql -U postgres cristal < ./init/backup.bak
+lint:
+	golangci-lint run
