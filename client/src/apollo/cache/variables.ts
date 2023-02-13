@@ -1,5 +1,5 @@
 import { makeVar } from '@apollo/client'
-import type { User, CurrentTrack, accessToken } from './types'
+import type { User, Soundtrack, CurrentTrack, accessToken } from './types'
 import jwtDecode from 'jwt-decode'
 
 // soundtrack
@@ -7,6 +7,8 @@ export const currentTrackVar = makeVar<CurrentTrack>({} as CurrentTrack)
 
 // user
 export const userVar = makeVar<User>({} as User)
+export const userPlaylistVar = makeVar<Soundtrack[]>([])
+// export const userPlaylistLoadedVar = makeVar<boolean>(false)
 
 // TODO: find better place for this
 function checkAuth(): boolean {

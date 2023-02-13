@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
 import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
@@ -18,30 +18,73 @@ import {
   CopyInfoBotton
 } from './NowPlaying.styled'
 import SvgIcon from '../../../shared/SvgIcon'
-import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../../apollo/cache/variables'
+import { useMutation, useReactiveVar } from '@apollo/client'
+import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
+import { UserMutations } from '../../../apollo/cache/mutations'
+import {
+  AttachSoundtrackMutation,
+  AttachSoundtrackVariables,
+  AttachSoundtrackDocument
+} from '../../../graphql/user/_gen_/attachSoundtrack.mutauion'
+import {
+  UnattachSoundtrackMutation,
+  UnattachSoundtrackVariables,
+  UnattachSoundtrackDocument
+} from '../../../graphql/user/_gen_/unattachSoundtrack.mutation'
 
-interface NowPlayingProps {
-  isAttached: boolean
-}
-
-const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
-  const [_, setIsAdded] = useState<boolean>(isAttached)
-  const track = useReactiveVar(currentTrackVar)
-
-  console.log('t:', track)
-
+const NowPlaying: React.FC = () => {
   const { t } = useTranslation()
-  const addButtonHandler = () => {
-    setIsAdded(true)
+  const track = useReactiveVar(currentTrackVar)
+  const user = useReactiveVar(userVar)
+
+  const [onAttachSoundtrack, attachMeta] = useMutation<
+    AttachSoundtrackMutation,
+    AttachSoundtrackVariables
+  >(AttachSoundtrackDocument, {
+    onCompleted: (data) => {
+      UserMutations.attachSoundtrack()
+    },
+    onError: (err) => {
+      console.log(err)
+    }
+  })
+
+  const [onUnattachSoundtrack, _unattachMeta] = useMutation<
+    UnattachSoundtrackMutation,
+    UnattachSoundtrackVariables
+  >(UnattachSoundtrackDocument, {
+    onCompleted: () => {
+      UserMutations.unattachSoundtrack()
+    },
+    onError: (err) => {
+      console.log(err)
+    }
+  })
+
+  const attachHandler = () => {
+    onAttachSoundtrack({
+      variables: {
+        trackId: track.id,
+        userId: user.id
+      }
+    })
+  }
+
+  const unattachHandler = () => {
+    onUnattachSoundtrack({
+      variables: {
+        trackId: track.id,
+        userId: user.id
+      }
+    })
   }
 
   return (
     <Container $isAdded={track.attached}>
       <div>
         <ImageWrapper>
-          <ImagePlaceholder src={track.coverImage} altText={track.title} />
+          <ImagePlaceholder src={track.coverURL} altText={track.title} />
         </ImageWrapper>
       </div>
       <Details>
@@ -49,7 +92,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
         <AuthorTitle>{track.author}</AuthorTitle>
         {track.attached ? (
           <ControlsWrapper>
-            <DeleteBotton>
+            <DeleteBotton onClick={unattachHandler}>
               <SvgIcon>
                 <TrashIcon />
               </SvgIcon>
@@ -68,9 +111,11 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
         ) : (
           <SaveBotton
             disabled={!!!track.id}
+            loading={attachMeta.loading}
             fullWidth
+            color="secondary"
             disableShadow
-            onClick={addButtonHandler}
+            onClick={attachHandler}
             startIcon={
               <AddIcon>
                 <PlusIcon />

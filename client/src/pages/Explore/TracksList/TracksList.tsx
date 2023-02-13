@@ -95,8 +95,8 @@ const TracksList: React.FC<TracksList> = ({ loading, tracks, hasNextPage, onNext
               title={track.title}
               author={track.author}
               duration={track.duration}
-              coverImage={track.coverURL || ''}
-              fileURL={track.audioURL}
+              coverURL={track.coverURL || ''}
+              audioURL={track.audioURL}
               isPlaying={currentTrack.id === track.id}
               isAttached={track.attached}
             />

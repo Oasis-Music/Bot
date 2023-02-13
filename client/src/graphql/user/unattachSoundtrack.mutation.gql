@@ -1,0 +1,3 @@
+mutation UnattachSoundtrack($userId: ID!, $trackId: ID!) {
+  unattachSoundtrack(input: { userId: $userId, trackId: $trackId })
+}

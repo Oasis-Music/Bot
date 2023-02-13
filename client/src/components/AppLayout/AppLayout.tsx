@@ -50,8 +50,8 @@ const AppLayout: React.FC = () => {
       })
 
       if (wavesurfer.current) {
-        if (track.fileURL) {
-          fetch(track.fileURL)
+        if (track.audioURL) {
+          fetch(track.audioURL)
             .then((response) => response.blob())
             .then((data) => {
               wavesurfer.current?.loadBlob(data)
@@ -78,7 +78,7 @@ const AppLayout: React.FC = () => {
         wavesurfer.current.destroy()
       }
     }
-  }, [track.fileURL])
+  }, [track.audioURL])
 
   const handlePlayerOpen = () => {
     setPlayerOpen(true)

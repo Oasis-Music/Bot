@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
-import { userVar, currentTrackVar } from '../../apollo/cache/variables'
+import { userVar, currentTrackVar, userPlaylistVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
   UserSoundtracksQuery,
   UserSoundtracksVariables,
   UserSoundtracksDocument
 } from '../../graphql/user/_gen_/userSoundtracks.query'
+import { UserMutations } from '../../apollo/cache/mutations'
+import type { Soundtrack } from '../../apollo/cache/types'
 import { Container, List, MountLoader } from './Home.styled'
 import { NoDataPlug, ErrorPlug } from './Plugs'
 
@@ -26,10 +28,11 @@ interface Track {
 const Home: React.FC = () => {
   const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
+  const userPlaylist = useReactiveVar(userPlaylistVar)
 
   const ITEMS_PER_PAGE = 15
 
-  const [tracks, setTracks] = useState<Track[]>([])
+  // const [tracks, setTracks] = useState<Track[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
   const [totalTracks, setTotalTracks] = useState<number>(1)
@@ -45,13 +48,16 @@ const Home: React.FC = () => {
       id: currentUser.id,
       page: currentPage
     },
+    fetchPolicy: 'network-only',
     onCompleted(q) {
       if (q.userSoundtracks.__typename === 'NotFound') {
         return
       }
       const newTracks = q.userSoundtracks.soundtracks
 
-      setTracks((prev) => [...prev, ...newTracks])
+      UserMutations.setUserPlaylist(newTracks as Soundtrack[])
+
+      // setTracks((prev) => [...prev, ...newTracks])
       setHasNextPage(q.userSoundtracks.soundtracks.length === ITEMS_PER_PAGE)
       setTotalTracks(q.userSoundtracks.total)
     }
@@ -90,7 +96,7 @@ const Home: React.FC = () => {
   if (error) {
     return (
       <Container>
-        <NowPlaying isAttached={false} />
+        <NowPlaying />
         <ErrorPlug />
       </Container>
     )
@@ -99,29 +105,31 @@ const Home: React.FC = () => {
   if (!totalTracks) {
     return (
       <Container>
-        <NowPlaying isAttached={false} />
+        <NowPlaying />
         <NoDataPlug />
       </Container>
     )
   }
 
+  const playlistLen = userPlaylist.length
+
   return (
     <Container>
-      <NowPlaying isAttached={false} />
+      <NowPlaying />
       {isMountLoad ? (
         mountPlug
       ) : (
         <List $isPlay={!!currentTrack.id}>
-          {tracks.map((track, index) => (
+          {userPlaylist.map((track, index) => (
             <PlaylistItem
-              ref={tracks.length === index + 1 ? lastTrackRef : undefined}
+              ref={playlistLen === index + 1 ? lastTrackRef : undefined}
               key={track.id}
               id={track.id}
               title={track.title}
               author={track.author}
               duration={track.duration}
-              coverImage={track.coverURL || ''}
-              fileURL={track.audioURL}
+              coverURL={track.coverURL || ''}
+              audioURL={track.audioURL}
               isPlaying={currentTrack.id === track.id}
               isAttached={track.attached}
             />

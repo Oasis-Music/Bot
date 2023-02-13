@@ -46,7 +46,7 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   return (
     <Container $open={isOpen}>
       <TopControls id={track.id} onClose={onClose} />
-      <Details title={track.title} author={track.author} coverImageURL={track.coverImage} />
+      <Details title={track.title} author={track.author} coverImage={track.coverURL} />
       <Trackline
         ref={waveContainerRef}
         currentTime={currentTime}

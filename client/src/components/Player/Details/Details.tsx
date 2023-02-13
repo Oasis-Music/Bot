@@ -7,16 +7,16 @@ import { useReactiveVar } from '@apollo/client'
 interface DetailsProps {
   title: string
   author: string
-  coverImageURL: string
+  coverImage?: string | null | undefined
 }
 
-const Details: React.FC<DetailsProps> = ({ coverImageURL, title, author }) => {
+const Details: React.FC<DetailsProps> = ({ coverImage, title, author }) => {
   const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
     <Container>
       <ImageWrapper $stopPlaying={!currentTrack.isPlaying}>
-        <ImagePlaceholder src={coverImageURL} altText={title} />
+        <ImagePlaceholder src={coverImage} altText={title} />
       </ImageWrapper>
       <Title>{title}</Title>
       <Author>{author}</Author>

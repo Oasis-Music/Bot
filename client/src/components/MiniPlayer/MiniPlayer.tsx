@@ -114,7 +114,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen, onPlayPause }) =>
     <Container $isPlaying={!!currentTrack.id}>
       <InnerContainer onClick={onPlayerOpen}>
         <ImageWrapper>
-          <ImagePlaceholder src={currentTrack.coverImage} altText={currentTrack.title} />
+          <ImagePlaceholder src={currentTrack.coverURL} altText={currentTrack.title} />
         </ImageWrapper>
         <InfoBox>
           <Title>{currentTrack.title}</Title>

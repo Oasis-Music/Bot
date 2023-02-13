@@ -1,0 +1,3 @@
+mutation AttachSoundtrack($userId: String!, $trackId: String!) {
+  attachSoundtrack(input: { userId: $userId, trackId: $trackId })
+}
