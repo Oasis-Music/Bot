@@ -132,7 +132,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     type={type}
     {...otherProps}
   >
-    {startIcon}
+    {!loading && startIcon}
     {loading ? (
       <LoaderWrapper>
         <Loader dark={color !== ButtonColor.primary} />
@@ -140,7 +140,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     ) : (
       <ButtonText>{children}</ButtonText>
     )}
-    {endIcon}
+    {!loading && endIcon}
   </BaseButton>
 )
 
