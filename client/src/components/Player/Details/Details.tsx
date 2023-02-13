@@ -16,7 +16,7 @@ const Details: React.FC<DetailsProps> = ({ coverImage, title, author }) => {
   return (
     <Container>
       <ImageWrapper $stopPlaying={!currentTrack.isPlaying}>
-        <ImagePlaceholder src={coverImage} altText={title} />
+        <ImagePlaceholder src={coverImage || ''} altText={title} />
       </ImageWrapper>
       <Title>{title}</Title>
       <Author>{author}</Author>

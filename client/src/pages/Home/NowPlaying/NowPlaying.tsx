@@ -84,7 +84,7 @@ const NowPlaying: React.FC = () => {
     <Container $isAdded={track.attached}>
       <div>
         <ImageWrapper>
-          <ImagePlaceholder src={track.coverURL} altText={track.title} />
+          <ImagePlaceholder src={track.coverURL || ''} altText={track.title} />
         </ImageWrapper>
       </div>
       <Details>
