@@ -6,4 +6,5 @@ export interface Track {
   duration: number
   coverURL?: string | null
   audioURL: string
+  attached: boolean
 }

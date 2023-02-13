@@ -10,6 +10,7 @@ export type CurrentTrack = {
   coverImage: string
   fileURL: string
   isPlaying: boolean
+  attached: boolean // without user context always - false
 }
 
 export type accessToken = {

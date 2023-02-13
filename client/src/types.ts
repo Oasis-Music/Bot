@@ -103,6 +103,7 @@ export enum Role {
 
 export type Soundtrack = {
   __typename?: 'Soundtrack'
+  attached: Scalars['Boolean']
   audioURL: Scalars['String']
   author: Scalars['String']
   coverURL?: Maybe<Scalars['String']>

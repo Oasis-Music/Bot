@@ -7,5 +7,6 @@ query SoundtrackByTitle($title: String!) {
     coverURL
     audioURL
     createdAt
+    attached
   }
 }

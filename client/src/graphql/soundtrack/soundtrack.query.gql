@@ -9,6 +9,7 @@ query GetSoundtrack($id: ID!) {
       coverURL
       audioURL
       createdAt
+      attached
     }
     ... on NotFound {
       message

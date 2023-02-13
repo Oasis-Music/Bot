@@ -21,6 +21,7 @@ export type UserSoundtracksQuery = {
           duration: number
           coverURL?: string | null
           audioURL: string
+          attached: boolean
         }>
       }
 }
@@ -59,6 +60,7 @@ export const UserSoundtracksDocument = gql`
           duration
           coverURL
           audioURL
+          attached
         }
       }
       ... on NotFound {

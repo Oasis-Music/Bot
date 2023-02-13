@@ -18,6 +18,7 @@ export type GetSoundtrackQuery = {
         coverURL?: string | null
         audioURL: string
         createdAt: string
+        attached: boolean
       }
     | null
 }
@@ -47,6 +48,7 @@ export const GetSoundtrackDocument = gql`
         coverURL
         audioURL
         createdAt
+        attached
       }
       ... on NotFound {
         message

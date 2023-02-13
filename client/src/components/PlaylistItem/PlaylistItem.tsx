@@ -13,6 +13,7 @@ interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   coverImage: string
   fileURL: string
   isPlaying: boolean
+  isAttached: boolean
 }
 
 const Container = styled.li`
@@ -54,9 +55,10 @@ const SideBox = styled.div`
 `
 
 const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemProps> = (
-  { id, title, author, duration, coverImage, fileURL, isPlaying },
+  { id, title, author, duration, coverImage, fileURL, isPlaying, isAttached },
   ref
 ) => {
+  console.log(isAttached)
   const trackClickHandler = () => {
     SoundtrackMutations.setCurrentTrack({
       id,
@@ -65,7 +67,8 @@ const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemPr
       duration,
       coverImage,
       fileURL,
-      isPlaying
+      isPlaying,
+      attached: isAttached
     })
   }
 

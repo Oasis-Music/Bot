@@ -95,6 +95,7 @@ type Soundtrack {
   validated: Boolean!
   creatorId: String!
   createdAt: Date!
+  attached: Boolean!
 }
 
 union SoundtrackResult = Soundtrack | NotFound

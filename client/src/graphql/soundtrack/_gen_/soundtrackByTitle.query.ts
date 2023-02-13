@@ -16,6 +16,7 @@ export type SoundtrackByTitleQuery = {
     coverURL?: string | null
     audioURL: string
     createdAt: string
+    attached: boolean
   }>
 }
 
@@ -34,6 +35,7 @@ export const SoundtrackByTitleDocument = gql`
       coverURL
       audioURL
       createdAt
+      attached
     }
   }
 `

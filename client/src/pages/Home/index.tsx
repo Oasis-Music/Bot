@@ -20,6 +20,7 @@ interface Track {
   duration: number
   coverURL?: string | null
   audioURL: string
+  attached: boolean
 }
 
 const Home: React.FC = () => {
@@ -122,6 +123,7 @@ const Home: React.FC = () => {
               coverImage={track.coverURL || ''}
               fileURL={track.audioURL}
               isPlaying={currentTrack.id === track.id}
+              isAttached={track.attached}
             />
           ))}
         </List>

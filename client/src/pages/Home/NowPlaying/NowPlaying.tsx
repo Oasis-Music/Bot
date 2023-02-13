@@ -27,8 +27,10 @@ interface NowPlayingProps {
 }
 
 const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
-  const [isAdded, setIsAdded] = useState<boolean>(isAttached)
+  const [_, setIsAdded] = useState<boolean>(isAttached)
   const track = useReactiveVar(currentTrackVar)
+
+  console.log('t:', track)
 
   const { t } = useTranslation()
   const addButtonHandler = () => {
@@ -36,7 +38,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
   }
 
   return (
-    <Container $isAdded={isAdded}>
+    <Container $isAdded={track.attached}>
       <div>
         <ImageWrapper>
           <ImagePlaceholder src={track.coverImage} altText={track.title} />
@@ -45,7 +47,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({ isAttached }) => {
       <Details>
         <TrackTitle>{track.title}</TrackTitle>
         <AuthorTitle>{track.author}</AuthorTitle>
-        {isAdded ? (
+        {track.attached ? (
           <ControlsWrapper>
             <DeleteBotton>
               <SvgIcon>

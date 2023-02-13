@@ -10,6 +10,7 @@ query UserSoundtracks($id: ID!, $page: Int!) {
         duration
         coverURL
         audioURL
+        attached
       }
     }
     ... on NotFound {

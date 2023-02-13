@@ -98,6 +98,7 @@ const TracksList: React.FC<TracksList> = ({ loading, tracks, hasNextPage, onNext
               coverImage={track.coverURL || ''}
               fileURL={track.audioURL}
               isPlaying={currentTrack.id === track.id}
+              isAttached={track.attached}
             />
           ))}
         </List>
