@@ -35,9 +35,6 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 
 // Soundtrack is the resolver for the soundtrack field.
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
-
-	withUserCtx := isUnderUserContext(ctx)
-
 	trackId, err := strconv.ParseInt(id, 10, 32)
 	if err != nil {
 		return nil, errors.New("invalid track id")
@@ -61,11 +58,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		AudioURL:  track.Audio,
 		CreatorID: strconv.FormatInt(track.CreatorID, 10),
 		CreatedAt: track.CreatedAt.UTC().String(),
-	}
-
-	if withUserCtx {
-		x := track.Attached
-		soundtrack.Attached = &x
+		Attached:  track.Attached,
 	}
 
 	return soundtrack, nil
@@ -73,9 +66,6 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 
 // Soundtracks is the resolver for the soundtracks field.
 func (r *queryResolver) Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error) {
-
-	withUserCtx := isUnderUserContext(ctx)
-
 	tracks, err := r.SoundtrackService.GetAllSoundtracks(ctx, entity.SoundtrackFilter{
 		Page: filter.Page,
 	})
@@ -88,13 +78,6 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 
 	for _, track := range tracks.Soundtracks {
 
-		var attached *bool
-
-		if withUserCtx {
-			x := track.Attached
-			attached = &x
-		}
-
 		soundtracks = append(soundtracks, models.Soundtrack{
 			ID:        utils.FormatInt32(track.ID),
 			Title:     track.Title,
@@ -102,7 +85,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 			Duration:  track.Duration,
 			CoverURL:  track.CoverImage,
 			AudioURL:  track.Audio,
-			Attached:  attached,
+			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
 		})
 	}
@@ -122,8 +105,6 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 		return nil, errors.New("invalid title value: max 100")
 	}
 
-	withUserCtx := isUnderUserContext(ctx)
-
 	tracks, err := r.SoundtrackService.GetByTitle(ctx, title)
 	if err != nil {
 		return nil, err
@@ -133,13 +114,6 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 
 	for _, track := range tracks {
 
-		var attached *bool
-
-		if withUserCtx {
-			x := track.Attached
-			attached = &x
-		}
-
 		soundtracks = append(soundtracks, models.Soundtrack{
 			ID:        utils.FormatInt32(track.ID),
 			Title:     track.Title,
@@ -147,7 +121,7 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 			Duration:  track.Duration,
 			CoverURL:  track.CoverImage,
 			AudioURL:  track.Audio,
-			Attached:  attached,
+			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
 		})
 	}

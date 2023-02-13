@@ -59,7 +59,7 @@ type Soundtrack struct {
 	Validated bool    `json:"validated"`
 	CreatorID string  `json:"creatorId"`
 	CreatedAt string  `json:"createdAt"`
-	Attached  *bool   `json:"attached"`
+	Attached  bool    `json:"attached"`
 }
 
 func (Soundtrack) IsSoundtrackResult() {}

@@ -526,7 +526,7 @@ type NotFound {
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
   createdAt: Date!
-  attached: Boolean
+  attached: Boolean!
 }
 
 union SoundtrackResult = Soundtrack | NotFound
@@ -2256,11 +2256,14 @@ func (ec *executionContext) _Soundtrack_attached(ctx context.Context, field grap
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*bool)
+	res := resTmp.(bool)
 	fc.Result = res
-	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Soundtrack_attached(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5202,6 +5205,9 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 
 			out.Values[i] = ec._Soundtrack_attached(ctx, field, obj)
 
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

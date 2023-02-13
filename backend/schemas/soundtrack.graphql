@@ -8,7 +8,7 @@ type Soundtrack {
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
   createdAt: Date!
-  attached: Boolean
+  attached: Boolean!
 }
 
 union SoundtrackResult = Soundtrack | NotFound
