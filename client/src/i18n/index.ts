@@ -6,7 +6,7 @@ i18n
   .use(Backend)
   .use(initReactI18next)
   .init<HttpBackendOptions>({
-    debug: process.env.NODE_ENV === 'development',
+    debug: false,
     fallbackLng: 'en',
     ns: ['translation'],
     defaultNS: 'translation',
