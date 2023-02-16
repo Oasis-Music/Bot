@@ -32,7 +32,7 @@ const (
 		s.audio_file,
 		s.created_at,
 		s.total
-   	FROM s
+   	FROM s INNER JOIN user_soundtrack us ON us.soundtrack_id = s.id AND us.user_id = $1 ORDER BY us.created_at DESC
 	`
 	ITEMS_PER_PAGE     = 15
 	PAGINATION_ERR_MSG = "invalid page"
@@ -91,7 +91,7 @@ func queryBuilder(query string, filter db.UserTracksFilterParams) (string, error
 
 	page := filter.Page - 1
 
-	query += fmt.Sprintf(" ORDER BY id LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
+	query += fmt.Sprintf(",id LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
 
 	return query, nil
 }
