@@ -6,12 +6,18 @@ prod:
 	go run ./cmd/main.go -env=prod
 gqlgen:
 	go run -mod=mod github.com/99designs/gqlgen
+lint:
+	golangci-lint run
+
+# DB
 backup:
 	pg_dump -U postgres cristal > ./init/backup.bak
 restore:
 	psql -U postgres cristal < ./init/backup.bak
-lint:
-	golangci-lint run
+docker_backup:
+	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_dump -U postgres cristal" > ./init/backup.bak
+docker_restore:
+	docker exec -i db /bin/bash -c "PGPASSWORD=postgres psql -U postgres cristal" < ./init/backup.bak
 
 # Migrations
 migrate_new:
