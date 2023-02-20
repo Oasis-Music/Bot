@@ -130,7 +130,7 @@ const Home: React.FC = () => {
               duration={track.duration}
               coverURL={track.coverURL || ''}
               audioURL={track.audioURL}
-              isPlaying={currentTrack.id === track.id}
+              isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
               isAttached={track.attached}
             />
           ))}
