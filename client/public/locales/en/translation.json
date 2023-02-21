@@ -28,6 +28,30 @@
     },
     "explore": {
       "searchInput": "I'm looking for"
+    },
+    "upload": {
+      "info": {
+        "title": "Step #1",
+        "subTitle": "Add some information about the track",
+        "titleField": "Title",
+        "authorField": "Author",
+        "nextBotton": "Continue",
+        "link": "To main",
+        "emojiAlt": "emoji - smile"
+      },
+      "cover": {
+        "title": "Шаг #2",
+        "subTitle": "Добавь изображение обложки",
+        "dropzone": {
+          "title": "Перетащи файл сюда или нажми на область",
+          "size": "Не более {{size}} KB",
+          "ext": "Формат JPEG",
+          "dimension": "До 1000×1000px"
+        },
+        "continue": "Продолжить",
+        "previewAlt": "Загруженное обложки трека"
+      },
+      "audio": {}
     }
   },
   "player": {

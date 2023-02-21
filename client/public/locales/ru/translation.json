@@ -28,6 +28,30 @@
     },
     "explore": {
       "searchInput": "Я ищу..."
+    },
+    "upload": {
+      "info": {
+        "title": "Шаг #1",
+        "subTitle": "Добавь немного информации о треке",
+        "titleField": "Название",
+        "authorField": "Автор",
+        "nextBotton": "Продолжить",
+        "link": "На главную",
+        "emojiAlt": "смайлик - улыбка"
+      },
+      "cover": {
+        "title": "Шаг #2",
+        "subTitle": "Добавь изображение обложки",
+        "dropzone": {
+          "title": "Перетащи файл сюда или нажми на область",
+          "size": "Не более {{size}} KB",
+          "ext": "Формат JPEG",
+          "dimension": "До 1000×1000px"
+        },
+        "continue": "Продолжить",
+        "previewAlt": "Загруженное обложки трека"
+      },
+      "audio": {}
     }
   },
   "player": {

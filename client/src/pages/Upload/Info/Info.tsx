@@ -4,6 +4,7 @@ import Button from '../../../shared/Button'
 import TextInput from '../../../shared/FormFields/TextInput'
 import blushEmoji from '../../../assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import { BackLinkButton } from '../StepControls'
 import history, { routeNames } from '../../../utils/history'
 
@@ -60,6 +61,7 @@ interface FieldProps {
 }
 
 const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
+  const { t } = useTranslation()
   const { errors, dirty, submitCount } = useFormikContext<FieldProps>()
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -82,13 +84,13 @@ const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
   return (
     <Container>
       <StepTitle>
-        <span>Шаг #1</span>
-        <EmojiImg src={blushEmoji} alt="смайлик -улыбка" />
+        <span>{t('pages.upload.info.title')}</span>
+        <EmojiImg src={blushEmoji} alt={t('pages.upload.info.emojiAlt')} />
       </StepTitle>
-      <Title>Добавь немного информации о треке</Title>
+      <Title>{t('pages.upload.info.subTitle')}</Title>
       <InputWrapper>
-        <TextInput name="title" placeholder="Название" />
-        <TextInput name="author" placeholder="Автор" />
+        <TextInput name="title" placeholder={t('pages.upload.info.titleField')} />
+        <TextInput name="author" placeholder={t('pages.upload.info.authorField')} />
       </InputWrapper>
       <NextBotton
         ref={ref}
@@ -97,9 +99,9 @@ const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
         disableShadow
         onClick={handleContinueClick}
       >
-        Продолжить
+        {t('pages.upload.info.nextBotton')}
       </NextBotton>
-      <BackLinkButton onClick={handlePageLeave}>На главную</BackLinkButton>
+      <BackLinkButton onClick={handlePageLeave}>{t('pages.upload.info.link')}</BackLinkButton>
     </Container>
   )
 }
