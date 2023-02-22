@@ -58,7 +58,22 @@
           "shared": "* something went wrong"
         }
       },
-      "audio": {}
+      "audio": {
+        "title": "Step #3",
+        "subTitle": "Add audio file",
+        "dropzone": {
+          "title": "Drop mp3 here or click",
+          "size": "No more than {{size}} MB",
+          "ext": "Format mp3"
+        },
+        "upload": "Upload",
+        "errors": {
+          "read": "* read error",
+          "tooLarge": "* file size more than {{size}} mb",
+          "invalidType": "* file type mp3 only",
+          "shared": "* something went wrong"
+        }
+      }
     }
   },
   "player": {

@@ -15,6 +15,7 @@ import {
   PlayBotton
 } from './Audio.styled'
 import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import Dropzone from './Dropzone/Dropzone'
 import StepControls from '../StepControls'
 
@@ -25,6 +26,7 @@ interface AudioProps {
 }
 
 const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
+  const { t } = useTranslation()
   const waveContainerRef = useRef(null)
   const wavesurfer = useRef<WaveSurfer | null>(null)
   const [audio, setAudio] = useState<File | null>(null)
@@ -94,8 +96,8 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
 
   return (
     <Container>
-      <StepTitle>Шаг #3</StepTitle>
-      <Title>Добавь аудиофайл</Title>
+      <StepTitle>{t('pages.upload.audio.title')}</StepTitle>
+      <Title>{t('pages.upload.audio.subTitle')}</Title>
       <Dropzone
         audio={audio}
         wavesurfer={wavesurfer.current}
@@ -119,7 +121,7 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
         actionButtonType="submit"
         disabled={!readyForPlay}
         loading={loading}
-        nextText="Загрузить"
+        nextText={t('pages.upload.audio.upload')}
         onBack={onPrevStep}
         onAlert={onAlert}
       />
