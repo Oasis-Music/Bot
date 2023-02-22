@@ -40,16 +40,23 @@
         "emojiAlt": "emoji - smile"
       },
       "cover": {
-        "title": "Шаг #2",
-        "subTitle": "Добавь изображение обложки",
+        "title": "Step #2",
+        "subTitle": "Add a cover image",
         "dropzone": {
-          "title": "Перетащи файл сюда или нажми на область",
-          "size": "Не более {{size}} KB",
-          "ext": "Формат JPEG",
-          "dimension": "До 1000×1000px"
+          "title": "Drag the file here or click",
+          "size": "No more than {{size}} KB",
+          "ext": "JPEG format",
+          "dimension": "Up to 1000×1000px"
         },
-        "continue": "Продолжить",
-        "previewAlt": "Загруженное обложки трека"
+        "continue": "Continue",
+        "previewAlt": "Uploaded track cover",
+        "errors": {
+          "dimensionEquals": "* width and height must be the same",
+          "dimensionMax": "* resolution exceeds 1000×1000 px",
+          "invalidType": "* file type only: .jpeg, .jpg",
+          "tooLarge": "* file is larger than {{size}} KB",
+          "shared": "* something went wrong"
+        }
       },
       "audio": {}
     }

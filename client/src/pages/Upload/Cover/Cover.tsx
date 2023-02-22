@@ -16,6 +16,7 @@ import {
   DeleteButton
 } from './Cover.styled'
 import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import SvgIcon from '../../../shared/SvgIcon'
 import StepControls from '../StepControls'
 
@@ -34,15 +35,16 @@ interface UploadedFile extends File {
 function dropzoneCodeToMsg(code: string): string {
   switch (code) {
     case 'file-invalid-type':
-      return '* тип файла только: .jpeg, .jpg'
+      return 'pages.upload.cover.errors.invalidType'
     case 'file-too-large':
-      return `* файл весит больше ${MAX_COVER_SIZE} KB`
+      return 'pages.upload.cover.errors.tooLarge'
     default:
-      return '* что-то пошло не так'
+      return 'pages.upload.cover.errors.shared'
   }
 }
 
 const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
+  const { t } = useTranslation()
   const { setFieldValue } = useFormikContext()
   const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
   const [dropError, setDropError] = useState<string>('')
@@ -79,12 +81,12 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
           h = image.height
 
         if (w !== h) {
-          setDropError('* ширина и высота должны быть одинаковы')
+          setDropError(t('pages.upload.cover.errors.dimensionEquals'))
           return
         }
 
         if (w > 1000) {
-          setDropError('* разрешение больше чем 1000×1000 px')
+          setDropError(t('pages.upload.cover.errors.dimensionMax'))
         }
       }
 
@@ -125,8 +127,8 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
 
   return (
     <Container>
-      <StepTitle>Шаг #2</StepTitle>
-      <Title>Добавь изображение обложки</Title>
+      <StepTitle>{t('pages.upload.cover.title')}</StepTitle>
+      <Title>{t('pages.upload.cover.subTitle')}</Title>
       <ContainerUpload
         {...{
           isDragActive,
@@ -141,7 +143,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
         {mainPhoto ? (
           <Preview
             src={mainPhoto.preview}
-            alt="Загруженное обложки трека"
+            alt={t('pages.upload.cover.previewAlt')}
             onLoad={() => URL.revokeObjectURL(mainPhoto.preview)}
           />
         ) : (
@@ -150,11 +152,15 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
               <CoverPlaceholderIcon />
             </PlugIcon>
             <PlugInfo>
-              <p>Перетащи файл сюда или нажми на область</p>
+              <p>{t('pages.upload.cover.dropzone.title')}</p>
               <ul>
-                <li>Не более&nbsp;{MAX_COVER_SIZE}&nbsp;KB</li>
-                <li>Формат JPEG</li>
-                <li>До 1000&#215;1000 px</li>
+                <li>
+                  {t('pages.upload.cover.dropzone.size', {
+                    size: MAX_COVER_SIZE
+                  })}
+                </li>
+                <li>{t('pages.upload.cover.dropzone.ext')}</li>
+                <li>{t('pages.upload.cover.dropzone.dimension')}</li>
               </ul>
             </PlugInfo>
           </Plug>
@@ -168,11 +174,15 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
         )}
       </ContainerUpload>
       <animated.div style={fadeStyles}>
-        <ErrorMessage>{dropError}</ErrorMessage>
+        <ErrorMessage>
+          {t(dropError, {
+            size: MAX_COVER_SIZE
+          })}
+        </ErrorMessage>
       </animated.div>
       <StepControls
         disabled={!!!mainPhoto?.size || !!dropError}
-        nextText="Продолжить"
+        nextText={t('pages.upload.cover.continue')}
         onBack={onPrevStep}
         onNext={onNextStep}
         onAlert={onAlert}
