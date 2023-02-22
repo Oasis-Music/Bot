@@ -4,6 +4,7 @@ import Modal from 'styled-react-modal'
 import sunglassesEmoji from '../../../assets/rastr/tada.png'
 import thinkingEmoji from '../../../assets/rastr/thinking.png'
 import Button from '../../../shared/Button'
+import { useTranslation } from 'react-i18next'
 import { ITheme } from '../../../utils/theme'
 
 interface FeedbackProps {
@@ -59,7 +60,11 @@ export const ActionButton = styled(Button)`
   }
 `
 
+// TODO: when error is occurred user can't leave the page retry only
+
 const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) => {
+  const { t } = useTranslation()
+
   const handleActionClick = () => {
     if (type === 'success') {
       onSubmit()
@@ -71,9 +76,19 @@ const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) 
   return (
     <StyledModal isOpen={isOpen}>
       <Image src={type === 'success' ? sunglassesEmoji : thinkingEmoji} />
-      <Title>{type === 'success' ? 'Трек успешно загружен!' : 'Что-то пошло не так'}</Title>
+      <Title>
+        {t(
+          type === 'success'
+            ? 'pages.upload.modals.feedback.successUpload'
+            : 'pages.upload.modals.feedback.uploadFail'
+        )}
+      </Title>
       <ActionButton fullWidth disableShadow color="secondary" onClick={handleActionClick}>
-        {type === 'success' ? 'Хорошо' : 'Повторить'}
+        {t(
+          type === 'success'
+            ? 'pages.upload.modals.feedback.fine'
+            : 'pages.upload.modals.feedback.retry'
+        )}
       </ActionButton>
     </StyledModal>
   )

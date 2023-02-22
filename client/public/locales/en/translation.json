@@ -36,7 +36,7 @@
         "titleField": "Title",
         "authorField": "Author",
         "nextBotton": "Continue",
-        "link": "To main",
+        "link": "Back on main",
         "emojiAlt": "emoji - smile"
       },
       "cover": {
@@ -73,6 +73,23 @@
           "invalidType": "* file type mp3 only",
           "shared": "* something went wrong"
         }
+      },
+      "modals": {
+        "alert": {
+          "title": "Leave the page?",
+          "message": "Unsaved data will be lost",
+          "yes": "Yes",
+          "stay": "Continue"
+        },
+        "feedback": {
+          "successUpload": "Track uploaded successfully!",
+          "uploadFail": "Something went wrong",
+          "fine": "Fine",
+          "retry": "Retry"
+        }
+      },
+      "shared": {
+        "toMain": "Back on main"
       }
     }
   },

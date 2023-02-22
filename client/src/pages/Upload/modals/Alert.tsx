@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import Modal from 'styled-react-modal'
 import Button from '../../../shared/Button'
+import { useTranslation } from 'react-i18next'
 import { ITheme } from '../../../utils/theme'
 
 interface AlertProps {
@@ -71,14 +72,16 @@ export const LeaveButton = styled(Button)`
 `
 
 const Alert: React.FC<AlertProps> = ({ isOpen, onLeave, onStay }) => {
+  const { t } = useTranslation()
+
   return (
     <StyledModal isOpen={isOpen}>
-      <Title>Покинуть страницу?</Title>
-      <SubTitle>Несохраненные данные будут потеряны</SubTitle>
+      <Title>{t('pages.upload.modals.alert.title')}</Title>
+      <SubTitle>{t('pages.upload.modals.alert.message')}</SubTitle>
       <Wrapper>
-        <LeaveButton onClick={onLeave}>Да</LeaveButton>
+        <LeaveButton onClick={onLeave}>{t('pages.upload.modals.alert.yes')}</LeaveButton>
         <StayButton fullWidth color="secondary" onClick={onStay}>
-          Остаться
+          {t('pages.upload.modals.alert.stay')}
         </StayButton>
       </Wrapper>
     </StyledModal>

@@ -5,6 +5,7 @@ import Button from '../../shared/Button'
 import IconButton from '../../shared/IconButton'
 import { ReactComponent as ArrowIcon } from '../../assets/svg/angle-arrow.svg'
 import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import history, { routeNames } from '../../utils/history'
 
 interface StepControlsProps {
@@ -72,6 +73,8 @@ const StepControls: React.FC<StepControlsProps> = ({
   onNext,
   onAlert
 }) => {
+  const { t } = useTranslation()
+
   const { dirty, submitCount } = useFormikContext()
 
   const handleLinkButtonClick = () => {
@@ -105,7 +108,7 @@ const StepControls: React.FC<StepControlsProps> = ({
         </NextButton>
       </ButtonWrapper>
       <BackLinkButton disableShadow onClick={handleLinkButtonClick}>
-        На главную
+        {t('pages.upload.shared.toMain')}
       </BackLinkButton>
     </>
   )
