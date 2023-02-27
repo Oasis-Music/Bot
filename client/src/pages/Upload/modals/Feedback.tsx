@@ -81,7 +81,7 @@ const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) 
             : 'pages.upload.modals.feedback.uploadFail'
         )}
       </Title>
-      <ActionButton fullWidth disableShadow color="secondary" onClick={handleActionClick}>
+      <ActionButton fullWidth color="secondary" onClick={handleActionClick}>
         {t(
           type === 'success'
             ? 'pages.upload.modals.feedback.fine'

@@ -19,7 +19,7 @@ interface BottonProps {
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  disableShadow?: boolean // TODO: rename to withoutShadow
+  withShadow?: boolean
   tabIndex?: number
   ref?: React.RefObject<HTMLButtonElement> | null
   onClick?(event: React.MouseEvent<HTMLButtonElement>): void
@@ -27,7 +27,7 @@ interface BottonProps {
 
 interface BaseButtonProps {
   $fullWidth?: boolean
-  $withoutShadow: boolean
+  $withShadow: boolean
   $color: ButtonColor
 }
 
@@ -57,14 +57,11 @@ const BaseButton = styled.button<BaseButtonProps>`
   &:focus {
     outline: none;
   }
-  ${({ $withoutShadow }) =>
-    $withoutShadow
-      ? css`
-          box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.3);
-        `
-      : css`
-          box-shadow: none;
-        `}
+  ${({ $withShadow }) =>
+    $withShadow &&
+    css`
+      box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.3);
+    `}
   ${({ $color, theme }) => {
     switch ($color) {
       case ButtonColor.primary:
@@ -115,7 +112,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     loading,
     children,
     color = ButtonColor.primary,
-    disableShadow = false,
+    withShadow = false,
     startIcon,
     endIcon,
     type = 'button',
@@ -127,7 +124,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
   <BaseButton
     ref={ref}
     $color={color as ButtonColor}
-    $withoutShadow={!disableShadow}
+    $withShadow={withShadow}
     $fullWidth={fullWidth}
     type={type}
     {...otherProps}

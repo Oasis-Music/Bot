@@ -114,7 +114,6 @@ const NowPlaying: React.FC = () => {
             loading={attachMeta.loading}
             fullWidth
             color="secondary"
-            disableShadow
             onClick={attachHandler}
             startIcon={
               <AddIcon>

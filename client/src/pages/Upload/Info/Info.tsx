@@ -96,7 +96,6 @@ const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
         ref={ref}
         disabled={!!(errors.title || errors.author)}
         color="secondary"
-        disableShadow
         onClick={handleContinueClick}
       >
         {t('pages.upload.info.nextBotton')}
