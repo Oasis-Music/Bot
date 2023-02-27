@@ -48,6 +48,7 @@
           "ext": "JPEG format",
           "dimension": "Up to 1000×1000px"
         },
+        "skip": "Skip",
         "continue": "Continue",
         "previewAlt": "Uploaded track cover",
         "errors": {

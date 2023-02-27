@@ -50,12 +50,20 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
   const [dropError, setDropError] = useState<string>('')
 
   useEffect(() => {
+    const cleanupTimer = setTimeout(() => {
+      if (dropError && !!!mainPhoto) {
+        setDropError('')
+      }
+    }, 3000)
+
     return () => {
+      clearInterval(cleanupTimer)
+
       if (mainPhoto) {
         URL.revokeObjectURL(mainPhoto.preview)
       }
     }
-  }, [])
+  }, [dropError])
 
   const fadeStyles = useSpring({
     config: { duration: 250 },
@@ -96,11 +104,8 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
   }
 
   const handleDropReject = (fileRejections: FileRejection[]) => {
-    console.log(fileRejections)
     const { errors } = fileRejections[0]
-    console.log('e', errors)
     const { code } = errors[0]
-    console.log(code)
     setDropError(dropzoneCodeToMsg(code))
   }
 
@@ -181,8 +186,10 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
         </ErrorMessage>
       </animated.div>
       <StepControls
-        disabled={!!!mainPhoto?.size || !!dropError}
-        nextText={t('pages.upload.cover.continue')}
+        disabled={!!dropError}
+        nextText={t(
+          !!dropError || !!!mainPhoto ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
+        )}
         onBack={onPrevStep}
         onNext={onNextStep}
         onAlert={onAlert}
