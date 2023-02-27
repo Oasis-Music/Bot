@@ -86,7 +86,7 @@
           "successUpload": "Track uploaded successfully!",
           "uploadFail": "Something went wrong",
           "fine": "Fine",
-          "retry": "Retry"
+          "close": "Close"
         }
       },
       "shared": {

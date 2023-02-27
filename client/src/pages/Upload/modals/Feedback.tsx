@@ -60,8 +60,6 @@ export const ActionButton = styled(Button)`
   }
 `
 
-// TODO: when error is occurred user can't leave the page retry only
-
 const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) => {
   const { t } = useTranslation()
 
@@ -87,7 +85,7 @@ const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) 
         {t(
           type === 'success'
             ? 'pages.upload.modals.feedback.fine'
-            : 'pages.upload.modals.feedback.retry'
+            : 'pages.upload.modals.feedback.close'
         )}
       </ActionButton>
     </StyledModal>
