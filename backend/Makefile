@@ -7,7 +7,7 @@ prod:
 gqlgen:
 	go run -mod=mod github.com/99designs/gqlgen
 lint:
-	golangci-lint run
+	golangci-lint run --verbose
 
 # DB
 backup:

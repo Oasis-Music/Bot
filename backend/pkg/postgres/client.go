@@ -57,5 +57,5 @@ func NewClient(ctx context.Context, config *config.AppConfig) (*pgxpool.Pool, er
 
 	}
 
-	return nil, errors.New("Postgres don't respond")
+	return nil, errors.New("postgres don't respond")
 }

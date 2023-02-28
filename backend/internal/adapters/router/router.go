@@ -31,5 +31,4 @@ func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.Auth
 	}
 
 	return r
-
 }

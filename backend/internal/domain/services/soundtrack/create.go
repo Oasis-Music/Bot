@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"math"
 	"mime/multipart"
 	"net/http"
@@ -90,7 +91,11 @@ func (s *soundtrackService) CreateSoundtrack(ctx context.Context, input entity.N
 	}
 	defer tempFile.Close()
 
-	tempFile.Write(resultBuffer.Bytes())
+	_, err = tempFile.Write(resultBuffer.Bytes())
+	if err != nil {
+		log.Println(err)
+		return false, err
+	}
 
 	fileName := tempFile.Name()
 
@@ -171,7 +176,12 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 		return "", nil, errors.New("failed to save media")
 
 	}
-	audioField.Write(audio.Bytes())
+
+	_, err = audioField.Write(audio.Bytes())
+	if err != nil {
+		fmt.Println(err)
+		return "", nil, errors.New("failed to save media")
+	}
 
 	if coverImage != nil {
 		coverImg, err := io.ReadAll(coverImage.File)
@@ -184,9 +194,13 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 		if err != nil {
 			fmt.Println(err)
 			return "", nil, errors.New("failed to save media")
-
 		}
-		coverImageField.Write(coverImg)
+
+		_, err = coverImageField.Write(coverImg)
+		if err != nil {
+			fmt.Println(err)
+			return "", nil, errors.New("failed to save media")
+		}
 	}
 
 	if err := writer.Close(); err != nil {
