@@ -110,7 +110,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 		}, nil
 	}
 
-	var soundtracks []models.Soundtrack
+	soundtracks := make([]models.Soundtrack, 0, len(tracks.Soundtracks))
 
 	for _, track := range tracks.Soundtracks {
 

@@ -26,7 +26,7 @@ func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter e
 		return nil, ErrUserTracksNotFound
 	}
 
-	var soundtracks []entity.Soundtrack
+	soundtracks := make([]entity.Soundtrack, 0, len(result.Soundtracks))
 
 	for _, track := range result.Soundtracks {
 

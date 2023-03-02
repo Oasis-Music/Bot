@@ -18,7 +18,7 @@ func (s *soundtrackService) GetAllSoundtracks(ctx context.Context, filter entity
 		return nil, ErrGetAllSoundtracks
 	}
 
-	var soundtracks []entity.Soundtrack
+	soundtracks := make([]entity.Soundtrack, 0, len(tracks))
 
 	for _, track := range tracks {
 

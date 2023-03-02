@@ -52,7 +52,7 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 
 	defer rows.Close()
 
-	var tracks []db.SoundtrackDTO
+	tracks := make([]db.SoundtrackDTO, 0, 15)
 
 	var total int64
 

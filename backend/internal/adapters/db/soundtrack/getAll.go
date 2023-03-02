@@ -37,7 +37,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 
 	defer rows.Close()
 
-	var items []db.SoundtrackDTO
+	items := make([]db.SoundtrackDTO, 0, 15)
 	for rows.Next() {
 		var i db.SoundtrackDTO
 		if err := rows.Scan(
