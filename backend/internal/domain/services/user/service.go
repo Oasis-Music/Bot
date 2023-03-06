@@ -39,17 +39,28 @@ func NewUserService(storage user.UserStorage, config *config.AppConfig, authServ
 
 func (u *userService) checkPermission(ctx context.Context, userID int64) error {
 
-	requestingUserRole := ctx.Value(auth.UserRole).(string)
+	var noAccessErr = errors.New("you have no access")
+
+	requestingUserRole, ok := ctx.Value(auth.UserRole).(string)
+	if !ok {
+		return errors.New("permission check failed")
+	}
 
 	if requestingUserRole == adminRole {
 		return nil
 	}
 
-	requestingUser := ctx.Value(auth.UserID).(string)
+	requestingUser, ok := ctx.Value(auth.UserID).(string)
+	if !ok {
+		return errors.New("invalid user id")
+	}
 
-	tokenUserId, _ := strconv.ParseInt(requestingUser, 10, 64) // INFO: 0 int64 is not real user ID
+	tokenUserId, err := strconv.ParseInt(requestingUser, 10, 64) // INFO: 0 int64 is not real user ID
+	if err != nil {
+		return noAccessErr
+	}
 	if tokenUserId != userID {
-		return errors.New("you have no access")
+		return noAccessErr
 	}
 
 	return nil

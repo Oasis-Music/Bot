@@ -106,19 +106,19 @@ func (s *soundtrackService) CreateSoundtrack(ctx context.Context, input entity.N
 
 	probe.Stdout = &ffprobeBuf
 
-	if err := probe.Start(); err != nil {
+	if err = probe.Start(); err != nil {
 		fmt.Println(err)
 		return false, err
 	}
 
-	if err := probe.Wait(); err != nil {
+	if err = probe.Wait(); err != nil {
 		fmt.Println(err)
 		return false, err
 	}
 
 	var data ProbeData
 
-	if err := json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
+	if err = json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
 		fmt.Println(err)
 		return false, err
 	}

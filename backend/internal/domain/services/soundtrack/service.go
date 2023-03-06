@@ -33,7 +33,10 @@ func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
 
 	var userID int64 = -1
 
-	ctxUserId := ctx.Value(auth.UserID).(string)
+	ctxUserId, ok := ctx.Value(auth.UserID).(string)
+	if !ok {
+		return -1
+	}
 	if ctxUserId == auth.UnknownUserID {
 		return userID
 	}

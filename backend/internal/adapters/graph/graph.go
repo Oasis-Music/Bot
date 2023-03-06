@@ -64,16 +64,21 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
 
-		tokenUserId := ctx.Value(auth.UserID).(string)
+		var gqlUnauthErr = &gqlerror.Error{
+			Path:    graphql.GetPath(ctx),
+			Message: "unauthorized user",
+			Extensions: map[string]interface{}{
+				"code": "401",
+			},
+		}
+
+		tokenUserId, ok := ctx.Value(auth.UserID).(string)
+		if !ok {
+			return nil, gqlUnauthErr
+		}
 
 		if tokenUserId == auth.UnknownUserID {
-			return nil, &gqlerror.Error{
-				Path:    graphql.GetPath(ctx),
-				Message: "unauthorized user",
-				Extensions: map[string]interface{}{
-					"code": "401",
-				},
-			}
+			return nil, gqlUnauthErr
 		}
 
 		userID, err := strconv.ParseInt(tokenUserId, 10, 64)

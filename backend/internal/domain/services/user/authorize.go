@@ -50,7 +50,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 
 	var userData entity.UserInitData
 
-	if err := json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
+	if err = json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
 		fmt.Println(err)
 		return nil, ErrInitDataInvalid
 	}
@@ -106,7 +106,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 	isChanged, updatedUserData := isInitDataDifferent(userData, user)
 	if isChanged {
 		fmt.Println("user data is different")
-		_, err := u.storage.UpdateUser(ctx, updatedUserData)
+		_, err = u.storage.UpdateUser(ctx, updatedUserData)
 		if err != nil {
 			fmt.Println(err)
 			return nil, ErrIternalAuthorizationError
