@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func (s *soundtrackService) DeleteSoundtrack(ctx context.Context, id int32) (bool, error) {
+func (s *soundtrackUseCase) DeleteSoundtrack(ctx context.Context, id int32) (bool, error) {
 
 	// TODO: delete from S3 first
 

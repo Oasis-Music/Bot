@@ -10,7 +10,7 @@ import (
 	"oasis/backend/internal/adapters/graph/models"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
-	"oasis/backend/internal/domain/services/user"
+	"oasis/backend/internal/useCase/user"
 	"oasis/backend/internal/utils"
 	"time"
 
@@ -24,18 +24,18 @@ import (
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
 
-func NewHandler(userService *user.UserService, rootComposite composites.RootComposite) http.Handler {
+func NewHandler(rootComposite composites.RootComposite) http.Handler {
 
 	resolver := &Resolver{
-		SoundtrackService: rootComposite.SoundtrackComposite.Service,
-		UserService:       rootComposite.UserComposite.Service,
+		SoundtrackUC: rootComposite.SoundtrackComposite.UseCase,
+		UserUC:       rootComposite.UserComposite.UseCase,
 	}
 
 	config := Config{
 		Resolvers: resolver,
 	}
 
-	config.Directives.HasRole = hasRoleDirectiveHandler(rootComposite.UserComposite.Service)
+	config.Directives.HasRole = hasRoleDirectiveHandler(rootComposite.UserComposite.UseCase)
 
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 
@@ -61,7 +61,7 @@ func NewHandler(userService *user.UserService, rootComposite composites.RootComp
 	return srv
 }
 
-func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
+func hasRoleDirectiveHandler(userUseCase user.UseCase) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
 
 		var gqlUnauthErr = &gqlerror.Error{
@@ -86,7 +86,7 @@ func hasRoleDirectiveHandler(userService user.UserService) directiveHandler {
 			return nil, errors.New("wrong user id")
 		}
 
-		userRole, err := userService.GetRole(ctx, userID)
+		userRole, err := userUseCase.GetRole(ctx, userID)
 		if err != nil {
 			return nil, &gqlerror.Error{
 				Path:    graphql.GetPath(ctx),

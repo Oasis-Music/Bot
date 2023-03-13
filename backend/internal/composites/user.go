@@ -4,21 +4,23 @@ import (
 	userStorage "oasis/backend/internal/adapters/db/user"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
-	"oasis/backend/internal/domain/services/user"
+	"oasis/backend/internal/useCase/user"
+
+	// "oasis/backend/internal/domain/services/user"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type UserComposite struct {
 	WARNSotage userStorage.UserStorage
-	Service    user.UserService
+	UseCase    user.UseCase
 }
 
 func NewUserComposite(db *pgxpool.Pool, config *config.AppConfig, authService auth.AuthService) UserComposite {
 	storage := userStorage.NewUserStorage(db)
-	service := user.NewUserService(storage, config, authService)
+	useCase := user.New(storage, config, authService)
 	return UserComposite{
-		Service:    service,
+		UseCase:    useCase,
 		WARNSotage: storage,
 	}
 }

@@ -8,20 +8,21 @@ import (
 	"context"
 	"errors"
 	"oasis/backend/internal/adapters/graph/models"
-	"oasis/backend/internal/domain/entity"
-	soundtrackUc "oasis/backend/internal/domain/services/soundtrack"
+	"oasis/backend/internal/entity"
+	"oasis/backend/internal/useCase/soundtrack"
 	"oasis/backend/internal/utils"
 	"strconv"
 )
 
 // CreateSoundtrack is the resolver for the createSoundtrack field.
 func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.CreateSoundtrackInput) (bool, error) {
-	return r.SoundtrackService.CreateSoundtrack(ctx, entity.NewSoundtrack{
+	return r.SoundtrackUC.CreateSoundtrack(ctx, entity.NewSoundtrack{
 		Title:      input.Title,
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),
 		Audiofile:  entity.Upload(input.Audiofile),
 	})
+
 }
 
 // DeleteSoundtrack is the resolver for the deleteSoundtrack field.
@@ -31,7 +32,7 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 		return false, errors.New("invalid track id")
 	}
 
-	return r.SoundtrackService.DeleteSoundtrack(ctx, trackId)
+	return r.SoundtrackUC.DeleteSoundtrack(ctx, trackId)
 }
 
 // Soundtrack is the resolver for the soundtrack field.
@@ -41,8 +42,8 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		return nil, errors.New("invalid track id")
 	}
 
-	track, err := r.SoundtrackService.GetSoundtrack(ctx, int32(trackId))
-	if errors.Is(err, soundtrackUc.ErrSoundtrackNotFound) {
+	track, err := r.SoundtrackUC.GetSoundtrack(ctx, int32(trackId))
+	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
 		}, nil
@@ -67,7 +68,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 
 // Soundtracks is the resolver for the soundtracks field.
 func (r *queryResolver) Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error) {
-	tracks, err := r.SoundtrackService.GetAllSoundtracks(ctx, entity.SoundtrackFilter{
+	tracks, err := r.SoundtrackUC.GetAllSoundtracks(ctx, entity.SoundtrackFilter{
 		Page: filter.Page,
 	})
 
@@ -106,7 +107,7 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 		return nil, errors.New("invalid title value: max 100")
 	}
 
-	tracks, err := r.SoundtrackService.GetByTitle(ctx, title)
+	tracks, err := r.SoundtrackUC.GetByTitle(ctx, title)
 	if err != nil {
 		return nil, err
 	}

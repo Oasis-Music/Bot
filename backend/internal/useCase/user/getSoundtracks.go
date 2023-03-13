@@ -4,10 +4,10 @@ import (
 	"context"
 	"log"
 	"oasis/backend/internal/adapters/db"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 )
 
-func (u *userService) GetSoundtracks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
+func (u *userUseCase) GetSoundtracks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
 
 	if err := u.checkPermission(ctx, userID); err != nil {
 		return nil, err

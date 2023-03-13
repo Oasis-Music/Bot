@@ -3,10 +3,10 @@ package user
 import (
 	"context"
 	"oasis/backend/internal/adapters/db"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 )
 
-func (u *userService) UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error) {
+func (u *userUseCase) UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error) {
 
 	affectedRows, err := u.storage.UnattachSoundtrack(ctx, db.UnattachSoundtrackParams{
 		UserId:  input.UserID,

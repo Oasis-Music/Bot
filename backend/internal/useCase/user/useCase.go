@@ -6,7 +6,7 @@ import (
 	"oasis/backend/internal/adapters/db/user"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 	"strconv"
 )
 
@@ -14,7 +14,7 @@ const (
 	adminRole = "admin"
 )
 
-type UserService interface {
+type UseCase interface {
 	Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error)
 	GetUser(ctx context.Context, id int64) (*entity.User, error)
 	GetRole(ctx context.Context, id int64) (string, error)
@@ -23,21 +23,21 @@ type UserService interface {
 	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
 }
 
-type userService struct {
+type userUseCase struct {
 	config  *config.AppConfig
 	storage user.UserStorage
 	auth    auth.AuthService
 }
 
-func NewUserService(storage user.UserStorage, config *config.AppConfig, authService auth.AuthService) UserService {
-	return &userService{
+func New(storage user.UserStorage, config *config.AppConfig, authService auth.AuthService) UseCase {
+	return &userUseCase{
 		storage: storage,
 		config:  config,
 		auth:    authService,
 	}
 }
 
-func (u *userService) checkPermission(ctx context.Context, userID int64) error {
+func (u *userUseCase) checkPermission(ctx context.Context, userID int64) error {
 
 	var noAccessErr = errors.New("you have no access")
 

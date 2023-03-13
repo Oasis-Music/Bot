@@ -16,7 +16,7 @@ import (
 
 	"oasis/backend/internal/adapters/db"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 )
 
 type Tags map[string]interface{}
@@ -46,7 +46,7 @@ func trackDurationToInt16(d float64) (int16, error) {
 	return int16(math.Round(d)), nil
 }
 
-func (s *soundtrackService) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error) {
+func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error) {
 
 	buf, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
@@ -165,7 +165,7 @@ func (s *soundtrackService) CreateSoundtrack(ctx context.Context, input entity.N
 	return true, nil
 }
 
-func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
+func (s *soundtrackUseCase) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
 
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)

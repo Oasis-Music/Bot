@@ -8,8 +8,8 @@ import (
 	"context"
 	"errors"
 	"oasis/backend/internal/adapters/graph/models"
-	entityDomain "oasis/backend/internal/domain/entity"
-	userUc "oasis/backend/internal/domain/services/user"
+	"oasis/backend/internal/entity"
+	userUC "oasis/backend/internal/useCase/user"
 	"strconv"
 )
 
@@ -25,7 +25,7 @@ func (r *mutationResolver) AttachSoundtrack(ctx context.Context, input models.At
 		return false, errors.New("invalid track ID")
 	}
 
-	return r.UserService.AttachSoundtrack(ctx, entityDomain.AttachSoundtrackToUserParams{
+	return r.UserUC.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
 		UserID:  userId,
 		TrackID: int32(trackId),
 	})
@@ -43,7 +43,7 @@ func (r *mutationResolver) UnattachSoundtrack(ctx context.Context, input models.
 		return false, errors.New("invalid track ID")
 	}
 
-	return r.UserService.UnattachSoundtrack(ctx, entityDomain.UnattachSoundtrackFromUserParams{
+	return r.UserUC.UnattachSoundtrack(ctx, entity.UnattachSoundtrackFromUserParams{
 		UserID:  userId,
 		TrackID: int32(trackId),
 	})
@@ -56,8 +56,8 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 		return nil, errors.New("invalid user id")
 	}
 
-	user, err := r.UserService.GetUser(ctx, parsedId)
-	if errors.Is(err, userUc.ErrUserNotFound) {
+	user, err := r.UserUC.GetUser(ctx, parsedId)
+	if errors.Is(err, userUC.ErrUserNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
 		}, nil
@@ -79,7 +79,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 
 // AuthorizeUser is the resolver for the authorizeUser field.
 func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
-	authResp, err := r.UserService.Authorize(ctx, initData)
+	authResp, err := r.UserUC.Authorize(ctx, initData)
 	if err != nil {
 		return nil, err
 	}
@@ -97,10 +97,10 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 		return nil, errors.New("invalid user id")
 	}
 
-	tracks, err := r.UserService.GetSoundtracks(ctx, userId, entityDomain.UserTracksFilter{
+	tracks, err := r.UserUC.GetSoundtracks(ctx, userId, entity.UserTracksFilter{
 		Page: filter.Page,
 	})
-	if errors.Is(err, userUc.ErrUserTracksNotFound) {
+	if errors.Is(err, userUC.ErrUserTracksNotFound) {
 		return models.UserSoundtracksResponse{
 			Total:       0,
 			Soundtracks: nil,

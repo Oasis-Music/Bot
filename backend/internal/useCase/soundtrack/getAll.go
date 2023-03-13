@@ -2,19 +2,23 @@ package soundtrack
 
 import (
 	"context"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/entity"
 )
 
-func (s *soundtrackService) GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error) {
+func (s *soundtrackUseCase) GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
 
 	userID := s.extractCtxUserId(ctx)
 
-	tracks, err := s.storage.GetByTitle(ctx, title, userID)
+	tracks, err := s.storage.GetAllSoundtracks(ctx, db.SoundtrackFilterParams{
+		Page:   filter.Page,
+		UserID: userID,
+	})
 	if err != nil {
 		return nil, ErrGetAllSoundtracks
 	}
 
-	var soundtracks []entity.Soundtrack
+	soundtracks := make([]entity.Soundtrack, 0, len(tracks))
 
 	for _, track := range tracks {
 
@@ -37,6 +41,7 @@ func (s *soundtrackService) GetByTitle(ctx context.Context, title string) ([]ent
 		})
 	}
 
-	return soundtracks, nil
-
+	return &entity.SoundtrackList{
+		Soundtracks: soundtracks,
+	}, nil
 }

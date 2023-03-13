@@ -2,6 +2,7 @@ package soundtrack
 
 import "errors"
 
+// TODO: separe
 var (
 	ErrSoundtrackNotFound       = errors.New("soundtrack not found")
 	ErrFailedToFetchSoundtrack  = errors.New("internal: failed to fetch soundtrack")

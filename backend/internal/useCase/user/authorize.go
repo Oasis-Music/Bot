@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"oasis/backend/internal/adapters/db"
 	dbnull "oasis/backend/internal/adapters/db/db-null"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 	"time"
 
 	"github.com/jackc/pgx/v4"
@@ -19,7 +19,7 @@ import (
 
 const telegramSeed = "WebAppData"
 
-func (u *userService) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
+func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
 		return nil, ErrInitDataInvalid
 	}
@@ -191,7 +191,7 @@ func isInitDataDifferent(tgUser entity.UserInitData, dbUser db.UserDTO) (bool, d
 	return isChanged, updatedUser
 }
 
-func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
+func (u *userUseCase) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
 
 	rawTokenPair, err := u.auth.CreateJwtPair(userID, firstName)
 	if err != nil {

@@ -5,11 +5,11 @@ import (
 	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 	"strconv"
 )
 
-type SoundtrackService interface {
+type UseCase interface {
 	DeleteSoundtrack(ctx context.Context, id int32) (bool, error)
 	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error)
 	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
@@ -17,19 +17,19 @@ type SoundtrackService interface {
 	GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error)
 }
 
-type soundtrackService struct {
+type soundtrackUseCase struct {
 	config  *config.AppConfig
 	storage soundtrack.SoundtrackStorage
 }
 
-func NewSoundtrackService(storage soundtrack.SoundtrackStorage, config *config.AppConfig) SoundtrackService {
-	return &soundtrackService{
+func New(storage soundtrack.SoundtrackStorage, config *config.AppConfig) UseCase {
+	return &soundtrackUseCase{
 		config:  config,
 		storage: storage,
 	}
 }
 
-func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
+func (s *soundtrackUseCase) extractCtxUserId(ctx context.Context) int64 {
 
 	var userID int64 = -1
 

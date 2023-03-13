@@ -2,12 +2,12 @@ package user
 
 import (
 	"context"
-	"oasis/backend/internal/domain/entity"
+	"oasis/backend/internal/entity"
 
 	"github.com/jackc/pgx/v4"
 )
 
-func (u *userService) GetUser(ctx context.Context, id int64) (*entity.User, error) {
+func (u *userUseCase) GetUser(ctx context.Context, id int64) (*entity.User, error) {
 
 	user, err := u.storage.GetUser(ctx, id)
 	if err == pgx.ErrNoRows {

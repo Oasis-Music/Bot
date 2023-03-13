@@ -2,6 +2,7 @@ package user
 
 import "errors"
 
+// TODO: separate
 var (
 	ErrUserNotFound              = errors.New("user not found")
 	ErrInitDataInvalid           = errors.New("initData string invalid")
