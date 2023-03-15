@@ -97,7 +97,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 		return nil, errors.New("invalid user id")
 	}
 
-	tracks, err := r.UserUC.GetSoundtracks(ctx, userId, entity.UserTracksFilter{
+	tracks, err := r.UserUC.GetSoundtracks(ctx, userId, entity.UserTracksOptions{
 		Page: filter.Page,
 	})
 	if errors.Is(err, userUC.ErrUserTracksNotFound) {

@@ -17,15 +17,26 @@ type Soundtrack struct {
 	CreatedAt  time.Time
 }
 
-type NewSoundtrack struct {
+type NewSoundtrackInput struct {
 	Title      string
 	Author     string
 	CoverImage *Upload
 	Audiofile  Upload
 }
 
+type NewSoundtrack struct {
+	Title       string
+	Author      string
+	Duration    int16
+	CoverImage  *string
+	AudioFile   string
+	IsValidated bool
+	CreatorID   int64
+}
+
 type SoundtrackFilter struct {
-	Page int
+	Page   int
+	UserID int64
 }
 
 type SoundtrackList struct {

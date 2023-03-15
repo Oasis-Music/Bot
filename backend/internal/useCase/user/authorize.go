@@ -9,8 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"oasis/backend/internal/adapters/db"
-	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"oasis/backend/internal/entity"
 	"time"
 
@@ -61,33 +59,33 @@ func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.U
 	if err == pgx.ErrNoRows {
 		fmt.Println("user not found, create...")
 
-		var dBNewUser db.CreateUserParams
+		var newUser entity.NewUser
 
-		dBNewUser.ID = userData.Id
-		dBNewUser.FirstName = userData.FirstName
-		dBNewUser.Role = db.UserRole
+		newUser.ID = userData.Id
+		newUser.FirstName = userData.FirstName
+		newUser.Role = "user" // TODO: make enum dBNewUser.Role = db.UserRole
 
 		if userData.LastName != "" {
-			dBNewUser.LastName = dbnull.NewNullString(userData.LastName, true)
+			newUser.LastName = &userData.LastName
 		}
 
 		if userData.Username != "" {
-			dBNewUser.Username = dbnull.NewNullString(userData.Username, true)
+			newUser.Username = &userData.Username
 		}
 
 		if userData.LanguageCode != "" {
-			dBNewUser.LanguageCode = dbnull.NewNullString(userData.LanguageCode, true)
+			newUser.LanguageCode = &userData.LanguageCode
 		}
 
-		newUser, err := u.storage.CreateUser(ctx, dBNewUser)
+		createdUser, err := u.storage.CreateUser(ctx, newUser)
 		if err != nil {
 			fmt.Println("Error during creation new user")
 			return nil, err
 		}
 
-		fmt.Printf("created new user: %s\n", newUser.FirstName)
+		fmt.Printf("created new user: %s\n", createdUser.FirstName)
 
-		at, rt, err := u.genTokenPairandSave(ctx, newUser.ID, newUser.FirstName)
+		at, rt, err := u.genTokenPairandSave(ctx, createdUser.ID, createdUser.FirstName)
 		if err != nil {
 			fmt.Println("last visit date update:", err)
 			return nil, ErrIternalAuthorizationError
@@ -149,42 +147,46 @@ func signData(msg, key []byte) []byte {
 	return mac.Sum(nil)
 }
 
-func isInitDataDifferent(tgUser entity.UserInitData, dbUser db.UserDTO) (bool, db.UpdateUserParams) {
+func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, entity.UserUpdate) {
+
+	// fmt.Printf("%+v\n", tgUser)
 
 	var isChanged bool
 
-	updatedUser := db.UpdateUserParams{
-		ID:           dbUser.ID,
-		FirstName:    dbUser.FirstName,
-		LastName:     dbUser.LastName,
-		Username:     dbUser.Username,
-		LanguageCode: dbUser.LanguageCode,
+	updatedUser := entity.UserUpdate{
+		ID:           user.ID,
+		FirstName:    user.FirstName,
+		LastName:     user.LastName,
+		Username:     user.Username,
+		LanguageCode: user.LanguageCode,
 		VisitedAt:    time.Now(),
 	}
 
-	if tgUser.FirstName != dbUser.FirstName {
+	if tgUser.FirstName != user.FirstName {
 		isChanged = true
 		updatedUser.FirstName = tgUser.FirstName
 	}
 
-	if tgUser.LastName != dbUser.LastName.ValueOrDefault() {
+	if tgUser.LastName != user.GetLastNameValue() {
+		fmt.Println("1 GetLastNameValue")
 		if tgUser.LastName != "" {
+			fmt.Println("1 GetLastNameValue")
 			isChanged = true
-			updatedUser.LastName = dbnull.NewNullString(tgUser.LastName, true)
+			updatedUser.LastName = &tgUser.LastName
 		}
 	}
 
-	if tgUser.Username != dbUser.Username.ValueOrDefault() {
+	if tgUser.Username != user.GetUsernameValue() {
 		if tgUser.Username != "" {
 			isChanged = true
-			updatedUser.Username = dbnull.NewNullString(tgUser.Username, true)
+			updatedUser.Username = &tgUser.Username
 		}
 	}
 
-	if tgUser.LanguageCode != dbUser.LanguageCode.ValueOrDefault() {
+	if tgUser.LanguageCode != user.GetLanguageCodeValue() {
 		if tgUser.LanguageCode != "" {
 			isChanged = true
-			updatedUser.LanguageCode = dbnull.NewNullString(tgUser.LanguageCode, true)
+			updatedUser.LanguageCode = &tgUser.LanguageCode
 		}
 	}
 

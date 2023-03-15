@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 	"net/http"
-	authStorage "oasis/backend/internal/adapters/db/auth"
 	"oasis/backend/internal/config"
+	authStorage "oasis/backend/internal/repo/storage/postgres/auth"
 	"time"
 
 	"github.com/jackc/pgx/v4/pgxpool"

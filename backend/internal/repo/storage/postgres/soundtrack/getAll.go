@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/entity"
+	"oasis/backend/internal/repo/storage/postgres"
 )
 
 const (
@@ -23,7 +24,7 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.SoundtrackFilterParams) ([]db.SoundtrackDTO, error) {
+func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error) {
 
 	query, err := queryBuilder(ALL_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
@@ -37,9 +38,9 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 
 	defer rows.Close()
 
-	items := make([]db.SoundtrackDTO, 0, 15)
+	dbSoundtracks := make([]postgres.SoundtrackDTO, 0, 15)
 	for rows.Next() {
-		var i db.SoundtrackDTO
+		var i postgres.SoundtrackDTO
 		if err := rows.Scan(
 			&i.ID,
 			&i.Title,
@@ -52,7 +53,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		dbSoundtracks = append(dbSoundtracks, i)
 	}
 	// TODO: rows.Close() no value error ???
 	// if err := rows.Close(); err != nil {
@@ -62,10 +63,33 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter db.Sou
 		return nil, err
 	}
 
-	return items, nil
+	soundtracks := make([]entity.Soundtrack, 0, len(dbSoundtracks))
+
+	for _, track := range dbSoundtracks {
+
+		var coverImg *string
+
+		if track.CoverImage.Valid {
+			path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
+			coverImg = &path
+		}
+
+		soundtracks = append(soundtracks, entity.Soundtrack{
+			ID:         track.ID,
+			Title:      track.Title,
+			Author:     track.Author,
+			Duration:   int(track.Duration),
+			CoverImage: coverImg,
+			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Attached:   track.Attached,
+			CreatedAt:  track.CreatedAt,
+		})
+	}
+
+	return soundtracks, nil
 }
 
-func queryBuilder(query string, filter db.SoundtrackFilterParams) (string, error) {
+func queryBuilder(query string, filter entity.SoundtrackFilter) (string, error) {
 
 	if filter.Page <= 0 {
 		return "", errors.New("param 'page' must not be negative or zero")

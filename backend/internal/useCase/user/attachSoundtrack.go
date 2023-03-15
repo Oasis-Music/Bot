@@ -2,22 +2,19 @@ package user
 
 import (
 	"context"
-	"oasis/backend/internal/adapters/db"
 	"oasis/backend/internal/entity"
+	"oasis/backend/internal/repo/storage/postgres"
 )
 
 func (u *userUseCase) AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error) {
 
-	err := u.storage.AttachSoundtrack(ctx, db.AttachSoundtrackParams{
-		UserId:  input.UserID,
-		TrackId: input.TrackID,
-	})
+	err := u.storage.AttachSoundtrack(ctx, input)
 
 	if err != nil {
 		switch err {
-		case db.DuplicateKeyError:
+		case postgres.DuplicateKeyError:
 			return false, ErrTrackAlreadyAttached
-		case db.KeyIsNotPresentError:
+		case postgres.KeyIsNotPresentError:
 			return false, ErrUserOrTrackNotPresent
 		default:
 			return false, ErrTrackAttachment

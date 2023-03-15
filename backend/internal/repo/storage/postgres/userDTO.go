@@ -1,4 +1,4 @@
-package db
+package postgres
 
 type UserTracksResult struct {
 	Total       int64

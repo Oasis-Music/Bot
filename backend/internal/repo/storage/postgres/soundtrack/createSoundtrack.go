@@ -2,7 +2,8 @@ package soundtrack
 
 import (
 	"context"
-	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/entity"
+	dbnull "oasis/backend/internal/repo/storage/postgres/db-null"
 )
 
 const ADD_NEW_SOUNDTRACK = `
@@ -20,15 +21,22 @@ const ADD_NEW_SOUNDTRACK = `
 	RETURNING id
 `
 
-func (s *soundtrackStorage) CreateSoundtrack(ctx context.Context, params db.NewSoundtrackParams) (int32, error) {
+func (s *soundtrackStorage) CreateSoundtrack(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
+
+	soundtrackCover := dbnull.NewNullString("", false)
+
+	if params.CoverImage != nil {
+		soundtrackCover = dbnull.NewNullString(*params.CoverImage, true)
+	}
+
 	row := s.database.QueryRow(context.Background(), ADD_NEW_SOUNDTRACK,
 		params.Title,
 		params.Author,
 		params.Duration,
-		params.CoverImage,
+		soundtrackCover,
 		params.AudioFile,
 		params.IsValidated,
-		params.CreatorID,
+		params.CreatorID, // TODO: save valid user ID
 	)
 	var id int32
 	err := row.Scan(&id)

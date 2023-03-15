@@ -13,13 +13,65 @@ type User struct {
 	CreatedAt    time.Time
 }
 
+func (u *User) GetLastNameValue() string {
+	if u.LastName == nil {
+		return ""
+	}
+
+	return *u.LastName
+}
+
+func (u *User) GetUsernameValue() string {
+	if u.Username == nil {
+		return ""
+	}
+
+	return *u.Username
+}
+
+func (u *User) GetLanguageCodeValue() string {
+	if u.LanguageCode == nil {
+		return ""
+	}
+
+	return *u.LanguageCode
+}
+
+type NewUser struct {
+	ID           int64
+	FirstName    string
+	LastName     *string
+	Username     *string
+	LanguageCode *string
+	Role         string
+}
+
+type NewUserResult struct {
+	ID        int64
+	FirstName string
+}
+
 type UserAuthorization struct {
 	AccessToken  string
 	RefreshToken string
 }
 
-type UserTracksFilter struct {
+type UserTracksOptions struct {
 	Page int
+}
+
+type UserUpdate struct {
+	ID           int64
+	FirstName    string
+	LastName     *string
+	Username     *string
+	LanguageCode *string
+	VisitedAt    time.Time
+}
+
+type UserUpdateResult struct {
+	ID        int64
+	FirstName string
 }
 
 type UserTracks struct {

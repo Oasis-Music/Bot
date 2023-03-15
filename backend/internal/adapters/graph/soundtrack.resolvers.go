@@ -16,7 +16,7 @@ import (
 
 // CreateSoundtrack is the resolver for the createSoundtrack field.
 func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.CreateSoundtrackInput) (bool, error) {
-	return r.SoundtrackUC.CreateSoundtrack(ctx, entity.NewSoundtrack{
+	return r.SoundtrackUC.CreateSoundtrack(ctx, entity.NewSoundtrackInput{
 		Title:      input.Title,
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),

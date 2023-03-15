@@ -14,8 +14,6 @@ import (
 	"os"
 	"os/exec"
 
-	"oasis/backend/internal/adapters/db"
-	dbnull "oasis/backend/internal/adapters/db/db-null"
 	"oasis/backend/internal/entity"
 )
 
@@ -46,7 +44,7 @@ func trackDurationToInt16(d float64) (int16, error) {
 	return int16(math.Round(d)), nil
 }
 
-func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error) {
+func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
 	buf, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
@@ -137,24 +135,41 @@ func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.N
 		return false, err
 	}
 
-	var dbParams db.NewSoundtrackParams
+	var newTrack entity.NewSoundtrack
 
-	dbParams.Title = input.Title
-	dbParams.Author = input.Author
-	dbParams.Duration = duration
+	newTrack.Title = input.Title
+	newTrack.Author = input.Author
+	newTrack.Duration = duration
 
-	dbCoverParam := dbnull.NewNullString("", false)
+	// coverParam := dbnull.NewNullString("", false)
 
-	if coverImageURL != nil {
-		dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
-	}
+	// if coverImageURL != nil {
+	// 	dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
+	// }
 
-	dbParams.CoverImage = dbCoverParam
-	dbParams.AudioFile = soundtrackURL
-	dbParams.IsValidated = false
-	dbParams.CreatorID = 1 // TODO: save valid user ID
+	newTrack.CoverImage = coverImageURL
+	newTrack.AudioFile = soundtrackURL
+	newTrack.IsValidated = false
+	newTrack.CreatorID = 1 // TODO: save valid user ID
 
-	id, err := s.storage.CreateSoundtrack(ctx, dbParams)
+	// var dbParams db.NewSoundtrackParams
+
+	// dbParams.Title = input.Title
+	// dbParams.Author = input.Author
+	// dbParams.Duration = duration
+
+	// dbCoverParam := dbnull.NewNullString("", false)
+
+	// if coverImageURL != nil {
+	// 	dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
+	// }
+
+	// dbParams.CoverImage = dbCoverParam
+	// dbParams.AudioFile = soundtrackURL
+	// dbParams.IsValidated = false
+	// dbParams.CreatorID = 1 // TODO: save valid user ID
+
+	id, err := s.storage.CreateSoundtrack(ctx, newTrack)
 	if err != nil {
 		fmt.Println(err)
 		return false, err

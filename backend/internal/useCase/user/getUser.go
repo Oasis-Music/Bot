@@ -19,9 +19,9 @@ func (u *userUseCase) GetUser(ctx context.Context, id int64) (*entity.User, erro
 	return &entity.User{
 		ID:           user.ID,
 		FirstName:    user.FirstName,
-		LastName:     user.LastName.ValueOrNil(),
-		Username:     user.Username.ValueOrNil(),
-		LanguageCode: user.LanguageCode.ValueOrNil(),
+		LastName:     user.LastName,
+		Username:     user.Username,
+		LanguageCode: user.LanguageCode,
 		Role:         string(user.Role),
 		VisitedAt:    user.VisitedAt,
 		CreatedAt:    user.CreatedAt,

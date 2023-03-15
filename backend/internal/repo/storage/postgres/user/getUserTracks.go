@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"oasis/backend/internal/adapters/db"
+	"oasis/backend/internal/entity"
+	"oasis/backend/internal/repo/storage/postgres"
 )
 
 const (
@@ -38,9 +39,9 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db.UserTracksFilterParams) (*db.UserTracksResult, error) {
+func (s *UserStorage) GetUserTracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
 
-	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, filter)
+	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, options)
 	if err != nil {
 		return nil, err
 	}
@@ -52,12 +53,12 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 
 	defer rows.Close()
 
-	tracks := make([]db.SoundtrackDTO, 0, 15)
+	dbTracks := make([]postgres.SoundtrackDTO, 0, 15)
 
 	var total int64
 
 	for rows.Next() {
-		var t db.SoundtrackDTO
+		var t postgres.SoundtrackDTO
 		if err := rows.Scan(
 			&t.ID,
 			&t.Title,
@@ -70,26 +71,50 @@ func (s *userStorage) GetUserTracks(ctx context.Context, userID int64, filter db
 		); err != nil {
 			return nil, err
 		}
-		tracks = append(tracks, t)
+		dbTracks = append(dbTracks, t)
 	}
 
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return &db.UserTracksResult{
+	soundtracks := make([]entity.Soundtrack, 0, len(dbTracks))
+
+	for _, track := range dbTracks {
+
+		var coverImg *string
+
+		if track.CoverImage.Valid {
+			path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
+			coverImg = &path
+		}
+
+		soundtracks = append(soundtracks, entity.Soundtrack{
+			ID:         track.ID,
+			Title:      track.Title,
+			Author:     track.Author,
+			Duration:   int(track.Duration),
+			CoverImage: coverImg,
+			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Attached:   true, // soundtracks from user playlist attached by default
+			CreatedAt:  track.CreatedAt,
+		})
+	}
+
+	return &entity.UserTracks{
 		Total:       total,
-		Soundtracks: tracks,
+		Soundtracks: soundtracks,
 	}, nil
+
 }
 
-func queryBuilder(query string, filter db.UserTracksFilterParams) (string, error) {
+func queryBuilder(query string, options entity.UserTracksOptions) (string, error) {
 
-	if filter.Page <= 0 {
+	if options.Page <= 0 {
 		return "", errors.New("param 'page' must not be negative or zero")
 	}
 
-	page := filter.Page - 1
+	page := options.Page - 1
 
 	query += fmt.Sprintf(",id LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
 

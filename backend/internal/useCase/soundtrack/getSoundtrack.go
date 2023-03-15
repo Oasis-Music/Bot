@@ -21,22 +21,5 @@ func (s *soundtrackUseCase) GetSoundtrack(ctx context.Context, id int32) (*entit
 		return nil, ErrFailedToFetchSoundtrack
 	}
 
-	var coverImg *string
-
-	if track.CoverImage.Valid {
-		path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
-		coverImg = &path
-	}
-
-	return &entity.Soundtrack{
-		ID:         track.ID,
-		Title:      track.Title,
-		Author:     track.Author,
-		Duration:   int(track.Duration),
-		CoverImage: coverImg,
-		Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
-		Attached:   track.Attached,
-		CreatorID:  track.CreatorID,
-		CreatedAt:  track.CreatedAt,
-	}, nil
+	return track, nil
 }

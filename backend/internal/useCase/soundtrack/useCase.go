@@ -2,16 +2,16 @@ package soundtrack
 
 import (
 	"context"
-	"oasis/backend/internal/adapters/db/soundtrack"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/config"
 	"oasis/backend/internal/entity"
+	"oasis/backend/internal/useCase/adapters/storage"
 	"strconv"
 )
 
 type UseCase interface {
 	DeleteSoundtrack(ctx context.Context, id int32) (bool, error)
-	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrack) (bool, error)
+	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
 	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
 	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
 	GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error)
@@ -19,10 +19,10 @@ type UseCase interface {
 
 type soundtrackUseCase struct {
 	config  *config.AppConfig
-	storage soundtrack.SoundtrackStorage
+	storage storage.Soundtrack
 }
 
-func New(storage soundtrack.SoundtrackStorage, config *config.AppConfig) UseCase {
+func New(storage storage.Soundtrack, config *config.AppConfig) UseCase {
 	return &soundtrackUseCase{
 		config:  config,
 		storage: storage,

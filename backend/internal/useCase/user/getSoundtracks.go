@@ -3,19 +3,16 @@ package user
 import (
 	"context"
 	"log"
-	"oasis/backend/internal/adapters/db"
 	"oasis/backend/internal/entity"
 )
 
-func (u *userUseCase) GetSoundtracks(ctx context.Context, userID int64, filter entity.UserTracksFilter) (*entity.UserTracks, error) {
+func (u *userUseCase) GetSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
 
 	if err := u.checkPermission(ctx, userID); err != nil {
 		return nil, err
 	}
 
-	result, err := u.storage.GetUserTracks(ctx, userID, db.UserTracksFilterParams{
-		Page: filter.Page,
-	})
+	result, err := u.storage.GetUserTracks(ctx, userID, options)
 	if err != nil {
 		log.Println(err)
 		return nil, ErrIternalUserTracksError
@@ -26,31 +23,5 @@ func (u *userUseCase) GetSoundtracks(ctx context.Context, userID int64, filter e
 		return nil, ErrUserTracksNotFound
 	}
 
-	soundtracks := make([]entity.Soundtrack, 0, len(result.Soundtracks))
-
-	for _, track := range result.Soundtracks {
-
-		var coverImg *string
-
-		if track.CoverImage.Valid {
-			path := u.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
-			coverImg = &path
-		}
-
-		soundtracks = append(soundtracks, entity.Soundtrack{
-			ID:         track.ID,
-			Title:      track.Title,
-			Author:     track.Author,
-			Duration:   int(track.Duration),
-			CoverImage: coverImg,
-			Audio:      u.config.ExternalAPI.AudioBaseURL + track.AudioFile,
-			Attached:   true, // soundtracks from user playlist attached by default
-			CreatedAt:  track.CreatedAt,
-		})
-	}
-
-	return &entity.UserTracks{
-		Total:       result.Total,
-		Soundtracks: soundtracks,
-	}, nil
+	return result, nil
 }

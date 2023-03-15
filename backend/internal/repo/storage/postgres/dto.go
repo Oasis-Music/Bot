@@ -1,8 +1,8 @@
-package db
+package postgres
 
 import (
 	"fmt"
-	dbnull "oasis/backend/internal/adapters/db/db-null"
+	dbnull "oasis/backend/internal/repo/storage/postgres/db-null"
 	"time"
 )
 
