@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
-	"oasis/backend/internal/adapters/graph/models"
+	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/useCase/soundtrack"
 	"oasis/backend/internal/utils"
@@ -22,7 +22,6 @@ func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.Cr
 		CoverImage: (*entity.Upload)(input.CoverImage),
 		Audiofile:  entity.Upload(input.Audiofile),
 	})
-
 }
 
 // DeleteSoundtrack is the resolver for the deleteSoundtrack field.

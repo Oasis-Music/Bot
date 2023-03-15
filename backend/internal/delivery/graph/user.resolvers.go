@@ -7,7 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
-	"oasis/backend/internal/adapters/graph/models"
+	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	userUC "oasis/backend/internal/useCase/user"
 	"strconv"

@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"oasis/backend/internal/adapters/graph/models"
+	"oasis/backend/internal/delivery/graph/models"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -622,7 +622,7 @@ func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[st
 	var arg0 []models.Role
 	if tmp, ok := rawArgs["role"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-		arg0, err = ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, tmp)
+		arg0, err = ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -637,7 +637,7 @@ func (ec *executionContext) field_Mutation_attachSoundtrack_args(ctx context.Con
 	var arg0 models.AttachSoundtrackInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx, tmp)
+		arg0, err = ec.unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -652,7 +652,7 @@ func (ec *executionContext) field_Mutation_createSoundtrack_args(ctx context.Con
 	var arg0 models.CreateSoundtrackInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐCreateSoundtrackInput(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐCreateSoundtrackInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -682,7 +682,7 @@ func (ec *executionContext) field_Mutation_unattachSoundtrack_args(ctx context.C
 	var arg0 models.UnattachSoundtrackInput
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -757,7 +757,7 @@ func (ec *executionContext) field_Query_soundtracks_args(ctx context.Context, ra
 	var arg0 models.SoundtracksFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg0, err = ec.unmarshalNSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtracksFilter(ctx, tmp)
+		arg0, err = ec.unmarshalNSoundtracksFilter2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -781,7 +781,7 @@ func (ec *executionContext) field_Query_userSoundtracks_args(ctx context.Context
 	var arg1 models.UserSoundtracksFilter
 	if tmp, ok := rawArgs["filter"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-		arg1, err = ec.unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx, tmp)
+		arg1, err = ec.unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1070,7 +1070,7 @@ func (ec *executionContext) _Mutation_deleteSoundtrack(ctx context.Context, fiel
 			return ec.resolvers.Mutation().DeleteSoundtrack(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN"})
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN"})
 			if err != nil {
 				return nil, err
 			}
@@ -1310,7 +1310,7 @@ func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql
 	}
 	res := resTmp.(models.SoundtrackResult)
 	fc.Result = res
-	return ec.marshalOSoundtrackResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackResult(ctx, field.Selections, res)
+	return ec.marshalOSoundtrackResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackResult(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_soundtrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1365,7 +1365,7 @@ func (ec *executionContext) _Query_soundtracks(ctx context.Context, field graphq
 	}
 	res := resTmp.(*models.SoundtracksResponse)
 	fc.Result = res
-	return ec.marshalNSoundtracksResponse2ᚖoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtracksResponse(ctx, field.Selections, res)
+	return ec.marshalNSoundtracksResponse2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1424,7 +1424,7 @@ func (ec *executionContext) _Query_soundtrackByTitle(ctx context.Context, field 
 	}
 	res := resTmp.([]models.Soundtrack)
 	fc.Result = res
-	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
+	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_soundtrackByTitle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1491,7 +1491,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 			return ec.resolvers.Query().User(rctx, fc.Args["id"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -1511,7 +1511,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 		if data, ok := tmp.(models.UserResult); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/adapters/graph/models.UserResult`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/delivery/graph/models.UserResult`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1522,7 +1522,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(models.UserResult)
 	fc.Result = res
-	return ec.marshalOUserResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserResult(ctx, field.Selections, res)
+	return ec.marshalOUserResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserResult(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_user(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1577,7 +1577,7 @@ func (ec *executionContext) _Query_authorizeUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*models.AuthorizationResponse)
 	fc.Result = res
-	return ec.marshalNAuthorizationResponse2ᚖoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAuthorizationResponse(ctx, field.Selections, res)
+	return ec.marshalNAuthorizationResponse2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐAuthorizationResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_authorizeUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1628,7 +1628,7 @@ func (ec *executionContext) _Query_userSoundtracks(ctx context.Context, field gr
 			return ec.resolvers.Query().UserSoundtracks(rctx, fc.Args["id"].(string), fc.Args["filter"].(models.UserSoundtracksFilter))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"USER", "ADMIN"})
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"USER", "ADMIN"})
 			if err != nil {
 				return nil, err
 			}
@@ -1648,7 +1648,7 @@ func (ec *executionContext) _Query_userSoundtracks(ctx context.Context, field gr
 		if data, ok := tmp.(models.UserSoundtracksResult); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/adapters/graph/models.UserSoundtracksResult`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/delivery/graph/models.UserSoundtracksResult`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1662,7 +1662,7 @@ func (ec *executionContext) _Query_userSoundtracks(ctx context.Context, field gr
 	}
 	res := resTmp.(models.UserSoundtracksResult)
 	fc.Result = res
-	return ec.marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx, field.Selections, res)
+	return ec.marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_userSoundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2141,7 +2141,7 @@ func (ec *executionContext) _Soundtrack_creatorId(ctx context.Context, field gra
 			return obj.CreatorID, nil
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -2307,7 +2307,7 @@ func (ec *executionContext) _SoundtracksResponse_soundtracks(ctx context.Context
 	}
 	res := resTmp.([]models.Soundtrack)
 	fc.Result = res
-	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
+	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2760,7 +2760,7 @@ func (ec *executionContext) _UserSoundtracksResponse_soundtracks(ctx context.Con
 	}
 	res := resTmp.([]models.Soundtrack)
 	fc.Result = res
-	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
+	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_UserSoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -5668,16 +5668,16 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx context.Context, v interface{}) (models.AttachSoundtrackInput, error) {
+func (ec *executionContext) unmarshalNAttachSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐAttachSoundtrackInput(ctx context.Context, v interface{}) (models.AttachSoundtrackInput, error) {
 	res, err := ec.unmarshalInputAttachSoundtrackInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAuthorizationResponse2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAuthorizationResponse(ctx context.Context, sel ast.SelectionSet, v models.AuthorizationResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthorizationResponse2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐAuthorizationResponse(ctx context.Context, sel ast.SelectionSet, v models.AuthorizationResponse) graphql.Marshaler {
 	return ec._AuthorizationResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAuthorizationResponse2ᚖoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐAuthorizationResponse(ctx context.Context, sel ast.SelectionSet, v *models.AuthorizationResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNAuthorizationResponse2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐAuthorizationResponse(ctx context.Context, sel ast.SelectionSet, v *models.AuthorizationResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -5702,7 +5702,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐCreateSoundtrackInput(ctx context.Context, v interface{}) (models.CreateSoundtrackInput, error) {
+func (ec *executionContext) unmarshalNCreateSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐCreateSoundtrackInput(ctx context.Context, v interface{}) (models.CreateSoundtrackInput, error) {
 	res, err := ec.unmarshalInputCreateSoundtrackInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -5752,17 +5752,17 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+func (ec *executionContext) unmarshalNRole2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
 	var res models.Role
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
+func (ec *executionContext) unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, v interface{}) ([]models.Role, error) {
 	var vSlice []interface{}
 	if v != nil {
 		vSlice = graphql.CoerceList(v)
@@ -5771,7 +5771,7 @@ func (ec *executionContext) unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadapt
 	res := make([]models.Role, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNRole2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRole(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -5779,7 +5779,7 @@ func (ec *executionContext) unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋadapt
 	return res, nil
 }
 
-func (ec *executionContext) marshalNRole2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Role) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -5803,7 +5803,7 @@ func (ec *executionContext) marshalNRole2ᚕoasisᚋbackendᚋinternalᚋadapter
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRole2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐRole(ctx, sel, v[i])
+			ret[i] = ec.marshalNRole2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRole(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -5823,11 +5823,11 @@ func (ec *executionContext) marshalNRole2ᚕoasisᚋbackendᚋinternalᚋadapter
 	return ret
 }
 
-func (ec *executionContext) marshalNSoundtrack2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrack(ctx context.Context, sel ast.SelectionSet, v models.Soundtrack) graphql.Marshaler {
+func (ec *executionContext) marshalNSoundtrack2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrack(ctx context.Context, sel ast.SelectionSet, v models.Soundtrack) graphql.Marshaler {
 	return ec._Soundtrack(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Soundtrack) graphql.Marshaler {
+func (ec *executionContext) marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Soundtrack) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -5851,7 +5851,7 @@ func (ec *executionContext) marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋa
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSoundtrack2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrack(ctx, sel, v[i])
+			ret[i] = ec.marshalNSoundtrack2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrack(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -5871,16 +5871,16 @@ func (ec *executionContext) marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋa
 	return ret
 }
 
-func (ec *executionContext) unmarshalNSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtracksFilter(ctx context.Context, v interface{}) (models.SoundtracksFilter, error) {
+func (ec *executionContext) unmarshalNSoundtracksFilter2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksFilter(ctx context.Context, v interface{}) (models.SoundtracksFilter, error) {
 	res, err := ec.unmarshalInputSoundtracksFilter(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSoundtracksResponse2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v models.SoundtracksResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSoundtracksResponse2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v models.SoundtracksResponse) graphql.Marshaler {
 	return ec._SoundtracksResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSoundtracksResponse2ᚖoasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v *models.SoundtracksResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSoundtracksResponse2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v *models.SoundtracksResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -5905,7 +5905,7 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx context.Context, v interface{}) (models.UnattachSoundtrackInput, error) {
+func (ec *executionContext) unmarshalNUnattachSoundtrackInput2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUnattachSoundtrackInput(ctx context.Context, v interface{}) (models.UnattachSoundtrackInput, error) {
 	res, err := ec.unmarshalInputUnattachSoundtrackInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -5925,12 +5925,12 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 	return res
 }
 
-func (ec *executionContext) unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx context.Context, v interface{}) (models.UserSoundtracksFilter, error) {
+func (ec *executionContext) unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx context.Context, v interface{}) (models.UserSoundtracksFilter, error) {
 	res, err := ec.unmarshalInputUserSoundtracksFilter(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx context.Context, sel ast.SelectionSet, v models.UserSoundtracksResult) graphql.Marshaler {
+func (ec *executionContext) marshalNUserSoundtracksResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserSoundtracksResult(ctx context.Context, sel ast.SelectionSet, v models.UserSoundtracksResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -6219,7 +6219,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOSoundtrackResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐSoundtrackResult(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackResult) graphql.Marshaler {
+func (ec *executionContext) marshalOSoundtrackResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackResult(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackResult) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6258,7 +6258,7 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return res
 }
 
-func (ec *executionContext) marshalOUserResult2oasisᚋbackendᚋinternalᚋadaptersᚋgraphᚋmodelsᚐUserResult(ctx context.Context, sel ast.SelectionSet, v models.UserResult) graphql.Marshaler {
+func (ec *executionContext) marshalOUserResult2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserResult(ctx context.Context, sel ast.SelectionSet, v models.UserResult) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

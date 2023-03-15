@@ -1,10 +1,10 @@
 package router
 
 import (
-	"oasis/backend/internal/adapters/graph"
 	"oasis/backend/internal/auth"
 	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
+	"oasis/backend/internal/delivery/graph"
 
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
