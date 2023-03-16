@@ -6,10 +6,13 @@ const arrowButtonStyles = css`
   color: #fff;
   font-size: 3vh;
   background: none;
+  outline: none;
   &:hover:not(:disabled) {
     background-color: #fff;
-
     background-color: transparent;
+  }
+  &:focus-visible {
+    color: ${({ theme }) => theme.colors.primary};
   }
   @media ${({ theme }) => theme.media.hxs} {
     font-size: 17px;
@@ -20,6 +23,10 @@ const subControlsBtsStyles = css`
   color: #838383;
   background: none;
   font-size: 13px;
+  outline: none;
+  &:focus-visible {
+    color: ${({ theme }) => theme.colors.primary};
+  }
   &:active {
     color: #bbb;
   }
@@ -43,6 +50,10 @@ export const PlayButton = styled(IconButton)`
   background-color: #fff;
   font-size: 3vh;
   padding: 4vh;
+  outline: none;
+  &:focus-visible {
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
   /* box-shadow: 0 0 10px #9521f3, 0 0 40px #c600ee, 0 0 80px #f704f7; */
   /* box-shadow: 0 0 0px #fff, 0 0 20px #fff, 0 0 60px #fff; */
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),

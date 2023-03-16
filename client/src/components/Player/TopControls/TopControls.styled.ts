@@ -19,12 +19,17 @@ export const Title = styled.span`
 const controlButtonStyles = css`
   color: #838383;
   background: none;
+  outline: none;
+
   &:active {
     color: #bbb;
   }
   &:hover:not(:disabled) {
     background-color: #fff;
     background-color: transparent;
+  }
+  &:focus-visible {
+    color: ${({ theme }) => theme.colors.primary};
   }
 `
 
