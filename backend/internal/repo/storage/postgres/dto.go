@@ -48,26 +48,6 @@ type UserDTO struct {
 	CreatedAt    time.Time
 }
 
-type AttachSoundtrackParams struct {
-	TrackId int32
-	UserId  int64
-}
-
-type UnattachSoundtrackParams struct {
-	TrackId int32
-	UserId  int64
-}
-
-type NewSoundtrackParams struct {
-	Title       string
-	Author      string
-	Duration    int16
-	CoverImage  dbnull.NullString
-	AudioFile   string
-	IsValidated bool
-	CreatorID   int64
-}
-
 type CreateUserParams struct {
 	ID           int64
 	FirstName    string
@@ -77,11 +57,6 @@ type CreateUserParams struct {
 	Role         RoleType
 }
 
-type CreateUserRow struct {
-	ID        int64
-	FirstName string
-}
-
 type UpdateUserParams struct {
 	ID           int64
 	FirstName    string
@@ -89,18 +64,4 @@ type UpdateUserParams struct {
 	Username     dbnull.NullString
 	LanguageCode dbnull.NullString
 	VisitedAt    time.Time
-}
-
-type UpdateUserRow struct {
-	ID        int64
-	FirstName string
-}
-
-type UserTracksFilterParams struct {
-	Page int
-}
-
-type SoundtrackFilterParams struct {
-	Page   int
-	UserID int64
 }

@@ -36,7 +36,6 @@ linters:
     - ineffassign
     - sqlclosecheck
     # - bodyclose
-    # - deadcode
     # - depguard
     # - dogsled
     # - dupl
@@ -55,7 +54,6 @@ linters:
     # - predeclared
     # - revive
     # - staticcheck
-    # - structcheck
     # - stylecheck
     # - thelper
     # - tparallel

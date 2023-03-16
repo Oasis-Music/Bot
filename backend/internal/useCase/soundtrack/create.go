@@ -141,33 +141,10 @@ func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.N
 	newTrack.Author = input.Author
 	newTrack.Duration = duration
 
-	// coverParam := dbnull.NewNullString("", false)
-
-	// if coverImageURL != nil {
-	// 	dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
-	// }
-
 	newTrack.CoverImage = coverImageURL
 	newTrack.AudioFile = soundtrackURL
 	newTrack.IsValidated = false
 	newTrack.CreatorID = 1 // TODO: save valid user ID
-
-	// var dbParams db.NewSoundtrackParams
-
-	// dbParams.Title = input.Title
-	// dbParams.Author = input.Author
-	// dbParams.Duration = duration
-
-	// dbCoverParam := dbnull.NewNullString("", false)
-
-	// if coverImageURL != nil {
-	// 	dbCoverParam = dbnull.NewNullString(*coverImageURL, true)
-	// }
-
-	// dbParams.CoverImage = dbCoverParam
-	// dbParams.AudioFile = soundtrackURL
-	// dbParams.IsValidated = false
-	// dbParams.CreatorID = 1 // TODO: save valid user ID
 
 	id, err := s.storage.CreateSoundtrack(ctx, newTrack)
 	if err != nil {
