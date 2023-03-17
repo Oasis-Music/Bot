@@ -1,4 +1,4 @@
-import { setCurrentTrack, playPouse } from './soundtrack'
+import { setCurrentTrack, playPouse, playNext, playPrev } from './soundtrack'
 import {
   processAccessToken,
   setUserPlaylist,
@@ -11,7 +11,9 @@ import { currentTrackVar, userVar, isAuthenticatedVar, userPlaylistVar } from '.
 
 export const SoundtrackMutations = {
   setCurrentTrack: setCurrentTrack(currentTrackVar),
-  playPouse: playPouse(currentTrackVar)
+  playPouse: playPouse(currentTrackVar),
+  playNext: playNext(currentTrackVar, userPlaylistVar),
+  playPrev: playPrev(currentTrackVar, userPlaylistVar)
 }
 
 export const UserMutations = {

@@ -13,6 +13,8 @@ interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   isReadyForPlay: boolean
   onClose(): void
   onPlayPause(): void
+  onPlayNext(): void
+  onPlayPrev(): void
 }
 
 interface containerStylesProps {
@@ -38,7 +40,7 @@ const Container = styled.div<containerStylesProps>`
 `
 
 const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
-  { isOpen, currentTime, duration, onClose, isReadyForPlay, onPlayPause },
+  { isOpen, currentTime, duration, onClose, isReadyForPlay, onPlayPause, onPlayNext, onPlayPrev },
   waveContainerRef
 ) => {
   const track = useReactiveVar(currentTrackVar)
@@ -53,6 +55,8 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         duration={duration}
         isReadyForPlay={isReadyForPlay}
         onPlayPause={onPlayPause}
+        onPlayNext={onPlayNext}
+        onPlayPrev={onPlayPrev}
       />
     </Container>
   )

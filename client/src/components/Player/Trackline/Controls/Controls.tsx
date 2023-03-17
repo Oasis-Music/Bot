@@ -22,6 +22,8 @@ interface ControlsProps {
   isLoop: boolean
   onPlayPause?(): void
   onLoop(): void
+  onPlayNext(): void
+  onPlayPrev(): void
 }
 
 const Controls: React.FC<ControlsProps> = ({
@@ -29,6 +31,8 @@ const Controls: React.FC<ControlsProps> = ({
   isLoop,
   readyForPlay,
   onPlayPause,
+  onPlayNext,
+  onPlayPrev,
   onLoop
 }) => {
   return (
@@ -39,7 +43,7 @@ const Controls: React.FC<ControlsProps> = ({
         </SvgIcon>
       </RandomButton>
       {/*  */}
-      <PrevButton withoutShadow color="primary">
+      <PrevButton withoutShadow onClick={onPlayPrev}>
         <PrevArrowIcon>
           <ArrowAltIcon />
         </PrevArrowIcon>
@@ -51,7 +55,7 @@ const Controls: React.FC<ControlsProps> = ({
         </PlayButton>
       </PlayButtonBox>
       {/*  */}
-      <NextButton withoutShadow>
+      <NextButton withoutShadow onClick={onPlayNext}>
         <SvgIcon>
           <ArrowAltIcon />
         </SvgIcon>

@@ -9,10 +9,12 @@ interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
   duration: string
   isReadyForPlay: boolean
   onPlayPause(): void
+  onPlayNext(): void
+  onPlayPrev(): void
 }
 
 const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> = (
-  { currentTime, duration, isReadyForPlay, onPlayPause },
+  { currentTime, duration, isReadyForPlay, onPlayPause, onPlayNext, onPlayPrev },
   waveContainerRef
 ) => {
   const [loop, setLoop] = useState<boolean>(false)
@@ -37,6 +39,8 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
         readyForPlay={isReadyForPlay}
         isLoop={loop}
         onPlayPause={onPlayPause}
+        onPlayNext={onPlayNext}
+        onPlayPrev={onPlayPrev}
         onLoop={loopButtonHandler}
       />
     </Container>

@@ -94,6 +94,18 @@ const AppLayout: React.FC = () => {
     }
   }
 
+  const playNextHadler = () => {
+    if (wavesurfer.current) {
+      SoundtrackMutations.playNext()
+    }
+  }
+
+  const playPrevHandler = () => {
+    if (wavesurfer.current) {
+      SoundtrackMutations.playPrev()
+    }
+  }
+
   return (
     <Box>
       <main>
@@ -113,6 +125,8 @@ const AppLayout: React.FC = () => {
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}
         onPlayPause={playPauseHandler}
+        onPlayNext={playNextHadler}
+        onPlayPrev={playPrevHandler}
       />
     </Box>
   )
