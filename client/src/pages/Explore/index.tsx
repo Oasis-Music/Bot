@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import {
   AllSoundtracksQuery,
   AllSoundtracksVariables,
@@ -15,6 +15,9 @@ import TracksList from './TracksList/TracksList'
 import { Track } from './types'
 import Search from '../../components/Search/Search'
 import { useTranslation } from 'react-i18next'
+import { SoundtrackMutations } from '../../apollo/cache/mutations'
+import type { Soundtrack } from '../../apollo/cache/types'
+import { explorePlaylistVar } from '../../apollo/cache/variables'
 
 const Explore: React.FC = () => {
   const { t } = useTranslation()
@@ -32,9 +35,11 @@ const Explore: React.FC = () => {
         page: currentPage
       },
       onCompleted(q) {
-        const newTracks = q.soundtracks.soundtracks
+        const newTracks = q.soundtracks.soundtracks as Soundtrack[]
 
-        setTracks((prev) => [...prev, ...newTracks])
+        // const prev = useReactiveVar(explorePlaylistVar) as Soundtrack[]
+
+        SoundtrackMutations.setExplorePlaylist(newTracks)
         setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
       }
     }

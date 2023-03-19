@@ -13,6 +13,7 @@ import { UserMutations } from '../../apollo/cache/mutations'
 import type { Soundtrack } from '../../apollo/cache/types'
 import { Container, List, MountLoader } from './Home.styled'
 import { NoDataPlug, ErrorPlug } from './Plugs'
+import { Playlist } from '../../apollo/cache/types'
 
 // TODO: share
 interface Track {
@@ -132,6 +133,7 @@ const Home: React.FC = () => {
               audioURL={track.audioURL}
               isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
               isAttached={track.attached}
+              playlist={Playlist.User}
             />
           ))}
         </List>

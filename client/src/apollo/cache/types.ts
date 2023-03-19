@@ -1,3 +1,8 @@
+export enum Playlist {
+  User = 1,
+  Explore
+}
+
 export type User = {
   id: string
 }

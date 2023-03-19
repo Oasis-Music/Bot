@@ -1,5 +1,17 @@
-import { setCurrentTrack, playPouse, playNext, playPrev } from './soundtrack'
 import {
+  currentTrackVar,
+  userVar,
+  isAuthenticatedVar,
+  mainPlaylistVar,
+  userPlaylistVar,
+  explorePlaylistVar
+} from '../variables'
+import { bindMainPlaylist } from './playlist'
+
+import { setCurrentTrack, playPouse, setExplorePlaylist } from './soundtrack'
+import {
+  playNext,
+  playPrev,
   processAccessToken,
   setUserPlaylist,
   attachSoundtrack,
@@ -7,19 +19,22 @@ import {
   logout
 } from './user'
 
-import { currentTrackVar, userVar, isAuthenticatedVar, userPlaylistVar } from '../variables'
-
 export const SoundtrackMutations = {
   setCurrentTrack: setCurrentTrack(currentTrackVar),
   playPouse: playPouse(currentTrackVar),
-  playNext: playNext(currentTrackVar, userPlaylistVar),
-  playPrev: playPrev(currentTrackVar, userPlaylistVar)
+  setExplorePlaylist: setExplorePlaylist(explorePlaylistVar)
 }
 
 export const UserMutations = {
+  playNext: playNext(currentTrackVar, mainPlaylistVar),
+  playPrev: playPrev(currentTrackVar, mainPlaylistVar),
   setUserPlaylist: setUserPlaylist(userPlaylistVar),
   attachSoundtrack: attachSoundtrack(currentTrackVar, userPlaylistVar),
   unattachSoundtrack: unattachSoundtrack(currentTrackVar, userPlaylistVar),
   processAccessToken: processAccessToken(userVar, isAuthenticatedVar),
   logout: logout(userVar, isAuthenticatedVar)
+}
+
+export const PlaylistMutations = {
+  bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar)
 }

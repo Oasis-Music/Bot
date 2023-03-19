@@ -3,11 +3,11 @@ import type { CurrentTrack, Soundtrack } from '../../types'
 
 export default (
   currentTrackVar: ReactiveVar<CurrentTrack>,
-  userPlaylistVar: ReactiveVar<Soundtrack[]>
+  mainPlaylistVar: ReactiveVar<Soundtrack[]>
 ): (() => void) => {
   return (): void => {
     const currentTrack = currentTrackVar()
-    const playList = userPlaylistVar()
+    const playList = mainPlaylistVar()
 
     const currentTrackIndex = playList.findIndex((track) => track.id === currentTrack.id)
 

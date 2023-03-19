@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import ImagePlaceholder from '../../shared/ImagePlaceholder'
 import ScaleLoader from '../../shared/Loader'
 import { timeFormater } from '../../utils/helpers'
-import { SoundtrackMutations } from '../../apollo/cache/mutations'
+import { PlaylistMutations, SoundtrackMutations } from '../../apollo/cache/mutations'
+import type { Playlist } from '../../apollo/cache/types'
 
 interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   id: string
@@ -14,6 +15,7 @@ interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   audioURL: string
   isPlaying: boolean
   isAttached: boolean
+  playlist: Playlist.User | Playlist.Explore
 }
 
 const Container = styled.li`
@@ -55,10 +57,11 @@ const SideBox = styled.div`
 `
 
 const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemProps> = (
-  { id, title, author, duration, coverURL, audioURL, isPlaying, isAttached },
+  { id, title, author, duration, coverURL, audioURL, isPlaying, isAttached, playlist },
   ref
 ) => {
   const trackClickHandler = () => {
+    PlaylistMutations.bindMainPlaylist(playlist)
     SoundtrackMutations.setCurrentTrack({
       id,
       title,

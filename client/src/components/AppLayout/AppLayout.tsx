@@ -8,7 +8,7 @@ import Player from '../Player'
 import { timeFormater } from '../../utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
-import { SoundtrackMutations } from '../../apollo/cache/mutations'
+import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
 
 const Box = styled.div`
   position: relative;
@@ -96,13 +96,13 @@ const AppLayout: React.FC = () => {
 
   const playNextHadler = () => {
     if (wavesurfer.current) {
-      SoundtrackMutations.playNext()
+      UserMutations.playNext()
     }
   }
 
   const playPrevHandler = () => {
     if (wavesurfer.current) {
-      SoundtrackMutations.playPrev()
+      UserMutations.playPrev()
     }
   }
 
