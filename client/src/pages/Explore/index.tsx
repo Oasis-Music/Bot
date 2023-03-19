@@ -21,7 +21,9 @@ import { explorePlaylistVar } from '../../apollo/cache/variables'
 
 const Explore: React.FC = () => {
   const { t } = useTranslation()
-  const [tracks, setTracks] = useState<Track[]>([])
+  const [_, setTracks] = useState<Track[]>([])
+
+  const exploreTracks = useReactiveVar(explorePlaylistVar)
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
@@ -34,10 +36,9 @@ const Explore: React.FC = () => {
       variables: {
         page: currentPage
       },
+      fetchPolicy: 'network-only', // TODO: when cache first duplicate values
       onCompleted(q) {
         const newTracks = q.soundtracks.soundtracks as Soundtrack[]
-
-        // const prev = useReactiveVar(explorePlaylistVar) as Soundtrack[]
 
         SoundtrackMutations.setExplorePlaylist(newTracks)
         setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
@@ -57,6 +58,14 @@ const Explore: React.FC = () => {
   useEffect(() => {
     getTracks()
   }, [currentPage])
+
+  // INFO: Because we have a cumulative effect of getting tracks
+  // when currentPage changes, we should not clean up already saved original data
+  useEffect(() => {
+    return () => {
+      SoundtrackMutations.clearExplorePlaylist()
+    }
+  }, [])
 
   const handleNextPage = () => {
     setCurrentPage((prev) => prev + 1)
@@ -78,7 +87,7 @@ const Explore: React.FC = () => {
       <TracksList
         loading={loading}
         hasNextPage={hasNextPage}
-        tracks={tracks}
+        tracks={exploreTracks}
         onNextPage={handleNextPage}
       />
     </div>

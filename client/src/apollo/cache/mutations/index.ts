@@ -8,7 +8,7 @@ import {
 } from '../variables'
 import { bindMainPlaylist } from './playlist'
 
-import { setCurrentTrack, playPouse, setExplorePlaylist } from './soundtrack'
+import { setCurrentTrack, playPouse, setExplorePlaylist, clearExplorePlaylist } from './soundtrack'
 import {
   playNext,
   playPrev,
@@ -22,7 +22,8 @@ import {
 export const SoundtrackMutations = {
   setCurrentTrack: setCurrentTrack(currentTrackVar),
   playPouse: playPouse(currentTrackVar),
-  setExplorePlaylist: setExplorePlaylist(explorePlaylistVar)
+  setExplorePlaylist: setExplorePlaylist(explorePlaylistVar),
+  clearExplorePlaylist: clearExplorePlaylist(explorePlaylistVar)
 }
 
 export const UserMutations = {

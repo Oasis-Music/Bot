@@ -49,10 +49,8 @@ interface TracksList {
   onNextPage(): void
 }
 
-const TracksList: React.FC<TracksList> = ({ loading, hasNextPage, onNextPage }) => {
+const TracksList: React.FC<TracksList> = ({ loading, tracks, hasNextPage, onNextPage }) => {
   const currentTrack = useReactiveVar(currentTrackVar)
-
-  const tracks = useReactiveVar(explorePlaylistVar)
 
   const [firstLoad, setFirstLoad] = useState<boolean>(true)
 
