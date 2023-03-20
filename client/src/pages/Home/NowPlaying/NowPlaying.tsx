@@ -142,7 +142,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
           </SaveBotton>
         )}
       </Details>
-      {trackCounter && (
+      {!!trackCounter && (
         <Counter>
           {trackCounter}/{process.env.REACT_APP_MAX_TRACK_AVAILABLE}
         </Counter>
