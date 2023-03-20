@@ -1,23 +1,10 @@
 import React from 'react'
+import SvgIcon from '../../../shared/SvgIcon'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
 import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
 import { ReactComponent as DownloadIcon } from '../../../assets/svg/cloud-download.svg'
 import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
-import {
-  Container,
-  ImageWrapper,
-  Details,
-  TrackTitle,
-  AuthorTitle,
-  SaveBotton,
-  AddIcon,
-  DeleteBotton,
-  DownloadBotton,
-  ControlsWrapper,
-  CopyInfoBotton
-} from './NowPlaying.styled'
-import SvgIcon from '../../../shared/SvgIcon'
 import { useMutation, useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
@@ -32,8 +19,32 @@ import {
   UnattachSoundtrackVariables,
   UnattachSoundtrackDocument
 } from '../../../graphql/user/_gen_/unattachSoundtrack.mutation'
+import {
+  Container,
+  ImageWrapper,
+  Details,
+  TrackTitle,
+  AuthorTitle,
+  SaveBotton,
+  AddIcon,
+  DeleteBotton,
+  DownloadBotton,
+  ControlsWrapper,
+  CopyInfoBotton,
+  Counter
+} from './NowPlaying.styled'
 
-const NowPlaying: React.FC = () => {
+interface NowPlayingProps {
+  trackCounter?: number
+  onTrackAttach?(): void
+  onTrackUnattach?(): void
+}
+
+const NowPlaying: React.FC<NowPlayingProps> = ({
+  trackCounter,
+  onTrackAttach,
+  onTrackUnattach
+}) => {
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar)
@@ -42,8 +53,11 @@ const NowPlaying: React.FC = () => {
     AttachSoundtrackMutation,
     AttachSoundtrackVariables
   >(AttachSoundtrackDocument, {
-    onCompleted: (data) => {
+    onCompleted: () => {
       UserMutations.attachSoundtrack()
+      if (onTrackAttach) {
+        onTrackAttach()
+      }
     },
     onError: (err) => {
       console.log(err)
@@ -56,6 +70,9 @@ const NowPlaying: React.FC = () => {
   >(UnattachSoundtrackDocument, {
     onCompleted: () => {
       UserMutations.unattachSoundtrack()
+      if (onTrackUnattach) {
+        onTrackUnattach()
+      }
     },
     onError: (err) => {
       console.log(err)
@@ -125,6 +142,11 @@ const NowPlaying: React.FC = () => {
           </SaveBotton>
         )}
       </Details>
+      {trackCounter && (
+        <Counter>
+          {trackCounter}/{process.env.REACT_APP_MAX_TRACK_AVAILABLE}
+        </Counter>
+      )}
     </Container>
   )
 }

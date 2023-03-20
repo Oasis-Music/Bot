@@ -3,6 +3,12 @@ import type { Soundtrack } from '../../types'
 
 export default (userPlaylistVar: ReactiveVar<Soundtrack[]>): ((tracks: Soundtrack[]) => void) => {
   return (tracks): void => {
-    userPlaylistVar([...tracks])
+    const playlist = userPlaylistVar()
+
+    if (playlist.length) {
+      userPlaylistVar([...playlist, ...tracks])
+    } else {
+      userPlaylistVar([...tracks])
+    }
   }
 }
