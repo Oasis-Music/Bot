@@ -14,6 +14,7 @@ import {
   playPrev,
   processAccessToken,
   setUserPlaylist,
+  clearUserPlaylist,
   attachSoundtrack,
   unattachSoundtrack,
   logout
@@ -30,6 +31,7 @@ export const UserMutations = {
   playNext: playNext(currentTrackVar, mainPlaylistVar),
   playPrev: playPrev(currentTrackVar, mainPlaylistVar),
   setUserPlaylist: setUserPlaylist(userPlaylistVar),
+  clearUserPlaylist: clearUserPlaylist(userPlaylistVar),
   attachSoundtrack: attachSoundtrack(currentTrackVar, userPlaylistVar),
   unattachSoundtrack: unattachSoundtrack(currentTrackVar, userPlaylistVar),
   processAccessToken: processAccessToken(userVar, isAuthenticatedVar),

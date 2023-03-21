@@ -149,3 +149,12 @@ export const CopyInfoBotton = styled(IconButton)`
   ${buttonsStyles}
   font-size: 16px;
 `
+
+export const Counter = styled.span`
+  position: absolute;
+  bottom: -17px;
+  right: 11px;
+  font-size: 2.3vh;
+  color: #bfbfbf;
+  font-weight: 400;
+`
