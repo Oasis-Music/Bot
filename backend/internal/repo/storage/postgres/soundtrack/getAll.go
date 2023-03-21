@@ -97,7 +97,7 @@ func queryBuilder(query string, filter entity.SoundtrackFilter) (string, error) 
 
 	page := filter.Page - 1
 
-	query += fmt.Sprintf(" ORDER BY created_at DESC LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
+	query += fmt.Sprintf(" ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d", ITEMS_PER_PAGE, page*ITEMS_PER_PAGE)
 
 	return query, nil
 }
