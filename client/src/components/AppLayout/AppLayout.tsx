@@ -38,12 +38,12 @@ const AppLayout: React.FC = () => {
       wavesurfer.current = WaveSurfer.create({
         mediaType: 'audio',
         container: waveContainerRef.current,
-        barWidth: 2,
+        barWidth: 3,
         barRadius: 4,
+        barGap: 5,
         cursorWidth: 1,
         backend: 'WebAudio',
         height: 30,
-
         progressColor: '#dbdbdb',
         waveColor: '#575763',
         cursorColor: 'transparent'
