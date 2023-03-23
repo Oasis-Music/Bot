@@ -33,6 +33,8 @@ const AppLayout: React.FC = () => {
   const wavesurfer = useRef<WaveSurfer | null>(null)
   const waveContainerRef = useRef<HTMLDivElement>(null)
 
+  const [loop, setLoop] = useState(false)
+
   useEffect(() => {
     if (waveContainerRef.current) {
       wavesurfer.current = WaveSurfer.create({
@@ -106,6 +108,10 @@ const AppLayout: React.FC = () => {
     }
   }
 
+  const handleLoopState = () => {
+    setLoop((prev) => !prev)
+  }
+
   return (
     <Box>
       <main>
@@ -124,9 +130,11 @@ const AppLayout: React.FC = () => {
         isOpen={isPlayerOpen}
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}
+        withLoop={loop}
         onPlayPause={playPauseHandler}
         onPlayNext={playNextHadler}
         onPlayPrev={playPrevHandler}
+        onLoop={handleLoopState}
       />
     </Box>
   )

@@ -19,16 +19,16 @@ import {
 interface ControlsProps {
   isPlay: boolean
   readyForPlay: boolean
-  isLoop: boolean
+  withLoop: boolean
   onPlayPause?(): void
-  onLoop(): void
   onPlayNext(): void
   onPlayPrev(): void
+  onLoop(): void
 }
 
 const Controls: React.FC<ControlsProps> = ({
   isPlay,
-  isLoop,
+  withLoop,
   readyForPlay,
   onPlayPause,
   onPlayNext,
@@ -61,7 +61,7 @@ const Controls: React.FC<ControlsProps> = ({
         </SvgIcon>
       </NextButton>
       {/*  */}
-      <LoopButton $loop={isLoop} onClick={onLoop} withoutShadow>
+      <LoopButton $loop={withLoop} onClick={onLoop} withoutShadow>
         <SvgIcon>
           <RepeatIcon />
         </SvgIcon>
