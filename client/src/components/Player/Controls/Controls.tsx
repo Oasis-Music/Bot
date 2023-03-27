@@ -1,10 +1,10 @@
 import React from 'react'
-import { ReactComponent as PlayIcon } from '../../../../assets/svg/play.svg'
-import { ReactComponent as PauseIcon } from '../../../../assets/svg/pause.svg'
-import { ReactComponent as ArrowAltIcon } from '../../../../assets/svg/arrow-alt.svg'
-import { ReactComponent as RepeatIcon } from '../../../../assets/svg/repeat.svg'
-import { ReactComponent as RandomIcon } from '../../../../assets/svg/random.svg'
-import SvgIcon from '../../../../shared/SvgIcon'
+import { ReactComponent as PlayIcon } from '../../../assets/svg/play.svg'
+import { ReactComponent as PauseIcon } from '../../../assets/svg/pause.svg'
+import { ReactComponent as ArrowAltIcon } from '../../../assets/svg/arrow-alt.svg'
+import { ReactComponent as RepeatIcon } from '../../../assets/svg/repeat.svg'
+import { ReactComponent as RandomIcon } from '../../../assets/svg/random.svg'
+import SvgIcon from '../../../shared/SvgIcon'
 import {
   Container,
   PlayButtonBox,

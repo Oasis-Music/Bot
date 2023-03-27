@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import TopControls from './TopControls/TopControls'
 import Details from './Details/Details'
 import Trackline from './Trackline/Trackline'
+import Controls from './Controls/Controls'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
 
@@ -56,17 +57,20 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   },
   waveContainerRef
 ) => {
-  const track = useReactiveVar(currentTrackVar)
+  const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
     <Container $open={isOpen}>
-      <TopControls id={track.id} onClose={onClose} />
-      <Details title={track.title} author={track.author} coverImage={track.coverURL} />
-      <Trackline
-        ref={waveContainerRef}
-        currentTime={currentTime}
-        duration={duration}
-        isReadyForPlay={isReadyForPlay}
+      <TopControls id={currentTrack.id} onClose={onClose} />
+      <Details
+        title={currentTrack.title}
+        author={currentTrack.author}
+        coverImage={currentTrack.coverURL}
+      />
+      <Trackline ref={waveContainerRef} currentTime={currentTime} duration={duration} />
+      <Controls
+        isPlay={currentTrack.isPlaying}
+        readyForPlay={isReadyForPlay}
         withLoop={withLoop}
         onPlayPause={onPlayPause}
         onPlayNext={onPlayNext}
