@@ -11,13 +11,13 @@ lint:
 
 # DB
 backup:
-	pg_dump -U postgres cristal > ./init/backup.bak
+	pg_dump -U postgres -Fc cristal > ./init/backup.dmp
 restore:
-	psql -U postgres cristal < ./init/backup.bak
+	pg_restore -U postgres -d cristal -v -c ./init/backup.dmp
 docker_backup:
-	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_dump -U postgres cristal" > ./init/backup.bak
+	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_dump -U postgres -Fc cristal" > ./init/backup.dmp
 docker_restore:
-	docker exec -i db /bin/bash -c "PGPASSWORD=postgres psql -U postgres cristal" < ./init/backup.bak
+	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_restore -U postgres -d cristal -v -c" ./init/backup.dmp
 
 # Migrations
 migrate_new:
