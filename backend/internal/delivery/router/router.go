@@ -1,8 +1,8 @@
 package router
 
 import (
+	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/auth"
-	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
 	"oasis/backend/internal/delivery/graph"
 

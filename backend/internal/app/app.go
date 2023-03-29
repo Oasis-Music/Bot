@@ -1,8 +1,8 @@
 package app
 
 import (
+	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/auth"
-	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
 	httpAPI "oasis/backend/internal/delivery/api/http"
 	"oasis/backend/internal/delivery/router"
