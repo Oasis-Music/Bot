@@ -17,7 +17,7 @@ restore:
 docker_backup:
 	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_dump -U postgres -Fc cristal" > ./init/backup.dmp
 docker_restore:
-	docker exec -i db /bin/bash -c "PGPASSWORD=postgres pg_restore -U postgres -d cristal -v -c" ./init/backup.dmp
+	docker exec -i db pg_restore -U postgres -d cristal -v -c < ./init/backup.dmp
 
 # Migrations
 migrate_new:
