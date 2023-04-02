@@ -3,16 +3,16 @@ schema:
 
 # Where should the generated server code go?
 exec:
-  filename: internal/adapters/graph/generated.go
+  filename: internal/delivery/graph/generated.go
   package: graph
 
 model:
-  filename: internal/adapters/graph/models/models_gen.go
+  filename: internal/delivery/graph/models/models_gen.go
   package: models
 
 resolver:
   layout: follow-schema
-  dir: internal/adapters/graph
+  dir: internal/delivery/graph
   package: graph
 
   # resolver:

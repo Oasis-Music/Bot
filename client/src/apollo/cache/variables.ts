@@ -4,11 +4,15 @@ import jwtDecode from 'jwt-decode'
 
 // soundtrack
 export const currentTrackVar = makeVar<CurrentTrack>({} as CurrentTrack)
+export const explorePlaylistVar = makeVar<Soundtrack[]>([])
 
 // user
 export const userVar = makeVar<User>({} as User)
 export const userPlaylistVar = makeVar<Soundtrack[]>([])
 // export const userPlaylistLoadedVar = makeVar<boolean>(false)
+
+// playlist
+export const mainPlaylistVar = makeVar<Soundtrack[]>([])
 
 // TODO: find better place for this
 function checkAuth(): boolean {

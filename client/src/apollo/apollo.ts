@@ -50,10 +50,17 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
           headers: { 'Content-Type': 'application/json' },
           body: rt
         })
-          .then((resp) => (resp.status === 401 ? Promise.reject(resp) : resp))
-          .then((resp) => resp.text())
-          .then((respData) => {
-            const data: refreshReponse = JSON.parse(respData)
+          .then((resp) => {
+            switch (resp.status) {
+              case 401:
+                return Promise.reject(resp)
+              case 500:
+                return Promise.reject(resp)
+              default:
+                return resp.json()
+            }
+          })
+          .then((data: refreshReponse) => {
             const ok = UserMutations.processAccessToken(data.token)
             if (!ok) {
               throw new Error('new AT is broken')

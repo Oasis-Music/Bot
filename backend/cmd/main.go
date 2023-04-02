@@ -18,7 +18,9 @@ func init() {
 
 	if err := godotenv.Load(".env." + *env); err != nil {
 		log.Printf("No .env.%s file found, load default", *env)
-		godotenv.Load(".env.dev")
+		if err = godotenv.Load(".env.dev"); err != nil {
+			panic("no .env files found")
+		}
 	}
 	log.Printf("loaded \".env.%s\"\n", *env)
 }

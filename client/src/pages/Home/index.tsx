@@ -4,38 +4,27 @@ import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
 import { userVar, currentTrackVar, userPlaylistVar } from '../../apollo/cache/variables'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
+import { UserMutations } from '../../apollo/cache/mutations'
+import { Container, List, MountLoader } from './Home.styled'
+import { NoDataPlug, ErrorPlug } from './Plugs'
+import { Playlist } from '../../apollo/cache/types'
 import {
   UserSoundtracksQuery,
   UserSoundtracksVariables,
   UserSoundtracksDocument
 } from '../../graphql/user/_gen_/userSoundtracks.query'
-import { UserMutations } from '../../apollo/cache/mutations'
 import type { Soundtrack } from '../../apollo/cache/types'
-import { Container, List, MountLoader } from './Home.styled'
-import { NoDataPlug, ErrorPlug } from './Plugs'
 
-// TODO: share
-interface Track {
-  id: string
-  title: string
-  author: string
-  duration: number
-  coverURL?: string | null
-  audioURL: string
-  attached: boolean
-}
+const ITEMS_PER_PAGE = 15
 
 const Home: React.FC = () => {
   const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
   const userPlaylist = useReactiveVar(userPlaylistVar)
 
-  const ITEMS_PER_PAGE = 15
-
-  // const [tracks, setTracks] = useState<Track[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
-  const [totalTracks, setTotalTracks] = useState<number>(1)
+  const [totalTracks, setTotalTracks] = useState<number>(0)
   const [firstLoad, setFirstLoad] = useState<boolean>(true)
 
   const intersectionObserver = useRef<IntersectionObserver>()
@@ -53,19 +42,25 @@ const Home: React.FC = () => {
       if (q.userSoundtracks.__typename === 'NotFound') {
         return
       }
-      const newTracks = q.userSoundtracks.soundtracks
+      const tracks = q.userSoundtracks.soundtracks
+      const totalNum = q.userSoundtracks.total
 
-      UserMutations.setUserPlaylist(newTracks as Soundtrack[])
+      UserMutations.setUserPlaylist(tracks as Soundtrack[])
 
-      // setTracks((prev) => [...prev, ...newTracks])
-      setHasNextPage(q.userSoundtracks.soundtracks.length === ITEMS_PER_PAGE)
-      setTotalTracks(q.userSoundtracks.total)
+      setHasNextPage(tracks.length < totalNum && tracks.length === ITEMS_PER_PAGE)
+      setTotalTracks(totalNum)
     }
   })
 
   useEffect(() => {
     getTracks()
   }, [currentPage])
+
+  useEffect(() => {
+    return () => {
+      UserMutations.clearUserPlaylist()
+    }
+  }, [])
 
   const lastTrackRef = useCallback(
     (track: any) => {
@@ -87,6 +82,14 @@ const Home: React.FC = () => {
   const isMountLoad = firstLoad && loading
   const isIntersectionLoad = !firstLoad && loading
 
+  const onTrackAttach = () => {
+    setTotalTracks((prev) => prev + 1)
+  }
+
+  const onUnattachHandler = () => {
+    setTotalTracks((prev) => prev - 1)
+  }
+
   const mountPlug = (
     <MountLoader>
       <ScaleLoader fallback />
@@ -102,7 +105,7 @@ const Home: React.FC = () => {
     )
   }
 
-  if (!totalTracks) {
+  if (!firstLoad && !totalTracks) {
     return (
       <Container>
         <NowPlaying />
@@ -115,7 +118,12 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <NowPlaying />
+      <NowPlaying
+        trackCounter={totalTracks}
+        onTrackAttach={onTrackAttach}
+        onTrackUnattach={onUnattachHandler}
+      />
+
       {isMountLoad ? (
         mountPlug
       ) : (
@@ -132,6 +140,7 @@ const Home: React.FC = () => {
               audioURL={track.audioURL}
               isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
               isAttached={track.attached}
+              playlist={Playlist.User}
             />
           ))}
         </List>

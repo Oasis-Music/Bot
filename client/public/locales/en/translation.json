@@ -48,6 +48,7 @@
           "ext": "JPEG format",
           "dimension": "Up to 1000×1000px"
         },
+        "skip": "Skip",
         "continue": "Continue",
         "previewAlt": "Uploaded track cover",
         "errors": {
@@ -85,7 +86,7 @@
           "successUpload": "Track uploaded successfully!",
           "uploadFail": "Something went wrong",
           "fine": "Fine",
-          "retry": "Retry"
+          "close": "Close"
         }
       },
       "shared": {

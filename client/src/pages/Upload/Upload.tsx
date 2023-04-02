@@ -77,7 +77,7 @@ const Upload: React.FC = () => {
 
   const [windowWidth] = useWindowRatio()
 
-  const [addSoundtrack, { loading }] = useMutation<
+  const [createSoundtrack, { loading }] = useMutation<
     CreateSoundtrackMutation,
     CreateSoundtrackVariables
   >(CreateSoundtrackDocument, {
@@ -108,7 +108,7 @@ const Upload: React.FC = () => {
 
   const handleSubmit = (values: FormValues) => {
     if (step === 2) {
-      addSoundtrack({
+      createSoundtrack({
         variables: { ...values }
       })
     } else {

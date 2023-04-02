@@ -51,7 +51,7 @@ const Buttons: React.FC = () => {
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Primary: without a shadow</p>
-          <Button disableShadow fullWidth>
+          <Button withShadow fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
@@ -99,7 +99,7 @@ const Buttons: React.FC = () => {
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Secondary: without a shadow</p>
-          <Button color="secondary" disableShadow fullWidth>
+          <Button color="secondary" fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
@@ -124,7 +124,7 @@ const Buttons: React.FC = () => {
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Success: without a shadow</p>
-          <Button color="success" disableShadow fullWidth>
+          <Button color="success" fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
@@ -149,7 +149,7 @@ const Buttons: React.FC = () => {
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Danger: without a shadow</p>
-          <Button color="danger" disableShadow fullWidth>
+          <Button color="danger" fullWidth>
             Submit
           </Button>
         </ButtonWrapper>

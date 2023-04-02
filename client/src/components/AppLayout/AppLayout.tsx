@@ -8,7 +8,7 @@ import Player from '../Player'
 import { timeFormater } from '../../utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
-import { SoundtrackMutations } from '../../apollo/cache/mutations'
+import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
 
 const Box = styled.div`
   position: relative;
@@ -33,17 +33,19 @@ const AppLayout: React.FC = () => {
   const wavesurfer = useRef<WaveSurfer | null>(null)
   const waveContainerRef = useRef<HTMLDivElement>(null)
 
+  const [loop, setLoop] = useState(false)
+
   useEffect(() => {
     if (waveContainerRef.current) {
       wavesurfer.current = WaveSurfer.create({
         mediaType: 'audio',
         container: waveContainerRef.current,
-        barWidth: 2,
+        barWidth: 3,
         barRadius: 4,
+        barGap: 5,
         cursorWidth: 1,
         backend: 'WebAudio',
         height: 30,
-
         progressColor: '#dbdbdb',
         waveColor: '#575763',
         cursorColor: 'transparent'
@@ -94,6 +96,22 @@ const AppLayout: React.FC = () => {
     }
   }
 
+  const playNextHadler = () => {
+    if (wavesurfer.current) {
+      UserMutations.playNext()
+    }
+  }
+
+  const playPrevHandler = () => {
+    if (wavesurfer.current) {
+      UserMutations.playPrev()
+    }
+  }
+
+  const handleLoopState = () => {
+    setLoop((prev) => !prev)
+  }
+
   return (
     <Box>
       <main>
@@ -112,7 +130,11 @@ const AppLayout: React.FC = () => {
         isOpen={isPlayerOpen}
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}
+        withLoop={loop}
         onPlayPause={playPauseHandler}
+        onPlayNext={playNextHadler}
+        onPlayPrev={playPrevHandler}
+        onLoop={handleLoopState}
       />
     </Box>
   )

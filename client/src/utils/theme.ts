@@ -68,6 +68,14 @@ export default styledTheme
 
 export const GlobalStyles = createGlobalStyle`
 
+  *,
+  *:after,
+  *:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
   body {
     background-color: #101318;
   }

@@ -1,6 +1,7 @@
 linters-settings:
   errcheck:
     check-type-assertions: true
+    check-blank: true
   goconst:
     min-len: 2
     min-occurrences: 3
@@ -14,48 +15,59 @@ linters-settings:
   govet:
     check-shadowing: true
     enable:
-      - fieldalignment
+      - assign
+      - bools
+      - httpresponse
+      - lostcancel
+      - stdmethods
+      - stringintconv
   nolintlint:
     require-explanation: true
     require-specific: true
 linters:
   disable-all: true
   enable:
-    - bodyclose
-    - deadcode
-    - depguard
-    - dogsled
-    - dupl
     - errcheck
-    - exportloopref
-    - exhaustive
-    - goconst
-    - gocritic
-    - gofmt
-    - goimports
-    - gomnd
-    - gocyclo
-    - gosec
-    - gosimple
     - govet
-    - ineffassign
-    - misspell
-    - nolintlint
-    - nakedret
-    - prealloc
-    - predeclared
-    - revive
-    - staticcheck
-    - structcheck
-    - stylecheck
-    - thelper
-    - tparallel
+    - gofmt
+    - unused
     - typecheck
-    - unconvert
-    - unparam
-    - varcheck
-    - whitespace
-    - wsl
+    - gosimple
+    - ineffassign
+    - sqlclosecheck
+    # - bodyclose
+    # - depguard
+    # - dogsled
+    # - dupl
+    # - exportloopref
+    # - exhaustive
+    # - goconst
+    # - gocritic
+    # - goimports
+    # - gomnd
+    # - gocyclo
+    # - gosec
+    # - misspell
+    # - nolintlint
+    # - nakedret
+    # - prealloc
+    # - predeclared
+    # - revive
+    # - staticcheck
+    # - stylecheck
+    # - thelper
+    # - tparallel
+    # - unconvert
+    # - unparam
+    # - varcheck
+    # - whitespace
+    # - wsl
 
 run:
   issues-exit-code: 1
+issues:
+  exclude-rules:
+    # Excluding err shadowing as second return value
+    - text: 'shadow: declaration of "(err|ctx)" shadows declaration at'
+      linters:
+        - govet

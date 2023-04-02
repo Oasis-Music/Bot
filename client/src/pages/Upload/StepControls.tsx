@@ -99,7 +99,6 @@ const StepControls: React.FC<StepControlsProps> = ({
           type={actionButtonType}
           color="secondary"
           tabIndex={-1}
-          disableShadow
           disabled={disabled}
           fullWidth
           onClick={onNext}
@@ -107,7 +106,7 @@ const StepControls: React.FC<StepControlsProps> = ({
           {nextText}
         </NextButton>
       </ButtonWrapper>
-      <BackLinkButton disableShadow onClick={handleLinkButtonClick}>
+      <BackLinkButton onClick={handleLinkButtonClick}>
         {t('pages.upload.shared.toMain')}
       </BackLinkButton>
     </>

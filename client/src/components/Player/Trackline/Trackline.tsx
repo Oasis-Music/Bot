@@ -1,28 +1,15 @@
-import React, { useState } from 'react'
-import Controls from './Controls/Controls'
+import React from 'react'
 import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
-import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../../apollo/cache/variables'
 
 interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string
   duration: string
-  isReadyForPlay: boolean
-  onPlayPause(): void
 }
 
 const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> = (
-  { currentTime, duration, isReadyForPlay, onPlayPause },
+  { currentTime, duration },
   waveContainerRef
 ) => {
-  const [loop, setLoop] = useState<boolean>(false)
-
-  const currentTrack = useReactiveVar(currentTrackVar)
-
-  const loopButtonHandler = () => {
-    setLoop(!loop)
-  }
-
   return (
     <Container>
       <WaveWrapper>
@@ -32,13 +19,6 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
         <span>{currentTime}</span>
         <span>{duration}</span>
       </TimeBox>
-      <Controls
-        isPlay={currentTrack.isPlaying}
-        readyForPlay={isReadyForPlay}
-        isLoop={loop}
-        onPlayPause={onPlayPause}
-        onLoop={loopButtonHandler}
-      />
     </Container>
   )
 }

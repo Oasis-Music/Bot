@@ -51,8 +51,9 @@ export const ImageWrapper = styled.div`
   height: 23vh;
   font-size: 4.5vh;
   margin-right: 17px;
-  border-radius: 15px;
-  border: 2px solid #d6d6d6;
+  border-radius: 16px;
+  background-color: #d6d6d6;
+  padding: 2px;
   @media ${({ theme }) => theme.media.hsm} {
     width: 123px;
     height: 123px;
@@ -148,4 +149,13 @@ export const DownloadBotton = styled(IconButton)`
 export const CopyInfoBotton = styled(IconButton)`
   ${buttonsStyles}
   font-size: 16px;
+`
+
+export const Counter = styled.span`
+  position: absolute;
+  bottom: -17px;
+  right: 11px;
+  font-size: 2.3vh;
+  color: #bfbfbf;
+  font-weight: 400;
 `

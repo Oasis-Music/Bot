@@ -1,11 +1,11 @@
 package app
 
 import (
-	httpAPI "oasis/backend/internal/adapters/api/http"
-	"oasis/backend/internal/adapters/router"
+	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/auth"
-	"oasis/backend/internal/composites"
 	"oasis/backend/internal/config"
+	httpAPI "oasis/backend/internal/delivery/api/http"
+	"oasis/backend/internal/delivery/router"
 
 	"context"
 	"log"
