@@ -31,13 +31,17 @@ func NewClient(ctx context.Context, config *config.AppConfig) (*pgxpool.Pool, er
 	str := "host=%s user=%s password=%s dbname=%s port=%s sslmode=%s"
 	connString := fmt.Sprintf(str, cfg.Host, cfg.Username, cfg.Password, cfg.Name, cfg.Port, cfg.SSLMode)
 
+	poolCfg, err := pgxpool.ParseConfig(connString)
+	if err != nil {
+		return nil, err
+	}
+
+	poolCfg.MaxConns = 8
+
 	var retryDuration time.Duration
 
-	for i := 0; i < maxAttempts; i++ {
-		ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
-		defer cancel()
-
-		pool, err := pgxpool.Connect(ctx, connString)
+	for i := 1; i <= maxAttempts; i++ {
+		pool, err := pgxpool.ConnectConfig(context.Background(), poolCfg)
 		if err == nil {
 			if err := pool.Ping(context.Background()); err != nil {
 				log.Printf("couldn't ping postgre database: %v", err)
@@ -50,8 +54,7 @@ func NewClient(ctx context.Context, config *config.AppConfig) (*pgxpool.Pool, er
 		log.Println("Failed to connect to postgres, retrying")
 
 		retryDuration = time.Duration(i*2) * time.Second
-
-		if i != maxAttempts-1 {
+		if i < maxAttempts {
 			time.Sleep(retryDuration)
 		}
 
