@@ -55,8 +55,10 @@ func (a *App) Run() {
 func (a *App) Serve() {
 
 	server := &http.Server{
-		Addr:    ":" + a.config.EntryPort,
-		Handler: a.router,
+		Addr:              ":" + a.config.EntryPort,
+		ReadHeaderTimeout: 500 * time.Millisecond,
+		ReadTimeout:       1 * time.Second,
+		Handler:           http.TimeoutHandler(a.router, 15*time.Second, "request timeout expired"),
 	}
 
 	if a.config.Environment == "development" {
