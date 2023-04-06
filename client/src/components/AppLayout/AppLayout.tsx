@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Outlet, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
 import WaveSurfer from 'wavesurfer.js'
 import styled from 'styled-components'
 import MiniPlayer from '../MiniPlayer/MiniPlayer'
@@ -8,6 +7,7 @@ import Player from '../Player'
 import { timeFormater } from '../../utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
+import { Outlet, useLocation } from 'react-router-dom'
 import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
 
 const Box = styled.div`
@@ -23,23 +23,20 @@ export const Wrapper = styled.div`
 
 const AppLayout: React.FC = () => {
   const track = useReactiveVar(currentTrackVar)
-
   const location = useLocation()
+
+  const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null)
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [duration, setDuration] = useState<string>('0:00')
-
-  const wavesurfer = useRef<WaveSurfer | null>(null)
-  const waveContainerRef = useRef<HTMLDivElement>(null)
-
   const [loop, setLoop] = useState(false)
 
-  useEffect(() => {
-    if (waveContainerRef.current) {
-      wavesurfer.current = WaveSurfer.create({
+  const containerRef = useCallback((node: HTMLDivElement) => {
+    if (node !== null) {
+      const ws = WaveSurfer.create({
         mediaType: 'audio',
-        container: waveContainerRef.current,
+        container: node,
         barWidth: 3,
         barRadius: 4,
         barGap: 5,
@@ -51,36 +48,84 @@ const AppLayout: React.FC = () => {
         cursorColor: 'transparent'
       })
 
-      if (wavesurfer.current) {
-        if (track.audioURL) {
-          fetch(track.audioURL)
-            .then((response) => response.blob())
-            .then((data) => {
-              wavesurfer.current?.loadBlob(data)
-            })
-            .catch((e) => {
-              console.log(e)
-            })
-        }
+      // static events
+      ws.on('ready', function () {
+        setDuration(timeFormater(ws.getDuration() || 0))
+        setReadyForPlay(true)
+        ws.play()
+      })
 
-        wavesurfer.current.on('ready', function () {
-          setDuration(timeFormater(wavesurfer.current?.getDuration() || 0))
-          setReadyForPlay(true)
-          wavesurfer.current?.play()
-        })
+      ws.on('audioprocess', function () {
+        setCurrentTime(timeFormater(ws.getCurrentTime() || 0))
+      })
 
-        wavesurfer.current.on('audioprocess', function () {
-          setCurrentTime(timeFormater(wavesurfer.current?.getCurrentTime() || 0))
-        })
+      setWavesurfer(ws)
+    }
+  }, [])
+
+  function resetTimings() {
+    setCurrentTime('0:00')
+    setDuration('0:00')
+  }
+
+  const playNextHadler = () => {
+    UserMutations.playNext()
+    resetTimings()
+  }
+
+  const playPrevHandler = () => {
+    UserMutations.playPrev()
+    resetTimings()
+  }
+
+  useEffect(() => {
+    return () => {
+      if (wavesurfer) {
+        wavesurfer.destroy()
       }
     }
+  }, [])
 
-    return () => {
-      if (wavesurfer.current) {
-        wavesurfer.current.destroy()
+  useEffect(() => {
+    if (wavesurfer) {
+      if (track.audioURL) {
+        fetch(track.audioURL)
+          .then((response) => response.blob())
+          .then((data) => {
+            wavesurfer.loadBlob(data)
+          })
+          .catch((e) => {
+            // TODO: handle it
+            console.log(e)
+          })
       }
     }
   }, [track.audioURL])
+
+  const handleLoopChange = () => {
+    if (wavesurfer) {
+      if (loop) {
+        wavesurfer.play(0)
+
+        return
+      }
+      playNextHadler()
+    }
+  }
+
+  useEffect(() => {
+    // registry of dynamic wavesurfer events
+
+    if (wavesurfer) {
+      wavesurfer.on('finish', handleLoopChange)
+    }
+
+    return () => {
+      if (wavesurfer) {
+        wavesurfer.un('finish', handleLoopChange)
+      }
+    }
+  }, [loop, wavesurfer])
 
   const handlePlayerOpen = () => {
     setPlayerOpen(true)
@@ -91,20 +136,8 @@ const AppLayout: React.FC = () => {
 
   const playPauseHandler = () => {
     SoundtrackMutations.playPouse()
-    if (wavesurfer.current) {
-      wavesurfer.current.playPause()
-    }
-  }
-
-  const playNextHadler = () => {
-    if (wavesurfer.current) {
-      UserMutations.playNext()
-    }
-  }
-
-  const playPrevHandler = () => {
-    if (wavesurfer.current) {
-      UserMutations.playPrev()
+    if (wavesurfer) {
+      wavesurfer.playPause()
     }
   }
 
@@ -124,7 +157,7 @@ const AppLayout: React.FC = () => {
         </Wrapper>
       )}
       <Player
-        ref={waveContainerRef}
+        ref={containerRef}
         currentTime={currentTime}
         duration={duration}
         isOpen={isPlayerOpen}
