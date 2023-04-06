@@ -29,53 +29,55 @@ const AppLayout: React.FC = () => {
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
-  const [duration, setDuration] = useState<string>('0:00')
   const [loop, setLoop] = useState(false)
 
-  const containerRef = useCallback((node: HTMLDivElement) => {
-    if (node !== null) {
-      const ws = WaveSurfer.create({
-        mediaType: 'audio',
-        container: node,
-        barWidth: 3,
-        barRadius: 4,
-        barGap: 5,
-        cursorWidth: 1,
-        backend: 'WebAudio',
-        height: 30,
-        progressColor: '#dbdbdb',
-        waveColor: '#575763',
-        cursorColor: 'transparent'
-      })
+  const containerRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (wavesurfer) return
+      if (node !== null) {
+        const ws = WaveSurfer.create({
+          mediaType: 'audio',
+          container: node,
+          barWidth: 3,
+          barRadius: 4,
+          barGap: 5,
+          cursorWidth: 1,
+          backend: 'WebAudio',
+          height: 30,
+          progressColor: '#dbdbdb',
+          waveColor: '#575763',
+          cursorColor: 'transparent'
+        })
 
-      // static events
-      ws.on('ready', function () {
-        setDuration(timeFormater(ws.getDuration() || 0))
-        setReadyForPlay(true)
-        ws.play()
-      })
+        // static events
+        ws.on('ready', function () {
+          setReadyForPlay(true)
+          ws.play()
+        })
 
-      ws.on('audioprocess', function () {
-        setCurrentTime(timeFormater(ws.getCurrentTime() || 0))
-      })
+        ws.on('audioprocess', function () {
+          setCurrentTime(timeFormater(ws.getCurrentTime() || 0))
+        })
 
-      setWavesurfer(ws)
-    }
-  }, [])
+        setWavesurfer(ws)
+      }
+    },
+    [wavesurfer]
+  )
 
-  function resetTimings() {
+  function beforeTrackChange() {
+    setReadyForPlay(false)
     setCurrentTime('0:00')
-    setDuration('0:00')
   }
 
   const playNextHadler = () => {
     UserMutations.playNext()
-    resetTimings()
+    beforeTrackChange()
   }
 
   const playPrevHandler = () => {
     UserMutations.playPrev()
-    resetTimings()
+    beforeTrackChange()
   }
 
   useEffect(() => {
@@ -102,11 +104,10 @@ const AppLayout: React.FC = () => {
     }
   }, [track.audioURL])
 
-  const handleLoopChange = () => {
+  const handleFinishPlay = () => {
     if (wavesurfer) {
       if (loop) {
         wavesurfer.play(0)
-
         return
       }
       playNextHadler()
@@ -117,12 +118,12 @@ const AppLayout: React.FC = () => {
     // registry of dynamic wavesurfer events
 
     if (wavesurfer) {
-      wavesurfer.on('finish', handleLoopChange)
+      wavesurfer.on('finish', handleFinishPlay)
     }
 
     return () => {
       if (wavesurfer) {
-        wavesurfer.un('finish', handleLoopChange)
+        wavesurfer.un('finish', handleFinishPlay)
       }
     }
   }, [loop, wavesurfer])
@@ -159,7 +160,6 @@ const AppLayout: React.FC = () => {
       <Player
         ref={containerRef}
         currentTime={currentTime}
-        duration={duration}
         isOpen={isPlayerOpen}
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}

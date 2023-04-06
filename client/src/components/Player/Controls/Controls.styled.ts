@@ -45,11 +45,13 @@ export const PlayButtonBox = styled.div`
   align-self: center;
 `
 
-export const PlayButton = styled(IconButton)`
+export const PlayButton = styled(IconButton)<{ $isPlay: boolean }>`
+  position: relative;
   color: #1b1818;
   background-color: #fff;
   font-size: 3vh;
-  padding: 4vh;
+  padding: 5.5vh;
+
   outline: none;
   &:focus-visible {
     background-color: ${({ theme }) => theme.colors.primary};
@@ -67,9 +69,14 @@ export const PlayButton = styled(IconButton)`
     background-color: #fff;
   }
 
+  & > div {
+    position: absolute;
+    ${({ $isPlay }) => !$isPlay && 'left: 50%; transform: translate(-41%, 0);'}
+  }
+
   @media ${({ theme }) => theme.media.hxs} {
-    font-size: 20px;
-    padding: 25px;
+    font-size: 23px;
+    padding: 41px;
   }
 `
 

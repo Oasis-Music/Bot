@@ -50,7 +50,7 @@ const Controls: React.FC<ControlsProps> = ({
       </PrevButton>
       {/*  */}
       <PlayButtonBox>
-        <PlayButton disabled={!readyForPlay} withoutShadow onClick={onPlayPause}>
+        <PlayButton disabled={!readyForPlay} $isPlay={isPlay} withoutShadow onClick={onPlayPause}>
           <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayButton>
       </PlayButtonBox>

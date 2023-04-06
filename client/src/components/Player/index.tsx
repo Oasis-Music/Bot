@@ -4,12 +4,12 @@ import TopControls from './TopControls/TopControls'
 import Details from './Details/Details'
 import Trackline from './Trackline/Trackline'
 import Controls from './Controls/Controls'
+import { timeFormater } from '../../utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
 
 interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string
-  duration: string
   isOpen: boolean
   isReadyForPlay: boolean
   withLoop: boolean
@@ -46,7 +46,6 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   {
     isOpen,
     currentTime,
-    duration,
     isReadyForPlay,
     withLoop,
     onPlayPause,
@@ -67,7 +66,11 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         author={currentTrack.author}
         coverImage={currentTrack.coverURL}
       />
-      <Trackline ref={waveContainerRef} currentTime={currentTime} duration={duration} />
+      <Trackline
+        ref={waveContainerRef}
+        currentTime={currentTime}
+        duration={timeFormater(currentTrack.duration)}
+      />
       <Controls
         isPlay={currentTrack.isPlaying}
         readyForPlay={isReadyForPlay}
