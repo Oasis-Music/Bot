@@ -65,19 +65,12 @@ const AppLayout: React.FC = () => {
     [wavesurfer]
   )
 
-  function beforeTrackChange() {
-    setReadyForPlay(false)
-    setCurrentTime('0:00')
-  }
-
   const playNextHadler = () => {
     UserMutations.playNext()
-    beforeTrackChange()
   }
 
   const playPrevHandler = () => {
     UserMutations.playPrev()
-    beforeTrackChange()
   }
 
   useEffect(() => {
@@ -89,9 +82,20 @@ const AppLayout: React.FC = () => {
   }, [])
 
   useEffect(() => {
+    const abortController = new AbortController()
+    const { signal } = abortController
+
     if (wavesurfer) {
       if (track.audioURL) {
-        fetch(track.audioURL)
+        console.log('load')
+        setCurrentTime('0:00')
+
+        wavesurfer.empty()
+
+        fetch(track.audioURL, {
+          signal: signal,
+          method: 'GET'
+        })
           .then((response) => response.blob())
           .then((data) => {
             wavesurfer.loadBlob(data)
@@ -101,6 +105,10 @@ const AppLayout: React.FC = () => {
             console.log(e)
           })
       }
+    }
+
+    return () => {
+      abortController.abort()
     }
   }, [track.audioURL])
 
