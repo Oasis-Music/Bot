@@ -26,7 +26,7 @@ const AppLayout: React.FC = () => {
   const location = useLocation()
 
   const [player, setPlayer] = useState<AudioPlayer>()
-  const [isPlayerOpen, setPlayerOpen] = useState<boolean>(true)
+  const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [loop, setLoop] = useState(false)
@@ -46,6 +46,10 @@ const AppLayout: React.FC = () => {
       })
 
       pl.onAudioProcess(() => {
+        setCurrentTime(timeFormater(pl.getCurrentTime()))
+      })
+
+      pl.howler.on('seek', () => {
         setCurrentTime(timeFormater(pl.getCurrentTime()))
       })
 
@@ -92,6 +96,7 @@ const AppLayout: React.FC = () => {
 
   const playPauseHandler = () => {
     SoundtrackMutations.playPouse()
+
     if (player) {
       player.playPause()
     }

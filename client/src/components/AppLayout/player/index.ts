@@ -19,7 +19,7 @@ Howl.prototype.changeSong = function (o) {
 }
 
 class AudioPlayer {
-  isPlay: boolean
+  isPlay: boolean // there is internal play state because howler.seek() automatically pause playback after call
   private audioProcessInterval: any
   readonly howler: Howl
   private canvas: Canvas
@@ -28,7 +28,7 @@ class AudioPlayer {
     this.isPlay = false
     this.audioProcessInterval = null
 
-    this.howler = new Howl({
+    const howler = new Howl({
       src: '_',
       html5: true,
       format: 'mp3',
@@ -37,12 +37,23 @@ class AudioPlayer {
       }
     })
 
+    howler.on('play', () => {
+      requestAnimationFrame(this.animate.bind(this))
+    })
+    this.howler = howler
+
     this.canvas = new Canvas(props.node, this.howler)
+    this.canvas.init()
   }
 
   public play() {
-    this.howler.play()
     this.isPlay = true
+    this.howler.play()
+  }
+
+  public pause() {
+    this.isPlay = false
+    this.howler.pause()
   }
 
   public playPause() {
@@ -61,13 +72,13 @@ class AudioPlayer {
 
   public onAudioProcess(callback: () => void) {
     this.audioProcessInterval = setInterval(() => {
-      if (this.isPlay) {
+      if (this.howler.playing()) {
         callback()
       }
     }, 1000)
   }
 
-  // if src changed it triggers AbortController automatically
+  /* If src changed it triggers AbortController automatically */
   public load(src: string) {
     this.howler.changeSong({ src })
   }
@@ -77,11 +88,25 @@ class AudioPlayer {
   }
 
   public onEnd(callback: () => void) {
-    this.howler.on('end', callback)
+    this.howler.on('end', () => {
+      if (this.howler.loop()) {
+        this.isPlay = true
+      } else {
+        this.isPlay = false
+      }
+      callback()
+    })
   }
 
   public clean() {
     clearInterval(this.audioProcessInterval)
+  }
+
+  private animate() {
+    this.canvas.drawProgress()
+    if (this.isPlay) {
+      requestAnimationFrame(this.animate.bind(this))
+    }
   }
 }
 
