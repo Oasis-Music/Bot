@@ -83,6 +83,7 @@ const AppLayout: React.FC = () => {
       if (track.audioURL) {
         console.log('load')
         setCurrentTime('0:00')
+        player.redrawTrackline()
         player.load(track.audioURL)
       }
     }

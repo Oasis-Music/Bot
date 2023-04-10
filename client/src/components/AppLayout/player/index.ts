@@ -119,6 +119,7 @@ class AudioPlayer {
   public clean() {
     clearInterval(this.audioProcessInterval)
     this.howler.off()
+    this.canvas.clearEventListeners()
   }
 
   private animate() {
@@ -126,6 +127,10 @@ class AudioPlayer {
     if (this.isPlay) {
       requestAnimationFrame(this.animate.bind(this))
     }
+  }
+
+  public redrawTrackline() {
+    this.canvas.regenerateWaves()
   }
 }
 

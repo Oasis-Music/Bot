@@ -2,10 +2,16 @@ import { Howl } from 'howler'
 
 type styleDeclaration = Partial<CSSStyleDeclaration> & { [propName: string]: string }
 
+function getRandomBarHeight(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
 class Canvas {
   readonly howler: Howl
   readonly container: HTMLElement
   readonly progressWrapper: HTMLDivElement
+  readonly barWidth: number
+  readonly barGap: number
 
   readonly progressCanvas: HTMLCanvasElement
   readonly progressCanvasCtx: CanvasRenderingContext2D
@@ -13,11 +19,18 @@ class Canvas {
   readonly waveCanvas: HTMLCanvasElement
   readonly waveCanvasCtx: CanvasRenderingContext2D
 
+  private bars: number[]
+
   containerClickHandler: (e: MouseEvent) => void
 
   constructor(container: HTMLElement, howler: Howl) {
     this.container = container
     this.howler = howler
+    this.bars = []
+
+    this.barWidth = 4
+    this.barGap = 4
+
     this.containerClickHandler = () => {
       return
     }
@@ -68,13 +81,14 @@ class Canvas {
     this.containerClickHandler = this.handleContainerClick.bind(this)
     this.container.addEventListener('click', this.containerClickHandler)
 
+    this.generateBars()
     this.drawWaveBars()
     this.drawProgressBars()
   }
 
   private handleContainerClick(e: MouseEvent) {
     const offset = Math.round(this.howler.duration() * (e.offsetX / this.container.offsetWidth))
-    console.log('play from:', offset, this.howler.playing())
+    // console.log('play from:', offset, this.howler.playing())
 
     this.howler.seek(offset)
 
@@ -98,20 +112,20 @@ class Canvas {
   }
 
   drawBars(ctx: CanvasRenderingContext2D, color: string) {
-    const barWidth = 4
-    const barGap = 4
-    const barCount = this.progressCanvas.width / (barWidth + barGap - barGap)
+    if (!this.bars.length) return
 
     let x = 0
 
-    for (let i = 0; i < barCount; i++) {
-      const barHeight = 20
+    const bars = this.bars
+
+    for (let i = 0; i < bars.length; i++) {
+      const barHeight = bars[i]
 
       const y = this.progressCanvas.height / 2 - barHeight / 2
 
-      this.drawRoundedRect(ctx, x, y, barWidth, barHeight, 2, color)
+      this.drawRoundedRect(ctx, x, y, this.barWidth, barHeight, 2, color)
 
-      x += barWidth + barGap
+      x += this.barWidth + this.barGap
     }
   }
 
@@ -153,6 +167,29 @@ class Canvas {
 
     ctx.closePath()
     ctx.fill()
+  }
+
+  generateBars() {
+    const genBars = []
+
+    const barCount = this.progressCanvas.width / (this.barWidth + this.barGap - this.barGap)
+
+    for (let i = 0; i < barCount; i++) {
+      const barHeight = getRandomBarHeight(15, 30)
+      genBars.push(barHeight)
+    }
+
+    this.bars = genBars
+  }
+
+  regenerateWaves() {
+    this.waveCanvasCtx.clearRect(0, 0, this.waveCanvas.width, this.waveCanvas.height)
+    this.progressCanvasCtx.clearRect(0, 0, this.progressCanvas.width, this.progressCanvas.height)
+
+    this.generateBars()
+
+    this.drawWaveBars()
+    this.drawProgressBars()
   }
 
   public clearEventListeners() {
