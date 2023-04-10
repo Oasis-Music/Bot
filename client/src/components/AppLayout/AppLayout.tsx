@@ -172,6 +172,10 @@ const AppLayout: React.FC = () => {
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}
         withLoop={loop}
+        withRandom={false} // TODO: plug
+        onRandom={() => {
+          console.log('plug')
+        }}
         onPlayPause={playPauseHandler}
         onPlayNext={playNextHadler}
         onPlayPrev={playPrevHandler}

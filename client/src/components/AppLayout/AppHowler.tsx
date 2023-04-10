@@ -29,7 +29,8 @@ const AppLayout: React.FC = () => {
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
-  const [loop, setLoop] = useState(false)
+  const [loop, setLoop] = useState<boolean>(false)
+  const [random, setRandom] = useState<boolean>(false)
 
   const containerRef = useCallback((node: HTMLDivElement) => {
     if (player) return
@@ -104,9 +105,13 @@ const AppLayout: React.FC = () => {
 
   const handleLoopState = () => {
     setLoop((prev) => {
-      player?.howler.loop(!prev)
+      player?.howler.loop(!prev) // TODO: wrap howler.loop
       return !prev
     })
+  }
+
+  const handleRandomState = () => {
+    setRandom((prev) => !prev)
   }
 
   return (
@@ -127,10 +132,12 @@ const AppLayout: React.FC = () => {
         onClose={handlePlayerClose}
         isReadyForPlay={readyForPlay}
         withLoop={loop}
+        withRandom={random}
         onPlayPause={playPauseHandler}
         onPlayNext={playNextHadler}
         onPlayPrev={playPrevHandler}
         onLoop={handleLoopState}
+        onRandom={handleRandomState}
       />
     </Box>
   )

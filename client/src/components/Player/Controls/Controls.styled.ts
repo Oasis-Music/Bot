@@ -95,8 +95,13 @@ interface loopButtonStyles {
   $loop: boolean
 }
 
-export const RandomButton = styled(IconButton)`
+interface randomButtonStyles {
+  $random: boolean
+}
+
+export const RandomButton = styled(IconButton)<randomButtonStyles>`
   ${subControlsBtsStyles}
+  color: ${({ $random }) => ($random ? '#fff' : '#838383')};
 `
 export const LoopButton = styled(IconButton)<loopButtonStyles>`
   ${subControlsBtsStyles}

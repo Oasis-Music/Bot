@@ -13,11 +13,13 @@ interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   isOpen: boolean
   isReadyForPlay: boolean
   withLoop: boolean
+  withRandom: boolean
   onClose(): void
   onPlayPause(): void
   onPlayNext(): void
   onPlayPrev(): void
   onLoop(): void
+  onRandom(): void
 }
 
 interface containerStylesProps {
@@ -48,10 +50,12 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
     currentTime,
     isReadyForPlay,
     withLoop,
+    withRandom,
     onPlayPause,
     onPlayNext,
     onPlayPrev,
     onLoop,
+    onRandom,
     onClose
   },
   waveContainerRef
@@ -75,10 +79,12 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         isPlay={currentTrack.isPlaying}
         readyForPlay={isReadyForPlay}
         withLoop={withLoop}
+        withRandom={withRandom}
         onPlayPause={onPlayPause}
         onPlayNext={onPlayNext}
         onPlayPrev={onPlayPrev}
         onLoop={onLoop}
+        onRandom={onRandom}
       />
     </Container>
   )
