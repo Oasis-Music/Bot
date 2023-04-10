@@ -19,9 +19,9 @@ Howl.prototype.changeSong = function (o) {
 }
 
 class AudioPlayer {
-  isPlay: boolean // there is internal play state because howler.seek() automatically pause playback after call
+  private isPlay: boolean //  it's internal play state because howler.seek() automatically pause playback after call
   private audioProcessInterval: any
-  readonly howler: Howl
+  private readonly howler: Howl
   private canvas: Canvas
 
   constructor(props: Options) {
@@ -66,6 +66,18 @@ class AudioPlayer {
     }
   }
 
+  public setLoop(v: boolean) {
+    this.howler.loop(v)
+  }
+
+  public getLoop(): boolean {
+    return this.howler.loop()
+  }
+
+  public seekTo(n: number) {
+    this.howler.seek(n)
+  }
+
   public getCurrentTime(): number {
     return this.howler.seek()
   }
@@ -76,6 +88,12 @@ class AudioPlayer {
         callback()
       }
     }, 1000)
+  }
+
+  public onSeek(callback: () => void) {
+    this.howler.on('seek', () => {
+      callback()
+    })
   }
 
   /* If src changed it triggers AbortController automatically */
@@ -100,6 +118,7 @@ class AudioPlayer {
 
   public clean() {
     clearInterval(this.audioProcessInterval)
+    this.howler.off()
   }
 
   private animate() {

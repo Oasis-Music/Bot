@@ -50,13 +50,13 @@ const AppLayout: React.FC = () => {
         setCurrentTime(timeFormater(pl.getCurrentTime()))
       })
 
-      pl.howler.on('seek', () => {
+      pl.onSeek(() => {
         setCurrentTime(timeFormater(pl.getCurrentTime()))
       })
 
       pl.onEnd(() => {
-        if (pl.howler.loop()) {
-          pl.howler.seek(0)
+        if (pl.getLoop()) {
+          pl.seekTo(0)
           return
         }
         playNextHadler()
@@ -105,7 +105,9 @@ const AppLayout: React.FC = () => {
 
   const handleLoopState = () => {
     setLoop((prev) => {
-      player?.howler.loop(!prev) // TODO: wrap howler.loop
+      if (player) {
+        player.setLoop(!prev)
+      }
       return !prev
     })
   }
