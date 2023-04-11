@@ -2,7 +2,7 @@ import { Howl } from 'howler'
 import Canvas from './canvas'
 
 interface Options {
-  src: string
+  src?: string
   node: HTMLElement
 }
 
@@ -29,7 +29,7 @@ class AudioPlayer {
     this.audioProcessInterval = null
 
     const howler = new Howl({
-      src: '_',
+      src: props.src ? props.src : '_',
       html5: true,
       format: 'mp3',
       xhr: {
