@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import MiniPlayer from '../MiniPlayer/MiniPlayer'
 import Nav from '../Nav/Nav'
@@ -32,12 +32,13 @@ const AppLayout: React.FC = () => {
   const [loop, setLoop] = useState<boolean>(false)
   const [random, setRandom] = useState<boolean>(false)
 
-  const containerRef = useCallback((node: HTMLDivElement) => {
-    if (player) return
-    if (node !== null) {
+  const waveContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (waveContainerRef) {
       const pl = new AudioPlayer({
         src: '',
-        node: node
+        node: waveContainerRef.current as HTMLElement
       })
 
       pl.onLoad(() => {
@@ -63,6 +64,10 @@ const AppLayout: React.FC = () => {
       })
 
       setPlayer(pl)
+
+      return () => {
+        pl.clean()
+      }
     }
   }, [])
 
@@ -74,14 +79,10 @@ const AppLayout: React.FC = () => {
     UserMutations.playPrev()
   }
 
-  //   useEffect(() => {
-  //     return () => {}
-  //   }, [])
-
   useEffect(() => {
     if (player) {
       if (track.audioURL) {
-        console.log('load')
+        // console.log('load')
         setCurrentTime('0:00')
         player.redrawTrackline()
         player.load(track.audioURL)
@@ -129,7 +130,7 @@ const AppLayout: React.FC = () => {
         </Wrapper>
       )}
       <Player
-        ref={containerRef}
+        ref={waveContainerRef}
         currentTime={currentTime}
         isOpen={isPlayerOpen}
         onClose={handlePlayerClose}
