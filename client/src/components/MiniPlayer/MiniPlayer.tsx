@@ -45,7 +45,8 @@ const InnerContainer = styled.div`
 `
 
 const ImageWrapper = styled.div`
-  font-size: 2.5vh;
+  font-size: 2.3vh;
+  color: #dddddd;
   margin-right: 7px;
   width: 10vh;
 `

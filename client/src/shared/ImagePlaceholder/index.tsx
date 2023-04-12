@@ -9,10 +9,12 @@ export interface ImagePlaceholderProps {
   src: string
   altText: string
   plain?: boolean
+  backgroundColor?: string
 }
 
 interface StyleProps {
   $plain: boolean
+  $backgroundColor?: string
 }
 
 interface ImageStyles {
@@ -21,7 +23,7 @@ interface ImageStyles {
 }
 
 const PlugIcon = styled(SvgIcon)`
-  color: #515151;
+  color: inherit;
   font-size: inherit;
 `
 
@@ -61,24 +63,11 @@ const ImagePlug = styled.div<StyleProps>`
   ${imageStyles}
 `
 
-const shineAnimation = keyframes`
-    0% {
-        background-position: 0% 0%;  
-    }
-    100% {
-        background-position: -135% 0%;
-    }
-`
-
 const ShineBox = styled.div<StyleProps>`
   width: 100%;
   height: 100%;
-  transition: 0.3s;
-  background: linear-gradient(-90deg, #efefef 0%, #fcfcfc 50%, #efefef 100%);
-  background-size: 300% 300%;
-  opacity: 0.8;
+  background-color: ${({ $backgroundColor }) => ($backgroundColor ? $backgroundColor : '#15191e')};
   border-radius: 15px;
-  animation: ${shineAnimation} 1.3s infinite;
   border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
 `
 
@@ -102,7 +91,12 @@ const PlugWrapper = styled.div`
   ${wrapperStyles}
 `
 
-const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain = false }) => {
+const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
+  src,
+  altText,
+  backgroundColor,
+  plain = false
+}) => {
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -111,7 +105,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
 
   const placeholderPlug = (
     <ImagePlug $plain={plain}>
-      <ShineBox $plain={plain} />
+      <ShineBox $plain={plain} $backgroundColor={backgroundColor} />
       <ImageWrapper>
         <PlugIcon>
           <PlaceholderImage />
@@ -120,7 +114,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
     </ImagePlug>
   )
 
-  const plainPlug = <ShineBox $plain={plain} />
+  const plainPlug = <ShineBox $plain={plain} $backgroundColor={backgroundColor} />
 
   if (src === '' || error) {
     return <PlugWrapper $plain={plain}>{plain ? plainPlug : placeholderPlug}</PlugWrapper>

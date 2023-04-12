@@ -32,8 +32,10 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
   ${prop}
   position: relative;
   border-radius: 15px;
+  font-size: 4vh;
   max-width: 35vh;
   margin: 0 auto;
+  color: #dddddd;
   &::before {
     content: '';
     width: 104%;
@@ -65,6 +67,7 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
   }
 
   @media ${({ theme }) => theme.media.hxs} {
+    font-size: 30px;
     max-width: 270px;
   }
   ${({ $stopPlaying }) =>
