@@ -73,7 +73,7 @@ const Author = styled.p`
   color: #4e4e4e;
   font-size: 2.3vh;
   margin: 0;
-  font-weight: 400;
+  font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
