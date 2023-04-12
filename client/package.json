@@ -24,7 +24,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-i18next": "^12.1.5",
-    "react-progressive-graceful-image": "^0.7.0",
+    "react-lazy-load": "^4.0.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.5.5",
