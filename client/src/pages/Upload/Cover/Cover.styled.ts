@@ -66,7 +66,7 @@ export const ContainerUpload = styled.div<containerStyles>`
 
 export const Preview = styled.img`
   display: block;
-  width: inherit;
+  width: 100%;
   height: 100%;
   border-radius: 8px;
 `
