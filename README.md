@@ -18,7 +18,7 @@ and
 ffprobe -version # >= 4.4.2
 ```
 
-Next, you will need a [file server](https://eli.thegreenplace.net/2022/serving-static-files-and-web-apps-in-go/) urls that will serve audio and picture files.
+Next, you will need a [file server](https://github.com/Oasis-Music/file-server) urls that will serve audio and picture files.
 
 For example:
 
