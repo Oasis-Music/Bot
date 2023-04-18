@@ -5,10 +5,10 @@ import { ReactComponent as AudioPlaceholderIcon } from '../../../../assets/svg/a
 import { ReactComponent as CheckIcon } from '../../../../assets/svg/check-circle.svg'
 import { ContainerUpload, Plug, PlugIcon, PlugInfo, ErrorMessage } from './Dropzone.styled'
 import { useTranslation } from 'react-i18next'
-
+import AudioPlayer from '../../../../components/AppLayout/player'
 interface DropzoneProps {
   audio: File | null
-  wavesurfer: WaveSurfer | null
+  player: AudioPlayer | undefined
   onStop(): void
   onSetAudio(f: File | null): void
   onFormValue(f: File): void
@@ -27,13 +27,7 @@ function dropzoneCodeToMsg(code: string): string {
   }
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({
-  audio,
-  wavesurfer,
-  onStop,
-  onSetAudio,
-  onFormValue
-}) => {
+const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, onFormValue }) => {
   const { t } = useTranslation()
 
   const [dropError, setDropError] = useState<string>('')
@@ -48,26 +42,22 @@ const Dropzone: React.FC<DropzoneProps> = ({
 
   const handleFileDrop = (acceptedFiles: globalThis.File[]) => {
     if (audio) {
-      if (wavesurfer?.isPlaying) onStop()
-      wavesurfer?.empty()
+      if (player?.isPlaying()) onStop()
     }
 
     if (acceptedFiles.length) {
       if (dropError) setDropError('')
       const file = acceptedFiles[0] as File
-
       onSetAudio(file)
 
       const reader = new FileReader()
 
       reader.onload = function (evt) {
         if (evt.target) {
-          if (wavesurfer) {
-            const r = evt.target.result as ArrayBuffer
-
-            const blob = new window.Blob([new Uint8Array(r)])
-            wavesurfer.loadBlob(blob)
+          if (player) {
+            const r = evt.target.result as string
             onFormValue(file)
+            player.load(r)
           }
         }
       }
@@ -77,8 +67,7 @@ const Dropzone: React.FC<DropzoneProps> = ({
         setDropError(t('pages.upload.audio.errors.read'))
       }
 
-      // Read File as an ArrayBuffer
-      reader.readAsArrayBuffer(file)
+      reader.readAsDataURL(file)
     }
   }
 

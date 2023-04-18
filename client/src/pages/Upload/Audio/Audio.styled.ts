@@ -28,24 +28,6 @@ export const WaveWrapper = styled.div`
   padding: 0 15px;
 `
 
-interface WavesStyles {
-  $isFile: boolean
-}
-
-export const Waves = styled.div<WavesStyles>`
-  position: relative;
-  &::before {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 0;
-    top: 40%;
-    border-bottom: 2px dashed #575763;
-    visibility: ${({ $isFile }) => ($isFile ? 'hidden' : 'visible')};
-    opacity: ${({ $isFile }) => ($isFile ? '0' : '1')};
-  }
-`
-
 export const TimeBox = styled.div`
   display: flex;
   margin-top: 9px;
