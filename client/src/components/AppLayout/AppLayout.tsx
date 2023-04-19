@@ -35,7 +35,7 @@ const AppLayout: React.FC = () => {
   const waveContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (waveContainerRef) {
+    if (waveContainerRef.current) {
       const pl = new AudioPlayer({
         node: waveContainerRef.current as HTMLElement
       })
