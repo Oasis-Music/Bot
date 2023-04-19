@@ -5,7 +5,7 @@ import { ReactComponent as AudioPlaceholderIcon } from '../../../../assets/svg/a
 import { ReactComponent as CheckIcon } from '../../../../assets/svg/check-circle.svg'
 import { ContainerUpload, Plug, PlugIcon, PlugInfo, ErrorMessage } from './Dropzone.styled'
 import { useTranslation } from 'react-i18next'
-import AudioPlayer from '../../../../components/AppLayout/player'
+import AudioPlayer from '../../../../player'
 interface DropzoneProps {
   audio: File | null
   player: AudioPlayer | undefined

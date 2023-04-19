@@ -8,7 +8,7 @@ import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '../../apollo/cache/variables'
 import { Outlet, useLocation } from 'react-router-dom'
 import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
-import AudioPlayer from './player'
+import AudioPlayer from '../../player'
 
 const Box = styled.div`
   position: relative;

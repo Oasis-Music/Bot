@@ -16,7 +16,7 @@ import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import Dropzone from './Dropzone/Dropzone'
 import StepControls from '../StepControls'
-import AudioPlayer from '../../../components/AppLayout/player'
+import AudioPlayer from '../../../player'
 
 interface AudioProps {
   loading: boolean
