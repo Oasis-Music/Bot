@@ -1,6 +1,5 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { useSpring, animated } from 'react-spring'
 import { useField } from 'formik'
 
 interface TextInputProps {
@@ -71,7 +70,7 @@ const BaseInput = styled.input<BaseInputStyles>`
   ${baseStyles}
 `
 
-const ErrorMessage = styled.p`
+const ErrorMessage = styled.p<{ $err: boolean }>`
   height: 24px;
   font-size: 13px;
   margin: 0;
@@ -79,6 +78,8 @@ const ErrorMessage = styled.p`
   padding-left: 10px;
   opacity: 1;
   transition: all 0.3s linear;
+  transition: opacity 0.2s ease-in-out;
+  opacity: ${({ $err }) => ($err ? 1 : 0)};
 `
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -91,14 +92,6 @@ const TextInput: React.FC<TextInputProps> = ({
   const [field, meta] = useField(restProps)
 
   const isErr = meta.touched && !!meta.error
-
-  const fadeStyles = useSpring({
-    config: { duration: 250 },
-    from: { opacity: 0 },
-    to: {
-      opacity: isErr ? 1 : 0
-    }
-  })
 
   return (
     <div>
@@ -113,11 +106,7 @@ const TextInput: React.FC<TextInputProps> = ({
           $error={isErr}
         />
       )}
-      {!hideErrorMessage && (
-        <animated.div style={fadeStyles}>
-          <ErrorMessage>{meta.touched && meta.error}</ErrorMessage>
-        </animated.div>
-      )}
+      {!hideErrorMessage && <ErrorMessage $err={isErr}>{meta.touched && meta.error}</ErrorMessage>}
     </div>
   )
 }
