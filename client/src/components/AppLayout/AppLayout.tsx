@@ -9,6 +9,7 @@ import { currentTrackVar } from '../../apollo/cache/variables'
 import { Outlet, useLocation } from 'react-router-dom'
 import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
 import AudioPlayer from '../../player'
+import Snackbar from '../Snackbar'
 
 const Box = styled.div`
   position: relative;
@@ -142,6 +143,7 @@ const AppLayout: React.FC = () => {
         onLoop={handleLoopState}
         onRandom={handleRandomState}
       />
+      <Snackbar />
     </Box>
   )
 }

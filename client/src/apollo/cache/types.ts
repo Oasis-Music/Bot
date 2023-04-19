@@ -25,11 +25,16 @@ export type CurrentTrack = {
   coverURL?: string | null | undefined
   audioURL: string
   isPlaying: boolean
-  attached: boolean // without user context always - false
+  attached: boolean // INFO: without user context always - false
 }
 
 export type accessToken = {
   userId: string
   firstName: string
   accessUuid: string
+}
+
+export type snackbarEvent = {
+  type: 'error' | 'success'
+  message: string
 }
