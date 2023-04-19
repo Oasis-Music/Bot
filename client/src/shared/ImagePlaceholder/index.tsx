@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css } from 'styled-components'
 import LazyLoad from 'react-lazy-load'
 import SvgIcon from '../SvgIcon'
 import { ReactComponent as PlaceholderImage } from '../../assets/svg/music.svg'

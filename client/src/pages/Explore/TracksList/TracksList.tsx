@@ -5,7 +5,7 @@ import PlaylistItem from '../../../components/PlaylistItem/PlaylistItem'
 import styled from 'styled-components'
 import ScaleLoader from '../../../shared/Loader'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar, explorePlaylistVar } from '../../../apollo/cache/variables'
+import { currentTrackVar } from '../../../apollo/cache/variables'
 import { Playlist } from '../../../apollo/cache/types'
 
 interface listStyleProps {

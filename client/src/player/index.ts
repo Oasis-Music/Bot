@@ -20,7 +20,7 @@ Howl.prototype.changeSong = function (o) {
 
 class AudioPlayer {
   private isPlay: boolean //  it's internal play state because howler.seek() automatically pause playback after call
-  private audioProcessInterval: any
+  private audioProcessInterval: unknown
   private readonly howler: Howl
   private canvas: Canvas
 
@@ -126,7 +126,7 @@ class AudioPlayer {
 
   public clean() {
     this.howler.stop()
-    clearInterval(this.audioProcessInterval)
+    clearInterval(this.audioProcessInterval as number)
     this.howler.off()
     this.canvas.clearEventListeners()
   }
