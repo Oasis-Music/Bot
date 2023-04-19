@@ -70,6 +70,14 @@ class AudioPlayer {
     this.howler.loop(v)
   }
 
+  public isPlaying(): boolean {
+    return this.isPlay
+  }
+
+  public getDuration(): number {
+    return this.howler.duration()
+  }
+
   public getLoop(): boolean {
     return this.howler.loop()
   }
@@ -117,6 +125,7 @@ class AudioPlayer {
   }
 
   public clean() {
+    this.howler.stop()
     clearInterval(this.audioProcessInterval)
     this.howler.off()
     this.canvas.clearEventListeners()
