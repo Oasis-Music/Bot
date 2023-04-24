@@ -16,8 +16,9 @@ const Container = styled.div<containerStyles>`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: ${({ $open }) => ($open ? '1' : '0')};
-  bottom: 7%;
+  bottom: 17%;
   color: #fff;
+  border: 2px solid;
   border-radius: 6px;
   padding: 15px 15px 15px 20px;
   font-weight: 500;
@@ -32,11 +33,13 @@ const Container = styled.div<containerStyles>`
     switch ($type) {
       case 'success':
         return css`
+          border-color: #006f00;
           background-color: #2bab2b;
         `
       case 'error':
         return css`
-          background-color: #ff0033;
+          border-color: #9b0000;
+          background-color: #ff3131;
         `
       default:
         return css`
