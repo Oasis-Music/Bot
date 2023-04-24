@@ -1,6 +1,7 @@
 {
   "common": {
-    "save": "Сохранить"
+    "save": "Сохранить",
+    "soundtrack": "Саундтрек"
   },
   "errors": {
     "telegramUserDataErr": "* ошибка данных пользователя Telegram",

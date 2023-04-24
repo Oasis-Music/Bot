@@ -20,7 +20,7 @@ import {
   UnattachSoundtrackDocument
 } from '../../../graphql/user/_gen_/unattachSoundtrack.mutation'
 import {
-  Container,
+  InnerContainer,
   ImageWrapper,
   Details,
   TrackTitle,
@@ -31,7 +31,7 @@ import {
   DownloadBotton,
   ControlsWrapper,
   CopyInfoBotton,
-  Counter
+  InfoLine
 } from './NowPlaying.styled'
 
 interface NowPlayingProps {
@@ -105,56 +105,62 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
   }
 
   return (
-    <Container $isAdded={track.attached}>
-      <div>
-        <ImageWrapper>
-          <ImagePlaceholder src={track.coverURL || ''} altText={track.title} />
-        </ImageWrapper>
-      </div>
-      <Details>
-        <TrackTitle>{track.title}</TrackTitle>
-        <AuthorTitle>{track.author}</AuthorTitle>
-        {track.attached ? (
-          <ControlsWrapper>
-            <DeleteBotton onClick={unattachHandler}>
-              <SvgIcon>
-                <TrashIcon />
-              </SvgIcon>
-            </DeleteBotton>
-            <DownloadBotton>
-              <SvgIcon>
-                <DownloadIcon />
-              </SvgIcon>
-            </DownloadBotton>
-            <CopyInfoBotton>
-              <SvgIcon>
-                <CopyIcon />
-              </SvgIcon>
-            </CopyInfoBotton>
-          </ControlsWrapper>
-        ) : (
-          <SaveBotton
-            disabled={!!!track.id}
-            loading={attachMeta.loading}
-            fullWidth
-            color="secondary"
-            onClick={attachHandler}
-            startIcon={
-              <AddIcon>
-                <PlusIcon />
-              </AddIcon>
-            }
-          >
-            {t('common.save')}
-          </SaveBotton>
-        )}
-      </Details>
+    <div>
+      <InnerContainer $isAdded={track.attached}>
+        <div>
+          <ImageWrapper>
+            <ImagePlaceholder src={track.coverURL || ''} altText={track.title} />
+          </ImageWrapper>
+        </div>
+        <Details>
+          <TrackTitle>{track.title}</TrackTitle>
+          <AuthorTitle>{track.author}</AuthorTitle>
+          {track.attached ? (
+            <ControlsWrapper>
+              <DeleteBotton onClick={unattachHandler}>
+                <SvgIcon>
+                  <TrashIcon />
+                </SvgIcon>
+              </DeleteBotton>
+              <DownloadBotton>
+                <SvgIcon>
+                  <DownloadIcon />
+                </SvgIcon>
+              </DownloadBotton>
+              <CopyInfoBotton>
+                <SvgIcon>
+                  <CopyIcon />
+                </SvgIcon>
+              </CopyInfoBotton>
+            </ControlsWrapper>
+          ) : (
+            <SaveBotton
+              disabled={!!!track.id}
+              loading={attachMeta.loading}
+              fullWidth
+              color="secondary"
+              onClick={attachHandler}
+              startIcon={
+                <AddIcon>
+                  <PlusIcon />
+                </AddIcon>
+              }
+            >
+              {t('common.save')}
+            </SaveBotton>
+          )}
+        </Details>
+      </InnerContainer>
       {!!trackCounter && (
-        <Counter>
-          {trackCounter}/{process.env.REACT_APP_MAX_TRACK_AVAILABLE}
-        </Counter>
+        <InfoLine>
+          <span>{t('common.soundtrack')}</span>
+          <div />
+          <span>
+            {trackCounter}/{process.env.REACT_APP_MAX_TRACK_AVAILABLE}
+          </span>
+        </InfoLine>
       )}
-    </Container>
+    </div>
   )
 }
 
