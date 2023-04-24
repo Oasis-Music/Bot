@@ -45,7 +45,8 @@ const InnerContainer = styled.div`
 `
 
 const ImageWrapper = styled.div`
-  font-size: 2.5vh;
+  font-size: 2.3vh;
+  color: #dddddd;
   margin-right: 7px;
   width: 10vh;
 `
@@ -58,26 +59,27 @@ const InfoBox = styled.div`
 
 const Title = styled.h3`
   color: #000;
-  font-size: 2.7vh;
+  font-size: 2.8vh;
+  margin: 0;
+  margin-bottom: 2px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media ${({ theme }) => theme.media.hxs} {
+    font-size: 19px;
+  }
+`
+const Author = styled.p`
+  color: #4e4e4e;
+  font-size: 2.3vh;
   margin: 0;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   @media ${({ theme }) => theme.media.hxs} {
-    font-size: 18px;
-  }
-`
-const Author = styled.p`
-  color: #4e4e4e;
-  font-size: 2vh;
-  margin: 0;
-  font-weight: 400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  @media ${({ theme }) => theme.media.hxs} {
-    font-size: 13px;
+    font-size: 15px;
   }
 `
 
@@ -89,11 +91,12 @@ const PlayBottonWrapper = styled.div`
   margin: 0 4%;
 `
 
-const PlayBotton = styled(IconButton)`
+const PlayBotton = styled(IconButton)<{ $isPlay: boolean }>`
+  position: relative;
   color: #fff;
   background-color: #1b1818;
-  font-size: 2.7vh;
-  padding: 2vh;
+  font-size: 2.5vh;
+  padding: 4vh;
   box-shadow: none;
   &:disabled {
     box-shadow: none;
@@ -101,9 +104,15 @@ const PlayBotton = styled(IconButton)`
   &:hover:not(:disabled) {
     background-color: #1b1818;
   }
+
+  & > div {
+    position: absolute;
+    ${({ $isPlay }) => !$isPlay && 'left: 50%; transform: translate(-41%, 0);'}
+  }
+
   @media ${({ theme }) => theme.media.hxs} {
     font-size: 17px;
-    padding: 15px;
+    padding: 30px;
   }
 `
 
@@ -122,7 +131,7 @@ const MiniPlayer: React.FC<MiniPlayerProps> = ({ onPlayerOpen, onPlayPause }) =>
         </InfoBox>
       </InnerContainer>
       <PlayBottonWrapper>
-        <PlayBotton onClick={onPlayPause}>
+        <PlayBotton onClick={onPlayPause} $isPlay={currentTrack.isPlaying}>
           <SvgIcon>{currentTrack.isPlaying ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayBotton>
       </PlayBottonWrapper>

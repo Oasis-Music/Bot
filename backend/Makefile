@@ -11,6 +11,8 @@ lint:
 
 # DB
 backup:
+	pg_dump -U postgres -T auth_token -Fc cristal > ./init/backup.dmp
+backup_full:
 	pg_dump -U postgres -Fc cristal > ./init/backup.dmp
 restore:
 	pg_restore -U postgres -d cristal -v -c ./init/backup.dmp

@@ -50,7 +50,7 @@ const Slide = styled.div<slideStyles>`
   box-sizing: border-box;
   background-color: #101318;
   & > div {
-    display: ${({ $active }) => ($active ? 'block' : 'none')};
+    visibility: ${({ $active }) => ($active ? 'visible' : 'hidden')};
   }
 `
 

@@ -20,24 +20,28 @@ interface ControlsProps {
   isPlay: boolean
   readyForPlay: boolean
   withLoop: boolean
+  withRandom: boolean
   onPlayPause?(): void
   onPlayNext(): void
   onPlayPrev(): void
   onLoop(): void
+  onRandom(): void
 }
 
 const Controls: React.FC<ControlsProps> = ({
   isPlay,
   withLoop,
+  withRandom,
   readyForPlay,
   onPlayPause,
   onPlayNext,
   onPlayPrev,
-  onLoop
+  onLoop,
+  onRandom
 }) => {
   return (
     <Container>
-      <RandomButton withoutShadow>
+      <RandomButton $random={withRandom} onClick={onRandom} withoutShadow>
         <SvgIcon>
           <RandomIcon />
         </SvgIcon>
@@ -50,7 +54,7 @@ const Controls: React.FC<ControlsProps> = ({
       </PrevButton>
       {/*  */}
       <PlayButtonBox>
-        <PlayButton disabled={!readyForPlay} withoutShadow onClick={onPlayPause}>
+        <PlayButton disabled={!readyForPlay} $isPlay={isPlay} withoutShadow onClick={onPlayPause}>
           <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayButton>
       </PlayButtonBox>

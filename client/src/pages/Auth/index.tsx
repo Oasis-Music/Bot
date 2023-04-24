@@ -14,7 +14,6 @@ import {
   AuthorizeUserQueryVariables,
   AuthorizeUserDocument
 } from '../../graphql/user/_gen_/authorizeUser.query'
-import { useSpring, animated } from 'react-spring'
 import { useLazyQuery, useReactiveVar } from '@apollo/client'
 import { UserMutations } from '../../apollo/cache/mutations'
 import { isAuthenticatedVar } from '../../apollo/cache/variables'
@@ -56,14 +55,6 @@ const Auth: React.FC = () => {
     }
   )
 
-  const fadeStyles = useSpring({
-    config: { duration: 250 },
-    from: { opacity: 0 },
-    to: {
-      opacity: error ? 1 : 0
-    }
-  })
-
   const handleSubmitClick = () => {
     setError('')
     authorize({
@@ -83,9 +74,7 @@ const Auth: React.FC = () => {
         <SubmitBotton color="secondary" loading={loading} onClick={handleSubmitClick}>
           {t('pages.auth.enterBtn')}
         </SubmitBotton>
-        <animated.div style={fadeStyles}>
-          <ErrorMessage>{error}</ErrorMessage>
-        </animated.div>
+        <ErrorMessage $err={!!error}>{error}</ErrorMessage>
         <TermsTitle>
           {t('pages.auth.terms', {
             btn: t('pages.auth.enterBtn')

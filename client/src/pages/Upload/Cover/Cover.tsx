@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { useSpring, animated } from 'react-spring'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { ReactComponent as DeleteIcon } from '../../../assets/svg/trash.svg'
 import { ReactComponent as CoverPlaceholderIcon } from '../../../assets/svg/cover_placeholder.svg'
@@ -54,7 +53,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
       if (dropError && !!!mainPhoto) {
         setDropError('')
       }
-    }, 3000)
+    }, 2000)
 
     return () => {
       clearInterval(cleanupTimer)
@@ -64,14 +63,6 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
       }
     }
   }, [dropError])
-
-  const fadeStyles = useSpring({
-    config: { duration: 250 },
-    from: { opacity: 0 },
-    to: {
-      opacity: dropError ? 1 : 0
-    }
-  })
 
   const handleFileDrop = (acceptedFiles: globalThis.File[]) => {
     if (mainPhoto) URL.revokeObjectURL(mainPhoto.preview)
@@ -178,13 +169,11 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
           </DeleteButton>
         )}
       </ContainerUpload>
-      <animated.div style={fadeStyles}>
-        <ErrorMessage>
-          {t(dropError, {
-            size: MAX_COVER_SIZE
-          })}
-        </ErrorMessage>
-      </animated.div>
+      <ErrorMessage $err={!!dropError}>
+        {t(dropError, {
+          size: MAX_COVER_SIZE
+        })}
+      </ErrorMessage>
       <StepControls
         disabled={!!dropError}
         nextText={t(

@@ -1,25 +1,33 @@
-import React from 'react'
-import styled, { css, keyframes } from 'styled-components'
-import { ReactComponent as PlaceholderImage } from '../../assets/svg/music.svg'
-import ProgressiveImage from 'react-progressive-graceful-image'
+import React, { useState, useEffect } from 'react'
+import styled, { css } from 'styled-components'
+import LazyLoad from 'react-lazy-load'
 import SvgIcon from '../SvgIcon'
+import { ReactComponent as PlaceholderImage } from '../../assets/svg/music.svg'
+import './styles.css'
 
 export interface ImagePlaceholderProps {
   src: string
   altText: string
   plain?: boolean
+  backgroundColor?: string
 }
 
 interface StyleProps {
   $plain: boolean
+  $backgroundColor?: string
+}
+
+interface ImageStyles {
+  $loading: boolean
+  $plain: boolean
 }
 
 const PlugIcon = styled(SvgIcon)`
-  color: #515151;
+  color: inherit;
   font-size: inherit;
 `
 
-const Box = styled.picture<StyleProps>`
+const wrapperStyles = css<StyleProps>`
   display: block;
   outline: none;
   position: relative;
@@ -29,7 +37,7 @@ const Box = styled.picture<StyleProps>`
   height: ${({ $plain }) => ($plain ? '100%' : 'auto')};
 `
 
-const imageStyles = css<StyleProps>`
+const imageStyles = css`
   position: absolute;
   top: 0;
   left: 0;
@@ -41,35 +49,25 @@ const imageStyles = css<StyleProps>`
   outline: none;
   object-fit: cover;
   user-select: none;
+  transition: all 0.3s ease-in-out;
+`
+
+const Image = styled.img<ImageStyles>`
+  opacity: ${({ $loading }) => ($loading ? 0 : 1)};
   border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
-`
-
-const Image = styled.img`
   ${imageStyles}
 `
 
-const ImagePlug = styled.div`
+const ImagePlug = styled.div<StyleProps>`
+  border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
   ${imageStyles}
-`
-
-const shineAnimation = keyframes`
-    0% {
-        background-position: 0% 0%;  
-    }
-    100% {
-        background-position: -135% 0%;
-    }
 `
 
 const ShineBox = styled.div<StyleProps>`
   width: 100%;
   height: 100%;
-  transition: 0.3s;
-  background: linear-gradient(-90deg, #efefef 0%, #fcfcfc 50%, #efefef 100%);
-  background-size: 300% 300%;
-  opacity: 0.8;
+  background-color: ${({ $backgroundColor }) => ($backgroundColor ? $backgroundColor : '#15191e')};
   border-radius: 15px;
-  animation: ${shineAnimation} 1.3s infinite;
   border-radius: ${({ $plain }) => ($plain ? '10px' : '15px')};
 `
 
@@ -85,10 +83,29 @@ const ImageWrapper = styled.div`
   bottom: 0;
 `
 
-const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain = false }) => {
+const Wrapper = styled(LazyLoad)<{ $plain: boolean }>`
+  ${wrapperStyles}
+`
+
+const PlugWrapper = styled.div`
+  ${wrapperStyles}
+`
+
+const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
+  src,
+  altText,
+  backgroundColor,
+  plain = false
+}) => {
+  const [error, setError] = useState(false)
+
+  useEffect(() => {
+    setError(false)
+  }, [src])
+
   const placeholderPlug = (
     <ImagePlug $plain={plain}>
-      <ShineBox $plain={plain} />
+      <ShineBox $plain={plain} $backgroundColor={backgroundColor} />
       <ImageWrapper>
         <PlugIcon>
           <PlaceholderImage />
@@ -97,18 +114,20 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({ src, altText, plain
     </ImagePlug>
   )
 
-  const plainPlug = <ShineBox $plain={plain} />
+  const plainPlug = <ShineBox $plain={plain} $backgroundColor={backgroundColor} />
 
-  const plug = plain ? plainPlug : placeholderPlug
+  if (src === '' || error) {
+    return <PlugWrapper $plain={plain}>{plain ? plainPlug : placeholderPlug}</PlugWrapper>
+  }
+
+  const handleImageLoadErr = () => {
+    setError(true)
+  }
 
   return (
-    <Box $plain={plain}>
-      <ProgressiveImage src={src} placeholder="">
-        {(src, loading) => {
-          return loading ? plug : <Image $plain={plain} src={src} alt={altText} />
-        }}
-      </ProgressiveImage>
-    </Box>
+    <Wrapper $plain={plain}>
+      <Image $plain={plain} $loading={false} src={src} alt={altText} onError={handleImageLoadErr} />
+    </Wrapper>
   )
 }
 

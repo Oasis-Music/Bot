@@ -4,7 +4,9 @@ import {
   isAuthenticatedVar,
   mainPlaylistVar,
   userPlaylistVar,
-  explorePlaylistVar
+  explorePlaylistVar,
+  isSnackbarOpenVar,
+  snackbarEventVar
 } from '../variables'
 import { bindMainPlaylist } from './playlist'
 
@@ -19,6 +21,8 @@ import {
   unattachSoundtrack,
   logout
 } from './user'
+
+import { openSnackbar, closeSnackbar } from './ui'
 
 export const SoundtrackMutations = {
   setCurrentTrack: setCurrentTrack(currentTrackVar),
@@ -40,4 +44,9 @@ export const UserMutations = {
 
 export const PlaylistMutations = {
   bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar)
+}
+
+export const UiMutations = {
+  openSnackbar: openSnackbar(isSnackbarOpenVar, snackbarEventVar),
+  closeSnackbar: closeSnackbar(isSnackbarOpenVar, snackbarEventVar)
 }

@@ -1,6 +1,7 @@
 {
   "common": {
-    "save": "Сохранить"
+    "save": "Сохранить",
+    "soundtrack": "Саундтрек"
   },
   "errors": {
     "telegramUserDataErr": "* ошибка данных пользователя Telegram",
@@ -99,5 +100,9 @@
   },
   "layout": {
     "upload": "Загрузить трек"
+  },
+  "snackbar": {
+    "trackSaveFail": "Не удалось сохранить трек",
+    "trackDeleteFail": "Не удалось удалить трек"
   }
 }

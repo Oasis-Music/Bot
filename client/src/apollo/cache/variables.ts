@@ -1,6 +1,13 @@
 import { makeVar } from '@apollo/client'
-import type { User, Soundtrack, CurrentTrack, accessToken } from './types'
+import type { User, Soundtrack, CurrentTrack, accessToken, snackbarEvent } from './types'
 import jwtDecode from 'jwt-decode'
+
+// ui
+export const isSnackbarOpenVar = makeVar<boolean>(false)
+export const snackbarEventVar = makeVar<snackbarEvent>({
+  type: 'success',
+  message: ''
+})
 
 // soundtrack
 export const currentTrackVar = makeVar<CurrentTrack>({} as CurrentTrack)

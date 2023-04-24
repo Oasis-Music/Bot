@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import WaveSurfer from 'wavesurfer.js'
 import SvgIcon from '../../../shared/SvgIcon'
 import { ReactComponent as PlayIcon } from '../../../assets/svg/play.svg'
 import { ReactComponent as PauseIcon } from '../../../assets/svg/pause.svg'
@@ -9,7 +8,6 @@ import {
   Title,
   StepTitle,
   WaveWrapper,
-  Waves,
   TimeBox,
   PlayBottonWrapper,
   PlayBotton
@@ -18,6 +16,7 @@ import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import Dropzone from './Dropzone/Dropzone'
 import StepControls from '../StepControls'
+import AudioPlayer from '../../../player'
 
 interface AudioProps {
   loading: boolean
@@ -27,10 +26,11 @@ interface AudioProps {
 
 const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
   const { t } = useTranslation()
-  const waveContainerRef = useRef(null)
-  const wavesurfer = useRef<WaveSurfer | null>(null)
+  const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
   const { setFieldValue } = useFormikContext()
+
+  const [player, setPlayer] = useState<AudioPlayer>()
 
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [isPlay, setPlay] = useState<boolean>(false)
@@ -39,38 +39,34 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
 
   useEffect(() => {
     if (waveContainerRef.current) {
-      wavesurfer.current = WaveSurfer.create({
-        mediaType: 'audio',
-        container: waveContainerRef.current,
-        barWidth: 2,
-        barRadius: 4,
-        cursorWidth: 1,
-        backend: 'WebAudio',
-        height: 30,
-        progressColor: '#dbdbdb',
-        waveColor: '#575763',
-        cursorColor: 'transparent'
+      const pl = new AudioPlayer({
+        node: waveContainerRef.current as HTMLElement
       })
-    }
 
-    if (wavesurfer.current) {
-      wavesurfer.current.on('ready', function () {
-        setDuration(timeFormater(wavesurfer.current?.getDuration() || 0))
+      pl.onLoad(() => {
         setReadyForPlay(true)
+        setCurrentTime(timeFormater(pl.getCurrentTime()))
+        setDuration(timeFormater(pl.getDuration()))
+        pl.redrawTrackline()
       })
 
-      wavesurfer.current.on('audioprocess', function () {
-        setCurrentTime(timeFormater(wavesurfer.current?.getCurrentTime() || 0))
+      pl.onAudioProcess(() => {
+        setCurrentTime(timeFormater(pl.getCurrentTime()))
       })
 
-      wavesurfer.current.on('finish', function () {
-        setPlay(false)
+      pl.onSeek(() => {
+        setCurrentTime(timeFormater(pl.getCurrentTime()))
       })
-    }
 
-    return () => {
-      if (wavesurfer.current) {
-        wavesurfer.current.destroy()
+      pl.onEnd(() => {
+        pl.seekTo(0)
+        pl.play()
+      })
+
+      setPlayer(pl)
+
+      return () => {
+        pl.clean()
       }
     }
   }, [])
@@ -81,16 +77,16 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
 
   const playHandler = () => {
     setPlay((prev) => !prev)
-    if (wavesurfer.current) {
-      wavesurfer.current.playPause()
+    if (player) {
+      player.playPause()
     }
   }
 
   const handleStopPlaying = () => {
     setPlay(false)
     setReadyForPlay(false)
-    if (wavesurfer.current) {
-      wavesurfer.current.pause()
+    if (player) {
+      player.pause()
     }
   }
 
@@ -100,13 +96,13 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
       <Title>{t('pages.upload.audio.subTitle')}</Title>
       <Dropzone
         audio={audio}
-        wavesurfer={wavesurfer.current}
+        player={player}
         onStop={handleStopPlaying}
         onSetAudio={setAudio}
         onFormValue={handleSetAudioFormValue}
       />
       <WaveWrapper>
-        <Waves $isFile={readyForPlay} ref={waveContainerRef} />
+        <div ref={waveContainerRef} />
         <TimeBox>
           <span>{currentTime}</span>
           <span>{duration}</span>

@@ -46,12 +46,14 @@ export const SubmitBotton = styled(Button)`
   margin-bottom: 7px;
 `
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p<{ $err: boolean }>`
   height: 15px;
   font-size: 14px;
   margin: 0;
   text-align: center;
   color: #ff182e;
+  transition: opacity 0.2s ease-in-out;
+  opacity: ${({ $err }) => ($err ? 1 : 0)};
 `
 
 export const TermsTitle = styled.p`

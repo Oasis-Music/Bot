@@ -66,7 +66,7 @@ export const ContainerUpload = styled.div<containerStyles>`
 
 export const Preview = styled.img`
   display: block;
-  width: inherit;
+  width: 100%;
   height: 100%;
   border-radius: 8px;
 `
@@ -118,7 +118,7 @@ export const DeleteButton = styled(IconButton)`
   }
 `
 
-export const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p<{ $err: boolean }>`
   color: #ff182e;
   text-align: center;
   font-size: 14px;
@@ -128,4 +128,6 @@ export const ErrorMessage = styled.p`
   height: 13px;
   transition: all 0.3s linear;
   margin-bottom: 5vh;
+  transition: opacity 0.2s ease-in-out;
+  opacity: ${({ $err }) => ($err ? 1 : 0)};
 `

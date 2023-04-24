@@ -19,27 +19,11 @@ const buttonsStyles = css`
   }
 `
 
-interface ContainerProps {
-  $isAdded: boolean
-}
-
-export const Container = styled.section<ContainerProps>`
+export const InnerContainer = styled.div<{ $isAdded: boolean }>`
   display: flex;
   position: relative;
   padding: 3vh 1vh 2vh 3vh;
   padding-bottom: ${({ $isAdded }) => ($isAdded ? '0' : '2vh')};
-  margin-bottom: 3vh;
-  &::after {
-    content: '';
-    position: absolute;
-    width: 60%;
-    height: 2px;
-    border-radius: 2px;
-    background: #808080;
-    bottom: -10px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
   @media ${({ theme }) => theme.media.hsd} {
     padding: 35px 13px 15px 17px;
     padding-top: 2vh;
@@ -151,11 +135,29 @@ export const CopyInfoBotton = styled(IconButton)`
   font-size: 16px;
 `
 
-export const Counter = styled.span`
-  position: absolute;
-  bottom: -17px;
-  right: 11px;
-  font-size: 2.3vh;
-  color: #bfbfbf;
-  font-weight: 400;
+export const InfoLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 11px 3px 9px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #898989;
+  & span:last-child {
+    color: #cbcbcb;
+  }
+  & div {
+    position: relative;
+    width: 100%;
+    &::after {
+      content: '';
+      position: absolute;
+      width: 80%;
+      height: 2px;
+      border-radius: 2px;
+      background: #808080;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 `

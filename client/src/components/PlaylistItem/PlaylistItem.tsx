@@ -28,6 +28,7 @@ const Container = styled.li`
 const ImageWrapper = styled.div`
   font-size: 2vh;
   margin-right: 7px;
+  color: #dddddd;
   width: 50px;
   height: 50px;
 `

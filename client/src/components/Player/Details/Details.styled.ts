@@ -32,15 +32,15 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
   ${prop}
   position: relative;
   border-radius: 15px;
+  font-size: 4vh;
   max-width: 35vh;
   margin: 0 auto;
-  /* box-shadow: 0 0 0px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
-    0 0 10px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1); */
+  color: #dddddd;
   &::before {
     content: '';
     width: 104%;
     height: 104%;
-    border-radius: 15px;
+    border-radius: 18px;
     background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
     position: absolute;
     z-index: -1;
@@ -67,6 +67,7 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
   }
 
   @media ${({ theme }) => theme.media.hxs} {
+    font-size: 30px;
     max-width: 270px;
   }
   ${({ $stopPlaying }) =>
