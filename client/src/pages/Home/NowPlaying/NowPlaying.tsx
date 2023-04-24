@@ -8,7 +8,7 @@ import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
 import { useMutation, useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
-import { UserMutations } from '../../../apollo/cache/mutations'
+import { UserMutations, UiMutations } from '../../../apollo/cache/mutations'
 import {
   AttachSoundtrackMutation,
   AttachSoundtrackVariables,
@@ -55,12 +55,16 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
   >(AttachSoundtrackDocument, {
     onCompleted: () => {
       UserMutations.attachSoundtrack()
+
       if (onTrackAttach) {
         onTrackAttach()
       }
     },
-    onError: (err) => {
-      console.log(err)
+    onError: () => {
+      UiMutations.openSnackbar({
+        type: 'error',
+        message: t('snackbar.trackSaveFail')
+      })
     }
   })
 
@@ -74,8 +78,11 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
         onTrackUnattach()
       }
     },
-    onError: (err) => {
-      console.log(err)
+    onError: () => {
+      UiMutations.openSnackbar({
+        type: 'error',
+        message: t('snackbar.trackDeleteFail')
+      })
     }
   })
 

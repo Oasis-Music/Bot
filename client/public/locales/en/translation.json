@@ -99,5 +99,9 @@
   },
   "layout": {
     "upload": "Upload"
+  },
+  "snackbar": {
+    "trackSaveFail": "Failed to save track",
+    "trackDeleteFail": "Failed to delete track"
   }
 }

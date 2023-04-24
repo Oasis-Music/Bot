@@ -16,13 +16,13 @@ const Container = styled.div<containerStyles>`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: ${({ $open }) => ($open ? '1' : '0')};
-  bottom: 17%;
+  bottom: ${({ $open }) => ($open ? '17%' : '-10%')};
   color: #fff;
   border: 2px solid;
   border-radius: 6px;
   padding: 15px 15px 15px 20px;
   font-weight: 500;
-  transition: all 0.2s ease-in;
+  transition: all 0.2s;
   & > p {
     margin: 0;
     white-space: nowrap;

@@ -99,5 +99,9 @@
   },
   "layout": {
     "upload": "Загрузить трек"
+  },
+  "snackbar": {
+    "trackSaveFail": "Не удалось сохранить трек",
+    "trackDeleteFail": "Не удалось удалить трек"
   }
 }
