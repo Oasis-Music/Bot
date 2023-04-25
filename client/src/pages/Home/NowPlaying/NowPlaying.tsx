@@ -171,7 +171,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
                 </AddIcon>
               }
             >
-              {t('common.save')}
+              {t('common.add')}
             </SaveBotton>
           )}
         </Details>
