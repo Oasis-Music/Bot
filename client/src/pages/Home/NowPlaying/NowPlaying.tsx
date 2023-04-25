@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import SvgIcon from '../../../shared/SvgIcon'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
 import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
 import { ReactComponent as DownloadIcon } from '../../../assets/svg/cloud-download.svg'
 import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
+import { ReactComponent as CheckIcon } from '../../../assets/svg/check-circle.svg'
 import { useMutation, useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
@@ -45,9 +46,15 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
   onTrackAttach,
   onTrackUnattach
 }) => {
+  const [wasCopied, setCopied] = useState(false)
+
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar)
+
+  useEffect(() => {
+    setCopied(false)
+  }, [track.id])
 
   const [onAttachSoundtrack, attachMeta] = useMutation<
     AttachSoundtrackMutation,
@@ -85,6 +92,26 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
       })
     }
   })
+
+  const onCopyTrackInfo = () => {
+    // INFO: it is a query permission for Blink only engines
+    // Is there a need to check permissions?
+
+    // navigator.permissions.query({ name: 'clipboard-write' as PermissionName }).then((result) => {
+    //   if (result.state == 'granted' || result.state == 'prompt') {
+    //     console.log('Write access granted!')
+    //   }
+    // })
+
+    navigator.clipboard.writeText(`${track.title} - ${track.author}`).then(
+      () => {
+        setCopied(true)
+      },
+      () => {
+        console.log('falied')
+      }
+    )
+  }
 
   const attachHandler = () => {
     onAttachSoundtrack({
@@ -127,10 +154,8 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
                   <DownloadIcon />
                 </SvgIcon>
               </DownloadBotton>
-              <CopyInfoBotton>
-                <SvgIcon>
-                  <CopyIcon />
-                </SvgIcon>
+              <CopyInfoBotton onClick={onCopyTrackInfo}>
+                <SvgIcon>{wasCopied ? <CheckIcon /> : <CopyIcon />}</SvgIcon>
               </CopyInfoBotton>
             </ControlsWrapper>
           ) : (
