@@ -91,9 +91,11 @@ const AppLayout: React.FC = () => {
   }, [track.audioURL])
 
   const handlePlayerOpen = () => {
+    document.body.style.overflow = 'hidden'
     setPlayerOpen(true)
   }
   const handlePlayerClose = () => {
+    document.body.style.overflow = 'visible'
     setPlayerOpen(false)
   }
 
