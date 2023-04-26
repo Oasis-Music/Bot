@@ -15,7 +15,7 @@ union SoundtrackResult = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult
-  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
+  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
   soundtrackByTitle(title: String!): [Soundtrack!]!
 }
 
