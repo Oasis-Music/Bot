@@ -15,10 +15,7 @@ union UserSoundtracksResult = UserSoundtracksResponse | NotFound
 extend type Query {
   user(id: ID!): UserResult @hasRole(role: ADMIN)
   authorizeUser(initData: String!): AuthorizationResponse!
-  userSoundtracks(
-    id: ID!
-    filter: UserSoundtracksFilter!
-  ): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
+  userSoundtracks(id: ID!, filter: UserSoundtracksFilter!): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
 }
 
 extend type Mutation {

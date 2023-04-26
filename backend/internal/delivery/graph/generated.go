@@ -532,13 +532,13 @@ type NotFound {
 union SoundtrackResult = Soundtrack | NotFound
 
 extend type Query {
-  soundtrack(id: ID!): SoundtrackResult
+  soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
-  soundtrackByTitle(title: String!): [Soundtrack!]!
+  soundtrackByTitle(title: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
 }
 
 extend type Mutation {
-  createSoundtrack(input: CreateSoundtrackInput!): Boolean!
+  createSoundtrack(input: CreateSoundtrackInput!): Boolean! @hasRole(role: [ADMIN, USER])
   deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
@@ -574,10 +574,7 @@ union UserSoundtracksResult = UserSoundtracksResponse | NotFound
 extend type Query {
   user(id: ID!): UserResult @hasRole(role: ADMIN)
   authorizeUser(initData: String!): AuthorizationResponse!
-  userSoundtracks(
-    id: ID!
-    filter: UserSoundtracksFilter!
-  ): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
+  userSoundtracks(id: ID!, filter: UserSoundtracksFilter!): UserSoundtracksResult! @hasRole(role: [USER, ADMIN])
 }
 
 extend type Mutation {
@@ -1010,8 +1007,32 @@ func (ec *executionContext) _Mutation_createSoundtrack(ctx context.Context, fiel
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateSoundtrack(rctx, fc.Args["input"].(models.CreateSoundtrackInput))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().CreateSoundtrack(rctx, fc.Args["input"].(models.CreateSoundtrackInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN", "USER"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(bool); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1298,8 +1319,32 @@ func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Soundtrack(rctx, fc.Args["id"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().Soundtrack(rctx, fc.Args["id"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN", "USER"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(models.SoundtrackResult); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/backend/internal/delivery/graph/models.SoundtrackResult`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1433,8 +1478,32 @@ func (ec *executionContext) _Query_soundtrackByTitle(ctx context.Context, field 
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().SoundtrackByTitle(rctx, fc.Args["title"].(string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().SoundtrackByTitle(rctx, fc.Args["title"].(string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN", "USER"})
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.([]models.Soundtrack); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []oasis/backend/internal/delivery/graph/models.Soundtrack`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
