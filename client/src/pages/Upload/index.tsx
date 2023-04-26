@@ -109,7 +109,7 @@ const Upload: React.FC = () => {
   const handleSubmit = (values: FormValues) => {
     if (step === 2) {
       createSoundtrack({
-        variables: { ...values }
+        variables: { ...values, title: values.title.trim(), author: values.author.trim() }
       })
     } else {
       slideNext()
