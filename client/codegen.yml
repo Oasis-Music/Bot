@@ -2,14 +2,14 @@ overwrite: true
 schema: ./src/graphql/schema.graphql
 documents: src/**/*.gql
 generates:
-  src/types.ts:
+  src/graphql/types.ts:
     plugins:
       - typescript
       - fragment-matcher
   ./src:
     preset: near-operation-file
     presetConfig:
-      baseTypesPath: ./types.ts
+      baseTypesPath: ./graphql/types.ts
       extension: .ts
       folder: _gen_
     plugins:
