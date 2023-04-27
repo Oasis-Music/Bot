@@ -46,6 +46,8 @@ func trackDurationToInt16(d float64) (int16, error) {
 
 func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
+	userID := s.extractCtxUserId(ctx)
+
 	buf, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
 		fmt.Println("io.ReadAll:", err)
@@ -144,15 +146,28 @@ func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.N
 	newTrack.CoverImage = coverImageURL
 	newTrack.AudioFile = soundtrackURL
 	newTrack.IsValidated = false
-	newTrack.CreatorID = 1 // TODO: save valid user ID
+	newTrack.CreatorID = userID
 
-	id, err := s.storage.CreateSoundtrack(ctx, newTrack)
+	newTrackId, err := s.storage.CreateSoundtrack(ctx, newTrack)
 	if err != nil {
-		fmt.Println(err)
+		log.Panicln("fail to create track", err)
 		return false, err
 	}
 
-	fmt.Println("Got ID:", id)
+	if input.Attach {
+		_, err := s.userUseCase.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
+			UserID:  userID,
+			TrackID: newTrackId,
+		})
+
+		if err != nil {
+			log.Panicln("fail to attach new track to user playlist", err)
+			return false, err
+		}
+
+	}
+
+	fmt.Println("Got ID:", newTrackId)
 
 	return true, nil
 }

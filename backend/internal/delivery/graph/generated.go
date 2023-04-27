@@ -555,6 +555,7 @@ input CreateSoundtrackInput {
   author: String!
   coverImage: Upload
   audiofile: Upload!
+  attach: Boolean!
 }
 `, BuiltIn: false},
 	{Name: "../../../schemas/user.graphql", Input: `type User {
@@ -4707,7 +4708,7 @@ func (ec *executionContext) unmarshalInputCreateSoundtrackInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"title", "author", "coverImage", "audiofile"}
+	fieldsInOrder := [...]string{"title", "author", "coverImage", "audiofile", "attach"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -4743,6 +4744,14 @@ func (ec *executionContext) unmarshalInputCreateSoundtrackInput(ctx context.Cont
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("audiofile"))
 			it.Audiofile, err = ec.unmarshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "attach":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("attach"))
+			it.Attach, err = ec.unmarshalNBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}

@@ -21,6 +21,7 @@ func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.Cr
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),
 		Audiofile:  entity.Upload(input.Audiofile),
+		Attach:     input.Attach,
 	})
 }
 

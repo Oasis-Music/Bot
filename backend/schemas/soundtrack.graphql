@@ -37,4 +37,5 @@ input CreateSoundtrackInput {
   author: String!
   coverImage: Upload
   audiofile: Upload!
+  attach: Boolean!
 }

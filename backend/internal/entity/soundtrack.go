@@ -22,6 +22,7 @@ type NewSoundtrackInput struct {
 	Author     string
 	CoverImage *Upload
 	Audiofile  Upload
+	Attach     bool
 }
 
 type NewSoundtrack struct {

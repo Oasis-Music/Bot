@@ -6,6 +6,7 @@ import (
 	"oasis/backend/internal/config"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/useCase/adapters/storage"
+	"oasis/backend/internal/useCase/user"
 	"strconv"
 )
 
@@ -18,14 +19,16 @@ type UseCase interface {
 }
 
 type soundtrackUseCase struct {
-	config  *config.AppConfig
-	storage storage.Soundtrack
+	config      *config.AppConfig
+	storage     storage.Soundtrack
+	userUseCase user.UseCase
 }
 
-func New(storage storage.Soundtrack, config *config.AppConfig) UseCase {
+func New(storage storage.Soundtrack, config *config.AppConfig, userUC user.UseCase) UseCase {
 	return &soundtrackUseCase{
-		config:  config,
-		storage: storage,
+		config:      config,
+		storage:     storage,
+		userUseCase: userUC,
 	}
 }
 
