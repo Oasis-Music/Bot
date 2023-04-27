@@ -97,17 +97,17 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	}, nil
 }
 
-// SoundtrackByName is the resolver for the soundtrackByName field.
-func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]models.Soundtrack, error) {
-	nLn := len(title)
+// SearchSoundtrack is the resolver for the searchSoundtrack field.
+func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]models.Soundtrack, error) {
+	nLn := len(value)
 
 	if nLn == 0 {
-		return nil, errors.New("invalid title value")
+		return nil, errors.New("invalid value value")
 	} else if nLn > 100 {
-		return nil, errors.New("invalid title value: max 100")
+		return nil, errors.New("invalid value value: max 100")
 	}
 
-	tracks, err := r.SoundtrackUC.GetByTitle(ctx, title)
+	tracks, err := r.SoundtrackUC.Search(ctx, value)
 	if err != nil {
 		return nil, err
 	}

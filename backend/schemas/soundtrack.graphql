@@ -16,7 +16,7 @@ union SoundtrackResult = Soundtrack | NotFound
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
-  soundtrackByTitle(title: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
+  searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
 }
 
 extend type Mutation {

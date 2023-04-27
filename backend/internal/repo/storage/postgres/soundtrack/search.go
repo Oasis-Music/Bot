@@ -20,7 +20,7 @@ FROM soundtrack
 WHERE to_tsvector(title) @@ to_tsquery($1) LIMIT 7;
 `
 
-func (s *soundtrackStorage) GetByTitle(ctx context.Context, title string, userID int64) ([]entity.Soundtrack, error) {
+func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int64) ([]entity.Soundtrack, error) {
 
 	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, title, userID)
 	if err != nil {

@@ -62,12 +62,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		AuthorizeUser     func(childComplexity int, initData string) int
-		Soundtrack        func(childComplexity int, id string) int
-		SoundtrackByTitle func(childComplexity int, title string) int
-		Soundtracks       func(childComplexity int, filter models.SoundtracksFilter) int
-		User              func(childComplexity int, id string) int
-		UserSoundtracks   func(childComplexity int, id string, filter models.UserSoundtracksFilter) int
+		AuthorizeUser    func(childComplexity int, initData string) int
+		SearchSoundtrack func(childComplexity int, value string) int
+		Soundtrack       func(childComplexity int, id string) int
+		Soundtracks      func(childComplexity int, filter models.SoundtracksFilter) int
+		User             func(childComplexity int, id string) int
+		UserSoundtracks  func(childComplexity int, id string, filter models.UserSoundtracksFilter) int
 	}
 
 	Soundtrack struct {
@@ -113,7 +113,7 @@ type MutationResolver interface {
 type QueryResolver interface {
 	Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error)
 	Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
-	SoundtrackByTitle(ctx context.Context, title string) ([]models.Soundtrack, error)
+	SearchSoundtrack(ctx context.Context, value string) ([]models.Soundtrack, error)
 	User(ctx context.Context, id string) (models.UserResult, error)
 	AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error)
 	UserSoundtracks(ctx context.Context, id string, filter models.UserSoundtracksFilter) (models.UserSoundtracksResult, error)
@@ -215,6 +215,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.AuthorizeUser(childComplexity, args["initData"].(string)), true
 
+	case "Query.searchSoundtrack":
+		if e.complexity.Query.SearchSoundtrack == nil {
+			break
+		}
+
+		args, err := ec.field_Query_searchSoundtrack_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.SearchSoundtrack(childComplexity, args["value"].(string)), true
+
 	case "Query.soundtrack":
 		if e.complexity.Query.Soundtrack == nil {
 			break
@@ -226,18 +238,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Soundtrack(childComplexity, args["id"].(string)), true
-
-	case "Query.soundtrackByTitle":
-		if e.complexity.Query.SoundtrackByTitle == nil {
-			break
-		}
-
-		args, err := ec.field_Query_soundtrackByTitle_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.SoundtrackByTitle(childComplexity, args["title"].(string)), true
 
 	case "Query.soundtracks":
 		if e.complexity.Query.Soundtracks == nil {
@@ -534,7 +534,7 @@ union SoundtrackResult = Soundtrack | NotFound
 extend type Query {
   soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
-  soundtrackByTitle(title: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
+  searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
 }
 
 extend type Mutation {
@@ -719,18 +719,18 @@ func (ec *executionContext) field_Query_authorizeUser_args(ctx context.Context, 
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_soundtrackByTitle_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_searchSoundtrack_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["title"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+	if tmp, ok := rawArgs["value"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["title"] = arg0
+	args["value"] = arg0
 	return args, nil
 }
 
@@ -1466,8 +1466,8 @@ func (ec *executionContext) fieldContext_Query_soundtracks(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_soundtrackByTitle(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_soundtrackByTitle(ctx, field)
+func (ec *executionContext) _Query_searchSoundtrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_searchSoundtrack(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1481,7 +1481,7 @@ func (ec *executionContext) _Query_soundtrackByTitle(ctx context.Context, field 
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		directive0 := func(rctx context.Context) (interface{}, error) {
 			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().SoundtrackByTitle(rctx, fc.Args["title"].(string))
+			return ec.resolvers.Query().SearchSoundtrack(rctx, fc.Args["value"].(string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			role, err := ec.unmarshalNRole2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN", "USER"})
@@ -1521,7 +1521,7 @@ func (ec *executionContext) _Query_soundtrackByTitle(ctx context.Context, field 
 	return ec.marshalNSoundtrack2ᚕoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Query_soundtrackByTitle(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Query_searchSoundtrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Query",
 		Field:      field,
@@ -1560,7 +1560,7 @@ func (ec *executionContext) fieldContext_Query_soundtrackByTitle(ctx context.Con
 		}
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Query_soundtrackByTitle_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+	if fc.Args, err = ec.field_Query_searchSoundtrack_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -5121,7 +5121,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			out.Concurrently(i, func() graphql.Marshaler {
 				return rrm(innerCtx)
 			})
-		case "soundtrackByTitle":
+		case "searchSoundtrack":
 			field := field
 
 			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
@@ -5130,7 +5130,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_soundtrackByTitle(ctx, field)
+				res = ec._Query_searchSoundtrack(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}

@@ -15,7 +15,7 @@ type UseCase interface {
 	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
 	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
 	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
-	GetByTitle(ctx context.Context, title string) ([]entity.Soundtrack, error)
+	Search(ctx context.Context, value string) ([]entity.Soundtrack, error)
 }
 
 type soundtrackUseCase struct {
