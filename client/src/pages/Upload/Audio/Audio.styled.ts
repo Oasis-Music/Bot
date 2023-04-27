@@ -41,8 +41,8 @@ export const TimeBox = styled.div`
 export const PlayBottonWrapper = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 5vh;
-  margin-bottom: 6vh;
+  margin-top: 2vh;
+  margin-bottom: 4vh;
 `
 
 export const PlayBotton = styled(IconButton)`
@@ -57,4 +57,10 @@ export const PlayBotton = styled(IconButton)`
   &:hover:not(:disabled) {
     background-color: #fff;
   }
+`
+
+export const AttachWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1vh;
 `
