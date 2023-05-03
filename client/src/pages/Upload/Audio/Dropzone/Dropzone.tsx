@@ -76,7 +76,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, 
     accept: {
       'audio/mpeg': ['.mp3']
     },
-    maxSize: 10485760, // 10 MB
+    maxSize: 15_728_640, // 15 MB
     maxFiles: 1,
     multiple: false,
     onDrop: handleFileDrop,
