@@ -38,6 +38,7 @@ type Config struct {
 type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
+	Soundtrack() SoundtrackResolver
 }
 
 type DirectiveRoot struct {
@@ -76,6 +77,7 @@ type ComplexityRoot struct {
 		Author    func(childComplexity int) int
 		CoverURL  func(childComplexity int) int
 		CreatedAt func(childComplexity int) int
+		Creator   func(childComplexity int) int
 		CreatorID func(childComplexity int) int
 		Duration  func(childComplexity int) int
 		ID        func(childComplexity int) int
@@ -117,6 +119,9 @@ type QueryResolver interface {
 	User(ctx context.Context, id string) (models.UserResult, error)
 	AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error)
 	UserSoundtracks(ctx context.Context, id string, filter models.UserSoundtracksFilter) (models.UserSoundtracksResult, error)
+}
+type SoundtrackResolver interface {
+	Creator(ctx context.Context, obj *models.Soundtrack) (*models.User, error)
 }
 
 type executableSchema struct {
@@ -309,6 +314,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Soundtrack.CreatedAt(childComplexity), true
+
+	case "Soundtrack.creator":
+		if e.complexity.Soundtrack.Creator == nil {
+			break
+		}
+
+		return e.complexity.Soundtrack.Creator(childComplexity), true
 
 	case "Soundtrack.creatorId":
 		if e.complexity.Soundtrack.CreatorID == nil {
@@ -525,6 +537,7 @@ type NotFound {
   audioURL: String!
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
+  creator: User!
   createdAt: Date!
   attached: Boolean!
 }
@@ -1545,6 +1558,8 @@ func (ec *executionContext) fieldContext_Query_searchSoundtrack(ctx context.Cont
 				return ec.fieldContext_Soundtrack_validated(ctx, field)
 			case "creatorId":
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
+			case "creator":
+				return ec.fieldContext_Soundtrack_creator(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
 			case "attached":
@@ -2285,6 +2300,68 @@ func (ec *executionContext) fieldContext_Soundtrack_creatorId(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Soundtrack_creator(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Soundtrack_creator(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Soundtrack().Creator(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Soundtrack_creator(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Soundtrack",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_User_id(ctx, field)
+			case "firstName":
+				return ec.fieldContext_User_firstName(ctx, field)
+			case "lastName":
+				return ec.fieldContext_User_lastName(ctx, field)
+			case "username":
+				return ec.fieldContext_User_username(ctx, field)
+			case "languageCode":
+				return ec.fieldContext_User_languageCode(ctx, field)
+			case "role":
+				return ec.fieldContext_User_role(ctx, field)
+			case "visitedAt":
+				return ec.fieldContext_User_visitedAt(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_User_createdAt(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Soundtrack_createdAt(ctx context.Context, field graphql.CollectedField, obj *models.Soundtrack) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Soundtrack_createdAt(ctx, field)
 	if err != nil {
@@ -2428,6 +2505,8 @@ func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(ctx con
 				return ec.fieldContext_Soundtrack_validated(ctx, field)
 			case "creatorId":
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
+			case "creator":
+				return ec.fieldContext_Soundtrack_creator(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
 			case "attached":
@@ -2881,6 +2960,8 @@ func (ec *executionContext) fieldContext_UserSoundtracksResponse_soundtracks(ctx
 				return ec.fieldContext_Soundtrack_validated(ctx, field)
 			case "creatorId":
 				return ec.fieldContext_Soundtrack_creatorId(ctx, field)
+			case "creator":
+				return ec.fieldContext_Soundtrack_creator(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Soundtrack_createdAt(ctx, field)
 			case "attached":
@@ -5248,28 +5329,28 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Soundtrack_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "title":
 
 			out.Values[i] = ec._Soundtrack_title(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "author":
 
 			out.Values[i] = ec._Soundtrack_author(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "duration":
 
 			out.Values[i] = ec._Soundtrack_duration(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "coverURL":
 
@@ -5280,35 +5361,55 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 			out.Values[i] = ec._Soundtrack_audioURL(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "validated":
 
 			out.Values[i] = ec._Soundtrack_validated(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "creatorId":
 
 			out.Values[i] = ec._Soundtrack_creatorId(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
+		case "creator":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Soundtrack_creator(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		case "createdAt":
 
 			out.Values[i] = ec._Soundtrack_createdAt(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "attached":
 
 			out.Values[i] = ec._Soundtrack_attached(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -6025,6 +6126,20 @@ func (ec *executionContext) marshalNUpload2githubᚗcomᚋ99designsᚋgqlgenᚋg
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNUser2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
+	return ec._User(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNUser2ᚖoasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNUserSoundtracksFilter2oasisᚋbackendᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐUserSoundtracksFilter(ctx context.Context, v interface{}) (models.UserSoundtracksFilter, error) {

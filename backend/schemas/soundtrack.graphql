@@ -7,6 +7,7 @@ type Soundtrack {
   audioURL: String!
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
+  creator: User!
   createdAt: Date!
   attached: Boolean!
 }

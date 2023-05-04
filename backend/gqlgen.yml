@@ -1,7 +1,5 @@
 schema:
   - schemas/*.graphql
-
-# Where should the generated server code go?
 exec:
   filename: internal/delivery/graph/generated.go
   package: graph
@@ -46,3 +44,7 @@ models:
       - github.com/99designs/gqlgen/graphql.Int
       - github.com/99designs/gqlgen/graphql.Int64
       - github.com/99designs/gqlgen/graphql.Int32
+  Soundtrack:
+    fields:
+      creator:
+        resolver: true

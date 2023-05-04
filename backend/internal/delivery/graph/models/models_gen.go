@@ -59,6 +59,7 @@ type Soundtrack struct {
 	AudioURL  string  `json:"audioURL"`
 	Validated bool    `json:"validated"`
 	CreatorID string  `json:"creatorId"`
+	Creator   *User   `json:"creator"`
 	CreatedAt string  `json:"createdAt"`
 	Attached  bool    `json:"attached"`
 }

@@ -130,3 +130,34 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 
 	return soundtracks, nil
 }
+
+// Creator is the resolver for the creator field.
+func (r *soundtrackResolver) Creator(ctx context.Context, obj *models.Soundtrack) (*models.User, error) {
+
+	userID, err := strconv.ParseInt(obj.CreatorID, 10, 64)
+	if err != nil {
+		return nil, errors.New("invalid user id")
+	}
+
+	user, err := r.UserUC.GetUser(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &models.User{
+		ID:           strconv.FormatInt(user.ID, 10),
+		FirstName:    user.FirstName,
+		LastName:     user.LastName,
+		Username:     user.Username,
+		LanguageCode: user.LanguageCode,
+		Role:         user.Role,
+		VisitedAt:    user.VisitedAt.UTC().String(),
+		CreatedAt:    user.CreatedAt.UTC().String(),
+	}, nil
+
+}
+
+// Soundtrack returns SoundtrackResolver implementation.
+func (r *Resolver) Soundtrack() SoundtrackResolver { return &soundtrackResolver{r} }
+
+type soundtrackResolver struct{ *Resolver }
