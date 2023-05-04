@@ -15,6 +15,7 @@ SELECT id,
 	audio_file,
 	creator_id,
 	created_at,
+	creator_id,
 	EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) as attached
 FROM soundtrack
 WHERE to_tsvector(title) @@ to_tsquery($1) LIMIT 7;
@@ -42,6 +43,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 			&t.AudioFile,
 			&t.CreatorID,
 			&t.CreatedAt,
+			&t.CreatorID,
 			&t.Attached,
 		); err != nil {
 			return nil, err
@@ -73,6 +75,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
 			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
+			CreatorID:  track.CreatorID,
 		})
 	}
 

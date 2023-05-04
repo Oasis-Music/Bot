@@ -17,6 +17,7 @@ const (
 		cover_image,
 		audio_file,
 		created_at,
+		creator_id,
 		EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $1) as attached
 	FROM soundtrack
 	`
@@ -49,6 +50,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter entity
 			&i.CoverImage,
 			&i.AudioFile,
 			&i.CreatedAt,
+			&i.CreatorID,
 			&i.Attached,
 		); err != nil {
 			return nil, err
@@ -83,6 +85,7 @@ func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter entity
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
 			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
+			CreatorID:  track.CreatorID,
 		})
 	}
 

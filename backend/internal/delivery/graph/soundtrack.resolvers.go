@@ -89,6 +89,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: strconv.FormatInt(track.CreatorID, 10),
 		})
 	}
 
@@ -125,6 +126,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: strconv.FormatInt(track.CreatorID, 10),
 		})
 	}
 

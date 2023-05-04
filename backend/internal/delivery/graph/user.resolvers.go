@@ -124,6 +124,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: strconv.FormatInt(track.CreatorID, 10),
 		})
 	}
 
