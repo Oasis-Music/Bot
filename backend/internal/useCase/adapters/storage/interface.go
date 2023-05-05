@@ -22,4 +22,5 @@ type User interface {
 	GetUser(ctx context.Context, id int64) (*entity.User, error)
 	AttachSoundtrack(ctx context.Context, params entity.AttachSoundtrackToUserParams) error
 	UnattachSoundtrack(ctx context.Context, params entity.UnattachSoundtrackFromUserParams) (int64, error)
+	GetUsers(ctx context.Context, ids []int64) ([]entity.User, error)
 }

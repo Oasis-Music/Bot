@@ -21,6 +21,7 @@ type UseCase interface {
 	GetSoundtracks(ctx context.Context, id int64, options entity.UserTracksOptions) (*entity.UserTracks, error)
 	AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error)
 	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
+	GetUsers(ctx context.Context, ids []int64) ([]entity.User, error)
 }
 
 type userUseCase struct {

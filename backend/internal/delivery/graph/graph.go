@@ -9,6 +9,7 @@ import (
 
 	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/auth"
+	"oasis/backend/internal/delivery/graph/dataloader"
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/useCase/user"
 	"oasis/backend/internal/utils"
@@ -35,6 +36,8 @@ func NewHandler(rootComposite composites.RootComposite) http.Handler {
 		Resolvers: resolver,
 	}
 
+	loader := dataloader.NewDataLoader(rootComposite)
+
 	config.Directives.HasRole = hasRoleDirectiveHandler(rootComposite.UserComposite.UseCase)
 
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
@@ -58,7 +61,7 @@ func NewHandler(rootComposite composites.RootComposite) http.Handler {
 		Cache: lru.New(100),
 	})
 
-	return srv
+	return dataloader.Middleware(loader, srv)
 }
 
 func hasRoleDirectiveHandler(userUseCase user.UseCase) directiveHandler {

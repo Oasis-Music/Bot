@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
+	"oasis/backend/internal/delivery/graph/dataloader"
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/useCase/soundtrack"
@@ -135,26 +136,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 
 // Creator is the resolver for the creator field.
 func (r *soundtrackResolver) Creator(ctx context.Context, obj *models.Soundtrack) (*models.User, error) {
-	userID, err := strconv.ParseInt(obj.CreatorID, 10, 64)
-	if err != nil {
-		return nil, errors.New("invalid user id")
-	}
-
-	user, err := r.UserUC.GetUser(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &models.User{
-		ID:           utils.Int64ToString(user.ID),
-		FirstName:    user.FirstName,
-		LastName:     user.LastName,
-		Username:     user.Username,
-		LanguageCode: user.LanguageCode,
-		Role:         user.Role,
-		VisitedAt:    user.VisitedAt.UTC().String(),
-		CreatedAt:    user.CreatedAt.UTC().String(),
-	}, nil
+	return dataloader.For(ctx).GetUser(ctx, obj.CreatorID)
 }
 
 // Soundtrack returns SoundtrackResolver implementation.
