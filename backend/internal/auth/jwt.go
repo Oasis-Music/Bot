@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"oasis/backend/internal/utils"
 	"regexp"
-	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -16,7 +16,7 @@ var ErrJwtInternal = errors.New("failed to authorize")
 
 func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPair, error) {
 
-	idString := strconv.FormatInt(userID, 10)
+	idString := utils.Int64ToString(userID)
 
 	r := RawTokenPair{
 		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpDur)),

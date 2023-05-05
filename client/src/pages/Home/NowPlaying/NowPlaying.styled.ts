@@ -113,7 +113,7 @@ export const ControlsWrapper = styled.div`
   align-items: center;
   margin-top: 2vh;
   background-color: #fff;
-  border-radius: 20px;
+  border-radius: 14px;
   max-width: 175px;
   @media ${({ theme }) => theme.media.hxs} {
     margin-top: 10px;

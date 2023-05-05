@@ -28,8 +28,8 @@ func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 
 	authService := auth.NewAuthService(config, db)
 
-	soundtrackComposite := composites.NewSoundtrackComposite(db, config)
 	userComposite := composites.NewUserComposite(db, config, authService)
+	soundtrackComposite := composites.NewSoundtrackComposite(db, config, userComposite)
 
 	rootComposite := composites.RootComposite{
 		SoundtrackComposite: soundtrackComposite,

@@ -10,6 +10,7 @@ import (
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	userUC "oasis/backend/internal/useCase/user"
+	"oasis/backend/internal/utils"
 	"strconv"
 )
 
@@ -66,7 +67,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 	}
 
 	return models.User{
-		ID:           strconv.FormatInt(user.ID, 10),
+		ID:           utils.Int64ToString(user.ID),
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
 		Username:     user.Username,
@@ -124,6 +125,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: utils.Int64ToString(track.CreatorID),
 		})
 	}
 

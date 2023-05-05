@@ -7,6 +7,7 @@ type Soundtrack {
   audioURL: String!
   validated: Boolean!
   creatorId: String! @hasRole(role: ADMIN)
+  creator: User!
   createdAt: Date!
   attached: Boolean!
 }
@@ -14,13 +15,13 @@ type Soundtrack {
 union SoundtrackResult = Soundtrack | NotFound
 
 extend type Query {
-  soundtrack(id: ID!): SoundtrackResult
-  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse!
-  soundtrackByTitle(title: String!): [Soundtrack!]!
+  soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
+  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
+  searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
 }
 
 extend type Mutation {
-  createSoundtrack(input: CreateSoundtrackInput!): Boolean!
+  createSoundtrack(input: CreateSoundtrackInput!): Boolean! @hasRole(role: [ADMIN, USER])
   deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
@@ -37,4 +38,5 @@ input CreateSoundtrackInput {
   author: String!
   coverImage: Upload
   audiofile: Upload!
+  attach: Boolean!
 }

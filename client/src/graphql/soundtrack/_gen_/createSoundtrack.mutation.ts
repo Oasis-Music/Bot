@@ -1,4 +1,4 @@
-import * as Types from '../../../types'
+import * as Types from '../../types'
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
@@ -7,6 +7,7 @@ export type CreateSoundtrackMutationVariables = Types.Exact<{
   author: Types.Scalars['String']
   coverImage?: Types.InputMaybe<Types.Scalars['Upload']>
   audiofile: Types.Scalars['Upload']
+  attach: Types.Scalars['Boolean']
 }>
 
 export type CreateSoundtrackMutation = { __typename?: 'Mutation'; createSoundtrack: boolean }
@@ -19,9 +20,16 @@ export const CreateSoundtrackDocument = gql`
     $author: String!
     $coverImage: Upload
     $audiofile: Upload!
+    $attach: Boolean!
   ) {
     createSoundtrack(
-      input: { title: $title, author: $author, coverImage: $coverImage, audiofile: $audiofile }
+      input: {
+        title: $title
+        author: $author
+        coverImage: $coverImage
+        audiofile: $audiofile
+        attach: $attach
+      }
     )
   }
 `

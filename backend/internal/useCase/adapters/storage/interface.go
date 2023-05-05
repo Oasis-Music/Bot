@@ -10,7 +10,7 @@ type Soundtrack interface {
 	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
 	GetSoundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error)
 	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error)
-	GetByTitle(ctx context.Context, title string, userID int64) ([]entity.Soundtrack, error)
+	Search(ctx context.Context, value string, userID int64) ([]entity.Soundtrack, error)
 }
 
 type User interface {
@@ -22,4 +22,5 @@ type User interface {
 	GetUser(ctx context.Context, id int64) (*entity.User, error)
 	AttachSoundtrack(ctx context.Context, params entity.AttachSoundtrackToUserParams) error
 	UnattachSoundtrack(ctx context.Context, params entity.UnattachSoundtrackFromUserParams) (int64, error)
+	GetUsers(ctx context.Context, ids []int64) ([]entity.User, error)
 }

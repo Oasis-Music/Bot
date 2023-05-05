@@ -57,6 +57,7 @@ const Slide = styled.div<slideStyles>`
 interface FormValues {
   title: string
   author: string
+  attach: boolean
   coverImage: unknown
   audiofile: unknown
 }
@@ -68,6 +69,7 @@ type feedbackModal = {
 
 const Upload: React.FC = () => {
   const [step, setStep] = useState<number>(Step.INFO)
+  const [isAttached, setAttached] = useState<boolean>(false)
 
   const [isAlertOpen, setAlertOpen] = useState<boolean>(false)
   const [feedbackModal, setFeedbackModal] = useState<feedbackModal>({
@@ -109,7 +111,7 @@ const Upload: React.FC = () => {
   const handleSubmit = (values: FormValues) => {
     if (step === 2) {
       createSoundtrack({
-        variables: { ...values }
+        variables: { ...values, title: values.title.trim(), author: values.author.trim() }
       })
     } else {
       slideNext()
@@ -121,7 +123,11 @@ const Upload: React.FC = () => {
   }, [step])
 
   const handleFeedbackOk = () => {
-    history.push(routeNames.root)
+    if (isAttached) {
+      history.push(routeNames.root)
+      return
+    }
+    history.push(routeNames.explore)
   }
 
   const handleFeedbackErr = () => {
@@ -143,6 +149,10 @@ const Upload: React.FC = () => {
     history.push(routeNames.root)
   }
 
+  const handleAttachCheck = (value: boolean) => {
+    setAttached(value)
+  }
+
   return (
     <Container>
       <Formik
@@ -153,7 +163,8 @@ const Upload: React.FC = () => {
           title: '',
           author: '',
           coverImage: null,
-          audiofile: null
+          audiofile: null,
+          attach: false
         }}
       >
         {() => (
@@ -166,7 +177,12 @@ const Upload: React.FC = () => {
                 <Cover onPrevStep={slidePrev} onNextStep={slideNext} onAlert={handleAlertInvoke} />
               </Slide>
               <Slide $active={Step.AUDIO === step} $width={windowWidth}>
-                <Audio loading={loading} onPrevStep={slidePrev} onAlert={handleAlertInvoke} />
+                <Audio
+                  loading={loading}
+                  onPrevStep={slidePrev}
+                  onAlert={handleAlertInvoke}
+                  onAttachChecked={handleAttachCheck}
+                />
               </Slide>
             </Wrapper>
           </Form>

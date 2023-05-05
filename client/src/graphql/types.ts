@@ -26,6 +26,7 @@ export type AuthorizationResponse = {
 }
 
 export type CreateSoundtrackInput = {
+  attach: Scalars['Boolean']
   audiofile: Scalars['Upload']
   author: Scalars['String']
   coverImage?: InputMaybe<Scalars['Upload']>

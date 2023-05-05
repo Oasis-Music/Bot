@@ -7,6 +7,7 @@ package graph
 import (
 	"context"
 	"errors"
+	"oasis/backend/internal/delivery/graph/dataloader"
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/useCase/soundtrack"
@@ -21,6 +22,7 @@ func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.Cr
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),
 		Audiofile:  entity.Upload(input.Audiofile),
+		Attach:     input.Attach,
 	})
 }
 
@@ -51,13 +53,13 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 	}
 
 	soundtrack := models.Soundtrack{
-		ID:        utils.FormatInt32(track.ID),
+		ID:        utils.Int32ToString(track.ID),
 		Title:     track.Title,
 		Author:    track.Author,
 		Duration:  track.Duration,
 		CoverURL:  track.CoverImage,
 		AudioURL:  track.Audio,
-		CreatorID: strconv.FormatInt(track.CreatorID, 10),
+		CreatorID: utils.Int64ToString(track.CreatorID),
 		CreatedAt: track.CreatedAt.UTC().String(),
 		Attached:  track.Attached,
 	}
@@ -80,7 +82,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	for _, track := range tracks.Soundtracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.FormatInt32(track.ID),
+			ID:        utils.Int32ToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
@@ -88,6 +90,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: utils.Int64ToString(track.CreatorID),
 		})
 	}
 
@@ -96,17 +99,17 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	}, nil
 }
 
-// SoundtrackByName is the resolver for the soundtrackByName field.
-func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]models.Soundtrack, error) {
-	nLn := len(title)
+// SearchSoundtrack is the resolver for the searchSoundtrack field.
+func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]models.Soundtrack, error) {
+	nLn := len(value)
 
 	if nLn == 0 {
-		return nil, errors.New("invalid title value")
+		return nil, errors.New("invalid value value")
 	} else if nLn > 100 {
-		return nil, errors.New("invalid title value: max 100")
+		return nil, errors.New("invalid value value: max 100")
 	}
 
-	tracks, err := r.SoundtrackUC.GetByTitle(ctx, title)
+	tracks, err := r.SoundtrackUC.Search(ctx, value)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +119,7 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 	for _, track := range tracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.FormatInt32(track.ID),
+			ID:        utils.Int32ToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
@@ -124,8 +127,19 @@ func (r *queryResolver) SoundtrackByTitle(ctx context.Context, title string) ([]
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
+			CreatorID: utils.Int64ToString(track.CreatorID),
 		})
 	}
 
 	return soundtracks, nil
 }
+
+// Creator is the resolver for the creator field.
+func (r *soundtrackResolver) Creator(ctx context.Context, obj *models.Soundtrack) (*models.User, error) {
+	return dataloader.For(ctx).GetUser(ctx, obj.CreatorID)
+}
+
+// Soundtrack returns SoundtrackResolver implementation.
+func (r *Resolver) Soundtrack() SoundtrackResolver { return &soundtrackResolver{r} }
+
+type soundtrackResolver struct{ *Resolver }

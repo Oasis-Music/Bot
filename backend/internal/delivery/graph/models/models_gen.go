@@ -37,6 +37,7 @@ type CreateSoundtrackInput struct {
 	Author     string          `json:"author"`
 	CoverImage *graphql.Upload `json:"coverImage"`
 	Audiofile  graphql.Upload  `json:"audiofile"`
+	Attach     bool            `json:"attach"`
 }
 
 type NotFound struct {
@@ -58,6 +59,7 @@ type Soundtrack struct {
 	AudioURL  string  `json:"audioURL"`
 	Validated bool    `json:"validated"`
 	CreatorID string  `json:"creatorId"`
+	Creator   *User   `json:"creator"`
 	CreatedAt string  `json:"createdAt"`
 	Attached  bool    `json:"attached"`
 }

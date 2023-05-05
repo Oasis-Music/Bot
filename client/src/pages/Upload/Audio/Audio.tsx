@@ -10,21 +10,24 @@ import {
   WaveWrapper,
   TimeBox,
   PlayBottonWrapper,
-  PlayBotton
+  PlayBotton,
+  AttachWrapper
 } from './Audio.styled'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import Dropzone from './Dropzone/Dropzone'
 import StepControls from '../StepControls'
 import AudioPlayer from '../../../player'
+import Checkbox from '../../../shared/FormFields/Checkbox'
 
 interface AudioProps {
   loading: boolean
   onPrevStep(): void
   onAlert(): void
+  onAttachChecked(v: boolean): void
 }
 
-const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
+const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert, onAttachChecked }) => {
   const { t } = useTranslation()
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
@@ -90,6 +93,10 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
     }
   }
 
+  const handleAttachCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onAttachChecked(!!event.target.value)
+  }
+
   return (
     <Container>
       <StepTitle>{t('pages.upload.audio.title')}</StepTitle>
@@ -113,6 +120,13 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert }) => {
           </PlayBotton>
         </PlayBottonWrapper>
       </WaveWrapper>
+      <AttachWrapper>
+        <Checkbox
+          name="attach"
+          onChange={handleAttachCheck}
+          label={t('pages.upload.audio.attach')}
+        />
+      </AttachWrapper>
       <StepControls
         actionButtonType="submit"
         disabled={!readyForPlay}

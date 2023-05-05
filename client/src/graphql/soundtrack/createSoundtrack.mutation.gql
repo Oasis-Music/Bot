@@ -3,8 +3,15 @@ mutation CreateSoundtrack(
   $author: String!
   $coverImage: Upload
   $audiofile: Upload!
+  $attach: Boolean!
 ) {
   createSoundtrack(
-    input: { title: $title, author: $author, coverImage: $coverImage, audiofile: $audiofile }
+    input: {
+      title: $title
+      author: $author
+      coverImage: $coverImage
+      audiofile: $audiofile
+      attach: $attach
+    }
   )
 }

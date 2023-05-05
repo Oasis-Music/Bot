@@ -1,7 +1,8 @@
 {
   "common": {
     "save": "Сохранить",
-    "soundtrack": "Саундтрек"
+    "soundtrack": "Саундтрек",
+    "add": "Добавить"
   },
   "errors": {
     "telegramUserDataErr": "* ошибка данных пользователя Telegram",
@@ -68,6 +69,7 @@
           "size": "Не более {{size}} MB",
           "ext": "Формат MP3"
         },
+        "attach": "Добавить в мой плейлист",
         "upload": "Загрузить",
         "errors": {
           "read": "* ошибка чтения",

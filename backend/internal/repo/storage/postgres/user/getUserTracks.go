@@ -18,6 +18,7 @@ const (
 		s.cover_image,
 		s.audio_file,
 		s.created_at,
+		s.creator_id,
 		count(s.id) over() AS total
 	FROM soundtrack s
 		WHERE EXISTS
@@ -32,6 +33,7 @@ const (
 		s.cover_image,
 		s.audio_file,
 		s.created_at,
+		s.creator_id,
 		s.total
    	FROM s INNER JOIN user_soundtrack us ON us.soundtrack_id = s.id AND us.user_id = $1 ORDER BY us.created_at DESC
 	`
@@ -67,10 +69,12 @@ func (s *UserStorage) GetUserTracks(ctx context.Context, userID int64, options e
 			&t.CoverImage,
 			&t.AudioFile,
 			&t.CreatedAt,
+			&t.CreatorID,
 			&total,
 		); err != nil {
 			return nil, err
 		}
+		// fmt.Println(t.CreatorID)
 		dbTracks = append(dbTracks, t)
 	}
 
@@ -98,6 +102,7 @@ func (s *UserStorage) GetUserTracks(ctx context.Context, userID int64, options e
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
 			Attached:   true, // soundtracks from user playlist attached by default
 			CreatedAt:  track.CreatedAt,
+			CreatorID:  track.CreatorID,
 		})
 	}
 

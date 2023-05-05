@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import TextInput from '../../../shared/FormFields/TextInput'
+import Checkbox from '../../../shared/FormFields/Checkbox'
 
 const Container = styled.section``
 
@@ -38,6 +39,13 @@ const TextInputs: React.FC = () => {
           <TextInput name="simpleInput" placeholder="Multiline Input" multiline rows={5} />
         </InputWrapper>
       </Box>
+      <h4>Checkbox:</h4>
+      <div>
+        <Checkbox name="baseCheckbox" />
+      </div>
+      <div style={{ color: '#fff' }}>
+        <Checkbox name="baseCheckbox" label="with label" />
+      </div>
     </Container>
   )
 }

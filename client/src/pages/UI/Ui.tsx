@@ -18,7 +18,7 @@ const UI: React.FC = () => {
 
   return (
     <div>
-      <div style={{ paddingLeft: 20 }}>
+      <div style={{ paddingLeft: 20, color: '#Fff' }}>
         <h3>Ваш шедевр готов!</h3>
         <Formik
           onSubmit={handleSubmit}
@@ -27,7 +27,8 @@ const UI: React.FC = () => {
             simpleInput: '',
             errorInput: '',
             password: 'password',
-            price: ''
+            price: '',
+            baseCheckbox: false
           }}
           initialErrors={{
             input: '',

@@ -78,6 +78,11 @@ export const GlobalStyles = createGlobalStyle`
 
   body {
     background-color: #101318;
+    font-family: Roboto,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  }
+
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 
   input::-webkit-outer-spin-button,
@@ -90,9 +95,6 @@ export const GlobalStyles = createGlobalStyle`
     -moz-appearance: textfield;
   }
 
-  body {
-    font-family: Roboto,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-  }
 
   ul {
     margin: 0;

@@ -1,44 +1,32 @@
 import React from 'react'
-import history, { routeNames } from '../../utils/history'
 import SvgIcon from '../../shared/SvgIcon'
+import { routeNames } from '../../utils/history'
 import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
 import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
 import { ReactComponent as CogIcon } from '../../assets/svg/cog.svg'
-import { Container, ControlButton, UploadTrackLink } from './Nav.styled'
+import { Container, UploadTrackLink, BaseLink } from './Nav.styled'
 import { useTranslation } from 'react-i18next'
 
 const Nav: React.FC = () => {
   const { t } = useTranslation()
 
-  const searchClickHandler = () => {
-    history.push(routeNames.explore)
-  }
-
-  const playlistClickHandler = () => {
-    history.push(routeNames.root)
-  }
-
-  const cogClickHandler = () => {
-    history.push(routeNames.settings)
-  }
-
   return (
     <Container>
-      <ControlButton onClick={searchClickHandler}>
+      <BaseLink to={routeNames.explore}>
         <SvgIcon>
           <SearchIcon />
         </SvgIcon>
-      </ControlButton>
-      <ControlButton onClick={playlistClickHandler}>
+      </BaseLink>
+      <BaseLink to={routeNames.root}>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>
-      </ControlButton>
-      <ControlButton onClick={cogClickHandler}>
+      </BaseLink>
+      <BaseLink to={routeNames.settings}>
         <SvgIcon>
           <CogIcon />
         </SvgIcon>
-      </ControlButton>
+      </BaseLink>
       <UploadTrackLink to={routeNames.upload}>
         <span>{t('layout.upload')}</span>
       </UploadTrackLink>

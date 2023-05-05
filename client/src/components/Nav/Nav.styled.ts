@@ -1,6 +1,5 @@
+import { Link, NavLink } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components'
-import { Link } from 'react-router-dom'
-import IconButton from '../../shared/IconButton'
 
 export const Container = styled.nav`
   z-index: 400;
@@ -11,18 +10,20 @@ export const Container = styled.nav`
   justify-content: center;
 `
 
-export const ControlButton = styled(IconButton)`
+export const BaseLink = styled(NavLink)`
+  display: inline-flex;
+  user-select: none;
   background: none;
-  color: #fff;
+  color: #aeaeae;
   font-size: 3vh;
   padding: 2.7vh;
-  &:hover:not(:disabled) {
-    background-color: #fff;
-    background-color: transparent;
-  }
+  transition: color 0.2s;
   @media ${({ theme }) => theme.media.hxs} {
     font-size: 17px;
     padding: 15px;
+  }
+  &.active {
+    color: #fff;
   }
 `
 
