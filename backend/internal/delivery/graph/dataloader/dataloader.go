@@ -9,8 +9,7 @@ import (
 
 	"oasis/backend/internal/useCase/user"
 
-	"github.com/graph-gophers/dataloader"
-	gopher_dataloader "github.com/graph-gophers/dataloader"
+	gql_dataloader "github.com/graph-gophers/dataloader"
 )
 
 type ctxKey string
@@ -21,12 +20,12 @@ const (
 
 // DataLoader offers data loaders scoped to a context
 type DataLoader struct {
-	userLoader *dataloader.Loader
+	userLoader *gql_dataloader.Loader
 }
 
 // GetUser wraps the User dataloader for efficient retrieval by user ID
 func (i *DataLoader) GetUser(ctx context.Context, userID string) (*models.User, error) {
-	thunk := i.userLoader.Load(ctx, gopher_dataloader.StringKey(userID))
+	thunk := i.userLoader.Load(ctx, gql_dataloader.StringKey(userID))
 	result, err := thunk()
 	if err != nil {
 		return nil, err
@@ -52,12 +51,12 @@ func NewDataLoader(rootComposite composites.RootComposite) *DataLoader {
 
 	// instantiate the user dataloader
 	users := &userBatcher{useCase: rootComposite.UserComposite.UseCase}
-	cache := &gopher_dataloader.NoCache{}
-	options := gopher_dataloader.WithCache(cache)
+	cache := &gql_dataloader.NoCache{}
+	options := gql_dataloader.WithCache(cache)
 
 	// return the DataLoader
 	return &DataLoader{
-		userLoader: dataloader.NewBatchedLoader(users.get, options),
+		userLoader: gql_dataloader.NewBatchedLoader(users.get, options),
 	}
 }
 
@@ -72,7 +71,7 @@ type userBatcher struct {
 }
 
 // the result must be in the same order of the keys
-func (u *userBatcher) get(ctx context.Context, keys dataloader.Keys) []*dataloader.Result {
+func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_dataloader.Result {
 	// fmt.Printf("dataloader.userBatcher.get, users: [%s]\n", strings.Join(keys.Keys(), ","))
 
 	usersID := make([]int64, 0, len(keys))
@@ -81,7 +80,7 @@ func (u *userBatcher) get(ctx context.Context, keys dataloader.Keys) []*dataload
 
 		id, err := utils.StrToInt64(key.String())
 		if err != nil {
-			return []*dataloader.Result{{Data: nil, Error: err}}
+			return []*gql_dataloader.Result{{Data: nil, Error: err}}
 		}
 
 		usersID = append(usersID, id)
@@ -89,7 +88,7 @@ func (u *userBatcher) get(ctx context.Context, keys dataloader.Keys) []*dataload
 
 	dbRecords, err := u.useCase.GetUsers(ctx, usersID)
 	if err != nil {
-		return []*dataloader.Result{{Data: nil, Error: err}}
+		return []*gql_dataloader.Result{{Data: nil, Error: err}}
 	}
 
 	userMap := make(map[string]entity.User, len(dbRecords))
@@ -104,10 +103,10 @@ func (u *userBatcher) get(ctx context.Context, keys dataloader.Keys) []*dataload
 
 	}
 
-	results := make([]*dataloader.Result, len(keys))
+	results := make([]*gql_dataloader.Result, len(keys))
 
 	for ind, keyValue := range keys {
-		results[ind] = &dataloader.Result{Data: userMap[keyValue.String()], Error: nil}
+		results[ind] = &gql_dataloader.Result{Data: userMap[keyValue.String()], Error: nil}
 	}
 
 	return results
