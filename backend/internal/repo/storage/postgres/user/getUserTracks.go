@@ -93,8 +93,6 @@ func (s *UserStorage) GetUserTracks(ctx context.Context, userID int64, options e
 			coverImg = &path
 		}
 
-		fmt.Println("track.CreatorID", track.CreatorID)
-
 		soundtracks = append(soundtracks, entity.Soundtrack{
 			ID:         track.ID,
 			Title:      track.Title,
