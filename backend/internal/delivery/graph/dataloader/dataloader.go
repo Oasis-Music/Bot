@@ -2,12 +2,10 @@ package dataloader
 
 import (
 	"context"
-	"fmt"
 	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/utils"
-	"strings"
 
 	"oasis/backend/internal/useCase/user"
 
@@ -54,9 +52,12 @@ func NewDataLoader(rootComposite composites.RootComposite) *DataLoader {
 
 	// instantiate the user dataloader
 	users := &userBatcher{useCase: rootComposite.UserComposite.UseCase}
+	cache := &gopher_dataloader.NoCache{}
+	options := gopher_dataloader.WithCache(cache)
+
 	// return the DataLoader
 	return &DataLoader{
-		userLoader: dataloader.NewBatchedLoader(users.get),
+		userLoader: dataloader.NewBatchedLoader(users.get, options),
 	}
 }
 
@@ -70,59 +71,44 @@ type userBatcher struct {
 	useCase user.UseCase
 }
 
-// get implements the dataloader for finding many users by Id and returns
-// them in the order requested
+// the result must be in the same order of the keys
 func (u *userBatcher) get(ctx context.Context, keys dataloader.Keys) []*dataloader.Result {
-	fmt.Printf("dataloader.userBatcher.get, users: [%s]\n", strings.Join(keys.Keys(), ","))
-	// create a map for remembering the order of keys passed in
-	keyOrder := make(map[string]int, len(keys))
-	// collect the keys to search for
-	var userIDs []string
-	for ix, key := range keys {
-		userIDs = append(userIDs, key.String())
-		keyOrder[key.String()] = ix
-	}
+	// fmt.Printf("dataloader.userBatcher.get, users: [%s]\n", strings.Join(keys.Keys(), ","))
 
-	var parsedIDs []int64
+	usersID := make([]int64, 0, len(keys))
 
-	for _, id := range userIDs {
+	for _, key := range keys {
 
-		parsed, err := utils.StrToInt64(id)
+		id, err := utils.StrToInt64(key.String())
 		if err != nil {
-			fmt.Println("here", err)
 			return []*dataloader.Result{{Data: nil, Error: err}}
 		}
 
-		parsedIDs = append(parsedIDs, parsed)
+		usersID = append(usersID, id)
 	}
 
-	dbRecords, err := u.useCase.GetUsers(ctx, parsedIDs)
-	// if DB error, return
+	dbRecords, err := u.useCase.GetUsers(ctx, usersID)
 	if err != nil {
 		return []*dataloader.Result{{Data: nil, Error: err}}
 	}
 
-	// construct an output array of dataloader results
-	results := make([]*dataloader.Result, len(keys))
-	// enumerate records, put into output
+	userMap := make(map[string]entity.User, len(dbRecords))
+
 	for _, record := range dbRecords {
 
-		recordID := utils.Int64ToString(record.ID)
-
-		ix, ok := keyOrder[recordID]
-		// if found, remove from index lookup map so we know elements were found
-		if ok {
-			results[ix] = &dataloader.Result{Data: record, Error: nil}
-			delete(keyOrder, recordID)
+		userId := utils.Int64ToString(record.ID)
+		_, ok := userMap[userId]
+		if !ok {
+			userMap[userId] = record
 		}
+
 	}
 
-	// fill array positions with errors where not found in DB
-	for userID, ix := range keyOrder {
-		err := fmt.Errorf("user not found %s", userID)
-		results[ix] = &dataloader.Result{Data: nil, Error: err}
+	results := make([]*dataloader.Result, len(keys))
+
+	for ind, keyValue := range keys {
+		results[ind] = &dataloader.Result{Data: userMap[keyValue.String()], Error: nil}
 	}
-	// return results
 
 	return results
 }
