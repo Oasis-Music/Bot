@@ -58,7 +58,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		Duration:  track.Duration,
 		CoverURL:  track.CoverImage,
 		AudioURL:  track.Audio,
-		CreatorID: strconv.FormatInt(track.CreatorID, 10),
+		CreatorID: utils.Int64ToString(track.CreatorID),
 		CreatedAt: track.CreatedAt.UTC().String(),
 		Attached:  track.Attached,
 	}
@@ -89,7 +89,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: strconv.FormatInt(track.CreatorID, 10),
+			CreatorID: utils.Int64ToString(track.CreatorID),
 		})
 	}
 
@@ -126,7 +126,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: strconv.FormatInt(track.CreatorID, 10),
+			CreatorID: utils.Int64ToString(track.CreatorID),
 		})
 	}
 
@@ -146,7 +146,7 @@ func (r *soundtrackResolver) Creator(ctx context.Context, obj *models.Soundtrack
 	}
 
 	return &models.User{
-		ID:           strconv.FormatInt(user.ID, 10),
+		ID:           utils.Int64ToString(user.ID),
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
 		Username:     user.Username,
