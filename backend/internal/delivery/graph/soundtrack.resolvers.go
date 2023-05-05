@@ -52,7 +52,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 	}
 
 	soundtrack := models.Soundtrack{
-		ID:        utils.FormatInt32(track.ID),
+		ID:        utils.Int32ToString(track.ID),
 		Title:     track.Title,
 		Author:    track.Author,
 		Duration:  track.Duration,
@@ -81,7 +81,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	for _, track := range tracks.Soundtracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.FormatInt32(track.ID),
+			ID:        utils.Int32ToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
@@ -118,7 +118,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 	for _, track := range tracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.FormatInt32(track.ID),
+			ID:        utils.Int32ToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
