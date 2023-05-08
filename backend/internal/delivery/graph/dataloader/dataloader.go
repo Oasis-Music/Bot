@@ -2,10 +2,13 @@ package dataloader
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"oasis/backend/internal/app/composites"
 	"oasis/backend/internal/delivery/graph/models"
 	"oasis/backend/internal/entity"
 	"oasis/backend/internal/utils"
+	"strings"
 
 	"oasis/backend/internal/useCase/user"
 
@@ -28,6 +31,7 @@ func (i *DataLoader) GetUser(ctx context.Context, userID string) (*models.User, 
 	thunk := i.userLoader.Load(ctx, gql_dataloader.StringKey(userID))
 	result, err := thunk()
 	if err != nil {
+		log.Println("batch creator", err)
 		return nil, err
 	}
 
@@ -72,7 +76,7 @@ type userBatcher struct {
 
 // the result must be in the same order of the keys
 func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_dataloader.Result {
-	// fmt.Printf("dataloader.userBatcher.get, users: [%s]\n", strings.Join(keys.Keys(), ","))
+	fmt.Printf("dataloader.userBatcher.get, users: [%s]\n", strings.Join(keys.Keys(), ","))
 
 	usersID := make([]int64, 0, len(keys))
 
@@ -106,7 +110,16 @@ func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_
 	results := make([]*gql_dataloader.Result, len(keys))
 
 	for ind, keyValue := range keys {
-		results[ind] = &gql_dataloader.Result{Data: userMap[keyValue.String()], Error: nil}
+
+		k := keyValue.String()
+
+		user, ok := userMap[k]
+		if !ok {
+			results[ind] = &gql_dataloader.Result{Data: nil, Error: fmt.Errorf("cannot find a user #%s", k)}
+			continue
+		}
+
+		results[ind] = &gql_dataloader.Result{Data: user, Error: nil}
 	}
 
 	return results
