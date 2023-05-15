@@ -26,8 +26,8 @@ migrate_new:
 	migrate create -ext sql -seq  -dir ./migrations $(MIG_NAME)
 migrate_up:
 	# migrate -path ./migrations -database $(DB_URL) force 1
-	migrate -database $(DB_URL) -verbose -path ./migrations up 
+	migrate -database $(DB_URL) -verbose -path ./migrations up 1
 migrate_down:
-	migrate -path ./migrations -database $(DB_URL) -verbose down
+	migrate -path ./migrations -database $(DB_URL) -verbose down 1
 migrate_force:
 	migrate -database $(DB_URL) -verbose -path ./migrations force $(FORCE)
