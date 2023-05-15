@@ -6,7 +6,7 @@ import SvgIcon from '../../../shared/SvgIcon'
 const buttonsStyles = css`
   flex-grow: 1;
   border-radius: 0;
-  color: #505050;
+  color: #2e2e2e;
   padding: 10px 5px;
   background: none;
   box-shadow: none;
@@ -125,9 +125,9 @@ export const DeleteBotton = styled(IconButton)`
   font-size: 16px;
 `
 
-export const DownloadBotton = styled(IconButton)`
+export const ShareBotton = styled(IconButton)`
   ${buttonsStyles}
-  font-size: 17px;
+  font-size: 16px;
 `
 
 export const CopyInfoBotton = styled(IconButton)`

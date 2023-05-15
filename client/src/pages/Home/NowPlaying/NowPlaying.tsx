@@ -3,7 +3,7 @@ import SvgIcon from '../../../shared/SvgIcon'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
 import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
 import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
-import { ReactComponent as DownloadIcon } from '../../../assets/svg/cloud-download.svg'
+import { ReactComponent as ShareIcon } from '../../../assets/svg/share.svg'
 import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
 import { ReactComponent as CheckIcon } from '../../../assets/svg/check-circle.svg'
 import { useMutation, useReactiveVar } from '@apollo/client'
@@ -29,7 +29,7 @@ import {
   SaveBotton,
   AddIcon,
   DeleteBotton,
-  DownloadBotton,
+  ShareBotton,
   ControlsWrapper,
   CopyInfoBotton,
   InfoLine
@@ -149,14 +149,14 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
                   <TrashIcon />
                 </SvgIcon>
               </DeleteBotton>
-              <DownloadBotton>
-                <SvgIcon>
-                  <DownloadIcon />
-                </SvgIcon>
-              </DownloadBotton>
               <CopyInfoBotton onClick={onCopyTrackInfo}>
                 <SvgIcon>{wasCopied ? <CheckIcon /> : <CopyIcon />}</SvgIcon>
               </CopyInfoBotton>
+              <ShareBotton>
+                <SvgIcon>
+                  <ShareIcon />
+                </SvgIcon>
+              </ShareBotton>
             </ControlsWrapper>
           ) : (
             <SaveBotton
