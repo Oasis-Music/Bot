@@ -16,4 +16,8 @@ export default styled.div`
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  & svg {
+    width: inherit;
+    height: inherit;
+  }
 `
