@@ -23,7 +23,7 @@ const (
 	WHERE id IN (`
 )
 
-func (s *UserStorage) GetUsers(ctx context.Context, ids []int64) ([]entity.User, error) {
+func (s *UserStorage) Users(ctx context.Context, ids []int64) ([]entity.User, error) {
 
 	sql := getUsersQueryBuilder(USERS_BY_IDs_QUERY, ids)
 

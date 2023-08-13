@@ -90,7 +90,7 @@ func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_
 		usersID = append(usersID, id)
 	}
 
-	dbRecords, err := u.useCase.GetUsers(ctx, usersID)
+	dbRecords, err := u.useCase.Users(ctx, usersID)
 	if err != nil {
 		return []*gql_dataloader.Result{{Data: nil, Error: err}}
 	}

@@ -57,7 +57,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 		return nil, errors.New("invalid user id")
 	}
 
-	user, err := r.UserUC.GetUser(ctx, parsedId)
+	user, err := r.UserUC.User(ctx, parsedId)
 	if errors.Is(err, userUC.ErrUserNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
@@ -98,7 +98,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 		return nil, errors.New("invalid user id")
 	}
 
-	tracks, err := r.UserUC.GetSoundtracks(ctx, userId, entity.UserTracksOptions{
+	tracks, err := r.UserUC.UserSoundtracks(ctx, userId, entity.UserTracksOptions{
 		Page: filter.Page,
 	})
 	if errors.Is(err, userUC.ErrUserTracksNotFound) {

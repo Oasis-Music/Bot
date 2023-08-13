@@ -55,7 +55,7 @@ func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.U
 
 	fmt.Printf("received user: %d\n", userData.Id)
 
-	user, err := u.storage.GetUser(ctx, userData.Id)
+	user, err := u.storage.User(ctx, userData.Id)
 	if err == pgx.ErrNoRows {
 		fmt.Println("user not found, create...")
 

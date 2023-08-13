@@ -19,7 +19,7 @@ FROM users
 WHERE id = $1;
 `
 
-func (s *UserStorage) GetUser(ctx context.Context, id int64) (*entity.User, error) {
+func (s *UserStorage) User(ctx context.Context, id int64) (*entity.User, error) {
 
 	row := s.database.QueryRow(context.Background(), GET_USER_QUERY, id)
 

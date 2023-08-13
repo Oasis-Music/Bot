@@ -89,7 +89,7 @@ func hasRoleDirectiveHandler(userUseCase user.UseCase) directiveHandler {
 			return nil, errors.New("wrong user id")
 		}
 
-		userRole, err := userUseCase.GetRole(ctx, userID)
+		userRole, err := userUseCase.Role(ctx, userID)
 		if err != nil {
 			return nil, &gqlerror.Error{
 				Path:    graphql.GetPath(ctx),

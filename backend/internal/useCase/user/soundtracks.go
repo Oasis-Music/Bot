@@ -6,13 +6,13 @@ import (
 	"oasis/backend/internal/entity"
 )
 
-func (u *userUseCase) GetSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
+func (u *userUseCase) UserSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
 
 	if err := u.checkPermission(ctx, userID); err != nil {
 		return nil, err
 	}
 
-	result, err := u.storage.GetUserTracks(ctx, userID, options)
+	result, err := u.storage.UserSoundtracks(ctx, userID, options)
 	if err != nil {
 		log.Println(err)
 		return nil, ErrIternalUserTracksError

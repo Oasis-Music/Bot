@@ -41,7 +41,7 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *UserStorage) GetUserTracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
+func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
 
 	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, options)
 	if err != nil {

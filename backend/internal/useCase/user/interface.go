@@ -15,13 +15,13 @@ const (
 )
 
 type UseCase interface {
+	User(ctx context.Context, id int64) (*entity.User, error)
+	Role(ctx context.Context, id int64) (string, error)
+	Users(ctx context.Context, ids []int64) ([]entity.User, error)
 	Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error)
-	GetUser(ctx context.Context, id int64) (*entity.User, error)
-	GetRole(ctx context.Context, id int64) (string, error)
-	GetSoundtracks(ctx context.Context, id int64, options entity.UserTracksOptions) (*entity.UserTracks, error)
+	UserSoundtracks(ctx context.Context, id int64, options entity.UserTracksOptions) (*entity.UserTracks, error)
 	AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error)
 	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
-	GetUsers(ctx context.Context, ids []int64) ([]entity.User, error)
 }
 
 type userUseCase struct {
