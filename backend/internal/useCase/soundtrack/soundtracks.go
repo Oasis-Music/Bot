@@ -5,11 +5,11 @@ import (
 	"oasis/backend/internal/entity"
 )
 
-func (s *soundtrackUseCase) GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
+func (s *soundtrackUseCase) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
 
 	filter.UserID = s.extractCtxUserId(ctx)
 
-	tracks, err := s.storage.GetAllSoundtracks(ctx, filter)
+	tracks, err := s.storage.AllSoundtracks(ctx, filter)
 	if err != nil {
 		return nil, ErrGetAllSoundtracks
 	}

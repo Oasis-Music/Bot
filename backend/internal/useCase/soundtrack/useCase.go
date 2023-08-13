@@ -11,10 +11,10 @@ import (
 )
 
 type UseCase interface {
-	DeleteSoundtrack(ctx context.Context, id int32) (bool, error)
-	CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
-	GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
-	GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
+	Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
+	AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
+	Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
+	Delete(ctx context.Context, id int32) (bool, error)
 	Search(ctx context.Context, value string) ([]entity.Soundtrack, error)
 }
 

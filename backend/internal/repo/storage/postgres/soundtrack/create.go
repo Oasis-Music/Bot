@@ -21,7 +21,7 @@ const ADD_NEW_SOUNDTRACK = `
 	RETURNING id
 `
 
-func (s *soundtrackStorage) CreateSoundtrack(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
+func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
 
 	soundtrackCover := dbnull.NewNullString("", false)
 

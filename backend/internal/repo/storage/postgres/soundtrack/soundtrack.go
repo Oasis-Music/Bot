@@ -20,7 +20,7 @@ FROM soundtrack
 WHERE id = $1;
 `
 
-func (s *soundtrackStorage) GetSoundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error) {
+func (s *soundtrackStorage) Soundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error) {
 
 	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id, userID)
 

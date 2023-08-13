@@ -17,7 +17,7 @@ import (
 
 // CreateSoundtrack is the resolver for the createSoundtrack field.
 func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.CreateSoundtrackInput) (bool, error) {
-	return r.SoundtrackUC.CreateSoundtrack(ctx, entity.NewSoundtrackInput{
+	return r.SoundtrackUC.Create(ctx, entity.NewSoundtrackInput{
 		Title:      input.Title,
 		Author:     input.Author,
 		CoverImage: (*entity.Upload)(input.CoverImage),
@@ -33,7 +33,7 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 		return false, errors.New("invalid track id")
 	}
 
-	return r.SoundtrackUC.DeleteSoundtrack(ctx, trackId)
+	return r.SoundtrackUC.Delete(ctx, trackId)
 }
 
 // Soundtrack is the resolver for the soundtrack field.
@@ -43,7 +43,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		return nil, errors.New("invalid track id")
 	}
 
-	track, err := r.SoundtrackUC.GetSoundtrack(ctx, int32(trackId))
+	track, err := r.SoundtrackUC.Soundtrack(ctx, int32(trackId))
 	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
@@ -69,7 +69,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 
 // Soundtracks is the resolver for the soundtracks field.
 func (r *queryResolver) Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error) {
-	tracks, err := r.SoundtrackUC.GetAllSoundtracks(ctx, entity.SoundtrackFilter{
+	tracks, err := r.SoundtrackUC.AllSoundtracks(ctx, entity.SoundtrackFilter{
 		Page: filter.Page,
 	})
 

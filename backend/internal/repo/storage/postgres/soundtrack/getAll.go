@@ -25,7 +25,7 @@ const (
 	PAGINATION_ERR_MSG = "invalid page"
 )
 
-func (s *soundtrackStorage) GetAllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error) {
+func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error) {
 
 	query, err := queryBuilder(ALL_SOUNDTRACKS_QUERY, filter)
 	if err != nil {

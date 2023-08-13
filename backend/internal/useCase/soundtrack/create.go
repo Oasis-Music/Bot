@@ -44,7 +44,7 @@ func trackDurationToInt16(d float64) (int16, error) {
 	return int16(math.Round(d)), nil
 }
 
-func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
+func (s *soundtrackUseCase) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
 	userID := s.extractCtxUserId(ctx)
 
@@ -148,7 +148,7 @@ func (s *soundtrackUseCase) CreateSoundtrack(ctx context.Context, input entity.N
 	newTrack.IsValidated = false
 	newTrack.CreatorID = userID
 
-	newTrackId, err := s.storage.CreateSoundtrack(ctx, newTrack)
+	newTrackId, err := s.storage.Create(ctx, newTrack)
 	if err != nil {
 		log.Panicln("fail to create track", err)
 		return false, err

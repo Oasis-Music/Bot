@@ -8,11 +8,11 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-func (s *soundtrackUseCase) GetSoundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
+func (s *soundtrackUseCase) Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
 
 	userID := s.extractCtxUserId(ctx)
 
-	track, err := s.storage.GetSoundtrack(ctx, id, userID)
+	track, err := s.storage.Soundtrack(ctx, id, userID)
 
 	if err == pgx.ErrNoRows {
 		return nil, ErrSoundtrackNotFound

@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-func (s *soundtrackUseCase) DeleteSoundtrack(ctx context.Context, id int32) (bool, error) {
+func (s *soundtrackUseCase) Delete(ctx context.Context, id int32) (bool, error) {
 
 	// TODO: delete from S3 first
 
-	affectedRows, err := s.storage.DeleteSoundtrack(ctx, id)
+	affectedRows, err := s.storage.Delete(ctx, id)
 	if err != nil {
 		fmt.Println(err)
 		return false, ErrInternalDeleteSoundtrack
