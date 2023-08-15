@@ -5,8 +5,8 @@ client/src/assets/music
 npm-debug.log*
 
 # backend
-backend/.env.prod
-backend/init/backup.*
+api/.env.prod
+api/init/backup.*
 
 /.pnp
 .pnp.js
