@@ -20,7 +20,7 @@ const Container = styled.div<{ $open: boolean }>`
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: ${({ $open }) => ($open ? '1' : '0')};
-  bottom: ${({ $open }) => ($open ? '17%' : '-10%')};
+  bottom: ${({ $open }) => ($open ? '17%' : '-50%')};
   color: #1e1e1e;
   border-radius: 8px;
   padding: 12px 15px;

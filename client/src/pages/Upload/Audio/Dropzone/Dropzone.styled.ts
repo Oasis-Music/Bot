@@ -48,8 +48,11 @@ export const Plug = styled.div`
   border-radius: 8px;
 `
 
-export const PlugIcon = styled(SvgIcon)`
+export const PlugIconBox = styled.div`
   padding: 3vh 2vh;
+`
+
+export const PlugIcon = styled(SvgIcon)`
   font-size: 9vh;
 `
 
