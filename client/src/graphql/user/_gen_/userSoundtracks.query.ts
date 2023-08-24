@@ -1,9 +1,11 @@
 import * as Types from '../../types'
 
 import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
+const defaultOptions = {} as const
 export type UserSoundtracksQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
-  page: Types.Scalars['Int']
+  id: Types.Scalars['ID']['input']
+  page: Types.Scalars['Int']['input']
 }>
 
 export type UserSoundtracksQuery = {
@@ -25,27 +27,6 @@ export type UserSoundtracksQuery = {
         }>
       }
 }
-
-type DiscriminateUnion<T, U> = T extends U ? T : never
-
-export type UserSoundtracksVariables = UserSoundtracksQueryVariables
-export type UserSoundtracksUserSoundtracks = NonNullable<UserSoundtracksQuery['userSoundtracks']>
-export type UserSoundtracksUserSoundtracksResponseInlineFragment = DiscriminateUnion<
-  NonNullable<UserSoundtracksQuery['userSoundtracks']>,
-  { __typename?: 'UserSoundtracksResponse' }
->
-export type UserSoundtracksSoundtracks = NonNullable<
-  NonNullable<
-    DiscriminateUnion<
-      NonNullable<UserSoundtracksQuery['userSoundtracks']>,
-      { __typename?: 'UserSoundtracksResponse' }
-    >['soundtracks']
-  >[number]
->
-export type UserSoundtracksNotFoundInlineFragment = DiscriminateUnion<
-  NonNullable<UserSoundtracksQuery['userSoundtracks']>,
-  { __typename?: 'NotFound' }
->
 
 export const UserSoundtracksDocument = gql`
   query UserSoundtracks($id: ID!, $page: Int!) {
@@ -69,3 +50,45 @@ export const UserSoundtracksDocument = gql`
     }
   }
 `
+
+/**
+ * __useUserSoundtracksQuery__
+ *
+ * To run a query within a React component, call `useUserSoundtracksQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserSoundtracksQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserSoundtracksQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      page: // value for 'page'
+ *   },
+ * });
+ */
+export function useUserSoundtracksQuery(
+  baseOptions: Apollo.QueryHookOptions<UserSoundtracksQuery, UserSoundtracksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserSoundtracksQuery, UserSoundtracksQueryVariables>(
+    UserSoundtracksDocument,
+    options
+  )
+}
+export function useUserSoundtracksLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserSoundtracksQuery, UserSoundtracksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserSoundtracksQuery, UserSoundtracksQueryVariables>(
+    UserSoundtracksDocument,
+    options
+  )
+}
+export type UserSoundtracksQueryHookResult = ReturnType<typeof useUserSoundtracksQuery>
+export type UserSoundtracksLazyQueryHookResult = ReturnType<typeof useUserSoundtracksLazyQuery>
+export type UserSoundtracksQueryResult = Apollo.QueryResult<
+  UserSoundtracksQuery,
+  UserSoundtracksQueryVariables
+>

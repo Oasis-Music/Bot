@@ -6,20 +6,12 @@ import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
 import { ReactComponent as ShareIcon } from '../../../assets/svg/share.svg'
 import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
 import { ReactComponent as CheckIcon } from '../../../assets/svg/check-circle.svg'
-import { useMutation, useReactiveVar } from '@apollo/client'
+import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
 import { UserMutations, UiMutations } from '../../../apollo/cache/mutations'
-import {
-  AttachSoundtrackMutation,
-  AttachSoundtrackVariables,
-  AttachSoundtrackDocument
-} from '../../../graphql/user/_gen_/attachSoundtrack.mutauion'
-import {
-  UnattachSoundtrackMutation,
-  UnattachSoundtrackVariables,
-  UnattachSoundtrackDocument
-} from '../../../graphql/user/_gen_/unattachSoundtrack.mutation'
+import { useAttachSoundtrackMutation } from '../../../graphql/user/_gen_/attachSoundtrack.mutauion'
+import { useUnattachSoundtrackMutation } from '../../../graphql/user/_gen_/unattachSoundtrack.mutation'
 import {
   InnerContainer,
   ImageWrapper,
@@ -56,10 +48,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
     setCopied(false)
   }, [track.id])
 
-  const [onAttachSoundtrack, attachMeta] = useMutation<
-    AttachSoundtrackMutation,
-    AttachSoundtrackVariables
-  >(AttachSoundtrackDocument, {
+  const [onAttachSoundtrack, attachMeta] = useAttachSoundtrackMutation({
     onCompleted: () => {
       UserMutations.attachSoundtrack()
 
@@ -75,10 +64,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
     }
   })
 
-  const [onUnattachSoundtrack, _unattachMeta] = useMutation<
-    UnattachSoundtrackMutation,
-    UnattachSoundtrackVariables
-  >(UnattachSoundtrackDocument, {
+  const [onUnattachSoundtrack, _unattachMeta] = useUnattachSoundtrackMutation({
     onCompleted: () => {
       UserMutations.unattachSoundtrack()
       if (onTrackUnattach) {

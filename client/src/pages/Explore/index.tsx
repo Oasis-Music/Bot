@@ -1,16 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { useLazyQuery, useReactiveVar } from '@apollo/client'
-import {
-  AllSoundtracksQuery,
-  AllSoundtracksVariables,
-  AllSoundtracksDocument
-} from '../../graphql/soundtrack/_gen_/soundtracks.query'
-import {
-  SoundtrackByTitleQuery,
-  SoundtrackByTitleVariables,
-  SoundtrackByTitleDocument
-} from '../../graphql/soundtrack/_gen_/soundtrackByTitle.query'
-
+import { useReactiveVar } from '@apollo/client'
+import { useAllSoundtracksLazyQuery } from '../../graphql/soundtrack/_gen_/soundtracks.query'
+import { useSearchSoundtrackLazyQuery } from '../../graphql/soundtrack/_gen_/searchSoundtrack.query'
 import TracksList from './TracksList/TracksList'
 import { Track } from './types'
 import Search from '../../components/Search/Search'
@@ -30,30 +21,24 @@ const Explore: React.FC = () => {
 
   const ITEMS_PER_PAGE = 15
 
-  const [getTracks, { loading }] = useLazyQuery<AllSoundtracksQuery, AllSoundtracksVariables>(
-    AllSoundtracksDocument,
-    {
-      variables: {
-        page: currentPage
-      },
-      fetchPolicy: 'network-only', // TODO: when cache first duplicate values
-      onCompleted(q) {
-        const newTracks = q.soundtracks.soundtracks as Soundtrack[]
+  const [getTracks, { loading }] = useAllSoundtracksLazyQuery({
+    variables: {
+      page: currentPage
+    },
+    fetchPolicy: 'network-only', // TODO: when cache first duplicate values
+    onCompleted(q) {
+      const newTracks = q.soundtracks.soundtracks as Soundtrack[]
 
-        SoundtrackMutations.setExplorePlaylist(newTracks)
-        setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
-      }
+      SoundtrackMutations.setExplorePlaylist(newTracks)
+      setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
     }
-  )
+  })
 
-  const [searchTrack] = useLazyQuery<SoundtrackByTitleQuery, SoundtrackByTitleVariables>(
-    SoundtrackByTitleDocument,
-    {
-      onCompleted(queryData) {
-        setTracks(queryData.soundtrackByTitle)
-      }
+  const [searchTrack] = useSearchSoundtrackLazyQuery({
+    onCompleted(queryData) {
+      setTracks(queryData.searchSoundtrack)
     }
-  )
+  })
 
   useEffect(() => {
     getTracks()
@@ -74,7 +59,7 @@ const Explore: React.FC = () => {
   const handleSearchSubmit = (value: string) => {
     searchTrack({
       variables: {
-        title: value
+        value
       }
     })
   }

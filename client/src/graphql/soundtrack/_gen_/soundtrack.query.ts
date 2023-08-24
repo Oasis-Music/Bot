@@ -1,8 +1,10 @@
 import * as Types from '../../types'
 
 import { gql } from '@apollo/client'
+import * as Apollo from '@apollo/client'
+const defaultOptions = {} as const
 export type GetSoundtrackQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']
+  id: Types.Scalars['ID']['input']
 }>
 
 export type GetSoundtrackQuery = {
@@ -17,24 +19,11 @@ export type GetSoundtrackQuery = {
         duration: number
         coverURL?: string | null
         audioURL: string
-        createdAt: string
+        createdAt: any
         attached: boolean
       }
     | null
 }
-
-type DiscriminateUnion<T, U> = T extends U ? T : never
-
-export type GetSoundtrackVariables = GetSoundtrackQueryVariables
-export type GetSoundtrackSoundtrack = NonNullable<GetSoundtrackQuery['soundtrack']>
-export type GetSoundtrackSoundtrackInlineFragment = DiscriminateUnion<
-  NonNullable<GetSoundtrackQuery['soundtrack']>,
-  { __typename?: 'Soundtrack' }
->
-export type GetSoundtrackNotFoundInlineFragment = DiscriminateUnion<
-  NonNullable<GetSoundtrackQuery['soundtrack']>,
-  { __typename?: 'NotFound' }
->
 
 export const GetSoundtrackDocument = gql`
   query GetSoundtrack($id: ID!) {
@@ -56,3 +45,44 @@ export const GetSoundtrackDocument = gql`
     }
   }
 `
+
+/**
+ * __useGetSoundtrackQuery__
+ *
+ * To run a query within a React component, call `useGetSoundtrackQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSoundtrackQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSoundtrackQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetSoundtrackQuery(
+  baseOptions: Apollo.QueryHookOptions<GetSoundtrackQuery, GetSoundtrackQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetSoundtrackQuery, GetSoundtrackQueryVariables>(
+    GetSoundtrackDocument,
+    options
+  )
+}
+export function useGetSoundtrackLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetSoundtrackQuery, GetSoundtrackQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetSoundtrackQuery, GetSoundtrackQueryVariables>(
+    GetSoundtrackDocument,
+    options
+  )
+}
+export type GetSoundtrackQueryHookResult = ReturnType<typeof useGetSoundtrackQuery>
+export type GetSoundtrackLazyQueryHookResult = ReturnType<typeof useGetSoundtrackLazyQuery>
+export type GetSoundtrackQueryResult = Apollo.QueryResult<
+  GetSoundtrackQuery,
+  GetSoundtrackQueryVariables
+>
