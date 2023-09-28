@@ -3,15 +3,10 @@ import styled from 'styled-components'
 import Info from './Info/Info'
 import Cover from './Cover/Cover'
 import Audio from './Audio/Audio'
-import { useMutation } from '@apollo/client'
 import { Formik, Form } from 'formik'
 import { useWindowRatio } from '../../hooks'
 import { createTrackStepsSchema } from '../../utils/validationSchemas'
-import {
-  CreateSoundtrackMutation,
-  CreateSoundtrackVariables,
-  CreateSoundtrackDocument
-} from '../../graphql/soundtrack/_gen_/createSoundtrack.mutation'
+import { useCreateSoundtrackMutation } from '../../graphql/soundtrack/_gen_/createSoundtrack.mutation'
 import Feedback from './modals/Feedback'
 import Alert from './modals/Alert'
 import history, { routeNames } from '../../utils/history'
@@ -79,10 +74,7 @@ const Upload: React.FC = () => {
 
   const [windowWidth] = useWindowRatio()
 
-  const [createSoundtrack, { loading }] = useMutation<
-    CreateSoundtrackMutation,
-    CreateSoundtrackVariables
-  >(CreateSoundtrackDocument, {
+  const [createSoundtrack, { loading }] = useCreateSoundtrackMutation({
     onCompleted: (data) => {
       console.log(data)
       setFeedbackModal({

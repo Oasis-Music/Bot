@@ -1,5 +1,5 @@
-query SoundtrackByTitle($title: String!) {
-  soundtrackByTitle(title: $title) {
+query SearchSoundtrack($value: String!) {
+  searchSoundtrack(value: $value) {
     id
     title
     author

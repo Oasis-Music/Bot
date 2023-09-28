@@ -9,12 +9,8 @@ import {
   ReportLink,
   TermsTitle
 } from './Auth.styled'
-import {
-  AuthorizeUserQuery,
-  AuthorizeUserQueryVariables,
-  AuthorizeUserDocument
-} from '../../graphql/user/_gen_/authorizeUser.query'
-import { useLazyQuery, useReactiveVar } from '@apollo/client'
+import { useAuthorizeUserLazyQuery } from '../../graphql/user/_gen_/authorizeUser.query'
+import { useReactiveVar } from '@apollo/client'
 import { UserMutations } from '../../apollo/cache/mutations'
 import { isAuthenticatedVar } from '../../apollo/cache/variables'
 import { Link, Navigate } from 'react-router-dom'
@@ -32,28 +28,25 @@ const Auth: React.FC = () => {
 
   const [error, setError] = useState<string>('')
 
-  const [authorize, { loading }] = useLazyQuery<AuthorizeUserQuery, AuthorizeUserQueryVariables>(
-    AuthorizeUserDocument,
-    {
-      onCompleted(data) {
-        const ok = UserMutations.processAccessToken(data.authorizeUser.token)
-        if (ok) {
-          localStorage.setItem('rt', data.authorizeUser.refreshToken)
-          history.push(routeNames.root)
-        }
-      },
-      onError(error) {
-        if (error.networkError) {
-          const msg = t('errors.serverAccessErr')
-          setError(msg)
-          return
-        }
-
-        const msg = t('errors.telegramUserDataErr')
-        setError(msg)
+  const [authorize, { loading }] = useAuthorizeUserLazyQuery({
+    onCompleted(data) {
+      const ok = UserMutations.processAccessToken(data.authorizeUser.token)
+      if (ok) {
+        localStorage.setItem('rt', data.authorizeUser.refreshToken)
+        history.push(routeNames.root)
       }
+    },
+    onError(error) {
+      if (error.networkError) {
+        const msg = t('errors.serverAccessErr')
+        setError(msg)
+        return
+      }
+
+      const msg = t('errors.telegramUserDataErr')
+      setError(msg)
     }
-  )
+  })
 
   const handleSubmitClick = () => {
     setError('')

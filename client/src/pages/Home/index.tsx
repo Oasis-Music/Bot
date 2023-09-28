@@ -3,16 +3,12 @@ import NowPlaying from './NowPlaying/NowPlaying'
 import PlaylistItem from '../../components/PlaylistItem/PlaylistItem'
 import ScaleLoader from '../../shared/Loader'
 import { userVar, currentTrackVar, userPlaylistVar } from '../../apollo/cache/variables'
-import { useLazyQuery, useReactiveVar } from '@apollo/client'
+import { useReactiveVar } from '@apollo/client'
 import { UserMutations } from '../../apollo/cache/mutations'
 import { Container, List, MountLoader } from './Home.styled'
 import { NoDataPlug, ErrorPlug } from './Plugs'
 import { Playlist } from '../../apollo/cache/types'
-import {
-  UserSoundtracksQuery,
-  UserSoundtracksVariables,
-  UserSoundtracksDocument
-} from '../../graphql/user/_gen_/userSoundtracks.query'
+import { useUserSoundtracksLazyQuery } from '../../graphql/user/_gen_/userSoundtracks.query'
 import type { Soundtrack } from '../../apollo/cache/types'
 
 const ITEMS_PER_PAGE = 15
@@ -29,10 +25,7 @@ const Home: React.FC = () => {
 
   const intersectionObserver = useRef<IntersectionObserver>()
 
-  const [getTracks, { loading, error }] = useLazyQuery<
-    UserSoundtracksQuery,
-    UserSoundtracksVariables
-  >(UserSoundtracksDocument, {
+  const [getTracks, { loading, error }] = useUserSoundtracksLazyQuery({
     variables: {
       id: currentUser.id,
       page: currentPage

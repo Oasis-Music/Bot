@@ -13,7 +13,7 @@
     "@types/react-dom": "^18.0.6",
     "apollo-upload-client": "^17.0.0",
     "formik": "^2.2.9",
-    "graphql": "^15.8.0",
+    "graphql": "^16.8.0",
     "history": "^5.3.0",
     "howler": "^2.2.3",
     "i18next": "^22.4.9",
@@ -39,11 +39,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\"",
-    "generate": "graphql-codegen --config codegen.yml",
-    "schema:get": "apollo client:download-schema --endpoint=http://localhost:8080/graphql ./src/graphql/schema.graphql",
-    "schema:remove": "rm ./src/graphql/schema.graphql",
-    "generate:clear": "find . -name _gen_ -type d -exec rm -r {} +",
-    "gen": "npm run schema:remove && npm run generate:clear && npm run schema:get && npm run generate"
+    "gen:clear": "find . -name _gen_ -type d -exec rm -r {} +",
+    "gen": "npm run gen:clear && graphql-codegen"
   },
   "eslintConfig": {
     "extends": [
@@ -64,13 +61,13 @@
     ]
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.11.3",
-    "@graphql-codegen/fragment-matcher": "^3.3.0",
-    "@graphql-codegen/near-operation-file-preset": "^2.4.1",
-    "@graphql-codegen/typescript": "^2.7.2",
-    "@graphql-codegen/typescript-compatibility": "^2.1.5",
-    "@graphql-codegen/typescript-operations": "^2.5.2",
-    "@graphql-codegen/typescript-react-apollo": "^3.3.2",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
+    "@graphql-codegen/fragment-matcher": "^5.0.0",
+    "@graphql-codegen/near-operation-file-preset": "^2.5.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@types/apollo-upload-client": "^17.0.2",
     "@types/howler": "^2.2.7",
     "@types/styled-components": "^5.1.25",
