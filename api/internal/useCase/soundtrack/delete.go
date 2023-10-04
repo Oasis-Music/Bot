@@ -2,22 +2,26 @@ package soundtrack
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"oasis/api/internal/repo/storage/postgres"
 )
 
 func (s *soundtrackUseCase) Delete(ctx context.Context, id int32) (bool, error) {
 
 	// TODO: delete from S3 first
 
-	affectedRows, err := s.storage.Delete(ctx, id)
+	success, err := s.storage.Delete(ctx, id)
 	if err != nil {
-		fmt.Println(err)
+		if errors.Is(err, postgres.ErrSoundtrackNotFound) {
+			return false, ErrSoundtrackNotFound
+		}
+
 		return false, ErrInternalDeleteSoundtrack
 	}
 
-	if affectedRows == 0 {
+	if !success {
 		return false, ErrSoundtrackNotFound
 	}
 
-	return true, nil
+	return success, nil
 }

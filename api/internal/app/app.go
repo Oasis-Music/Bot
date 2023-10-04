@@ -6,6 +6,7 @@ import (
 	"oasis/api/internal/config"
 	httpAPI "oasis/api/internal/delivery/api/http"
 	"oasis/api/internal/delivery/router"
+	"oasis/api/internal/repo/storage/postgres/sqlc"
 
 	"context"
 	"log"
@@ -26,10 +27,12 @@ type App struct {
 
 func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
 
+	sqlc := sqlc.New(db)
+
 	authService := auth.NewAuthService(config, db)
 
 	userComposite := composites.NewUserComposite(db, config, authService)
-	soundtrackComposite := composites.NewSoundtrackComposite(db, config, userComposite)
+	soundtrackComposite := composites.NewSoundtrackComposite(config, db, sqlc, userComposite)
 
 	rootComposite := composites.RootComposite{
 		SoundtrackComposite: soundtrackComposite,

@@ -2,24 +2,11 @@ package soundtrack
 
 import (
 	"context"
+	"log"
 	"oasis/api/internal/entity"
 	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
+	"oasis/api/internal/repo/storage/postgres/sqlc"
 )
-
-const ADD_NEW_SOUNDTRACK = `
-	INSERT INTO soundtrack (
-		title,
-		author,
-		duration,
-		cover_image,
-		audio_file,
-		is_validated,
-		creator_id
-	) VALUES (
-		$1, $2, $3, $4, $5, $6, $7
-	)
-	RETURNING id
-`
 
 func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
 
@@ -29,16 +16,20 @@ func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtr
 		soundtrackCover = dbnull.NewNullString(*params.CoverImage, true)
 	}
 
-	row := s.database.QueryRow(context.Background(), ADD_NEW_SOUNDTRACK,
-		params.Title,
-		params.Author,
-		params.Duration,
-		soundtrackCover,
-		params.AudioFile,
-		params.IsValidated,
-		params.CreatorID, // TODO: save valid user ID
-	)
-	var id int32
-	err := row.Scan(&id)
-	return id, err
+	trackID, err := s.sqlc.CreateSoundtrack(context.Background(), sqlc.CreateSoundtrackParams{
+		Title:       params.Title,
+		Author:      params.Author,
+		Duration:    params.Duration,
+		CoverImage:  soundtrackCover.NullString,
+		AudioFile:   params.AudioFile,
+		IsValidated: params.IsValidated,
+		CreatorID:   params.CreatorID,
+	})
+
+	if err != nil {
+		log.Println("storage/soundtrack(Create) -->", err)
+		return -1, err
+	}
+
+	return trackID, nil
 }

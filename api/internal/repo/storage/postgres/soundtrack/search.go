@@ -2,62 +2,26 @@ package soundtrack
 
 import (
 	"context"
+	"log"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/repo/storage/postgres"
+	"oasis/api/internal/repo/storage/postgres/sqlc"
 )
-
-const GET_SOUNDTRACK_BY_NAME_QUERY = `
-SELECT id,
-	title,
-	author,
-	duration,
-	cover_image,
-	audio_file,
-	creator_id,
-	created_at,
-	creator_id,
-	EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) as attached
-FROM soundtrack
-WHERE to_tsvector(title) @@ to_tsquery($1) LIMIT 7;
-`
 
 func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int64) ([]entity.Soundtrack, error) {
 
-	rows, err := s.database.Query(context.Background(), GET_SOUNDTRACK_BY_NAME_QUERY, title, userID)
+	data, err := s.sqlc.GetSoundtrackByTitle(context.Background(), sqlc.GetSoundtrackByTitleParams{
+		ToTsquery: title,
+		UserID:    userID,
+	})
+
 	if err != nil {
+		log.Println("storage/soundtrack(Search) -->", err)
 		return nil, err
 	}
 
-	defer rows.Close()
+	soundtracks := make([]entity.Soundtrack, 0, len(data))
 
-	var dbSoundtracks []postgres.SoundtrackDTO
-
-	for rows.Next() {
-		var t postgres.SoundtrackDTO
-		if err := rows.Scan(
-			&t.ID,
-			&t.Title,
-			&t.Author,
-			&t.Duration,
-			&t.CoverImage,
-			&t.AudioFile,
-			&t.CreatorID,
-			&t.CreatedAt,
-			&t.CreatorID,
-			&t.Attached,
-		); err != nil {
-			return nil, err
-		}
-		dbSoundtracks = append(dbSoundtracks, t)
-	}
-
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	var soundtracks []entity.Soundtrack
-
-	for _, track := range dbSoundtracks {
+	for _, track := range data {
 
 		var coverImg *string
 
@@ -73,6 +37,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
 			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Validated:  track.IsValidated,
 			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
 			CreatorID:  track.CreatorID,

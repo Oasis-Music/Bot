@@ -2,63 +2,47 @@ package soundtrack
 
 import (
 	"context"
+	"fmt"
+	"log"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
+	"oasis/api/internal/repo/storage/postgres/sqlc"
+
+	"github.com/jackc/pgx/v4"
 )
 
-const GET_SOUNDTRACK_QUERY = `
-SELECT id,
-	title,
-	author,
-	duration,
-	cover_image,
-	audio_file,
-	creator_id,
-	created_at,
-	EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) as attached
-FROM soundtrack
-WHERE id = $1;
-`
+func (s *soundtrackStorage) Soundtrack(ctx context.Context, trackID int32, userID int64) (*entity.Soundtrack, error) {
 
-func (s *soundtrackStorage) Soundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error) {
+	data, err := s.sqlc.GetSoundtrack(context.Background(), sqlc.GetSoundtrackParams{
+		ID:     trackID,
+		UserID: userID,
+	})
 
-	row := s.database.QueryRow(context.Background(), GET_SOUNDTRACK_QUERY, id, userID)
-
-	var dto postgres.SoundtrackDTO
-
-	err := row.Scan(
-		&dto.ID,
-		&dto.Title,
-		&dto.Author,
-		&dto.Duration,
-		&dto.CoverImage,
-		&dto.AudioFile,
-		&dto.CreatorID,
-		&dto.CreatedAt,
-		&dto.Attached,
-	)
-
-	if err != nil {
+	if err == pgx.ErrNoRows {
+		log.Println("storage/soundtrack(GetSoundtrack) -->", err)
+		return nil, fmt.Errorf("storage: %w", postgres.ErrSoundtrackNotFound)
+	} else if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
 
 	var coverImg *string
 
-	if dto.CoverImage.Valid {
-		path := s.config.ExternalAPI.CoverImageBaseURL + dto.CoverImage.String
+	if data.CoverImage.Valid {
+		path := s.config.ExternalAPI.CoverImageBaseURL + data.CoverImage.String
 		coverImg = &path
 	}
 
 	return &entity.Soundtrack{
-		ID:         dto.ID,
-		Title:      dto.Title,
-		Author:     dto.Author,
-		Duration:   int(dto.Duration),
+		ID:         data.ID,
+		Title:      data.Title,
+		Author:     data.Author,
+		Duration:   int(data.Duration),
 		CoverImage: coverImg,
-		Audio:      s.config.ExternalAPI.AudioBaseURL + dto.AudioFile,
-		Attached:   dto.Attached,
-		CreatorID:  dto.CreatorID,
-		CreatedAt:  dto.CreatedAt,
+		Audio:      s.config.ExternalAPI.AudioBaseURL + data.AudioFile,
+		Attached:   data.Attached,
+		CreatorID:  data.CreatorID,
+		CreatedAt:  data.CreatedAt,
 	}, nil
 
 }

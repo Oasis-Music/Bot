@@ -2,10 +2,10 @@ package soundtrack
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"oasis/api/internal/entity"
-
-	"github.com/jackc/pgx/v4"
+	"oasis/api/internal/repo/storage/postgres"
 )
 
 func (s *soundtrackUseCase) Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
@@ -13,10 +13,11 @@ func (s *soundtrackUseCase) Soundtrack(ctx context.Context, id int32) (*entity.S
 	userID := s.extractCtxUserId(ctx)
 
 	track, err := s.storage.Soundtrack(ctx, id, userID)
+	if err != nil {
+		if errors.Is(err, postgres.ErrSoundtrackNotFound) {
+			return nil, ErrSoundtrackNotFound
+		}
 
-	if err == pgx.ErrNoRows {
-		return nil, ErrSoundtrackNotFound
-	} else if err != nil {
 		fmt.Println(err)
 		return nil, ErrFailedToFetchSoundtrack
 	}
