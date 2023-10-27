@@ -77,8 +77,11 @@ export const SaveBotton = styled(Button)`
   font-size: 2.7vh;
   border: none;
   margin-top: 4vh;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
-    0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.6),
+    0 0 50px rgba(255, 255, 255, 0.45),
+    0 0 70px rgba(255, 255, 255, 0.25),
+    0 0 70px rgba(255, 255, 255, 0.1);
 
   &:disabled {
     box-shadow: none;

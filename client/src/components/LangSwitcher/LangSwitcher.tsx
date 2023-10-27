@@ -51,7 +51,9 @@ const Input = styled.input`
     left: 10px;
     right: 80px;
     background-color: #1e1e1e;
-    transition: left 0.5s, right 0.5s 0.2s;
+    transition:
+      left 0.5s,
+      right 0.5s 0.2s;
   }
 
   &:not(:checked) {
@@ -73,7 +75,10 @@ const Input = styled.input`
     left: 80px;
     right: 10px;
     background: ${({ theme }) => theme.colors.primary};
-    transition: left 0.4s 0.2s, right 0.5s, background 0.35s;
+    transition:
+      left 0.4s 0.2s,
+      right 0.5s,
+      background 0.35s;
   }
 `
 

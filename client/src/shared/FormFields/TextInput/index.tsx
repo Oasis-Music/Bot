@@ -40,7 +40,9 @@ const baseStyles = css<BaseInputStyles>`
   border: 1px solid;
   border-color: ${({ $error }) => ($error ? '#ff182e' : '#6a6a6a')};
   -webkit-tap-highlight-color: transparent;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow:
+    rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   transition: all 0.2s;
 
   &:focus {
@@ -95,7 +97,7 @@ const TextInput: React.FC<TextInputProps> = ({
 
   return (
     <div>
-      {!!multiline ? (
+      {multiline ? (
         <MultilineInput {...field} {...restProps} $error={isErr} autoComplete={autoComplete} />
       ) : (
         <BaseInput
