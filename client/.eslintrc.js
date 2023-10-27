@@ -1,29 +1,52 @@
 module.exports = {
-    parser: '@typescript-eslint/parser',
-    extends: [
-      'plugin:react/recommended', // Uses the recommended rules from @eslint-plugin-react
-      'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
-      'plugin:prettier/recommended' // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
-    ],
-    parserOptions: {
-      ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-      sourceType: 'module' // Allows for the use of imports
-    },
-    rules: {
-      'react/prop-types': 0,
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          varsIgnorePattern: '^_',
-          argsIgnorePattern: '^_',
-          ignoreRestSiblings: true
-        }
-      ]
-    },
-    settings: {
-      react: {
-        version: 'detect' // Tells eslint-plugin-react to automatically detect the version of React to use
+  plugins: ['@typescript-eslint', 'react', 'react-hooks'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module'
+  },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:prettier/recommended'
+  ],
+  env: {
+    browser: true,
+    es2021: true
+  },
+  overrides: [
+    {
+      env: {
+        node: true
+      },
+      files: ['.eslintrc.{js,cjs}'],
+      parserOptions: {
+        sourceType: 'script'
       }
     }
+  ],
+  rules: {
+    'react/prop-types': 'off',
+    'prettier/prettier': 'warn',
+    'import/no-anonymous-default-export': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        varsIgnorePattern: '^_',
+        argsIgnorePattern: '^_',
+        ignoreRestSiblings: true
+      }
+    ],
+    '@typescript-eslint/no-explicit-any': 'warn',
+    'no-extra-boolean-cast': 'warn',
+    'no-case-declarations': 'warn',
+    'react-hooks/rules-of-hooks': 'warn'
+  },
+  settings: {
+    react: {
+      version: 'detect'
+    }
   }
-  
+}

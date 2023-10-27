@@ -16,7 +16,7 @@ i18n
     defaultNS: 'translation',
     initImmediate: false,
     backend: {
-      allowMultiLoading: false,
+      // allowMultiLoading: false,
       loadPath: '/locales/{{lng}}/{{ns}}.json'
     }
   })
