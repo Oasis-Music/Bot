@@ -74,8 +74,20 @@ export function useAllSoundtracksLazyQuery(
     options
   )
 }
+export function useAllSoundtracksSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<AllSoundtracksQuery, AllSoundtracksQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<AllSoundtracksQuery, AllSoundtracksQueryVariables>(
+    AllSoundtracksDocument,
+    options
+  )
+}
 export type AllSoundtracksQueryHookResult = ReturnType<typeof useAllSoundtracksQuery>
 export type AllSoundtracksLazyQueryHookResult = ReturnType<typeof useAllSoundtracksLazyQuery>
+export type AllSoundtracksSuspenseQueryHookResult = ReturnType<
+  typeof useAllSoundtracksSuspenseQuery
+>
 export type AllSoundtracksQueryResult = Apollo.QueryResult<
   AllSoundtracksQuery,
   AllSoundtracksQueryVariables

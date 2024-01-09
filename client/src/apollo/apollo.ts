@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { createUploadLink } from 'apollo-upload-client'
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { cache } from './cache/cache'
 import { UserMutations } from './cache/mutations'
 import { promiseToObservable } from '../utils/helpers'
