@@ -24,3 +24,5 @@ api/init/backup.*
 .env.development.local
 .env.test.local
 .env.production.local
+
+/api/app
