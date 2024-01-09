@@ -83,11 +83,11 @@ const ImageWrapper = styled.div`
   bottom: 0;
 `
 
-const Wrapper = styled(LazyLoad)<{ $plain: boolean }>`
+const Wrapper = styled.div<{ $plain: boolean }>`
   ${wrapperStyles}
 `
 
-const PlugWrapper = styled.div`
+const PlugWrapper = styled.div<{ $plain: boolean }>`
   ${wrapperStyles}
 `
 
@@ -125,7 +125,7 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
   }
 
   return (
-    <Wrapper $plain={plain}>
+    <Wrapper $plain={plain} as={LazyLoad}>
       <Image $plain={plain} $loading={false} src={src} alt={altText} onError={handleImageLoadErr} />
     </Wrapper>
   )

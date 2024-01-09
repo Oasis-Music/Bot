@@ -100,7 +100,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, 
           isDragReject
         }}
         {...getRootProps()}
-        isError={dropError}
+        isError={Boolean(dropError)}
       >
         <input {...getInputProps()} />
         <Plug>

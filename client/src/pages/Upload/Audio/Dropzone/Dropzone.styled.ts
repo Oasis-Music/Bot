@@ -3,13 +3,13 @@ import SvgIcon from '../../../../shared/SvgIcon'
 
 interface containerStyles {
   isError: boolean
-  dragActive: boolean
+  isDragActive: boolean
   isDragAccept: boolean
   isDragReject: boolean
 }
 
 const getColor = (props: containerStyles) => {
-  if (props.dragActive) {
+  if (props.isDragActive) {
     return '#2196f3'
   }
   if (props.isDragAccept) {

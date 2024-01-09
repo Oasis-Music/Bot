@@ -50,7 +50,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
 
   useEffect(() => {
     const cleanupTimer = setTimeout(() => {
-      if (dropError && !!!mainPhoto) {
+      if (dropError && !mainPhoto) {
         setDropError('')
       }
     }, 2000)
@@ -132,7 +132,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
           isDragReject
         }}
         {...getRootProps()}
-        isError={dropError}
+        isError={Boolean(dropError)}
         $droped={!!mainPhoto?.size}
       >
         <input {...getInputProps()} />
@@ -177,7 +177,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
       <StepControls
         disabled={!!dropError}
         nextText={t(
-          !!dropError || !!!mainPhoto ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
+          !!dropError || !mainPhoto ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
         )}
         onBack={onPrevStep}
         onNext={onNextStep}
