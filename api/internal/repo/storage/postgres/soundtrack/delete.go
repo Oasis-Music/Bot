@@ -1,14 +1,21 @@
 package soundtrack
 
-import "context"
+import (
+	"context"
+	"oasis/api/internal/repo/storage/postgres"
+)
 
-const DELETE_SOUNDTRACK_QUERY = "DELETE FROM soundtrack WHERE id = $1;"
+func (s *soundtrackStorage) Delete(ctx context.Context, id int32) (bool, error) {
 
-func (s *soundtrackStorage) Delete(ctx context.Context, id int32) (int64, error) {
-	res, err := s.database.Exec(context.Background(), DELETE_SOUNDTRACK_QUERY, id)
+	rowsAffected, err := s.sqlc.DeleteSoundtrack(context.Background(), id)
 	if err != nil {
-		return 0, err
+		return false, err
 	}
 
-	return res.RowsAffected(), err
+	if rowsAffected == 0 {
+		return false, postgres.ErrSoundtrackNotFound
+	}
+
+	return true, nil
+
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import { ReactComponent as AudioPlaceholderIcon } from '../../../../assets/svg/audio_placeholder.svg'
-import { ReactComponent as CheckIcon } from '../../../../assets/svg/check-circle.svg'
+import AudioPlaceholderIcon from '../../../../assets/svg/audio_placeholder.svg?react'
+import CheckIcon from '../../../../assets/svg/check-circle.svg?react'
 import { useTranslation } from 'react-i18next'
 import AudioPlayer from '../../../../player'
 
@@ -100,7 +100,7 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, 
           isDragReject
         }}
         {...getRootProps()}
-        isError={dropError}
+        isError={Boolean(dropError)}
       >
         <input {...getInputProps()} />
         <Plug>

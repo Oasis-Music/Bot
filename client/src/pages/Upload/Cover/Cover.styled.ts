@@ -27,13 +27,13 @@ export const Title = styled.p`
 interface containerStyles {
   $droped: boolean
   isError: boolean
-  dragActive: boolean
+  isDragActive: boolean
   isDragAccept: boolean
   isDragReject: boolean
 }
 
 const getColor = (props: containerStyles) => {
-  if (props.dragActive) {
+  if (props.isDragActive) {
     return '#2196f3'
   }
   if (props.isDragAccept) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import { ReactComponent as DeleteIcon } from '../../../assets/svg/trash.svg'
-import { ReactComponent as CoverPlaceholderIcon } from '../../../assets/svg/cover_placeholder.svg'
+import DeleteIcon from '../../../assets/svg/trash.svg?react'
+import CoverPlaceholderIcon from '../../../assets/svg/cover_placeholder.svg?react'
 import {
   Container,
   StepTitle,
@@ -50,7 +50,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
 
   useEffect(() => {
     const cleanupTimer = setTimeout(() => {
-      if (dropError && !!!mainPhoto) {
+      if (dropError && !mainPhoto) {
         setDropError('')
       }
     }, 2000)
@@ -132,7 +132,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
           isDragReject
         }}
         {...getRootProps()}
-        isError={dropError}
+        isError={Boolean(dropError)}
         $droped={!!mainPhoto?.size}
       >
         <input {...getInputProps()} />
@@ -177,7 +177,7 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
       <StepControls
         disabled={!!dropError}
         nextText={t(
-          !!dropError || !!!mainPhoto ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
+          !!dropError || !mainPhoto ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
         )}
         onBack={onPrevStep}
         onNext={onNextStep}

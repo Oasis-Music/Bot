@@ -26,8 +26,8 @@ const App: React.FC = () => {
             <Route path="/explore" element={<Explore />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/settings" element={<Settings />} />
-            {process.env.NODE_ENV === 'development' && <Route path="/test" element={<Test />} />}
-            {process.env.NODE_ENV === 'development' && <Route path="/ui" element={<UI />} />}
+            {import.meta.env.DEV && <Route path="/test" element={<Test />} />}
+            {import.meta.env.DEV && <Route path="/ui" element={<UI />} />}
           </Route>
           <Route path="/terms" element={<Terms />} />
         </Route>

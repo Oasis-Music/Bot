@@ -8,6 +8,8 @@ gqlgen:
 	go run -mod=mod github.com/99designs/gqlgen
 lint:
 	golangci-lint run --verbose
+sqlc:
+	sqlc generate
 
 # DB
 backup:

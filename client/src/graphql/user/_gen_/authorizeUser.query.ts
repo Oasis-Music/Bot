@@ -55,8 +55,18 @@ export function useAuthorizeUserLazyQuery(
     options
   )
 }
+export function useAuthorizeUserSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<AuthorizeUserQuery, AuthorizeUserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<AuthorizeUserQuery, AuthorizeUserQueryVariables>(
+    AuthorizeUserDocument,
+    options
+  )
+}
 export type AuthorizeUserQueryHookResult = ReturnType<typeof useAuthorizeUserQuery>
 export type AuthorizeUserLazyQueryHookResult = ReturnType<typeof useAuthorizeUserLazyQuery>
+export type AuthorizeUserSuspenseQueryHookResult = ReturnType<typeof useAuthorizeUserSuspenseQuery>
 export type AuthorizeUserQueryResult = Apollo.QueryResult<
   AuthorizeUserQuery,
   AuthorizeUserQueryVariables

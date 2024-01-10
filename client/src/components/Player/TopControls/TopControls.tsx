@@ -1,7 +1,7 @@
 import React from 'react'
 import SvgIcon from '../../../shared/SvgIcon'
-import { ReactComponent as ArrowIcon } from '../../../assets/svg/angle-arrow.svg'
-import { ReactComponent as MusicListIcon } from '../../../assets/svg/list-music.svg'
+import ArrowIcon from '../../../assets/svg/angle-arrow.svg?react'
+import MusicListIcon from '../../../assets/svg/list-music.svg?react'
 
 import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.styled'
 import { useTranslation } from 'react-i18next'

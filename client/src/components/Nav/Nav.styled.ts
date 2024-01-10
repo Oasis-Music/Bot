@@ -79,8 +79,14 @@ export const UploadTrackLink = styled(Link)`
     height: 200%;
     background-color: transparent;
     background-repeat: no-repeat;
-    background-size: 50% 50%, 50% 50%;
-    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    background-size:
+      50% 50%,
+      50% 50%;
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%;
     background-image: linear-gradient(
       90deg,
       rgba(255, 255, 255, 0) 0%,

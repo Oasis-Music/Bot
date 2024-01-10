@@ -11,3 +11,8 @@ var (
 	DuplicateKeyError    = errors.New("key already exists")
 	KeyIsNotPresentError = errors.New("key is not present")
 )
+
+var (
+	ErrNoData             = errors.New("no data found")
+	ErrSoundtrackNotFound = errors.New("soundtrack not found")
+)

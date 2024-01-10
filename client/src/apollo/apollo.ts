@@ -1,12 +1,11 @@
 import { ApolloClient, ApolloLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
-import { createUploadLink } from 'apollo-upload-client'
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { cache } from './cache/cache'
 import { UserMutations } from './cache/mutations'
 import { promiseToObservable } from '../utils/helpers'
 
-const GRAPHQL_URL = process.env.REACT_APP_API_URL + 'graphql'
-const withDevTools = process.env.NODE_ENV === 'development'
+const GRAPHQL_URL = import.meta.env.VITE_API_URL + 'graphql'
 
 // this link fully covers HttpLink
 const uploadLink = createUploadLink({ uri: GRAPHQL_URL })
@@ -44,7 +43,7 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
           return
         }
 
-        const refsresh = fetch(process.env.REACT_APP_API_URL + 'refresh', {
+        const refsresh = fetch(import.meta.env.VITE_API_URL + 'refresh', {
           method: 'POST',
           cache: 'no-cache',
           headers: { 'Content-Type': 'application/json' },
@@ -97,7 +96,7 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
 const client = new ApolloClient({
   cache,
   link: from([authMiddleware, refreshLink, uploadLink]),
-  connectToDevTools: withDevTools
+  connectToDevTools: import.meta.env.DEV
 })
 
 export default client
