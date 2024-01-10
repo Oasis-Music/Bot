@@ -1,9 +1,9 @@
 import React from 'react'
-import { ReactComponent as PlayIcon } from '../../../assets/svg/play.svg'
-import { ReactComponent as PauseIcon } from '../../../assets/svg/pause.svg'
-import { ReactComponent as ArrowAltIcon } from '../../../assets/svg/arrow-alt.svg'
-import { ReactComponent as RepeatIcon } from '../../../assets/svg/repeat.svg'
-import { ReactComponent as RandomIcon } from '../../../assets/svg/random.svg'
+import PlayIcon from '../../../assets/svg/play.svg?react'
+import PauseIcon from '../../../assets/svg/pause.svg?react'
+import ArrowAltIcon from '../../../assets/svg/arrow-alt.svg?react'
+import RepeatIcon from '../../../assets/svg/repeat.svg?react'
+import RandomIcon from '../../../assets/svg/random.svg?react'
 import SvgIcon from '../../../shared/SvgIcon'
 import {
   Container,

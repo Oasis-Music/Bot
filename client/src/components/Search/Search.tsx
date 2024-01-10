@@ -3,7 +3,7 @@ import { Formik } from 'formik'
 import { Container, SearchField, SearchButton } from './Search.styled'
 import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '../../utils/validationSchemas'
 import SvgIcon from '../../shared/SvgIcon'
-import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
+import SearchIcon from '../../assets/svg/search.svg?react'
 
 interface SearchProps {
   placeholder?: string

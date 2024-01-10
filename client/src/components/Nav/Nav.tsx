@@ -1,9 +1,9 @@
 import React from 'react'
 import SvgIcon from '../../shared/SvgIcon'
 import { routeNames } from '../../utils/history'
-import { ReactComponent as SearchIcon } from '../../assets/svg/search.svg'
-import { ReactComponent as MusicListIcon } from '../../assets/svg/list-music.svg'
-import { ReactComponent as CogIcon } from '../../assets/svg/cog.svg'
+import SearchIcon from '../../assets/svg/search.svg?react'
+import MusicListIcon from '../../assets/svg/list-music.svg?react'
+import CogIcon from '../../assets/svg/cog.svg?react'
 import { Container, UploadTrackLink, BaseLink } from './Nav.styled'
 import { useTranslation } from 'react-i18next'
 

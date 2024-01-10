@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import SvgIcon from '../../../shared/SvgIcon'
 import ImagePlaceholder from '../../../shared/ImagePlaceholder'
-import { ReactComponent as PlusIcon } from '../../../assets/svg/plus.svg'
-import { ReactComponent as TrashIcon } from '../../../assets/svg/trash.svg'
-import { ReactComponent as ShareIcon } from '../../../assets/svg/share.svg'
-import { ReactComponent as CopyIcon } from '../../../assets/svg/copy.svg'
-import { ReactComponent as CheckIcon } from '../../../assets/svg/check-circle.svg'
+import PlusIcon from '../../../assets/svg/plus.svg?react'
+import TrashIcon from '../../../assets/svg/trash.svg?react'
+import ShareIcon from '../../../assets/svg/share.svg?react'
+import CopyIcon from '../../../assets/svg/copy.svg?react'
+import CheckIcon from '../../../assets/svg/check-circle.svg?react'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '../../../apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
@@ -146,7 +146,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
             </ControlsWrapper>
           ) : (
             <SaveBotton
-              disabled={!!!track.id}
+              disabled={!track.id}
               loading={attachMeta.loading}
               fullWidth
               color="secondary"
@@ -167,7 +167,7 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
           <span>{t('common.soundtrack')}</span>
           <div />
           <span>
-            {trackCounter}/{process.env.REACT_APP_MAX_TRACK_AVAILABLE}
+            {trackCounter}/{import.meta.env.VITE_APP_MAX_TRACK_AVAILABLE}
           </span>
         </InfoLine>
       )}

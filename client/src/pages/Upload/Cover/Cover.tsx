@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import { ReactComponent as DeleteIcon } from '../../../assets/svg/trash.svg'
-import { ReactComponent as CoverPlaceholderIcon } from '../../../assets/svg/cover_placeholder.svg'
+import DeleteIcon from '../../../assets/svg/trash.svg?react'
+import CoverPlaceholderIcon from '../../../assets/svg/cover_placeholder.svg?react'
 import {
   Container,
   StepTitle,

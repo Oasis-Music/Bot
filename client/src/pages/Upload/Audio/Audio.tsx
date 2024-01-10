@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import SvgIcon from '../../../shared/SvgIcon'
-import { ReactComponent as PlayIcon } from '../../../assets/svg/play.svg'
-import { ReactComponent as PauseIcon } from '../../../assets/svg/pause.svg'
+import PlayIcon from '../../../assets/svg/play.svg?react'
+import PauseIcon from '../../../assets/svg/pause.svg?react'
 import { timeFormater } from '../../../utils/helpers'
 import {
   Container,
