@@ -25,7 +25,7 @@
     "react-dropzone": "^14.2.3",
     "react-i18next": "^12.1.5",
     "react-lazy-load": "^4.0.1",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "^6.21.1",
     "react-scripts": "^5.0.1",
     "styled-components": "^6.1.8",
     "styled-react-modal": "^3.1.1",
