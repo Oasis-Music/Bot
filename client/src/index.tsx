@@ -9,7 +9,6 @@ import { ThemeProvider } from 'styled-components'
 import { ModalProvider } from 'styled-react-modal'
 import App from './App'
 import HistoryRouter from './components/HistoryRouter/HistoryRouter'
-// import reportWebVitals from './reportWebVitals'
 
 import 'normalize.css'
 
@@ -34,4 +33,3 @@ const Application: React.FC = () => {
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 root.render(<Application />)
-// reportWebVitals(console.log)
