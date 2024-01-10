@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import IconButton from '../../../shared/IconButton'
+import IconButton from '@/shared/IconButton'
 
 export const Container = styled.div`
   color: #fff;

@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { Track } from '../types'
-import PlaylistItem from '../../../components/PlaylistItem/PlaylistItem'
-
 import styled from 'styled-components'
-import ScaleLoader from '../../../shared/Loader'
+import ScaleLoader from '@/shared/Loader'
+import PlaylistItem from '@/components/PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../../apollo/cache/variables'
-import { Playlist } from '../../../apollo/cache/types'
+import { currentTrackVar } from '@/apollo/cache/variables'
+import { Playlist } from '@/apollo/cache/types'
+import type { Track } from '../types'
 
 interface listStyleProps {
   $isPlay: boolean

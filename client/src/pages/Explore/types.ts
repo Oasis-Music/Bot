@@ -1,5 +1,5 @@
 // TODO: share
-export interface Track {
+export type Track = {
   id: string
   title: string
   author: string

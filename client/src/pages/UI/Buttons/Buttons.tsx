@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../../../shared/Button'
-import EyeIcon from '../../../assets/svg/eye.svg?react'
+import Button from '@/shared/Button'
+import EyeIcon from '@/assets/svg/eye.svg?react'
 
 const Container = styled.section``
 

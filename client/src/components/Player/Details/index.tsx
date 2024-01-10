@@ -1,8 +1,8 @@
 import React from 'react'
-import ImagePlaceholder from '../../../shared/ImagePlaceholder'
-import { Container, ImageWrapper, Title, Author } from './Details.styled'
-import { currentTrackVar } from '../../../apollo/cache/variables'
+import ImagePlaceholder from '@/shared/ImagePlaceholder'
 import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '@/apollo/cache/variables'
+import { Container, ImageWrapper, Title, Author } from './Details.styled'
 
 interface DetailsProps {
   title: string

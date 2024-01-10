@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
-import Loader from '../Loader'
+import Loader from '@/shared/Loader'
 
 enum ButtonColor {
   primary = 'primary',

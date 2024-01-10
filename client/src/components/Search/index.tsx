@@ -1,9 +1,9 @@
 import React from 'react'
+import SvgIcon from '@/shared/SvgIcon'
+import SearchIcon from '@/assets/svg/search.svg?react'
 import { Formik } from 'formik'
+import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '@/utils/validationSchemas'
 import { Container, SearchField, SearchButton } from './Search.styled'
-import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '../../utils/validationSchemas'
-import SvgIcon from '../../shared/SvgIcon'
-import SearchIcon from '../../assets/svg/search.svg?react'
 
 interface SearchProps {
   placeholder?: string

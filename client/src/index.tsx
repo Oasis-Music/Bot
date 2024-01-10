@@ -1,14 +1,14 @@
 import React from 'react'
 import theme, { GlobalStyles } from './utils/theme'
-import client from './apollo/apollo'
-import history from './utils/history'
-import { useDetectLang } from './hooks'
+import client from '@/apollo/apollo'
+import history from '@/utils/history'
+import { useDetectLang } from '@/hooks'
 import { createRoot } from 'react-dom/client'
 import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from 'styled-components'
 import { ModalProvider } from 'styled-react-modal'
 import App from './App'
-import HistoryRouter from './components/HistoryRouter/HistoryRouter'
+import HistoryRouter from '@/components/HistoryRouter'
 
 import 'normalize.css'
 

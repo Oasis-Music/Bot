@@ -1,10 +1,9 @@
 import React from 'react'
-import SvgIcon from '../../../shared/SvgIcon'
-import ArrowIcon from '../../../assets/svg/angle-arrow.svg?react'
-import MusicListIcon from '../../../assets/svg/list-music.svg?react'
-
-import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.styled'
+import SvgIcon from '@/shared/SvgIcon'
+import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
+import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import { useTranslation } from 'react-i18next'
+import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.styled'
 
 interface TopControlsProps {
   id: string

@@ -1,12 +1,12 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import TopControls from './TopControls/TopControls'
-import Details from './Details/Details'
-import Trackline from './Trackline/Trackline'
-import Controls from './Controls/Controls'
-import { timeFormater } from '../../utils/helpers'
+import TopControls from './TopControls'
+import Details from './Details'
+import Trackline from './Trackline'
+import Controls from './Controls'
+import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../apollo/cache/variables'
+import { currentTrackVar } from '@/apollo/cache/variables'
 
 interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string

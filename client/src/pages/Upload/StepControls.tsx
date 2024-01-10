@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import SvgIcon from '../../shared/SvgIcon'
-import Button from '../../shared/Button'
-import IconButton from '../../shared/IconButton'
-import ArrowIcon from '../../assets/svg/angle-arrow.svg?react'
+import SvgIcon from '@/shared/SvgIcon'
+import Button from '@/shared/Button'
+import IconButton from '@/shared/IconButton'
+import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
-import history, { routeNames } from '../../utils/history'
+import history, { routeNames } from '@/utils/history'
 
 interface StepControlsProps {
   disabled: boolean

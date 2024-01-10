@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import SvgIcon from '../../shared/SvgIcon'
-import CheckIcon from '../../assets/svg/check-circle.svg?react'
-import TimesIcon from '../../assets/svg/times-circle.svg?react'
+import SvgIcon from '@/shared/SvgIcon'
+import CheckIcon from '@/assets/svg/check-circle.svg?react'
+import TimesIcon from '@/assets/svg/times-circle.svg?react'
 import { useReactiveVar } from '@apollo/client'
-import { isSnackbarOpenVar, snackbarEventVar } from '../../apollo/cache/variables'
-import { UiMutations } from '../../apollo/cache/mutations'
+import { UiMutations } from '@/apollo/cache/mutations'
+import { isSnackbarOpenVar, snackbarEventVar } from '@/apollo/cache/variables'
 
 type eventType = 'error' | 'success'
 

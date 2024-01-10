@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import SvgIcon from '@/shared/SvgIcon'
+import DeleteIcon from '@/assets/svg/trash.svg?react'
+import StepControls from '../StepControls'
+import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
+import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import DeleteIcon from '../../../assets/svg/trash.svg?react'
-import CoverPlaceholderIcon from '../../../assets/svg/cover_placeholder.svg?react'
 import {
   Container,
   StepTitle,
@@ -14,10 +18,6 @@ import {
   ErrorMessage,
   DeleteButton
 } from './Cover.styled'
-import { useFormikContext } from 'formik'
-import { useTranslation } from 'react-i18next'
-import SvgIcon from '../../../shared/SvgIcon'
-import StepControls from '../StepControls'
 
 interface CoverProps {
   onNextStep(): void

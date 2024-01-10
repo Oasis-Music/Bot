@@ -1,6 +1,6 @@
 import styled from 'styled-components'
+import IconButton from '@/shared/IconButton'
 import { Form, Field } from 'formik'
-import IconButton from '../../shared/IconButton'
 
 const borderRadius = '10px'
 

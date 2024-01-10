@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import Search from '@/components/Search'
+import TracksList from './TracksList'
 import { useReactiveVar } from '@apollo/client'
-import { useAllSoundtracksLazyQuery } from '../../graphql/soundtrack/_gen_/soundtracks.query'
-import { useSearchSoundtrackLazyQuery } from '../../graphql/soundtrack/_gen_/searchSoundtrack.query'
-import TracksList from './TracksList/TracksList'
-import { Track } from './types'
-import Search from '../../components/Search/Search'
+import { useAllSoundtracksLazyQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
+import { SoundtrackMutations } from '@/apollo/cache/mutations'
+import { useSearchSoundtrackLazyQuery } from '@/graphql/soundtrack/_gen_/searchSoundtrack.query'
 import { useTranslation } from 'react-i18next'
-import { SoundtrackMutations } from '../../apollo/cache/mutations'
-import type { Soundtrack } from '../../apollo/cache/types'
-import { explorePlaylistVar } from '../../apollo/cache/variables'
+import { explorePlaylistVar } from '@/apollo/cache/variables'
+import type { Track } from './types'
+import type { Soundtrack } from '@/apollo/cache/types'
 
 const Explore: React.FC = () => {
   const { t } = useTranslation()

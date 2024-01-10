@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import patternImg from '../../assets/rastr/strawberry-pattern.jpeg'
-import Button from '../../shared/Button'
+import Button from '@/shared/Button'
+import patternImg from '@/assets/rastr/strawberry-pattern.jpeg'
 import { Link } from 'react-router-dom'
 
 export const Container = styled.div`
