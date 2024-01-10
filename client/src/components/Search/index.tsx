@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgIcon from '@/shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import { Formik } from 'formik'
 import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '@/utils/validationSchemas'

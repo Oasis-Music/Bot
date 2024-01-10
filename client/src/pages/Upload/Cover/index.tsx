@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import SvgIcon from '@/shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 import DeleteIcon from '@/assets/svg/trash.svg?react'
 import StepControls from '../StepControls'
 import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'

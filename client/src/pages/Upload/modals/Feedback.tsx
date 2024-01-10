@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Modal from 'styled-react-modal'
 import sunglassesEmoji from '@/assets/rastr/tada.png'
 import thinkingEmoji from '@/assets/rastr/thinking.png'
-import Button from '@/shared/Button'
+import Button from '@/components/ui/Button'
 import { useTranslation } from 'react-i18next'
 import { ITheme } from '@/utils/theme'
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import LazyLoad from 'react-lazy-load'
-import SvgIcon from '@/shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 import PlaceholderImage from '@/assets/svg/music.svg?react'
 import './styles.css'
 

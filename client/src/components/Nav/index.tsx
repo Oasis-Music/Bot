@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgIcon from '@/shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import CogIcon from '@/assets/svg/cog.svg?react'

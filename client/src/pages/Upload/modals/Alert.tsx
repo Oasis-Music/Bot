@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import Modal from 'styled-react-modal'
-import Button from '@/shared/Button'
+import Button from '@/components/ui/Button'
 import { useTranslation } from 'react-i18next'
 import { ITheme } from '@/utils/theme'
 

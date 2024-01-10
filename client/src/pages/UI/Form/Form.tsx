@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import TextInput from '@/shared/FormFields/TextInput'
-import Checkbox from '@/shared/FormFields/Checkbox'
+import TextInput from '@/components/ui/TextInput'
+import Checkbox from '@/components/ui/Checkbox'
 
 const Container = styled.section``
 

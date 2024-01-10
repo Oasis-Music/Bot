@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import SvgIcon from '@/shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
 import TimesIcon from '@/assets/svg/times-circle.svg?react'
 import { useReactiveVar } from '@apollo/client'

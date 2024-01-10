@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import NowPlaying from './NowPlaying'
-import ScaleLoader from '@/shared/Loader'
+import ScaleLoader from '@/components/ui/Loader'
 import PlaylistItem from '@/components/PlaylistItem'
 import { NoDataPlug, ErrorPlug } from './Plugs'
 import { useReactiveVar } from '@apollo/client'

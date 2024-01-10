@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '@/shared/Button'
+import Button from '@/components/ui/Button'
 import EyeIcon from '@/assets/svg/eye.svg?react'
 
 const Container = styled.section``

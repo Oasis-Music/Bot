@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Button from '@/shared/Button'
+import Button from '@/components/ui/Button'
 import patternImg from '@/assets/rastr/strawberry-pattern.jpeg'
 import { Link } from 'react-router-dom'
 

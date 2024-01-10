@@ -1,6 +1,6 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import styled, { css } from 'styled-components'
-import Loader from '@/shared/Loader'
+import Loader from '@/components/ui/Loader'
 
 enum ButtonColor {
   primary = 'primary',
@@ -11,42 +11,27 @@ enum ButtonColor {
 
 interface BottonProps {
   to?: string
-  type?: 'button' | 'reset' | 'submit'
   color?: 'primary' | 'secondary' | 'success' | 'danger'
+  type?: 'button' | 'reset' | 'submit'
   children: React.ReactNode
-  startIcon?: React.ReactNode
-  endIcon?: React.ReactNode
   loading?: boolean
   disabled?: boolean
-  fullWidth?: boolean
-  withShadow?: boolean
-  tabIndex?: number
-  ref?: React.RefObject<HTMLButtonElement> | null
+  withoutShadow?: boolean
   onClick?(event: React.MouseEvent<HTMLButtonElement>): void
 }
 
 interface BaseButtonProps {
-  $fullWidth?: boolean
-  $withShadow: boolean
+  $withoutShadow: boolean
   $color: ButtonColor
 }
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-`
 
 const BaseButton = styled.button<BaseButtonProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
-  font-size: 18px;
-  line-height: 18px;
-  font-weight: 500;
-  padding: 15px 30px;
-  border-radius: 8px;
-  border: 1px solid;
+  padding: 20px;
+  border-radius: 50%;
+  border: none;
   transition: all 0.3s;
   -webkit-tap-highlight-color: transparent;
   &:disabled {
@@ -54,21 +39,20 @@ const BaseButton = styled.button<BaseButtonProps>`
     pointer-events: initial;
     opacity: 0.7;
   }
-  &:focus {
-    outline: none;
-  }
-  ${({ $withShadow }) =>
-    $withShadow &&
-    css`
-      box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.3);
-    `}
+  ${({ $withoutShadow }) =>
+    $withoutShadow
+      ? css`
+          box-shadow: 0px 8px 17px rgba(0, 0, 0, 0.3);
+        `
+      : css`
+          box-shadow: none;
+        `}
   ${({ $color, theme }) => {
     switch ($color) {
       case ButtonColor.primary:
         return css`
           color: ${theme.colors.primary};
           background-color: #363636;
-          border-color: #6a6a6a;
           &:hover:not(:disabled) {
             cursor: pointer;
             background-color: #323232;
@@ -105,40 +89,24 @@ const BaseButton = styled.button<BaseButtonProps>`
   }}
 `
 
-const ButtonText = styled.span``
+const IconButton: React.FC<BottonProps> = ({
+  loading,
+  children,
+  color = ButtonColor.primary,
+  withoutShadow = false,
+  type = 'button',
+  ...otherProps
+}: BottonProps) => {
+  return (
+    <BaseButton
+      $color={color as ButtonColor}
+      $withoutShadow={!withoutShadow}
+      type={type}
+      {...otherProps}
+    >
+      {loading ? <Loader dark={color !== ButtonColor.primary} /> : children}
+    </BaseButton>
+  )
+}
 
-const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
-  {
-    loading,
-    children,
-    color = ButtonColor.primary,
-    withShadow = false,
-    startIcon,
-    endIcon,
-    type = 'button',
-    fullWidth,
-    ...otherProps
-  },
-  ref
-) => (
-  <BaseButton
-    ref={ref}
-    $color={color as ButtonColor}
-    $withShadow={withShadow}
-    $fullWidth={fullWidth}
-    type={type}
-    {...otherProps}
-  >
-    {!loading && startIcon}
-    {loading ? (
-      <LoaderWrapper>
-        <Loader dark={color !== ButtonColor.primary} />
-      </LoaderWrapper>
-    ) : (
-      <ButtonText>{children}</ButtonText>
-    )}
-    {!loading && endIcon}
-  </BaseButton>
-)
-
-export default forwardRef(Button)
+export default IconButton

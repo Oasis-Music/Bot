@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Loader from '@/shared/Loader'
+import Loader from '@/components/ui/Loader'
 
 const Box = styled.div`
   height: 100vh;

@@ -1,5 +1,5 @@
 import React from 'react'
-import ImagePlaceholder from '@/shared/ImagePlaceholder'
+import ImagePlaceholder from '@/components/ImagePlaceholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { Container, ImageWrapper, Title, Author } from './Details.styled'

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
-import ScaleLoader from '@/shared/Loader'
+import ScaleLoader from '@/components/ui/Loader'
 import PlaylistItem from '@/components/PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
