@@ -11,7 +11,7 @@ import { useWindowRatio } from '@/hooks'
 import { createTrackStepsSchema } from '@/utils/validationSchemas'
 import { useCreateSoundtrackMutation } from '@/graphql/soundtrack/_gen_/createSoundtrack.mutation'
 
-enum Step {
+const enum Step {
   INFO = 0,
   COVER,
   AUDIO

@@ -103,7 +103,7 @@ export type QueryUserSoundtracksArgs = {
   id: Scalars['ID']['input']
 }
 
-export enum Role {
+export const enum Role {
   Admin = 'ADMIN',
   User = 'USER'
 }
