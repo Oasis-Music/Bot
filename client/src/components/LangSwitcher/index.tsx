@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useLang } from '../../hooks'
+import { useLang } from '@/hooks'
 
 const Switch = styled.div`
   position: relative;

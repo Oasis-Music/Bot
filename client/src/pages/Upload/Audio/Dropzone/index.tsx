@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
+import AudioPlayer from '@/player'
+import CheckIcon from '@/assets/svg/check-circle.svg?react'
+import AudioPlaceholderIcon from '@/assets/svg/audio_placeholder.svg?react'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import AudioPlaceholderIcon from '../../../../assets/svg/audio_placeholder.svg?react'
-import CheckIcon from '../../../../assets/svg/check-circle.svg?react'
 import { useTranslation } from 'react-i18next'
-import AudioPlayer from '../../../../player'
-
 import {
   ContainerUpload,
   Plug,
@@ -13,6 +12,7 @@ import {
   PlugInfo,
   ErrorMessage
 } from './Dropzone.styled'
+
 interface DropzoneProps {
   audio: File | null
   player: AudioPlayer | undefined

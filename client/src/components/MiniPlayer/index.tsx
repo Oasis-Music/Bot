@@ -1,12 +1,12 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import IconButton from '../../shared/IconButton'
-import ImagePlaceholder from '../../shared/ImagePlaceholder'
-import SvgIcon from '../../shared/SvgIcon'
-import PlayIcon from '../../assets/svg/play.svg?react'
-import PauseIcon from '../../assets/svg/pause.svg?react'
+import SvgIcon from '@/components/ui/SvgIcon'
+import IconButton from '@/components/ui/IconButton'
+import PlayIcon from '@/assets/svg/play.svg?react'
+import PauseIcon from '@/assets/svg/pause.svg?react'
+import ImagePlaceholder from '@/components/ImagePlaceholder'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../apollo/cache/variables'
+import { currentTrackVar } from '@/apollo/cache/variables'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void

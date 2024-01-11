@@ -6,7 +6,10 @@ const config: CodegenConfig = {
   documents: './src/**/*.gql',
   generates: {
     'src/graphql/types.ts': {
-      plugins: ['typescript', 'fragment-matcher']
+      plugins: ['typescript', 'fragment-matcher'],
+      config: {
+        constEnums: true
+      }
     },
     'src/': {
       preset: 'near-operation-file',

@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import Button from '../../../shared/Button'
-import TextInput from '../../../shared/FormFields/TextInput'
-import blushEmoji from '../../../assets/rastr/blush.png'
+import Button from '@/components/ui/Button'
+import TextInput from '@/components/ui/TextInput'
+import blushEmoji from '@/assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { BackLinkButton } from '../StepControls'
-import history, { routeNames } from '../../../utils/history'
+import history, { routeNames } from '@/utils/history'
 
 interface InfoProps {
   onNextStep(): void

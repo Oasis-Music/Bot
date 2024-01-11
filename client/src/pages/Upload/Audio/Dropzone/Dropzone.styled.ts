@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import SvgIcon from '../../../../shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
 
 interface containerStyles {
   isError: boolean

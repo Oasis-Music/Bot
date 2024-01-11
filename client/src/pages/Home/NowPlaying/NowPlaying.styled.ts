@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
-import Button from '../../../shared/Button'
-import IconButton from '../../../shared/IconButton'
-import SvgIcon from '../../../shared/SvgIcon'
+import Button from '@/components/ui/Button'
+import IconButton from '@/components/ui/IconButton'
+import SvgIcon from '@/components/ui/SvgIcon'
 
 const buttonsStyles = css`
   flex-grow: 1;

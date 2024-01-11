@@ -1,4 +1,13 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useReactiveVar } from '@apollo/client'
+import { Link, Navigate } from 'react-router-dom'
+import { UserMutations } from '@/apollo/cache/mutations'
+import { isAuthenticatedVar } from '@/apollo/cache/variables'
+import { useAuthorizeUserLazyQuery } from '@/graphql/user/_gen_/authorizeUser.query'
+import history, { routeNames } from '@/utils/history'
+import handv_img from '@/assets/rastr/hand-v.png'
+
 import {
   Container,
   MainBox,
@@ -9,14 +18,6 @@ import {
   ReportLink,
   TermsTitle
 } from './Auth.styled'
-import { useAuthorizeUserLazyQuery } from '../../graphql/user/_gen_/authorizeUser.query'
-import { useReactiveVar } from '@apollo/client'
-import { UserMutations } from '../../apollo/cache/mutations'
-import { isAuthenticatedVar } from '../../apollo/cache/variables'
-import { Link, Navigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import history, { routeNames } from '../../utils/history'
-import handv_img from '../../assets/rastr/hand-v.png'
 
 const Auth: React.FC = () => {
   const isAuth = useReactiveVar(isAuthenticatedVar)

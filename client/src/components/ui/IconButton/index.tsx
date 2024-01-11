@@ -1,8 +1,8 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import Loader from '../Loader'
+import Loader from '@/components/ui/Loader'
 
-enum ButtonColor {
+const enum ButtonColor {
   primary = 'primary',
   secondary = 'secondary',
   success = 'success',

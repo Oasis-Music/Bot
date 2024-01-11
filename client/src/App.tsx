@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react'
-import AppLayout from './components/AppLayout/AppLayout'
-import Fallback from './components/Fallback/Fallback'
-import PrivateRoute from './shared/PrivateRoute'
+import AppLayout from '@/components/AppLayout'
+import Fallback from '@/components/Fallback'
+import PrivateRoute from '@/components/PrivateRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useWindowCSSRatio } from './hooks'
+import { useWindowCSSRatio } from '@/hooks'
 
 const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))

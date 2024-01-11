@@ -1,10 +1,10 @@
 import React, { forwardRef } from 'react'
 import styled from 'styled-components'
-import ImagePlaceholder from '../../shared/ImagePlaceholder'
-import ScaleLoader from '../../shared/Loader'
-import { timeFormater } from '../../utils/helpers'
-import { PlaylistMutations, SoundtrackMutations } from '../../apollo/cache/mutations'
-import type { Playlist } from '../../apollo/cache/types'
+import ScaleLoader from '@/components/ui/Loader'
+import ImagePlaceholder from '@/components/ImagePlaceholder'
+import { timeFormater } from '@/utils/helpers'
+import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
+import type { Playlist } from '@/apollo/cache/types'
 
 interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   id: string

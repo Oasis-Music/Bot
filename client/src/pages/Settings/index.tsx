@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import LangSwitcher from '../../components/LangSwitcher/LangSwitcher'
+import LangSwitcher from '@/components/LangSwitcher'
 
 const Wrapper = styled.div`
   padding: 10%;

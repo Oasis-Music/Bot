@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
-import SvgIcon from '../../../shared/SvgIcon'
-import PlayIcon from '../../../assets/svg/play.svg?react'
-import PauseIcon from '../../../assets/svg/pause.svg?react'
-import { timeFormater } from '../../../utils/helpers'
+import Dropzone from './Dropzone'
+import SvgIcon from '@/components/ui/SvgIcon'
+import StepControls from '../StepControls'
+import PlayIcon from '@/assets/svg/play.svg?react'
+import PauseIcon from '@/assets/svg/pause.svg?react'
+import Checkbox from '@/components/ui/Checkbox'
+import AudioPlayer from '@/player'
+import { timeFormater } from '@/utils/helpers'
+import { useFormikContext } from 'formik'
+import { useTranslation } from 'react-i18next'
 import {
   Container,
   Title,
@@ -13,12 +19,6 @@ import {
   PlayBotton,
   AttachWrapper
 } from './Audio.styled'
-import { useFormikContext } from 'formik'
-import { useTranslation } from 'react-i18next'
-import Dropzone from './Dropzone/Dropzone'
-import StepControls from '../StepControls'
-import AudioPlayer from '../../../player'
-import Checkbox from '../../../shared/FormFields/Checkbox'
 
 interface AudioProps {
   loading: boolean

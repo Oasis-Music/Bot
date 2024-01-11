@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import MiniPlayer from '../MiniPlayer/MiniPlayer'
-import Nav from '../Nav/Nav'
-import Player from '../Player'
-import { timeFormater } from '../../utils/helpers'
+import Nav from '@/components/Nav'
+import Player from '@/components/Player'
+import Snackbar from '@/components/ui/Snackbar'
+import MiniPlayer from '@/components/MiniPlayer'
+import AudioPlayer from '@/player'
+import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '../../apollo/cache/variables'
+import { currentTrackVar } from '@/apollo/cache/variables'
 import { Outlet, useLocation } from 'react-router-dom'
-import { SoundtrackMutations, UserMutations } from '../../apollo/cache/mutations'
-import AudioPlayer from '../../player'
-import Snackbar from '../Snackbar'
+import { SoundtrackMutations, UserMutations } from '@/apollo/cache/mutations'
 
 const Box = styled.div`
   position: relative;

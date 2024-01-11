@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
-import IconButton from '../../../shared/IconButton'
-import SvgIcon from '../../../shared/SvgIcon'
+import SvgIcon from '@/components/ui/SvgIcon'
+import IconButton from '@/components/ui/IconButton'
 
 const arrowButtonStyles = css`
   color: #fff;
