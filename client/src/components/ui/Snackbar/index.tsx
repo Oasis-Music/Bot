@@ -42,11 +42,11 @@ const IconWrapper = styled.div<{ $type: eventType }>`
     switch ($type) {
       case 'success':
         return css`
-          background-color: #2bab2b;
+          background-color: #80d680;
         `
       case 'error':
         return css`
-          background-color: #ff3131;
+          background-color: #fc4343;
         `
       default:
         return css`
@@ -78,7 +78,7 @@ const Snackbar: React.FC = () => {
 
   useEffect(() => {
     const t = setTimeout(() => {
-      UiMutations.closeSnackbar()
+      // UiMutations.closeSnackbar()
     }, 5000)
 
     return () => {
