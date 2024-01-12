@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,7 @@ interface TopControlsProps {
   onClose(): void
 }
 
-const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
+export function TopControls({ onClose }: TopControlsProps) {
   const { t } = useTranslation()
 
   return (
@@ -29,5 +29,3 @@ const TopControls: React.FC<TopControlsProps> = ({ onClose }) => {
     </Container>
   )
 }
-
-export default TopControls

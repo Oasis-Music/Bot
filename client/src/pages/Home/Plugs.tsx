@@ -39,7 +39,7 @@ const NoDataTextBox = styled.div`
   color: #777777;
 `
 
-export const ErrorPlug: React.FC = () => {
+export function ErrorPlug() {
   const { t } = useTranslation()
 
   return (
@@ -55,7 +55,7 @@ export const ErrorPlug: React.FC = () => {
   )
 }
 
-export const NoDataPlug: React.FC = () => {
+export function NoDataPlug() {
   const { t } = useTranslation()
 
   return (

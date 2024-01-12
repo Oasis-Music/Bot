@@ -2,15 +2,15 @@ import React from 'react'
 import * as yup from 'yup'
 import { Formik, Form } from 'formik'
 
-import FormUI from './Form/Form'
-import Buttons from './Buttons/Buttons'
+import { TextInputs } from './Form/Form'
+import { Buttons } from './Buttons/Buttons'
 
 const UISchema = yup.object({
   simpleInput: yup.string(),
   errorInput: yup.string().min(10, 'Мин 10 символов').required('Необходимое поле')
 })
 
-const UI: React.FC = () => {
+export default function UI() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = (values: any) => {
     console.log(values)
@@ -37,7 +37,7 @@ const UI: React.FC = () => {
         >
           {() => (
             <Form>
-              <FormUI />
+              <TextInputs />
               <Buttons />
             </Form>
           )}
@@ -46,5 +46,3 @@ const UI: React.FC = () => {
     </div>
   )
 }
-
-export default UI

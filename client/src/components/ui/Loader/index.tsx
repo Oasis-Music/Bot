@@ -20,7 +20,7 @@ interface LoaderProps {
   dark?: boolean
 }
 
-const ScaleLoader: React.FC<LoaderProps> = ({ fallback = false, dark = false }) => {
+export function ScaleLoader({ fallback = false, dark = false }: LoaderProps) {
   return (
     <Loader
       $fallback={fallback}
@@ -87,5 +87,3 @@ const ScaleLoader: React.FC<LoaderProps> = ({ fallback = false, dark = false }) 
     </Loader>
   )
 }
-
-export default ScaleLoader

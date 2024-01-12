@@ -12,7 +12,7 @@ export interface BrowserRouterProps extends Omit<NativeBrowserRouterProps, 'wind
   history: History
 }
 
-const HistoryRouter: React.FC<BrowserRouterProps> = memo((props) => {
+export const HistoryRouter = memo((props: BrowserRouterProps) => {
   const { history, ...restProps } = props
   const [state, setState] = useState({
     action: history.action,
@@ -32,5 +32,3 @@ const HistoryRouter: React.FC<BrowserRouterProps> = memo((props) => {
 })
 
 HistoryRouter.displayName = 'HistoryRouter'
-
-export default HistoryRouter

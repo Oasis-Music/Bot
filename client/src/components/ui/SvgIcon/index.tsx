@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export default styled.div`
+export const SvgIcon = styled.div`
   font-size: 1em;
   width: 1.5em;
   height: 1.5em;

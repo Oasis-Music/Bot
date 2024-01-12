@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import TextInput from '@/components/ui/TextInput'
-import Checkbox from '@/components/ui/Checkbox'
+import { TextInput } from '@/components/ui/TextInput'
+import { Checkbox } from '@/components/ui/Checkbox'
 
 const Container = styled.section``
 
@@ -15,7 +15,7 @@ const InputWrapper = styled.div`
   padding: 20px 10px;
 `
 
-const TextInputs: React.FC = () => {
+export function TextInputs() {
   return (
     <Container>
       <h4>Text Inputs:</h4>
@@ -49,5 +49,3 @@ const TextInputs: React.FC = () => {
     </Container>
   )
 }
-
-export default TextInputs

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import NowPlaying from './NowPlaying'
-import ScaleLoader from '@/components/ui/Loader'
+import { NowPlaying } from './NowPlaying'
+import { ScaleLoader } from '@/components/ui/Loader'
 import PlaylistItem from '@/components/PlaylistItem'
 import { NoDataPlug, ErrorPlug } from './Plugs'
 import { useReactiveVar } from '@apollo/client'
@@ -13,7 +13,7 @@ import type { Soundtrack } from '@/apollo/cache/types'
 
 const ITEMS_PER_PAGE = 15
 
-const Home: React.FC = () => {
+export default function Home() {
   const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
   const userPlaylist = useReactiveVar(userPlaylistVar)
@@ -142,5 +142,3 @@ const Home: React.FC = () => {
     </Container>
   )
 }
-
-export default Home

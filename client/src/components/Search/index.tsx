@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import { Formik } from 'formik'
 import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '@/utils/validationSchemas'
@@ -10,7 +10,7 @@ interface SearchProps {
   onSubmit(value: string): void
 }
 
-const Search: React.FC<SearchProps> = ({ placeholder, onSubmit }) => {
+export function Search({ placeholder, onSubmit }: SearchProps) {
   const initialValues: ExploreSearchSchemaTypes = { searchQuery: '' }
 
   const handleSearch = (value: ExploreSearchSchemaTypes) => {
@@ -38,5 +38,3 @@ const Search: React.FC<SearchProps> = ({ placeholder, onSubmit }) => {
     </section>
   )
 }
-
-export default Search

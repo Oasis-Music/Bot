@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import PlusIcon from '@/assets/svg/plus.svg?react'
 import TrashIcon from '@/assets/svg/trash.svg?react'
 import ShareIcon from '@/assets/svg/share.svg?react'
 import CopyIcon from '@/assets/svg/copy.svg?react'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
-import ImagePlaceholder from '@/components/ImagePlaceholder'
+import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '@/apollo/cache/variables'
 import { useTranslation } from 'react-i18next'
@@ -34,11 +34,7 @@ interface NowPlayingProps {
   onTrackUnattach?(): void
 }
 
-const NowPlaying: React.FC<NowPlayingProps> = ({
-  trackCounter,
-  onTrackAttach,
-  onTrackUnattach
-}) => {
+export function NowPlaying({ trackCounter, onTrackAttach, onTrackUnattach }: NowPlayingProps) {
   const [wasCopied, setCopied] = useState(false)
 
   const { t } = useTranslation()
@@ -175,5 +171,3 @@ const NowPlaying: React.FC<NowPlayingProps> = ({
     </div>
   )
 }
-
-export default NowPlaying

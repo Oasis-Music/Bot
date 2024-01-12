@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import Button from '@/components/ui/Button'
-import IconButton from '@/components/ui/IconButton'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
+import { IconButton } from '@/components/ui/IconButton'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import history, { routeNames } from '@/utils/history'
@@ -64,7 +64,7 @@ export const NextButton = styled(Button)`
   flex-basis: 70%;
 `
 
-const StepControls: React.FC<StepControlsProps> = ({
+export function StepControls({
   nextText,
   loading,
   disabled,
@@ -72,7 +72,7 @@ const StepControls: React.FC<StepControlsProps> = ({
   onBack,
   onNext,
   onAlert
-}) => {
+}: StepControlsProps) {
   const { t } = useTranslation()
 
   const { dirty, submitCount } = useFormikContext()
@@ -112,5 +112,3 @@ const StepControls: React.FC<StepControlsProps> = ({
     </>
   )
 }
-
-export default StepControls

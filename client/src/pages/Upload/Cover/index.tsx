@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import DeleteIcon from '@/assets/svg/trash.svg?react'
-import StepControls from '../StepControls'
+import { StepControls } from '../StepControls'
 import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +42,7 @@ function dropzoneCodeToMsg(code: string): string {
   }
 }
 
-const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
+export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
   const { t } = useTranslation()
   const { setFieldValue } = useFormikContext()
   const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
@@ -186,5 +186,3 @@ const Cover: React.FC<CoverProps> = ({ onNextStep, onPrevStep, onAlert }) => {
     </Container>
   )
 }
-
-export default Cover

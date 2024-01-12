@@ -1,5 +1,5 @@
 import React from 'react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import CogIcon from '@/assets/svg/cog.svg?react'
@@ -7,7 +7,7 @@ import { routeNames } from '@/utils/history'
 import { useTranslation } from 'react-i18next'
 import { Container, UploadTrackLink, BaseLink } from './Nav.styled'
 
-const Nav: React.FC = () => {
+export function Nav() {
   const { t } = useTranslation()
 
   return (
@@ -33,5 +33,3 @@ const Nav: React.FC = () => {
     </Container>
   )
 }
-
-export default Nav

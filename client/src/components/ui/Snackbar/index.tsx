@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
 import TimesIcon from '@/assets/svg/times-circle.svg?react'
 import { useReactiveVar } from '@apollo/client'
@@ -66,7 +66,7 @@ const NOTIFICATION_ICON = {
   error: TimesIcon
 }
 
-const Snackbar: React.FC = () => {
+export function Snackbar() {
   const isOpen = useReactiveVar(isSnackbarOpenVar)
   const event = useReactiveVar(snackbarEventVar)
 
@@ -99,5 +99,3 @@ const Snackbar: React.FC = () => {
     </Container>
   )
 }
-
-export default Snackbar

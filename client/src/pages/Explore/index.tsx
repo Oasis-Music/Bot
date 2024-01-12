@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import Search from '@/components/Search'
-import TracksList from './TracksList'
+import { Search } from '@/components/Search'
+import { TracksList } from './TracksList'
 import { useReactiveVar } from '@apollo/client'
 import { useAllSoundtracksLazyQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
 import { SoundtrackMutations } from '@/apollo/cache/mutations'
@@ -10,7 +10,7 @@ import { explorePlaylistVar } from '@/apollo/cache/variables'
 import type { Track } from './types'
 import type { Soundtrack } from '@/apollo/cache/types'
 
-const Explore: React.FC = () => {
+export default function Explore() {
   const { t } = useTranslation()
   const [_, setTracks] = useState<Track[]>([])
 
@@ -78,5 +78,3 @@ const Explore: React.FC = () => {
     </div>
   )
 }
-
-export default Explore

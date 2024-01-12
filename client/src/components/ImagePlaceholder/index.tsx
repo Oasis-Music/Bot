@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import LazyLoad from 'react-lazy-load'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import PlaceholderImage from '@/assets/svg/music.svg?react'
 import './styles.css'
 
@@ -91,12 +91,12 @@ const PlugWrapper = styled.div<{ $plain: boolean }>`
   ${wrapperStyles}
 `
 
-const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
+export function ImagePlaceholder({
   src,
   altText,
   backgroundColor,
   plain = false
-}) => {
+}: ImagePlaceholderProps) {
   const [error, setError] = useState(false)
 
   useEffect(() => {
@@ -130,5 +130,3 @@ const ImagePlaceholder: React.FC<ImagePlaceholderProps> = ({
     </Wrapper>
   )
 }
-
-export default ImagePlaceholder

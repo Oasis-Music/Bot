@@ -28,7 +28,7 @@ const StyledEyeIconEnd = styled(EyeIcon)`
   margin-left: 5px;
 `
 
-const Buttons: React.FC = () => {
+export function Buttons() {
   return (
     <Container>
       <h4>Buttons:</h4>
@@ -157,5 +157,3 @@ const Buttons: React.FC = () => {
     </Container>
   )
 }
-
-export default Buttons

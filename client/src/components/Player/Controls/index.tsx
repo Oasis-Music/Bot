@@ -4,7 +4,7 @@ import PauseIcon from '@/assets/svg/pause.svg?react'
 import ArrowAltIcon from '@/assets/svg/arrow-alt.svg?react'
 import RepeatIcon from '@/assets/svg/repeat.svg?react'
 import RandomIcon from '@/assets/svg/random.svg?react'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import {
   Container,
   PlayButtonBox,
@@ -28,7 +28,7 @@ interface ControlsProps {
   onRandom(): void
 }
 
-const Controls: React.FC<ControlsProps> = ({
+export function Controls({
   isPlay,
   withLoop,
   withRandom,
@@ -38,7 +38,7 @@ const Controls: React.FC<ControlsProps> = ({
   onPlayPrev,
   onLoop,
   onRandom
-}) => {
+}: ControlsProps) {
   return (
     <Container>
       <RandomButton $random={withRandom} onClick={onRandom} withoutShadow>
@@ -73,5 +73,3 @@ const Controls: React.FC<ControlsProps> = ({
     </Container>
   )
 }
-
-export default Controls

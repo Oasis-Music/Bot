@@ -8,7 +8,7 @@ const Container = styled.div`
 `
 const InitData = styled.code``
 
-const Test: React.FC = () => {
+export default function Test() {
   const [one, setOne] = useState<string>('???')
   const [two, setTwo] = useState<string>('???')
   const tg = Telegram.WebApp
@@ -52,5 +52,3 @@ const Test: React.FC = () => {
     </Container>
   )
 }
-
-export default Test

@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react'
-import AppLayout from '@/components/AppLayout'
-import Fallback from '@/components/Fallback'
-import PrivateRoute from '@/components/PrivateRoute'
+import { AppLayout } from '@/components/AppLayout'
+import { Fallback } from '@/components/Fallback'
+import { PrivateRoute } from '@/components/PrivateRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from '@/hooks'
 
@@ -14,7 +14,7 @@ const Terms = lazy(() => import('./pages/Terms'))
 const Auth = lazy(() => import('./pages/Auth'))
 const Settings = lazy(() => import('./pages/Settings'))
 
-const App: React.FC = () => {
+export function App() {
   useWindowCSSRatio()
 
   return (
@@ -37,5 +37,3 @@ const App: React.FC = () => {
     </Suspense>
   )
 }
-
-export default App

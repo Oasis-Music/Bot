@@ -19,7 +19,7 @@ import {
   TermsTitle
 } from './Auth.styled'
 
-const Auth: React.FC = () => {
+export default function Auth() {
   const isAuth = useReactiveVar(isAuthenticatedVar)
   if (isAuth) {
     return <Navigate to={routeNames.root} />
@@ -81,5 +81,3 @@ const Auth: React.FC = () => {
     </Container>
   )
 }
-
-export default Auth

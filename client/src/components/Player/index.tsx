@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
-import TopControls from './TopControls'
-import Details from './Details'
+import { TopControls } from './TopControls'
+import { Details } from './Details'
 import Trackline from './Trackline'
-import Controls from './Controls'
+import { Controls } from './Controls'
 import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
@@ -90,4 +90,4 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   )
 }
 
-export default React.forwardRef(Player)
+export default forwardRef(Player)

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import Button from '@/components/ui/Button'
-import TextInput from '@/components/ui/TextInput'
+import { TextInput } from '@/components/ui/TextInput'
 import blushEmoji from '@/assets/rastr/blush.png'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -60,7 +60,7 @@ interface FieldProps {
   author: string
 }
 
-const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
+export function Info({ onNextStep, onAlert }: InfoProps) {
   const { t } = useTranslation()
   const { errors, dirty, submitCount } = useFormikContext<FieldProps>()
   const ref = useRef<HTMLButtonElement>(null)
@@ -104,5 +104,3 @@ const Info: React.FC<InfoProps> = ({ onNextStep, onAlert }) => {
     </Container>
   )
 }
-
-export default Info

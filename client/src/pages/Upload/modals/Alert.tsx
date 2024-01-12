@@ -11,22 +11,6 @@ interface AlertProps {
   onStay(): void
 }
 
-interface styledReactModalProps {
-  theme: ITheme
-}
-
-const StyledModal = Modal.styled`
-  width: 70vh;
-  padding-bottom: 5vh;
-  color: #fff;
-  border-radius: 10px;
-  background-color:#343434;
-  transition : all 0.3s ease-in-out;
-  @media ${(props: styledReactModalProps) => props.theme.media.hsm} {
-    width: 90%;
-  }
-`
-
 const Title = styled.h4`
   font-size: 4.5vh;
   text-align: center;
@@ -71,7 +55,7 @@ export const LeaveButton = styled(Button)`
   margin-right: 10%;
 `
 
-const Alert: React.FC<AlertProps> = ({ isOpen, onLeave, onStay }) => {
+export function Alert({ isOpen, onLeave, onStay }: AlertProps) {
   const { t } = useTranslation()
 
   return (
@@ -88,4 +72,18 @@ const Alert: React.FC<AlertProps> = ({ isOpen, onLeave, onStay }) => {
   )
 }
 
-export default Alert
+interface styledReactModalProps {
+  theme: ITheme
+}
+
+const StyledModal = Modal.styled`
+  width: 70vh;
+  padding-bottom: 5vh;
+  color: #fff;
+  border-radius: 10px;
+  background-color:#343434;
+  transition : all 0.3s ease-in-out;
+  @media ${(props: styledReactModalProps) => props.theme.media.hsm} {
+    width: 90%;
+  }
+`

@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
-import Alert from './modals/Alert'
-import Feedback from './modals/Feedback'
-import Info from './Info'
-import Cover from './Cover'
-import Audio from './Audio'
+import { Alert } from './modals/Alert'
+import { Feedback } from './modals/Feedback'
+import { Info } from './Info'
+import { Cover } from './Cover'
+import { Audio } from './Audio'
 import history, { routeNames } from '@/utils/history'
 import { Formik, Form } from 'formik'
 import { useWindowRatio } from '@/hooks'
@@ -62,7 +62,7 @@ type feedbackModal = {
   type: 'success' | 'fail'
 }
 
-const Upload: React.FC = () => {
+export default function Upload() {
   const [step, setStep] = useState<number>(Step.INFO)
   const [isAttached, setAttached] = useState<boolean>(false)
 
@@ -190,5 +190,3 @@ const Upload: React.FC = () => {
     </Container>
   )
 }
-
-export default Upload

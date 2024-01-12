@@ -7,14 +7,14 @@ import { createRoot } from 'react-dom/client'
 import { ApolloProvider } from '@apollo/client'
 import { ThemeProvider } from 'styled-components'
 import { ModalProvider } from 'styled-react-modal'
-import App from './App'
-import HistoryRouter from '@/components/HistoryRouter'
+import { App } from './App'
+import { HistoryRouter } from '@/components/HistoryRouter'
 
 import 'normalize.css'
 
 import './i18n'
 
-const Application: React.FC = () => {
+function Application() {
   useDetectLang()
 
   return (

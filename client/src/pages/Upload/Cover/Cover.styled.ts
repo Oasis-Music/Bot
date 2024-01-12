@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import IconButton from '@/components/ui/IconButton'
-import SvgIcon from '@/components/ui/SvgIcon'
+import { IconButton } from '@/components/ui/IconButton'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 
 export const Container = styled.div`
   color: #fff;

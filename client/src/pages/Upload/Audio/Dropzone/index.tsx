@@ -34,7 +34,7 @@ function dropzoneCodeToMsg(code: string): string {
   }
 }
 
-const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, onFormValue }) => {
+export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: DropzoneProps) {
   const { t } = useTranslation()
 
   const [dropError, setDropError] = useState<string>('')
@@ -128,5 +128,3 @@ const Dropzone: React.FC<DropzoneProps> = ({ audio, player, onStop, onSetAudio, 
     </>
   )
 }
-
-export default Dropzone

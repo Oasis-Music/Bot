@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
-import ScaleLoader from '@/components/ui/Loader'
+import { ScaleLoader } from '@/components/ui/Loader'
 import PlaylistItem from '@/components/PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
@@ -48,7 +48,7 @@ interface TracksList {
   onNextPage(): void
 }
 
-const TracksList: React.FC<TracksList> = ({ loading, tracks, hasNextPage, onNextPage }) => {
+export function TracksList({ loading, tracks, hasNextPage, onNextPage }: TracksList) {
   const currentTrack = useReactiveVar(currentTrackVar)
 
   const [firstLoad, setFirstLoad] = useState<boolean>(true)
@@ -108,5 +108,3 @@ const TracksList: React.FC<TracksList> = ({ loading, tracks, hasNextPage, onNext
     </div>
   )
 }
-
-export default TracksList

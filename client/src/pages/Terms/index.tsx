@@ -9,7 +9,7 @@ const Title = styled.h2``
 
 const APP_NAME = 'Oasis'
 
-const Terms: React.FC = () => {
+export default function Terms() {
   return (
     <Container>
       <h1>Terms of Use</h1>
@@ -33,5 +33,3 @@ const Terms: React.FC = () => {
     </Container>
   )
 }
-
-export default Terms
