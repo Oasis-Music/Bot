@@ -1,3 +1,6 @@
+build
+src/assets/music
+
 # Logs
 logs
 *.log
@@ -6,6 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 firebase-debug.log*
 firebase-debug.*.log*
+
 
 # Firebase cache
 .firebase/
