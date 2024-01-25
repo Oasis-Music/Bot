@@ -16,13 +16,19 @@ func init() {
 	env := flag.String("env", "dev", "specify .env filename for flag")
 	flag.Parse()
 
-	if err := godotenv.Load(".env." + *env); err != nil {
-		log.Printf("No .env.%s file found, load default", *env)
-		if err = godotenv.Load(".env.dev"); err != nil {
-			panic("no .env files found")
+	if *env == "dev" {
+		if err := godotenv.Load(".env.local"); err != nil {
+			log.Fatal("No .env.local file found")
 		}
+		log.Println("loaded .env.local")
 	}
+
+	if err := godotenv.Load(".env." + *env); err != nil {
+		log.Fatalf("No .env.%s file found, load default", *env)
+	}
+
 	log.Printf("loaded \".env.%s\"\n", *env)
+
 }
 
 func main() {
