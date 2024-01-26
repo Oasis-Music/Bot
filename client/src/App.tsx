@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react'
+import React, { useEffect, lazy, Suspense } from 'react'
 import { AppLayout } from '@/components/AppLayout'
 import { Fallback } from '@/components/Fallback'
 import { PrivateRoute } from '@/components/PrivateRoute'
@@ -16,6 +16,10 @@ const Settings = lazy(() => import('./pages/Settings'))
 
 export function App() {
   useWindowCSSRatio()
+
+  useEffect(() => {
+    Telegram.WebApp.expand()
+  }, [])
 
   return (
     <Suspense fallback={<Fallback />}>
