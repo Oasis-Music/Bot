@@ -9,7 +9,6 @@ const Home = lazy(() => import('./pages/Home'))
 const Explore = lazy(() => import('./pages/Explore'))
 const Upload = lazy(() => import('./pages/Upload'))
 const UI = lazy(() => import('./pages/UI'))
-const Test = lazy(() => import('./pages/Test'))
 const Terms = lazy(() => import('./pages/Terms'))
 const Auth = lazy(() => import('./pages/Auth'))
 const Settings = lazy(() => import('./pages/Settings'))
@@ -30,7 +29,6 @@ export function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/upload" element={<Upload />} />
             <Route path="/settings" element={<Settings />} />
-            {import.meta.env.DEV && <Route path="/test" element={<Test />} />}
             {import.meta.env.DEV && <Route path="/ui" element={<UI />} />}
           </Route>
           <Route path="/terms" element={<Terms />} />
