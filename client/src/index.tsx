@@ -1,14 +1,13 @@
 import React from 'react'
 import theme, { GlobalStyles } from './utils/theme'
 import client from '@/apollo/apollo'
-import history from '@/utils/history'
 import { useDetectLang } from '@/hooks'
 import { createRoot } from 'react-dom/client'
 import { ApolloProvider } from '@apollo/client'
+import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
 import { ModalProvider } from 'styled-react-modal'
 import { App } from './App'
-import { HistoryRouter } from '@/components/HistoryRouter'
 
 import 'normalize.css'
 
@@ -18,7 +17,7 @@ function Application() {
   useDetectLang()
 
   return (
-    <HistoryRouter history={history}>
+    <BrowserRouter>
       <ThemeProvider theme={theme}>
         <ModalProvider>
           <ApolloProvider client={client}>
@@ -27,7 +26,7 @@ function Application() {
           </ApolloProvider>
         </ModalProvider>
       </ThemeProvider>
-    </HistoryRouter>
+    </BrowserRouter>
   )
 }
 
