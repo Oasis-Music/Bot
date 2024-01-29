@@ -6,7 +6,6 @@ import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import { IconButton } from '@/components/ui/IconButton'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
-import history, { routeNames } from '@/utils/history'
 
 interface StepControlsProps {
   disabled: boolean
@@ -75,15 +74,12 @@ export function StepControls({
 }: StepControlsProps) {
   const { t } = useTranslation()
 
-  const { dirty, submitCount } = useFormikContext()
+  const { dirty } = useFormikContext()
 
   const handleLinkButtonClick = () => {
-    if (dirty && submitCount === 0) {
+    if (dirty) {
       onAlert()
-      return
     }
-
-    history.push(routeNames.root)
   }
 
   return (

@@ -1,12 +1,13 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import Button from '@/components/ui/Button'
-import { TextInput } from '@/components/ui/TextInput'
 import blushEmoji from '@/assets/rastr/blush.png'
+import { TextInput } from '@/components/ui/TextInput'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { BackLinkButton } from '../StepControls'
-import history, { routeNames } from '@/utils/history'
+import { routeNames } from '@/utils/history'
+import { useNavigate } from 'react-router-dom'
 
 interface InfoProps {
   onNextStep(): void
@@ -64,6 +65,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
   const { t } = useTranslation()
   const { errors, dirty, submitCount } = useFormikContext<FieldProps>()
   const ref = useRef<HTMLButtonElement>(null)
+  const navigate = useNavigate()
 
   const handleContinueClick = () => {
     if (ref.current) {
@@ -78,7 +80,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
       return
     }
 
-    history.push(routeNames.root)
+    navigate(routeNames.root)
   }
 
   return (

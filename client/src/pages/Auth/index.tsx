@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, redirect } from 'react-router-dom'
 import { UserMutations } from '@/apollo/cache/mutations'
 import { useAuthorizeUserLazyQuery } from '@/graphql/user/_gen_/authorizeUser.query'
-import history, { routeNames } from '@/utils/history'
+import { routeNames } from '@/utils/history'
 import handv_img from '@/assets/rastr/hand-v.png'
 
 import {
@@ -27,7 +27,7 @@ export default function Auth() {
       const ok = UserMutations.processAccessToken(data.authorizeUser.token)
       if (ok) {
         localStorage.setItem('rt', data.authorizeUser.refreshToken)
-        history.push(routeNames.root)
+        redirect(routeNames.root)
       }
     },
     onError(error) {

@@ -1,4 +1,4 @@
-import { createBrowserHistory } from 'history'
+// import { createBrowserRouter } from 'react-router-dom'
 
 type RouteName = 'root' | 'upload' | 'ui' | 'explore' | 'auth' | 'settings'
 
@@ -11,4 +11,4 @@ export const routeNames: Record<RouteName, string> = {
   settings: '/settings'
 }
 
-export default createBrowserHistory()
+// export default createBrowserRouter()
