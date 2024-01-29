@@ -2,6 +2,10 @@ package user
 
 import "errors"
 
+var (
+	ErrTgAuthDateExpired = errors.New("telegram auth_date expired")
+)
+
 // TODO: separate
 var (
 	ErrUserNotFound              = errors.New("user not found")
