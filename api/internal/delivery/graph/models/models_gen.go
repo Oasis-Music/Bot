@@ -35,9 +35,12 @@ type AuthorizationResponse struct {
 type CreateSoundtrackInput struct {
 	Title      string          `json:"title"`
 	Author     string          `json:"author"`
-	CoverImage *graphql.Upload `json:"coverImage"`
+	CoverImage *graphql.Upload `json:"coverImage,omitempty"`
 	Audiofile  graphql.Upload  `json:"audiofile"`
 	Attach     bool            `json:"attach"`
+}
+
+type Mutation struct {
 }
 
 type NotFound struct {
@@ -50,12 +53,15 @@ func (NotFound) IsUserResult() {}
 
 func (NotFound) IsUserSoundtracksResult() {}
 
+type Query struct {
+}
+
 type Soundtrack struct {
 	ID        string  `json:"id"`
 	Title     string  `json:"title"`
 	Author    string  `json:"author"`
 	Duration  int     `json:"duration"`
-	CoverURL  *string `json:"coverURL"`
+	CoverURL  *string `json:"coverURL,omitempty"`
 	AudioURL  string  `json:"audioURL"`
 	Validated bool    `json:"validated"`
 	CreatorID string  `json:"creatorId"`
@@ -82,9 +88,9 @@ type UnattachSoundtrackInput struct {
 type User struct {
 	ID           string  `json:"id"`
 	FirstName    string  `json:"firstName"`
-	LastName     *string `json:"lastName"`
-	Username     *string `json:"username"`
-	LanguageCode *string `json:"languageCode"`
+	LastName     *string `json:"lastName,omitempty"`
+	Username     *string `json:"username,omitempty"`
+	LanguageCode *string `json:"languageCode,omitempty"`
 	Role         string  `json:"role"`
 	VisitedAt    string  `json:"visitedAt"`
 	CreatedAt    string  `json:"createdAt"`
