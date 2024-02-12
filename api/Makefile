@@ -2,6 +2,8 @@ DB_URL=postgres://postgres:postgres@localhost:5432/cristal?sslmode=disable
 
 go:
 	go run ./cmd/main.go
+build:
+	go build -o app cmd/main.go
 prod:
 	go run ./cmd/main.go -env=prod
 gqlgen:
