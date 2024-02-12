@@ -137,30 +137,3 @@ export const CopyInfoBotton = styled(IconButton)`
   ${buttonsStyles}
   font-size: 16px;
 `
-
-export const InfoLine = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0 11px 3px 9px;
-  font-size: 15px;
-  font-weight: 500;
-  color: #898989;
-  & span:last-child {
-    color: #cbcbcb;
-  }
-  & div {
-    position: relative;
-    width: 100%;
-    &::after {
-      content: '';
-      position: absolute;
-      width: 80%;
-      height: 2px;
-      border-radius: 2px;
-      background: #808080;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  }
-`

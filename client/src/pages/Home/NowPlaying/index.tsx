@@ -24,8 +24,7 @@ import {
   DeleteBotton,
   ShareBotton,
   ControlsWrapper,
-  CopyInfoBotton,
-  InfoLine
+  CopyInfoBotton
 } from './NowPlaying.styled'
 
 interface NowPlayingProps {
@@ -34,7 +33,7 @@ interface NowPlayingProps {
   onTrackUnattach?(): void
 }
 
-export function NowPlaying({ trackCounter, onTrackAttach, onTrackUnattach }: NowPlayingProps) {
+export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) {
   const [wasCopied, setCopied] = useState(false)
 
   const { t } = useTranslation()
@@ -159,15 +158,6 @@ export function NowPlaying({ trackCounter, onTrackAttach, onTrackUnattach }: Now
           )}
         </Details>
       </InnerContainer>
-      {!!trackCounter && (
-        <InfoLine>
-          <span>{t('common.soundtrack')}</span>
-          <div />
-          <span>
-            {trackCounter}/{import.meta.env.VITE_APP_MAX_TRACK_AVAILABLE}
-          </span>
-        </InfoLine>
-      )}
     </div>
   )
 }

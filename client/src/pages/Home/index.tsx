@@ -9,6 +9,8 @@ import { userVar, currentTrackVar, userPlaylistVar } from '@/apollo/cache/variab
 import { useUserSoundtracksLazyQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
 import { Container, List, MountLoader } from './Home.styled'
 import { Playlist } from '@/apollo/cache/types'
+import { Counter } from './Counter'
+import { useTranslation } from 'react-i18next'
 import type { Soundtrack } from '@/apollo/cache/types'
 
 const ITEMS_PER_PAGE = 15
@@ -17,6 +19,8 @@ export default function Home() {
   const currentTrack = useReactiveVar(currentTrackVar)
   const currentUser = useReactiveVar(userVar)
   const userPlaylist = useReactiveVar(userPlaylistVar)
+
+  const { t } = useTranslation()
 
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
@@ -116,6 +120,7 @@ export default function Home() {
         onTrackAttach={onTrackAttach}
         onTrackUnattach={onUnattachHandler}
       />
+      <Counter text={t('common.soundtrack')} counter={totalTracks} />
 
       {isMountLoad ? (
         mountPlug
