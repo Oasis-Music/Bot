@@ -36,7 +36,8 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\"",
     "gen:clear": "find . -name _gen_ -type d -exec rm -r {} +",
-    "gen": "npm run gen:clear && graphql-codegen"
+    "gen": "npm run gen:clear && graphql-codegen",
+    "analyze": "npx vite-bundle-visualizer"
   },
   "browserslist": {
     "production": [
