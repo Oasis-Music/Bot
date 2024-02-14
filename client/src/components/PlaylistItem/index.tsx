@@ -21,7 +21,7 @@ interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
 const Container = styled.li`
   display: flex;
   align-items: center;
-  margin: 11px 0;
+  margin-bottom: 10px;
   padding: 0 11px 0 7px;
 `
 
@@ -31,9 +31,12 @@ const ImageWrapper = styled.div`
   color: #dddddd;
   width: 50px;
   height: 50px;
+  flex-shrink: 0;
 `
 
-const InfoBox = styled.div``
+const InfoBox = styled.div`
+  width: 74%;
+`
 
 const TrackTitle = styled.p`
   font-size: 15px;
@@ -41,6 +44,9 @@ const TrackTitle = styled.p`
   font-weight: 500;
   margin: 0;
   margin-bottom: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 const AuthorTitle = styled.p`
   font-size: 11px;
