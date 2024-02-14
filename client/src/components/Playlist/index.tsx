@@ -8,6 +8,7 @@ import type { Soundtrack } from '@/apollo/cache/types'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useUserSoundtracksQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
 import { UserMutations } from '@/apollo/cache/mutations'
+import { ErrorPlug } from '@/pages/Home/plugs'
 
 interface PlaylistProps {
   // children?: React.ReactNode
@@ -15,6 +16,8 @@ interface PlaylistProps {
   soundtracks?: Soundtrack[]
   hasNextPage?: boolean
 }
+
+import styles from './Playlist.module.css'
 
 // { soundtracks, isFetching, hasNextPage }: PlaylistProps
 
@@ -53,6 +56,7 @@ export function Playlist(props: PlaylistProps) {
       setFirstLoad(false)
     },
     onError() {
+      setData([])
       setFirstLoad(false)
     }
   })
@@ -82,29 +86,44 @@ export function Playlist(props: PlaylistProps) {
 
     console.log(lastItem.index, allRows.length - 1)
 
-    if (lastItem.index >= allRows.length - 1 && hasNextPage && !isFetchingNextPage) {
+    if (lastItem.index >= allRows.length - 1 && hasNextPage && !isFetchingNextPage && !error) {
+      console.log('fetch next')
+
       fetchNextPage()
-      // setCurrentPage((page) => page + 1)
     }
-  }, [hasNextPage, fetchNextPage, allRows, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
+  }, [
+    error,
+    hasNextPage,
+    fetchNextPage,
+    allRows,
+    isFetchingNextPage,
+    rowVirtualizer.getVirtualItems()
+  ])
+
+  if (error) {
+    return (
+      <div className={styles.container}>
+        <ErrorPlug />
+      </div>
+    )
+  }
 
   return (
     <div style={{ flex: '1 1 auto' }}>
       {firstLoad ? (
         <p>Loading...</p>
-      ) : error ? (
-        <span>Error: {(error as Error).message}</span>
       ) : (
         <div
           ref={parentRef}
-          // className="List"
+          className={styles.view}
           style={{
-            height: `437px`,
+            height: currentTrack.id ? 'calc(65vh - 67px)' : '65vh',
             width: `100%`,
-            overflow: 'auto'
+            overflow: 'auto',
+            paddingBottom: 0
           }}
         >
-          <div
+          <ul
             style={{
               height: `${rowVirtualizer.getTotalSize()}px`,
               width: '100%',
@@ -116,7 +135,7 @@ export function Playlist(props: PlaylistProps) {
               const track = allRows[virtualRow.index]
 
               return (
-                <div
+                <li
                   key={virtualRow.index}
                   style={{
                     position: 'absolute',
@@ -146,10 +165,10 @@ export function Playlist(props: PlaylistProps) {
                       playlist={TPlaylist.User}
                     />
                   )}
-                </div>
+                </li>
               )
             })}
-          </div>
+          </ul>
         </div>
       )}
     </div>

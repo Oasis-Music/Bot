@@ -1,0 +1,19 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.view::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.view::-webkit-scrollbar {
+  width: 5px;
+}
+
+.view::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  background-color: #9f9f9f !important;
+}
