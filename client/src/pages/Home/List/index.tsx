@@ -1,75 +1,64 @@
-import React, { useCallback, useRef } from 'react'
-import { Playlist } from '@/apollo/cache/types'
-import { ItemsList } from './List.styled'
-import { NoDataPlug } from '../plugs'
+import React from 'react'
+import { Playlist } from '@/components/Playlist'
+import { NoDataPlug, ErrorPlug } from '../plugs'
 import { ScaleLoader } from '@/components/ui/Loader'
-import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar, userPlaylistVar } from '@/apollo/cache/variables'
-import PlaylistItem from '@/components/PlaylistItem'
+import { ApolloError, useReactiveVar } from '@apollo/client'
+import { userPlaylistVar } from '@/apollo/cache/variables'
+
+import { Container } from './List.styled'
 
 interface ListProps {
+  currentPage: number
   isLoad: boolean
-  hasNextPage: boolean
   isFirstLoad: boolean
-  onPageChange(): void
-  onIntersectionLoad(): void
+  hasNextPage: boolean
+  error: ApolloError | undefined
+  onFetchNextPage(): void
 }
 
 export function List({
+  currentPage,
   isLoad,
+  error,
   isFirstLoad,
   hasNextPage,
-  onPageChange,
-  onIntersectionLoad
+  onFetchNextPage
 }: ListProps) {
-  const currentTrack = useReactiveVar(currentTrackVar)
   const userPlaylist = useReactiveVar(userPlaylistVar)
 
-  const intersectionObserver = useRef<IntersectionObserver>()
+  if (isFirstLoad) {
+    return (
+      <Container>
+        <ScaleLoader fallback />
+      </Container>
+    )
+  }
 
-  const lastTrackRef = useCallback(
-    (track: any) => {
-      if (isLoad) return
-      if (intersectionObserver.current) intersectionObserver.current.disconnect()
+  if (error) {
+    return (
+      <Container>
+        <ErrorPlug />
+      </Container>
+    )
+  }
 
-      intersectionObserver.current = new IntersectionObserver((tracks) => {
-        if (tracks[0].isIntersecting && hasNextPage) {
-          onIntersectionLoad()
-          onPageChange()
-        }
-      })
-
-      if (track) intersectionObserver.current.observe(track)
-    },
-    [isLoad, hasNextPage, onPageChange, onIntersectionLoad]
-  )
-
-  const playlistLen = userPlaylist.length
-
-  if (isFirstLoad && !userPlaylist.length) {
-    return <NoDataPlug />
+  if (!isLoad && userPlaylist.length === 0) {
+    return (
+      <Container>
+        <NoDataPlug />
+      </Container>
+    )
   }
 
   return (
-    <div>
-      <ItemsList $isPlay={!!currentTrack.id}>
-        {userPlaylist.map((track, index) => (
-          <PlaylistItem
-            ref={playlistLen === index + 1 ? lastTrackRef : undefined}
-            key={track.id}
-            id={track.id}
-            title={track.title}
-            author={track.author}
-            duration={track.duration}
-            coverURL={track.coverURL || ''}
-            audioURL={track.audioURL}
-            isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-            isAttached={track.attached}
-            playlist={Playlist.User}
-          />
-        ))}
-      </ItemsList>
-      {!isFirstLoad && isLoad && <ScaleLoader fallback />}
+    <div style={{ display: 'flex', flexGrow: '1' }}>
+      <Playlist
+        relatedTo="User"
+        data={userPlaylist}
+        hasNextPage={hasNextPage}
+        isFetchingNextPage={currentPage > 1 && isLoad}
+        onFetchNextPage={onFetchNextPage}
+      />
     </div>
   )
 }

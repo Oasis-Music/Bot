@@ -6,11 +6,3 @@ export const Container = styled.div`
   flex-direction: column;
   color: #fff;
 `
-
-export const MountLoader = styled.div`
-  height: 100%;
-  max-height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`

@@ -1,4 +1,4 @@
-export const enum Playlist {
+export const enum PlaylistType {
   User = 1,
   Explore
 }

@@ -4,7 +4,6 @@ import { ScaleLoader } from '@/components/ui/Loader'
 import PlaylistItem from '@/components/PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
-import { Playlist } from '@/apollo/cache/types'
 import type { Track } from '../types'
 
 interface listStyleProps {
@@ -99,7 +98,7 @@ export function TracksList({ loading, tracks, hasNextPage, onNextPage }: TracksL
               audioURL={track.audioURL}
               isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
               isAttached={track.attached}
-              playlist={Playlist.Explore}
+              playlist="Explore"
             />
           ))}
         </List>

@@ -4,7 +4,9 @@ import { ScaleLoader } from '@/components/ui/Loader'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { timeFormater } from '@/utils/helpers'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
-import type { Playlist } from '@/apollo/cache/types'
+import type { PlaylistType } from '@/apollo/cache/types'
+
+// TODO: drop forwardRef support
 
 interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   id: string
@@ -15,7 +17,7 @@ interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   audioURL: string
   isPlaying: boolean
   isAttached: boolean
-  playlist: Playlist.User | Playlist.Explore
+  playlist: keyof typeof PlaylistType
 }
 
 const Container = styled.li`
