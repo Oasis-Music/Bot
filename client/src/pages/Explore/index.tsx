@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { List } from './List'
 import { Search } from '@/components/Search'
-import { TracksList } from './TracksList'
-import { useReactiveVar } from '@apollo/client'
-import { useAllSoundtracksLazyQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
+import { useAllSoundtracksQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
 import { SoundtrackMutations } from '@/apollo/cache/mutations'
 import { useSearchSoundtrackLazyQuery } from '@/graphql/soundtrack/_gen_/searchSoundtrack.query'
 import { useTranslation } from 'react-i18next'
-import { explorePlaylistVar } from '@/apollo/cache/variables'
 import type { Track } from './types'
 import type { Soundtrack } from '@/apollo/cache/types'
 
@@ -14,14 +12,13 @@ export default function Explore() {
   const { t } = useTranslation()
   const [_, setTracks] = useState<Track[]>([])
 
-  const exploreTracks = useReactiveVar(explorePlaylistVar)
-
+  const [firstLoad, setFirstLoad] = useState(true)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [hasNextPage, setHasNextPage] = useState<boolean>(false)
 
   const ITEMS_PER_PAGE = 15
 
-  const [getTracks, { loading }] = useAllSoundtracksLazyQuery({
+  const { loading, error } = useAllSoundtracksQuery({
     variables: {
       page: currentPage
     },
@@ -31,6 +28,10 @@ export default function Explore() {
 
       SoundtrackMutations.setExplorePlaylist(newTracks)
       setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
+      setFirstLoad(false)
+    },
+    onError() {
+      setFirstLoad(false)
     }
   })
 
@@ -40,10 +41,6 @@ export default function Explore() {
     }
   })
 
-  useEffect(() => {
-    getTracks()
-  }, [currentPage])
-
   // INFO: Because we have a cumulative effect of getting tracks
   // when currentPage changes, we should not clean up already saved original data
   useEffect(() => {
@@ -52,7 +49,7 @@ export default function Explore() {
     }
   }, [])
 
-  const handleNextPage = () => {
+  const fetchNextPage = () => {
     setCurrentPage((prev) => prev + 1)
   }
 
@@ -69,11 +66,13 @@ export default function Explore() {
   return (
     <div>
       <Search onSubmit={handleSearchSubmit} placeholder={searchPlaceholder} />
-      <TracksList
-        loading={loading}
+      <List
+        currentPage={currentPage}
+        isLoad={loading}
         hasNextPage={hasNextPage}
-        tracks={exploreTracks}
-        onNextPage={handleNextPage}
+        isFirstLoad={firstLoad}
+        error={error}
+        onFetchNextPage={fetchNextPage}
       />
     </div>
   )
