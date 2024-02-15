@@ -51,9 +51,10 @@ export function List({
   }
 
   return (
-    <div style={{ display: 'flex', flexGrow: '1' }}>
+    <div>
       <Playlist
         relatedTo="User"
+        height="65vh"
         data={userPlaylist}
         hasNextPage={hasNextPage}
         isFetchingNextPage={currentPage > 1 && isLoad}

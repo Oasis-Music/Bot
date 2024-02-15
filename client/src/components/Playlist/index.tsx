@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import PlaylistItem from '../PlaylistItem'
+import { PlaylistItem } from '../PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { ScaleLoader } from '@/components/ui/Loader'
@@ -11,6 +11,7 @@ import styles from './Playlist.module.css'
 interface PlaylistProps {
   relatedTo: keyof typeof PlaylistType
   data: Soundtrack[]
+  height: string
   hasNextPage: boolean
   isFetchingNextPage: boolean
   onFetchNextPage(): void
@@ -19,6 +20,7 @@ interface PlaylistProps {
 export function Playlist({
   relatedTo,
   data,
+  height,
   hasNextPage,
   isFetchingNextPage,
   onFetchNextPage
@@ -59,7 +61,7 @@ export function Playlist({
         ref={parentRef}
         className={styles.view}
         style={{
-          height: currentTrack.id ? 'calc(65vh - 67px)' : '65vh',
+          height: currentTrack.id ? `calc(${height} - 67px)` : height,
           width: `100%`,
           overflow: 'auto',
           paddingBottom: 0
