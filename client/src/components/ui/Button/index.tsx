@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
-import Loader from '@/components/ui/Loader'
+import { ScaleLoader } from '@/components/ui/Loader'
 
 const enum ButtonColor {
   primary = 'primary',
@@ -132,7 +132,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     {!loading && startIcon}
     {loading ? (
       <LoaderWrapper>
-        <Loader dark={color !== ButtonColor.primary} />
+        <ScaleLoader dark={color !== ButtonColor.primary} />
       </LoaderWrapper>
     ) : (
       <ButtonText>{children}</ButtonText>

@@ -24,8 +24,11 @@
     <script type="module" src="./src/index.tsx"></script>
   </body>
   <script>
-    const tg = window.Telegram.WebApp
-    tg.ready()
-    tg.expand()
+    const TG = window.Telegram.WebApp
+    document.body.style.backgroundColor = '#101318'
+    console.log('********')
+    console.log(TG)
+    console.log(TG.initData)
+    console.log('********')
   </script>
 </html>

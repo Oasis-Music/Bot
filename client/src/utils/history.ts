@@ -1,6 +1,6 @@
-import { createBrowserHistory } from 'history'
+// import { createBrowserRouter } from 'react-router-dom'
 
-type RouteName = 'root' | 'upload' | 'ui' | 'explore' | 'test' | 'auth' | 'settings'
+type RouteName = 'root' | 'upload' | 'ui' | 'explore' | 'auth' | 'settings'
 
 export const routeNames: Record<RouteName, string> = {
   root: '/',
@@ -8,8 +8,7 @@ export const routeNames: Record<RouteName, string> = {
   upload: '/upload',
   ui: '/ui',
   explore: '/explore',
-  test: '/test',
   settings: '/settings'
 }
 
-export default createBrowserHistory()
+// export default createBrowserRouter()

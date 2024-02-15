@@ -1,22 +1,9 @@
-# client
-client/node_modules
-client/build
-client/src/assets/music
-npm-debug.log*
-
 # backend
-api/.env.prod
 api/init/backup.*
-
-/.pnp
-.pnp.js
 
 # testing
 /notes
 /coverage
-
-# production
-/build
 
 # misc
 .DS_Store
@@ -24,5 +11,3 @@ api/init/backup.*
 .env.development.local
 .env.test.local
 .env.production.local
-
-/api/app

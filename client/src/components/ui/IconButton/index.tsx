@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import Loader from '@/components/ui/Loader'
+import { ScaleLoader } from '@/components/ui/Loader'
 
 const enum ButtonColor {
   primary = 'primary',
@@ -9,7 +9,7 @@ const enum ButtonColor {
   danger = 'danger'
 }
 
-interface BottonProps {
+interface IconBottonProps {
   to?: string
   color?: 'primary' | 'secondary' | 'success' | 'danger'
   type?: 'button' | 'reset' | 'submit'
@@ -89,14 +89,14 @@ const BaseButton = styled.button<BaseButtonProps>`
   }}
 `
 
-const IconButton: React.FC<BottonProps> = ({
+export function IconButton({
   loading,
   children,
   color = ButtonColor.primary,
   withoutShadow = false,
   type = 'button',
   ...otherProps
-}: BottonProps) => {
+}: IconBottonProps) {
   return (
     <BaseButton
       $color={color as ButtonColor}
@@ -104,9 +104,7 @@ const IconButton: React.FC<BottonProps> = ({
       type={type}
       {...otherProps}
     >
-      {loading ? <Loader dark={color !== ButtonColor.primary} /> : children}
+      {loading ? <ScaleLoader dark={color !== ButtonColor.primary} /> : children}
     </BaseButton>
   )
 }
-
-export default IconButton

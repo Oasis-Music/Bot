@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import IconButton from '@/components/ui/IconButton'
+import { IconButton } from '@/components/ui/IconButton'
 
 export const Container = styled.div`
   color: #fff;

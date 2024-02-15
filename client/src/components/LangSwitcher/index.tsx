@@ -90,7 +90,7 @@ const Label = styled.label`
   border-radius: 20px;
 `
 
-const LangSwitcher: React.FC = () => {
+export function LangSwitcher() {
   const [lng, changeLang] = useLang()
 
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,5 +109,3 @@ const LangSwitcher: React.FC = () => {
     </Switch>
   )
 }
-
-export default LangSwitcher

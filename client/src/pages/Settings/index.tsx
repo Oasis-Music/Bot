@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import LangSwitcher from '@/components/LangSwitcher'
+import { LangSwitcher } from '@/components/LangSwitcher'
 
 const Wrapper = styled.div`
   padding: 10%;
@@ -9,12 +9,10 @@ const Wrapper = styled.div`
   align-items: center;
 `
 
-const Settings: React.FC = () => {
+export default function Settings() {
   return (
     <Wrapper>
       <LangSwitcher />
     </Wrapper>
   )
 }
-
-export default Settings

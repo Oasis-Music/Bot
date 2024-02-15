@@ -8,47 +8,60 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"net/url"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/utils"
 	"time"
 
 	"github.com/jackc/pgx/v4"
 )
 
-const telegramSeed = "WebAppData"
+const (
+	TELEGRAM_SEED = "WebAppData"
+	WAIT_AUTH_IN  = 3
+)
 
 func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
 		return nil, ErrInitDataInvalid
 	}
 
-	urlA, err := url.ParseQuery(initData)
+	dataMap, err := url.ParseQuery(initData)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return nil, ErrInitDataInvalid
 	}
 
-	tgHash := urlA.Get("hash")
+	initDataHash := dataMap.Get("hash")
+	authDate := dataMap.Get("auth_date")
 
-	if tgHash == "" {
-		fmt.Println(err)
+	if initDataHash == "" {
+		// fmt.Println(err)
 		return nil, ErrInitDataInvalid
 	}
 
-	validString := "auth_date=" + urlA.Get("auth_date") + "\n" +
-		"query_id=" + urlA.Get("query_id") +
-		"\n" + "user=" + urlA.Get("user")
+	authValid := isTelegramAuthDateValidIn(authDate, WAIT_AUTH_IN*time.Minute)
+	if !authValid {
+		return nil, ErrTgAuthDateExpired
+	}
 
-	gen := signData([]byte(u.config.Telegram.Token), []byte(telegramSeed))
-	hash := hex.EncodeToString(signData([]byte(validString), gen))
+	validString := "auth_date=" + authDate + "\n" +
+		"query_id=" + dataMap.Get("query_id") +
+		"\n" + "user=" + dataMap.Get("user")
 
-	if hash != tgHash {
+	gen := signTelegramData([]byte(u.config.Telegram.Token), []byte(TELEGRAM_SEED))
+
+	hash := hex.EncodeToString(signTelegramData([]byte(validString), gen))
+
+	if hash != initDataHash {
+		log.Println("hash != telegram hash")
 		return nil, errors.New("authorization failed")
 	}
 
 	var userData entity.UserInitData
 
-	if err = json.Unmarshal([]byte(urlA.Get("user")), &userData); err != nil {
+	if err = json.Unmarshal([]byte(dataMap.Get("user")), &userData); err != nil {
 		fmt.Println(err)
 		return nil, ErrInitDataInvalid
 	}
@@ -141,7 +154,7 @@ func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.U
 
 }
 
-func signData(msg, key []byte) []byte {
+func signTelegramData(msg, key []byte) []byte {
 	mac := hmac.New(sha256.New, key)
 	mac.Write(msg)
 	return mac.Sum(nil)
@@ -208,4 +221,24 @@ func (u *userUseCase) genTokenPairandSave(ctx context.Context, userID int64, fir
 	}
 
 	return rawTokenPair.AccessToken, rawTokenPair.RefreshToken, nil
+}
+
+func isTelegramAuthDateValidIn(src string, validIn time.Duration) bool {
+
+	authTimestamp, err := utils.StrToInt64(src)
+	if err != nil {
+		log.Println("faild parse to TG auth_date")
+		return false
+	}
+
+	currentTimestamp := time.Now().Unix()
+
+	timeFrame := int64(validIn.Seconds())
+
+	if authTimestamp+timeFrame < currentTimestamp {
+		return false
+	}
+
+	return true
+
 }

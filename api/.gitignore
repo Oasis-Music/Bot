@@ -1,0 +1,6 @@
+# Env
+.env.prod
+.env.local
+
+# Pkg
+/app

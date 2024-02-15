@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useReactiveVar } from '@apollo/client'
-import { Link, Navigate } from 'react-router-dom'
+import { Link, redirect } from 'react-router-dom'
 import { UserMutations } from '@/apollo/cache/mutations'
-import { isAuthenticatedVar } from '@/apollo/cache/variables'
 import { useAuthorizeUserLazyQuery } from '@/graphql/user/_gen_/authorizeUser.query'
-import history, { routeNames } from '@/utils/history'
+import { routeNames } from '@/utils/history'
 import handv_img from '@/assets/rastr/hand-v.png'
 
 import {
@@ -19,12 +17,7 @@ import {
   TermsTitle
 } from './Auth.styled'
 
-const Auth: React.FC = () => {
-  const isAuth = useReactiveVar(isAuthenticatedVar)
-  if (isAuth) {
-    return <Navigate to={routeNames.root} />
-  }
-
+export default function Auth() {
   const { t } = useTranslation()
 
   const [error, setError] = useState<string>('')
@@ -34,7 +27,7 @@ const Auth: React.FC = () => {
       const ok = UserMutations.processAccessToken(data.authorizeUser.token)
       if (ok) {
         localStorage.setItem('rt', data.authorizeUser.refreshToken)
-        history.push(routeNames.root)
+        redirect(routeNames.root)
       }
     },
     onError(error) {
@@ -81,5 +74,3 @@ const Auth: React.FC = () => {
     </Container>
   )
 }
-
-export default Auth

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Dropzone from './Dropzone'
-import SvgIcon from '@/components/ui/SvgIcon'
-import StepControls from '../StepControls'
+import { Dropzone } from './Dropzone'
+import { SvgIcon } from '@/components/ui/SvgIcon'
+import { StepControls } from '../StepControls'
 import PlayIcon from '@/assets/svg/play.svg?react'
 import PauseIcon from '@/assets/svg/pause.svg?react'
-import Checkbox from '@/components/ui/Checkbox'
+import { Checkbox } from '@/components/ui/Checkbox'
 import AudioPlayer from '@/player'
 import { timeFormater } from '@/utils/helpers'
 import { useFormikContext } from 'formik'
@@ -27,7 +27,7 @@ interface AudioProps {
   onAttachChecked(v: boolean): void
 }
 
-const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert, onAttachChecked }) => {
+export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioProps) {
   const { t } = useTranslation()
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
@@ -138,5 +138,3 @@ const Audio: React.FC<AudioProps> = ({ loading, onPrevStep, onAlert, onAttachChe
     </Container>
   )
 }
-
-export default Audio

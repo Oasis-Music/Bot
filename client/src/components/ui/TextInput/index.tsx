@@ -84,13 +84,13 @@ const ErrorMessage = styled.p<{ $err: boolean }>`
   opacity: ${({ $err }) => ($err ? 1 : 0)};
 `
 
-const TextInput: React.FC<TextInputProps> = ({
+export function TextInput({
   autoComplete = 'off',
   hideErrorMessage = false,
   type = 'text',
   multiline,
   ...restProps
-}) => {
+}: TextInputProps) {
   const [field, meta] = useField(restProps)
 
   const isErr = meta.touched && !!meta.error
@@ -112,5 +112,3 @@ const TextInput: React.FC<TextInputProps> = ({
     </div>
   )
 }
-
-export default TextInput

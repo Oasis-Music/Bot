@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Loader from '@/components/ui/Loader'
+import { ScaleLoader } from '@/components/ui/Loader'
 
 const Box = styled.div`
   height: 100vh;
@@ -9,12 +9,10 @@ const Box = styled.div`
   align-items: center;
 `
 
-const Fallback: React.FC = () => {
+export function Fallback() {
   return (
     <Box>
-      <Loader fallback />
+      <ScaleLoader fallback />
     </Box>
   )
 }
-
-export default Fallback

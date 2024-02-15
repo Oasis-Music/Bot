@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import IconButton from '@/components/ui/IconButton'
+import { IconButton } from '@/components/ui/IconButton'
 
 export const Container = styled.div`
   display: flex;

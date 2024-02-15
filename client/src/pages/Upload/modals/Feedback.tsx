@@ -14,22 +14,6 @@ interface FeedbackProps {
   onRetry(): void
 }
 
-interface styledReactModalProps {
-  theme: ITheme
-}
-
-const StyledModal = Modal.styled`
-  width: 70vh;
-  aspect-ratio: 1 / 1;
-  color: #fff;
-  border-radius: 10px;
-  background-color:#343434;
-  transition : all 0.3s ease-in-out;
-  @media ${(props: styledReactModalProps) => props.theme.media.hsm} {
-    width: 90%;
-  }
-`
-
 const Image = styled.img`
   display: block;
   width: 37%;
@@ -60,7 +44,7 @@ export const ActionButton = styled(Button)`
   }
 `
 
-const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) => {
+export function Feedback({ type, isOpen, onSubmit, onRetry }: FeedbackProps) {
   const { t } = useTranslation()
 
   const handleActionClick = () => {
@@ -92,4 +76,18 @@ const Feedback: React.FC<FeedbackProps> = ({ type, isOpen, onSubmit, onRetry }) 
   )
 }
 
-export default Feedback
+interface styledReactModalProps {
+  theme: ITheme
+}
+
+const StyledModal = Modal.styled`
+  width: 70vh;
+  aspect-ratio: 1 / 1;
+  color: #fff;
+  border-radius: 10px;
+  background-color:#343434;
+  transition : all 0.3s ease-in-out;
+  @media ${(props: styledReactModalProps) => props.theme.media.hsm} {
+    width: 90%;
+  }
+`

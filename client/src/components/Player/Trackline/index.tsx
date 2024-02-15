@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
 
 interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
@@ -23,4 +23,4 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
   )
 }
 
-export default React.forwardRef(Trackline)
+export default forwardRef(Trackline)

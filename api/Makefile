@@ -2,10 +2,12 @@ DB_URL=postgres://postgres:postgres@localhost:5432/cristal?sslmode=disable
 
 go:
 	go run ./cmd/main.go
+build:
+	go build -o app cmd/main.go
 prod:
 	go run ./cmd/main.go -env=prod
 gqlgen:
-	go run -mod=mod github.com/99designs/gqlgen
+	go run github.com/99designs/gqlgen generate
 lint:
 	golangci-lint run --verbose
 sqlc:

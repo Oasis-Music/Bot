@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react'
 import styled from 'styled-components'
-import Alert from './modals/Alert'
-import Feedback from './modals/Feedback'
-import Info from './Info'
-import Cover from './Cover'
-import Audio from './Audio'
-import history, { routeNames } from '@/utils/history'
+import { Alert } from './modals/Alert'
+import { Feedback } from './modals/Feedback'
+import { Info } from './Info'
+import { Cover } from './Cover'
+import { Audio } from './Audio'
+import { routeNames } from '@/utils/history'
 import { Formik, Form } from 'formik'
+import { useNavigate } from 'react-router-dom'
 import { useWindowRatio } from '@/hooks'
 import { createTrackStepsSchema } from '@/utils/validationSchemas'
 import { useCreateSoundtrackMutation } from '@/graphql/soundtrack/_gen_/createSoundtrack.mutation'
@@ -62,7 +63,9 @@ type feedbackModal = {
   type: 'success' | 'fail'
 }
 
-const Upload: React.FC = () => {
+export default function Upload() {
+  const navigate = useNavigate()
+
   const [step, setStep] = useState<number>(Step.INFO)
   const [isAttached, setAttached] = useState<boolean>(false)
 
@@ -116,10 +119,10 @@ const Upload: React.FC = () => {
 
   const handleFeedbackOk = () => {
     if (isAttached) {
-      history.push(routeNames.root)
+      navigate(routeNames.root)
       return
     }
-    history.push(routeNames.explore)
+    navigate(routeNames.explore)
   }
 
   const handleFeedbackErr = () => {
@@ -138,7 +141,7 @@ const Upload: React.FC = () => {
   }
 
   const handleAlertLeave = () => {
-    history.push(routeNames.root)
+    navigate(routeNames.root)
   }
 
   const handleAttachCheck = (value: boolean) => {
@@ -190,5 +193,3 @@ const Upload: React.FC = () => {
     </Container>
   )
 }
-
-export default Upload

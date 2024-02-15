@@ -1,4 +1,4 @@
-export const enum Playlist {
+export const enum PlaylistType {
   User = 1,
   Explore
 }
@@ -12,7 +12,7 @@ export type Soundtrack = {
   title: string
   author: string
   duration: number
-  coverURL?: string | null | undefined
+  coverURL?: string | null
   audioURL: string
   attached: boolean
 }

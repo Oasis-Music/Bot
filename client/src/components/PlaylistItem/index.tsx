@@ -1,12 +1,12 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-import ScaleLoader from '@/components/ui/Loader'
-import ImagePlaceholder from '@/components/ImagePlaceholder'
+import { ScaleLoader } from '@/components/ui/Loader'
+import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { timeFormater } from '@/utils/helpers'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
-import type { Playlist } from '@/apollo/cache/types'
+import type { PlaylistType } from '@/apollo/cache/types'
 
-interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
+interface PlaylistItemProps {
   id: string
   title: string
   author: string
@@ -15,13 +15,13 @@ interface PlaylistItemProps extends React.ComponentPropsWithRef<'li'> {
   audioURL: string
   isPlaying: boolean
   isAttached: boolean
-  playlist: Playlist.User | Playlist.Explore
+  playlist: keyof typeof PlaylistType
 }
 
-const Container = styled.li`
+const Container = styled.div`
   display: flex;
   align-items: center;
-  margin: 11px 0;
+  margin-bottom: 10px;
   padding: 0 11px 0 7px;
 `
 
@@ -31,9 +31,12 @@ const ImageWrapper = styled.div`
   color: #dddddd;
   width: 50px;
   height: 50px;
+  flex-shrink: 0;
 `
 
-const InfoBox = styled.div``
+const InfoBox = styled.div`
+  width: 74%;
+`
 
 const TrackTitle = styled.p`
   font-size: 15px;
@@ -41,6 +44,9 @@ const TrackTitle = styled.p`
   font-weight: 500;
   margin: 0;
   margin-bottom: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 `
 const AuthorTitle = styled.p`
   font-size: 11px;
@@ -57,10 +63,17 @@ const SideBox = styled.div`
   font-weight: 400;
 `
 
-const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemProps> = (
-  { id, title, author, duration, coverURL, audioURL, isPlaying, isAttached, playlist },
-  ref
-) => {
+export function PlaylistItem({
+  id,
+  title,
+  author,
+  duration,
+  coverURL,
+  audioURL,
+  isPlaying,
+  isAttached,
+  playlist
+}: PlaylistItemProps) {
   const trackClickHandler = () => {
     PlaylistMutations.bindMainPlaylist(playlist)
     SoundtrackMutations.setCurrentTrack({
@@ -76,7 +89,7 @@ const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemPr
   }
 
   return (
-    <Container ref={ref ? ref : undefined} onClick={trackClickHandler}>
+    <Container onClick={trackClickHandler}>
       <ImageWrapper>
         <ImagePlaceholder src={coverURL} altText={title} />
       </ImageWrapper>
@@ -90,5 +103,3 @@ const PlaylistItem: React.ForwardRefRenderFunction<HTMLLIElement, PlaylistItemPr
     </Container>
   )
 }
-
-export default forwardRef(PlaylistItem)

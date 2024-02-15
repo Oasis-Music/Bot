@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import Nav from '@/components/Nav'
+import { Nav } from '@/components/Nav'
 import Player from '@/components/Player'
-import Snackbar from '@/components/ui/Snackbar'
-import MiniPlayer from '@/components/MiniPlayer'
+import { Snackbar } from '@/components/ui/Snackbar'
+import { MiniPlayer } from '@/components/MiniPlayer'
 import AudioPlayer from '@/player'
 import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
@@ -22,7 +22,7 @@ export const Wrapper = styled.div`
   bottom: 0;
 `
 
-const AppLayout: React.FC = () => {
+export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
   const location = useLocation()
 
@@ -149,5 +149,3 @@ const AppLayout: React.FC = () => {
     </Box>
   )
 }
-
-export default AppLayout
