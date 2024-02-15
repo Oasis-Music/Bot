@@ -3,21 +3,20 @@ import PlaylistItem from '../PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userPlaylistVar, userVar } from '@/apollo/cache/variables'
 import { Playlist as TPlaylist } from '@/apollo/cache/types'
-import type { Soundtrack } from '@/apollo/cache/types'
-
+import { ScaleLoader } from '@/components/ui/Loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useUserSoundtracksQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
 import { UserMutations } from '@/apollo/cache/mutations'
 import { ErrorPlug } from '@/pages/Home/plugs'
+import type { Soundtrack } from '@/apollo/cache/types'
+
+import styles from './Playlist.module.css'
 
 interface PlaylistProps {
-  // children?: React.ReactNode
   isFetching?: boolean
   soundtracks?: Soundtrack[]
   hasNextPage?: boolean
 }
-
-import styles from './Playlist.module.css'
 
 // { soundtracks, isFetching, hasNextPage }: PlaylistProps
 
@@ -109,7 +108,7 @@ export function Playlist(props: PlaylistProps) {
   }
 
   return (
-    <div style={{ flex: '1 1 auto' }}>
+    <div>
       {firstLoad ? (
         <p>Loading...</p>
       ) : (
@@ -148,7 +147,9 @@ export function Playlist(props: PlaylistProps) {
                 >
                   {isLoaderRow ? (
                     hasNextPage ? (
-                      'Loading more...'
+                      <div className={styles.loader}>
+                        <ScaleLoader fallback />
+                      </div>
                     ) : (
                       'Nothing more to load'
                     )
