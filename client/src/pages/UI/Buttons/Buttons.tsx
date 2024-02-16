@@ -106,25 +106,25 @@ export function Buttons() {
         {/* Success */}
         <ButtonWrapper>
           <p>Success: plain</p>
-          <Button color="success" fullWidth>
+          <Button color="accept" fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Success: loading</p>
-          <Button color="success" loading fullWidth>
+          <Button color="accept" loading fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Success: loading [disabled]</p>
-          <Button color="success" loading disabled fullWidth>
+          <Button color="accept" loading disabled fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
         <ButtonWrapper>
           <p>Success: without a shadow</p>
-          <Button color="success" fullWidth>
+          <Button color="accept" fullWidth>
             Submit
           </Button>
         </ButtonWrapper>
