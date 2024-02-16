@@ -1,41 +1,33 @@
-import styled, { keyframes, css } from 'styled-components'
-
-export const Container = styled.div`
+.container {
   padding-top: 2.5vh;
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     padding-top: 47px;
   }
-`
+}
 
-const prop = css`
-  @property --rotate {
-    syntax: '<angle>';
-    initial-value: 132deg;
-    inherits: false;
-  }
-`
-
-const spin = keyframes`
+@keyframes spin {
   0% {
     --rotate: 0deg;
   }
   100% {
     --rotate: 360deg;
   }
-`
-
-interface ImageWrapperStyles {
-  $stopPlaying: boolean
 }
 
-export const ImageWrapper = styled.div<ImageWrapperStyles>`
-  ${prop}
+@property --rotate {
+  syntax: '<angle>';
+  initial-value: 132deg;
+  inherits: false;
+}
+
+.imageWrapper {
   position: relative;
   border-radius: 15px;
   font-size: 4vh;
   max-width: 35vh;
   margin: 0 auto;
   color: #dddddd;
+
   &::before {
     content: '';
     width: 104%;
@@ -46,7 +38,7 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
     z-index: -1;
     top: -2%;
     left: -2%;
-    animation: ${spin} 2.5s linear infinite;
+    animation: spin 2.5s linear infinite;
   }
   &::after {
     position: absolute;
@@ -63,25 +55,24 @@ export const ImageWrapper = styled.div<ImageWrapperStyles>`
     background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
     opacity: 1;
     transition: opacity 0.5s;
-    animation: ${spin} 2.5s linear infinite;
+    animation: spin 2.5s linear infinite;
   }
 
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     font-size: 30px;
     max-width: 270px;
   }
-  ${({ $stopPlaying }) =>
-    $stopPlaying &&
-    css`
-      &::before,
-      &::after {
-        opacity: 0;
-        animation: none;
-      }
-    `}
-`
+}
 
-export const Title = styled.h1`
+.pause {
+  .imageWrapper::before,
+  .imageWrapper::after {
+    opacity: 0.3;
+    animation: none;
+  }
+}
+
+.title {
   font-size: 4vh;
   font-weight: 500;
   text-align: center;
@@ -103,20 +94,20 @@ export const Title = styled.h1`
     outline: none;
   }
 
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     margin-top: 40px;
     font-size: 25px;
   }
-`
+}
 
-export const Author = styled.p`
+.author {
   color: #939393;
   font-weight: 500;
   font-size: 2.8vh;
   text-align: center;
   margin-top: 0px;
   margin-bottom: 0px;
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     font-size: 15px;
   }
-`
+}

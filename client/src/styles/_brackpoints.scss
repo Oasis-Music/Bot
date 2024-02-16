@@ -1,0 +1,7 @@
+$hxs: 700px;
+
+@mixin minHSX {
+  @media (min-height: $hxs) {
+    @content;
+  }
+}
