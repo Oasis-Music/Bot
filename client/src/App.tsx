@@ -5,6 +5,8 @@ import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from '@/hooks'
 
+import './styles/global.scss'
+
 import Home from './pages/Home'
 
 const Explore = lazy(() => import('./pages/Explore'))

@@ -1,10 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
 import { ScaleLoader } from '@/components/ui/Loader'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { timeFormater } from '@/utils/helpers'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
 import type { PlaylistType } from '@/apollo/cache/types'
+
+import styles from './PlaylistItem.module.scss'
 
 interface PlaylistItemProps {
   id: string
@@ -17,51 +18,6 @@ interface PlaylistItemProps {
   isAttached: boolean
   playlist: keyof typeof PlaylistType
 }
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 0 11px 0 7px;
-`
-
-const ImageWrapper = styled.div`
-  font-size: 2vh;
-  margin-right: 7px;
-  color: #dddddd;
-  width: 50px;
-  height: 50px;
-  flex-shrink: 0;
-`
-
-const InfoBox = styled.div`
-  width: 74%;
-`
-
-const TrackTitle = styled.p`
-  font-size: 15px;
-  color: #fff;
-  font-weight: 500;
-  margin: 0;
-  margin-bottom: 5px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`
-const AuthorTitle = styled.p`
-  font-size: 11px;
-  color: #bbbbbb;
-  font-weight: 400;
-  margin: 0;
-`
-
-const SideBox = styled.div`
-  margin-left: auto;
-  font-size: 16px;
-  margin-left: auto;
-  color: #878787;
-  font-weight: 400;
-`
 
 export function PlaylistItem({
   id,
@@ -89,17 +45,17 @@ export function PlaylistItem({
   }
 
   return (
-    <Container onClick={trackClickHandler}>
-      <ImageWrapper>
+    <div className={styles.container} onClick={trackClickHandler}>
+      <div className={styles.image}>
         <ImagePlaceholder src={coverURL} altText={title} />
-      </ImageWrapper>
-      <InfoBox>
-        <TrackTitle>{title}</TrackTitle>
-        <AuthorTitle>{author}</AuthorTitle>
-      </InfoBox>
-      <SideBox>
+      </div>
+      <div className={styles.info}>
+        <p className={styles.title}>{title}</p>
+        <p className={styles.author}>{author}</p>
+      </div>
+      <div className={styles.sideBox}>
         {isPlaying ? <ScaleLoader fallback /> : <span>{timeFormater(duration)}</span>}
-      </SideBox>
-    </Container>
+      </div>
+    </div>
   )
 }
