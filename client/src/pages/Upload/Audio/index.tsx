@@ -115,7 +115,7 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
           <span>{duration}</span>
         </TimeBox>
         <PlayBottonWrapper>
-          <PlayBotton disabled={!readyForPlay} withoutShadow onClick={playHandler}>
+          <PlayBotton disabled={!readyForPlay} onClick={playHandler}>
             <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
           </PlayBotton>
         </PlayBottonWrapper>

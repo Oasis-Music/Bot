@@ -162,7 +162,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
           </Plug>
         )}
         {mainPhoto && (
-          <DeleteButton withoutShadow onClick={handleRemoveClick}>
+          <DeleteButton onClick={handleRemoveClick}>
             <SvgIcon>
               <DeleteIcon />
             </SvgIcon>

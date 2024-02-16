@@ -27,7 +27,7 @@ export function Search({ placeholder, onSubmit }: SearchProps) {
         {() => (
           <Container noValidate>
             <SearchField name="searchQuery" autoComplete="off" placeholder={placeholder} />
-            <SearchButton withoutShadow color="secondary" type="submit">
+            <SearchButton type="submit">
               <SvgIcon>
                 <SearchIcon />
               </SvgIcon>

@@ -15,13 +15,13 @@ export function TopControls({ onClose }: TopControlsProps) {
 
   return (
     <Container>
-      <MinimizeButton withoutShadow onClick={onClose}>
+      <MinimizeButton onClick={onClose}>
         <SvgIcon>
           <ArrowIcon />
         </SvgIcon>
       </MinimizeButton>
       <Title>{t('player.header')}</Title>
-      <PlaylistButton withoutShadow>
+      <PlaylistButton>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>

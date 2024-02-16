@@ -41,31 +41,31 @@ export function Controls({
 }: ControlsProps) {
   return (
     <Container>
-      <RandomButton $random={withRandom} onClick={onRandom} withoutShadow>
+      <RandomButton $random={withRandom} onClick={onRandom}>
         <SvgIcon>
           <RandomIcon />
         </SvgIcon>
       </RandomButton>
       {/*  */}
-      <PrevButton withoutShadow onClick={onPlayPrev}>
+      <PrevButton onClick={onPlayPrev}>
         <PrevArrowIcon>
           <ArrowAltIcon />
         </PrevArrowIcon>
       </PrevButton>
       {/*  */}
       <PlayButtonBox>
-        <PlayButton disabled={!readyForPlay} $isPlay={isPlay} withoutShadow onClick={onPlayPause}>
+        <PlayButton disabled={!readyForPlay} $isPlay={isPlay} onClick={onPlayPause}>
           <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
         </PlayButton>
       </PlayButtonBox>
       {/*  */}
-      <NextButton withoutShadow onClick={onPlayNext}>
+      <NextButton onClick={onPlayNext}>
         <SvgIcon>
           <ArrowAltIcon />
         </SvgIcon>
       </NextButton>
       {/*  */}
-      <LoopButton $loop={withLoop} onClick={onLoop} withoutShadow>
+      <LoopButton $loop={withLoop} onClick={onLoop}>
         <SvgIcon>
           <RepeatIcon />
         </SvgIcon>

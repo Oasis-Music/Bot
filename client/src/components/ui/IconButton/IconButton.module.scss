@@ -1,0 +1,36 @@
+.button {
+  cursor: pointer;
+  color: inherit;
+  border: none;
+  margin: 0;
+  outline: 0;
+  z-index: 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  text-decoration: none;
+  background-color: transparent;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 20px;
+  overflow: visible;
+  text-align: center;
+  border-radius: 50%;
+
+  color: var(--main-color);
+  background-color: #363636;
+  &:hover:not(:disabled) {
+    background-color: #323232;
+  }
+}
+
+.inner {
+  width: 100%;
+  display: flex;
+  align-items: inherit;
+  justify-content: inherit;
+}
