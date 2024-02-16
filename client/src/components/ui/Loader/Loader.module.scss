@@ -1,0 +1,12 @@
+.svgEl {
+  display: block;
+  & > rect {
+    fill: #fff;
+  }
+}
+
+.dark {
+  & > rect {
+    fill: #343434;
+  }
+}

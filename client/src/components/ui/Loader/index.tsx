@@ -1,19 +1,7 @@
 import React from 'react'
-import styled from 'styled-components'
+import clsx from 'clsx'
 
-interface LoaderStyledProps {
-  $fallback: boolean
-  $dark: boolean
-}
-
-const Loader = styled.svg<LoaderStyledProps>`
-  display: block;
-  width: ${({ $fallback }) => ($fallback ? 34 : 18)}px;
-  height: ${({ $fallback }) => ($fallback ? 40 : 18)}px;
-  & > rect {
-    fill: ${({ $dark }) => ($dark ? '#343434' : '#fff')};
-  }
-`
+import styles from './Loader.module.scss'
 
 interface LoaderProps {
   fallback?: boolean
@@ -22,12 +10,14 @@ interface LoaderProps {
 
 export function ScaleLoader({ fallback = false, dark = false }: LoaderProps) {
   return (
-    <Loader
-      $fallback={fallback}
-      $dark={dark}
+    <svg
+      className={clsx({
+        [styles.svgEl]: true,
+        [styles.dark]: dark
+      })}
+      width={fallback ? '34px' : '24px'}
+      height={fallback ? '40px' : '24px'}
       xmlns="http://www.w3.org/2000/svg"
-      width="24px"
-      height="24px"
       viewBox="0 0 24 30"
     >
       <rect x="0" y="13" width="4" height="5" fill="#333">
@@ -84,6 +74,6 @@ export function ScaleLoader({ fallback = false, dark = false }: LoaderProps) {
           repeatCount="indefinite"
         />
       </rect>
-    </Loader>
+    </svg>
   )
 }
