@@ -43,7 +43,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
   },
   ref
 ) => {
-  let colorClass: string
+  let colorClass = styles.primary
 
   switch (color) {
     case ButtonColor.secondary:
@@ -54,10 +54,6 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       break
     case ButtonColor.danger:
       colorClass = styles.danger
-      break
-
-    default:
-      colorClass = styles.primary
       break
   }
 
