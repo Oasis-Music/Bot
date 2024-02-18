@@ -1,34 +1,31 @@
-import styled from 'styled-components'
-import { IconButton } from '@/components/ui/IconButton'
-
-export const Container = styled.div`
+.container {
   color: #fff;
   padding: 20px 10px 0 10px;
-`
+}
 
-export const StepTitle = styled.h2`
+.stepTitle {
   margin: 0;
-  font-size: 4.5vh;
-  text-align: start;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
   margin-left: 10px;
-  margin-bottom: 1.5vh;
-`
+  text-align: start;
+}
 
-export const Title = styled.p`
-  font-size: 2.6vh;
+.subTitle {
   color: #ababab;
   margin: 0;
   margin-left: 10px;
-  margin-bottom: 5vh;
-`
+  margin-bottom: 40px;
+}
 
-export const WaveWrapper = styled.div`
+.waveWrapper {
   margin: 1vh 0;
   margin-top: 4vh;
   padding: 0 15px;
-`
+}
 
-export const TimeBox = styled.div`
+.timings {
   display: flex;
   margin-top: 9px;
   padding: 0 19px;
@@ -36,17 +33,16 @@ export const TimeBox = styled.div`
   font-weight: 500;
   font-size: 14px;
   justify-content: space-between;
-`
+}
 
-export const PlayBottonWrapper = styled.div`
+.playButtonWrapper {
   display: flex;
   justify-content: center;
   margin-top: 2vh;
   margin-bottom: 4vh;
-`
+}
 
-export const PlayBotton = styled(IconButton)`
-  /* && {} */
+.playButton {
   color: #1b1818;
   background-color: #fff;
   font-size: 2.8vh;
@@ -57,10 +53,10 @@ export const PlayBotton = styled(IconButton)`
   &:hover:not(:disabled) {
     background-color: #fff;
   }
-`
+}
 
-export const AttachWrapper = styled.div`
+.attach {
   display: flex;
   justify-content: center;
   margin-bottom: 1vh;
-`
+}

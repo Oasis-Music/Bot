@@ -1,0 +1,17 @@
+.container {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.inner {
+  display: flex;
+  transition: transform 0.3s;
+}
+
+.slide {
+  min-height: 100vh;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background-color: #101318;
+}
