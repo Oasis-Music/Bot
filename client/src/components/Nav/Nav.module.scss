@@ -15,12 +15,12 @@
   font-size: 3vh;
   padding: 2.7vh;
   transition: color 0.2s;
+  &:global.active {
+    color: #fff;
+  }
   @include minHSX {
     font-size: 17px;
     padding: 15px;
-  }
-  &.active {
-    color: #fff;
   }
 }
 
