@@ -1,16 +1,13 @@
-import { Link, NavLink } from 'react-router-dom'
-import styled, { keyframes } from 'styled-components'
-
-export const Container = styled.nav`
+.container {
   z-index: 400;
   position: relative;
   background-color: #070c13;
   display: flex;
   align-items: center;
   justify-content: center;
-`
+}
 
-export const BaseLink = styled(NavLink)`
+.navLink {
   display: inline-flex;
   user-select: none;
   background: none;
@@ -18,22 +15,22 @@ export const BaseLink = styled(NavLink)`
   font-size: 3vh;
   padding: 2.7vh;
   transition: color 0.2s;
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     font-size: 17px;
     padding: 15px;
   }
   &.active {
     color: #fff;
   }
-`
+}
 
-const spinBorder = keyframes`
- 100% {
+@keyframes spin {
+  100% {
     transform: rotate(360deg);
   }
-`
+}
 
-export const UploadTrackLink = styled(Link)`
+.uploadLink {
   cursor: pointer;
   user-select: none;
   position: relative;
@@ -93,10 +90,10 @@ export const UploadTrackLink = styled(Link)`
       rgba(255, 255, 255, 1) 50%,
       rgba(255, 255, 255, 0) 100%
     );
-    animation: ${spinBorder} 2s linear infinite;
+    animation: spin 2s linear infinite;
   }
 
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     font-size: 2vh;
   }
-`
+}

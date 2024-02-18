@@ -1,35 +1,37 @@
 import React from 'react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import CogIcon from '@/assets/svg/cog.svg?react'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import { routeNames } from '@/utils/history'
 import { useTranslation } from 'react-i18next'
-import { Container, UploadTrackLink, BaseLink } from './Nav.styled'
+import { Link, NavLink } from 'react-router-dom'
+
+import styles from './Nav.module.scss'
 
 export function Nav() {
   const { t } = useTranslation()
 
   return (
-    <Container>
-      <BaseLink to={routeNames.explore}>
+    <nav className={styles.container}>
+      <NavLink to={routeNames.explore} className={styles.navLink}>
         <SvgIcon>
           <SearchIcon />
         </SvgIcon>
-      </BaseLink>
-      <BaseLink to={routeNames.root}>
+      </NavLink>
+      <NavLink to={routeNames.root} className={styles.navLink}>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>
-      </BaseLink>
-      <BaseLink to={routeNames.settings}>
+      </NavLink>
+      <NavLink to={routeNames.settings} className={styles.navLink}>
         <SvgIcon>
           <CogIcon />
         </SvgIcon>
-      </BaseLink>
-      <UploadTrackLink to={routeNames.upload}>
+      </NavLink>
+      <Link to={routeNames.upload} className={styles.uploadLink}>
         <span>{t('layout.upload')}</span>
-      </UploadTrackLink>
-    </Container>
+      </Link>
+    </nav>
   )
 }

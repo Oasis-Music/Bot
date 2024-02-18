@@ -1,18 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 import { ScaleLoader } from '@/components/ui/Loader'
 
-const Box = styled.div`
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+import styles from './Fallback.module.scss'
 
 export function Fallback() {
   return (
-    <Box>
+    <div className={styles.container}>
       <ScaleLoader fallback />
-    </Box>
+    </div>
   )
 }

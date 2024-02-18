@@ -1,26 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
-import styled from 'styled-components'
-import { Nav } from '@/components/Nav'
 import Player from '@/components/Player'
+import AudioPlayer from '@/player'
+import { Nav } from '@/components/Nav'
 import { Snackbar } from '@/components/ui/Snackbar'
 import { MiniPlayer } from '@/components/MiniPlayer'
-import AudioPlayer from '@/player'
 import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { Outlet, useLocation } from 'react-router-dom'
 import { SoundtrackMutations, UserMutations } from '@/apollo/cache/mutations'
 
-const Box = styled.div`
-  position: relative;
-`
-
-export const Wrapper = styled.div`
-  width: 100%;
-  left: 0;
-  position: fixed;
-  bottom: 0;
-`
+import styles from './AppLayout.module.scss'
 
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
@@ -121,15 +111,15 @@ export function AppLayout() {
   }
 
   return (
-    <Box>
+    <div className={styles.container}>
       <main>
         <Outlet />
       </main>
       {location.pathname !== '/upload' && (
-        <Wrapper>
+        <div className={styles.wrapper}>
           <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
           <Nav />
-        </Wrapper>
+        </div>
       )}
       <Player
         ref={waveContainerRef}
@@ -146,6 +136,6 @@ export function AppLayout() {
         onRandom={handleRandomState}
       />
       <Snackbar />
-    </Box>
+    </div>
   )
 }

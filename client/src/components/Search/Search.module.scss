@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  padding: 20px 10px;
+}
+
+$common-radius: 10px;
+
+.searchField {
+  padding: 0 10px 0 15px;
+  width: 100%;
+  background-color: #3c4144;
+  border: none;
+  border-top-left-radius: $common-radius;
+  border-bottom-left-radius: $common-radius;
+  outline: none;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.searchButton {
+  padding: 16px 20px;
+  border-radius: 0;
+  background-color: #3c4144;
+  color: #c3c3c3;
+
+  border-top-right-radius: $common-radius;
+  border-bottom-right-radius: $common-radius;
+  outline: none;
+  &:hover:not(:disabled) {
+    color: #fff;
+    background-color: #3c4144;
+  }
+  &:focus {
+    color: var(--main-color);
+  }
+}

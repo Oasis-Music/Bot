@@ -1,9 +1,11 @@
 import React from 'react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
 import SearchIcon from '@/assets/svg/search.svg?react'
-import { Formik } from 'formik'
+import { SvgIcon } from '@/components/ui/SvgIcon'
+import { IconButton } from '@/components/ui/IconButton'
+import { Formik, Form, Field } from 'formik'
 import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '@/utils/validationSchemas'
-import { Container, SearchField, SearchButton } from './Search.styled'
+
+import styles from './Search.module.scss'
 
 interface SearchProps {
   placeholder?: string
@@ -25,14 +27,19 @@ export function Search({ placeholder, onSubmit }: SearchProps) {
         validationSchema={ExploreSearchSchema}
       >
         {() => (
-          <Container noValidate>
-            <SearchField name="searchQuery" autoComplete="off" placeholder={placeholder} />
-            <SearchButton type="submit">
+          <Form noValidate className={styles.form}>
+            <Field
+              name="searchQuery"
+              autoComplete="off"
+              placeholder={placeholder}
+              className={styles.searchField}
+            />
+            <IconButton type="submit" className={styles.searchButton}>
               <SvgIcon>
                 <SearchIcon />
               </SvgIcon>
-            </SearchButton>
-          </Container>
+            </IconButton>
+          </Form>
         )}
       </Formik>
     </section>

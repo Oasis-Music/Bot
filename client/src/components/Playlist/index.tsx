@@ -6,7 +6,7 @@ import { ScaleLoader } from '@/components/ui/Loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { Soundtrack, PlaylistType } from '@/apollo/cache/types'
 
-import styles from './Playlist.module.css'
+import styles from './Playlist.module.scss'
 
 interface PlaylistProps {
   relatedTo: keyof typeof PlaylistType
