@@ -5,7 +5,7 @@ import { ScaleLoader } from '@/components/ui/Loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { userPlaylistVar } from '@/apollo/cache/variables'
 
-import { Container } from './List.styled'
+import styles from './List.module.scss'
 
 interface ListProps {
   currentPage: number
@@ -28,25 +28,25 @@ export function List({
 
   if (isFirstLoad) {
     return (
-      <Container>
+      <div className={styles.container}>
         <ScaleLoader fallback />
-      </Container>
+      </div>
     )
   }
 
   if (error) {
     return (
-      <Container>
+      <div className={styles.container}>
         <ErrorPlug />
-      </Container>
+      </div>
     )
   }
 
   if (!isLoad && userPlaylist.length === 0) {
     return (
-      <Container>
+      <div className={styles.container}>
         <NoDataPlug />
-      </Container>
+      </div>
     )
   }
 

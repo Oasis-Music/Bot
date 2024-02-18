@@ -1,9 +1,4 @@
-import styled, { css } from 'styled-components'
-import Button from '@/components/ui/Button'
-import { IconButton } from '@/components/ui/IconButton'
-import { SvgIcon } from '@/components/ui/SvgIcon'
-
-const buttonsStyles = css`
+.button {
   flex-grow: 1;
   border-radius: 0;
   color: #2e2e2e;
@@ -17,20 +12,19 @@ const buttonsStyles = css`
     background-color: #fff;
     background-color: transparent;
   }
-`
+}
 
-export const InnerContainer = styled.div<{ $isAdded: boolean }>`
+.inner {
   display: flex;
   position: relative;
   padding: 3vh 1vh 2vh 3vh;
-  padding-bottom: ${({ $isAdded }) => ($isAdded ? '0' : '2vh')};
-  @media ${({ theme }) => theme.media.hsd} {
-    padding: 35px 13px 15px 17px;
-    padding-top: 2vh;
+  padding-bottom: 2vh;
+  @include minHSD {
+    padding: 15px 13px 15px 13px;
   }
-`
+}
 
-export const ImageWrapper = styled.div`
+.imageWrapper {
   width: 23vh;
   height: 23vh;
   font-size: 4.5vh;
@@ -38,38 +32,39 @@ export const ImageWrapper = styled.div`
   border-radius: 16px;
   background-color: #d6d6d6;
   padding: 2px;
-  @media ${({ theme }) => theme.media.hsm} {
+  @include minHSM {
     width: 123px;
     height: 123px;
   }
-`
+}
 
-export const Details = styled.div`
+.details {
   flex-grow: 1;
   padding-top: 1.7vh;
-`
+}
 
-export const TrackTitle = styled.h1`
+.title {
   font-size: 3vh;
   color: #fff;
   font-weight: 600;
   margin: 0;
   margin-bottom: 7px;
-  @media ${({ theme }) => theme.media.hsm} {
+  @include minHSM {
     font-size: 17px;
   }
-`
-export const AuthorTitle = styled.p`
+}
+
+.author {
   font-size: 2.4vh;
   color: #878787;
   font-weight: 500;
   margin: 0;
-  @media ${({ theme }) => theme.media.hsm} {
+  @include minHSM {
     font-size: 14px;
   }
-`
+}
 
-export const SaveBotton = styled(Button)`
+.saveBotton {
   color: #080808;
   max-width: 220px;
   padding: 2vh 2.5vh;
@@ -91,49 +86,34 @@ export const SaveBotton = styled(Button)`
     background-color: #fff;
   }
 
-  @media ${({ theme }) => theme.media.hsm} {
+  @include minHSM {
     padding: 1.5vh 2vh;
     margin-top: 2.7vh;
   }
 
-  @media ${({ theme }) => theme.media.hsd} {
+  @include minHSD {
     padding: 7px 10px;
     font-size: 14px;
     max-width: 100%;
   }
-`
+}
 
-export const AddIcon = styled(SvgIcon)`
+.addIcon {
   font-size: 2.5vh;
   margin-right: 5px;
-  @media ${({ theme }) => theme.media.hsd} {
+  @include minHSD {
     font-size: 12px;
   }
-`
+}
 
-export const ControlsWrapper = styled.div`
+.controls {
   display: flex;
   align-items: center;
   margin-top: 2vh;
   background-color: #fff;
   border-radius: 14px;
   max-width: 175px;
-  @media ${({ theme }) => theme.media.hxs} {
+  @include minHSX {
     margin-top: 10px;
   }
-`
-
-export const DeleteBotton = styled(IconButton)`
-  ${buttonsStyles}
-  font-size: 16px;
-`
-
-export const ShareBotton = styled(IconButton)`
-  ${buttonsStyles}
-  font-size: 16px;
-`
-
-export const CopyInfoBotton = styled(IconButton)`
-  ${buttonsStyles}
-  font-size: 16px;
-`
+}

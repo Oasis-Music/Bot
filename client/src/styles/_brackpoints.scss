@@ -1,4 +1,18 @@
+$hsm: 550px;
+$hsd: 600px;
 $hxs: 700px;
+
+@mixin minHSM {
+  @media (min-height: $hsm) {
+    @content;
+  }
+}
+
+@mixin minHSD {
+  @media (min-height: $hsd) {
+    @content;
+  }
+}
 
 @mixin minHSX {
   @media (min-height: $hxs) {

@@ -9,7 +9,7 @@ import { Counter } from './Counter'
 import { useTranslation } from 'react-i18next'
 import type { Soundtrack } from '@/apollo/cache/types'
 
-import { Container } from './Home.styled'
+import styles from './Home.module.scss'
 
 const ITEMS_PER_PAGE = 15
 
@@ -68,7 +68,7 @@ export default function Home() {
   }
 
   return (
-    <Container>
+    <div className={styles.container}>
       <NowPlaying
         trackCounter={tracksNum}
         onTrackAttach={onTrackAttach}
@@ -84,6 +84,6 @@ export default function Home() {
         error={error}
         onFetchNextPage={fetchNextPage}
       />
-    </Container>
+    </div>
   )
 }
