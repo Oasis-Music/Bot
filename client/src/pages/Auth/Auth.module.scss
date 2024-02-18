@@ -1,17 +1,12 @@
-import styled from 'styled-components'
-import Button from '@/components/ui/Button'
-import patternImg from '@/assets/rastr/strawberry-pattern.jpeg'
-import { Link } from 'react-router-dom'
-
-export const Container = styled.div`
-  background-image: url(${patternImg});
+.container {
+  background-image: url('@/assets/rastr/strawberry-pattern.jpeg');
   height: 100vh;
   display: flex;
   color: #fff;
   flex-direction: column;
-`
+}
 
-export const MainBox = styled.div`
+.inner {
   box-sizing: border-box;
   margin-top: auto;
   background-color: #03141d;
@@ -19,44 +14,49 @@ export const MainBox = styled.div`
   border-top-right-radius: 50px;
   border-top: 2px solid #c01037;
   padding: 6vh 20px 4vh 20px;
-`
+}
 
-export const HeadTitle = styled.h1`
+.title {
   padding-left: 3px;
-  font-size: 3.5vh;
+  font-size: 3.7vh;
   margin: 0;
   display: flex;
   align-items: center;
   margin-bottom: 5vh;
   margin-left: 10px;
   text-align: start;
-`
+}
 
-export const EmojiImg = styled.img`
+.emojiImg {
   width: 30px;
   margin-left: 5px;
-`
+}
 
-export const SubmitBotton = styled(Button)`
+.submitButton {
   width: 100%;
   max-width: 240px;
+  line-height: 24px;
   outline: none;
   display: block;
   margin: 0 auto;
   margin-bottom: 7px;
-`
+}
 
-export const ErrorMessage = styled.p<{ $err: boolean }>`
+.errorMessage {
   height: 15px;
   font-size: 14px;
   margin: 0;
   text-align: center;
   color: #ff182e;
   transition: opacity 0.2s ease-in-out;
-  opacity: ${({ $err }) => ($err ? 1 : 0)};
-`
+  opacity: 0;
+}
 
-export const TermsTitle = styled.p`
+.showError {
+  opacity: 1;
+}
+
+.terms {
   font-size: 14px;
   font-weight: 500;
   text-align: center;
@@ -64,11 +64,11 @@ export const TermsTitle = styled.p`
   margin-top: 1vh;
   & > a {
     text-decoration: none;
-    color: ${({ theme }) => theme.colors.primary};
+    color: var(--main-color);
   }
-`
+}
 
-export const ReportLink = styled(Link)`
+.report {
   display: block;
   text-align: center;
   outline: none;
@@ -79,6 +79,6 @@ export const ReportLink = styled(Link)`
   text-decoration: underline;
   -webkit-tap-highlight-color: transparent;
   &:active {
-    color: ${({ theme }) => theme.colors.primary};
+    color: var(--main-color);
   }
-`
+}

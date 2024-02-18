@@ -1,21 +1,14 @@
 import React, { useState } from 'react'
+import clsx from 'clsx'
+import Button from '@/components/ui/Button'
+import handv_img from '@/assets/rastr/hand-v.png'
 import { useTranslation } from 'react-i18next'
 import { Link, redirect } from 'react-router-dom'
 import { UserMutations } from '@/apollo/cache/mutations'
 import { useAuthorizeUserLazyQuery } from '@/graphql/user/_gen_/authorizeUser.query'
 import { routeNames } from '@/utils/history'
-import handv_img from '@/assets/rastr/hand-v.png'
 
-import {
-  Container,
-  MainBox,
-  HeadTitle,
-  EmojiImg,
-  SubmitBotton,
-  ErrorMessage,
-  ReportLink,
-  TermsTitle
-} from './Auth.styled'
+import styles from './Auth.module.scss'
 
 export default function Auth() {
   const { t } = useTranslation()
@@ -52,25 +45,32 @@ export default function Auth() {
   }
 
   return (
-    <Container>
-      <MainBox>
-        <HeadTitle>
+    <div className={styles.container}>
+      <div className={styles.inner}>
+        <h1 className={styles.title}>
           <span>{t('pages.auth.welcome')}</span>
-          <EmojiImg src={handv_img} alt="смайлик - мир" />
-        </HeadTitle>
-        <SubmitBotton color="secondary" loading={loading} onClick={handleSubmitClick}>
+          <img src={handv_img} alt="смайлик - мир" className={styles.emojiImg} />
+        </h1>
+        <Button
+          color="secondary"
+          loading={loading}
+          onClick={handleSubmitClick}
+          className={styles.submitButton}
+        >
           {t('pages.auth.enterBtn')}
-        </SubmitBotton>
-        <ErrorMessage $err={!!error}>{error}</ErrorMessage>
-        <TermsTitle>
+        </Button>
+        <p className={clsx(styles.errorMessage, !!error && styles.showError)}>{error}</p>
+        <p className={styles.terms}>
           {t('pages.auth.terms', {
             btn: t('pages.auth.enterBtn')
           })}
           <Link to={'#'}>{t('pages.auth.termsLink')}</Link>
           &nbsp;Oasis
-        </TermsTitle>
-        <ReportLink to={'#'}>{t('pages.auth.report')}</ReportLink>
-      </MainBox>
-    </Container>
+        </p>
+        <Link to={'#'} className={styles.report}>
+          {t('pages.auth.report')}
+        </Link>
+      </div>
+    </div>
   )
 }
