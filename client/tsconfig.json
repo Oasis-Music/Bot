@@ -14,6 +14,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "useUnknownInCatchVariables": true,
     "jsx": "react-jsx",
     "types": ["vite/client", "vite-plugin-svgr/client"],
     "paths": {
