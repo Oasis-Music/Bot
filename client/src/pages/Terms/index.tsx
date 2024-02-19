@@ -1,19 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const Container = styled.div`
-  padding: 0 10px;
-`
-
-const Title = styled.h2``
+import styles from './Terms.module.scss'
 
 const APP_NAME = 'Oasis'
 
 export default function Terms() {
   return (
-    <Container>
+    <div className={styles.container}>
       <h1>Terms of Use</h1>
-      <Title>1. Introduction</Title>
+      <h2>1. Introduction</h2>
       <p>
         Please read these Terms of Use (next «Terms») carefully as they govern your use of (which
         includes access to) {APP_NAME} personalized services for streaming music and other content,
@@ -30,6 +24,6 @@ export default function Terms() {
         you do not agree to these Terms, then you must not use the {APP_NAME} Service or access any
         Content.
       </p>
-    </Container>
+    </div>
   )
 }

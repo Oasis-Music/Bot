@@ -1,18 +1,12 @@
 import React from 'react'
-import styled from 'styled-components'
 import { LangSwitcher } from '@/components/LangSwitcher'
 
-const Wrapper = styled.div`
-  padding: 10%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+import styles from './Settings.module.scss'
 
 export default function Settings() {
   return (
-    <Wrapper>
+    <div className={styles.container}>
       <LangSwitcher />
-    </Wrapper>
+    </div>
   )
 }
