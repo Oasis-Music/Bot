@@ -1,20 +1,14 @@
 import React from 'react'
+import clsx from 'clsx'
 import PlayIcon from '@/assets/svg/play.svg?react'
 import PauseIcon from '@/assets/svg/pause.svg?react'
 import ArrowAltIcon from '@/assets/svg/arrow-alt.svg?react'
 import RepeatIcon from '@/assets/svg/repeat.svg?react'
 import RandomIcon from '@/assets/svg/random.svg?react'
 import { SvgIcon } from '@/components/ui/SvgIcon'
-import {
-  Container,
-  PlayButtonBox,
-  PlayButton,
-  PrevButton,
-  NextButton,
-  PrevArrowIcon,
-  LoopButton,
-  RandomButton
-} from './Controls.styled'
+import { IconButton } from '@/components/ui/IconButton'
+
+import styles from './Controls.module.scss'
 
 interface ControlsProps {
   isPlay: boolean
@@ -40,36 +34,48 @@ export function Controls({
   onRandom
 }: ControlsProps) {
   return (
-    <Container>
-      <RandomButton $random={withRandom} onClick={onRandom} withoutShadow>
+    <div className={styles.container}>
+      <IconButton
+        onClick={onRandom}
+        className={clsx(styles.subControl, withRandom && styles.subControlActive)}
+      >
         <SvgIcon>
           <RandomIcon />
         </SvgIcon>
-      </RandomButton>
+      </IconButton>
       {/*  */}
-      <PrevButton withoutShadow onClick={onPlayPrev}>
-        <PrevArrowIcon>
+      <IconButton onClick={onPlayPrev} className={styles.control}>
+        <SvgIcon className={styles.prevArrowIcon}>
           <ArrowAltIcon />
-        </PrevArrowIcon>
-      </PrevButton>
+        </SvgIcon>
+      </IconButton>
       {/*  */}
-      <PlayButtonBox>
-        <PlayButton disabled={!readyForPlay} $isPlay={isPlay} withoutShadow onClick={onPlayPause}>
-          <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
-        </PlayButton>
-      </PlayButtonBox>
+      <div className={styles.playButtonWrapper}>
+        <IconButton
+          disabled={!readyForPlay}
+          onClick={onPlayPause}
+          className={clsx(styles.playButton)}
+        >
+          <SvgIcon className={clsx(styles.playIcon, !isPlay && styles.playIconPaused)}>
+            {isPlay ? <PauseIcon /> : <PlayIcon />}
+          </SvgIcon>
+        </IconButton>
+      </div>
       {/*  */}
-      <NextButton withoutShadow onClick={onPlayNext}>
+      <IconButton onClick={onPlayNext} className={styles.control}>
         <SvgIcon>
           <ArrowAltIcon />
         </SvgIcon>
-      </NextButton>
+      </IconButton>
       {/*  */}
-      <LoopButton $loop={withLoop} onClick={onLoop} withoutShadow>
+      <IconButton
+        onClick={onLoop}
+        className={clsx(styles.subControl, withLoop && styles.subControlActive)}
+      >
         <SvgIcon>
           <RepeatIcon />
         </SvgIcon>
-      </LoopButton>
-    </Container>
+      </IconButton>
+    </div>
   )
 }

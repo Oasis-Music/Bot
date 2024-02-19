@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react'
-import styled from 'styled-components'
 import { Alert } from './modals/Alert'
 import { Feedback } from './modals/Feedback'
 import { Info } from './Info'
@@ -12,43 +11,21 @@ import { useWindowRatio } from '@/hooks'
 import { createTrackStepsSchema } from '@/utils/validationSchemas'
 import { useCreateSoundtrackMutation } from '@/graphql/soundtrack/_gen_/createSoundtrack.mutation'
 
+import styles from './Upload.module.scss'
+
 const enum Step {
   INFO = 0,
   COVER,
   AUDIO
 }
 
-interface WrapperStyles {
-  $shift: number
+function Slide({ children, width }: { children: React.ReactNode; width: number }) {
+  return (
+    <div className={styles.slide} style={{ width: width + 'px' }}>
+      {children}
+    </div>
+  )
 }
-
-const Container = styled.div`
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
-`
-
-const Wrapper = styled.div<WrapperStyles>`
-  display: flex;
-  transform: ${({ $shift }) => `translate3d(-${$shift}px, 0, 0)`};
-  transition: transform 0.3s;
-`
-
-interface slideStyles {
-  $width: number
-  $active?: boolean
-}
-
-const Slide = styled.div<slideStyles>`
-  width: ${({ $width }) => `${$width}px`};
-  min-height: 100vh;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  background-color: #101318;
-  & > div {
-    visibility: ${({ $active }) => ($active ? 'visible' : 'hidden')};
-  }
-`
 
 interface FormValues {
   title: string
@@ -149,7 +126,7 @@ export default function Upload() {
   }
 
   return (
-    <Container>
+    <div className={styles.container}>
       <Formik
         validateOnMount
         onSubmit={handleSubmit}
@@ -164,14 +141,19 @@ export default function Upload() {
       >
         {() => (
           <Form>
-            <Wrapper $shift={step * window.innerWidth}>
-              <Slide $active={Step.INFO === step} $width={windowWidth}>
+            <div
+              className={styles.inner}
+              style={{
+                transform: `translate3d(-${step * window.innerWidth}px, 0, 0)`
+              }}
+            >
+              <Slide width={windowWidth}>
                 <Info onNextStep={slideNext} onAlert={handleAlertInvoke} />
               </Slide>
-              <Slide $active={Step.COVER === step} $width={windowWidth}>
+              <Slide width={windowWidth}>
                 <Cover onPrevStep={slidePrev} onNextStep={slideNext} onAlert={handleAlertInvoke} />
               </Slide>
-              <Slide $active={Step.AUDIO === step} $width={windowWidth}>
+              <Slide width={windowWidth}>
                 <Audio
                   loading={loading}
                   onPrevStep={slidePrev}
@@ -179,7 +161,7 @@ export default function Upload() {
                   onAttachChecked={handleAttachCheck}
                 />
               </Slide>
-            </Wrapper>
+            </div>
           </Form>
         )}
       </Formik>
@@ -190,6 +172,6 @@ export default function Upload() {
         onRetry={handleFeedbackErr}
       />
       <Alert isOpen={isAlertOpen} onStay={handleAlertStay} onLeave={handleAlertLeave} />
-    </Container>
+    </div>
   )
 }

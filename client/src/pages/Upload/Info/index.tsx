@@ -1,60 +1,19 @@
 import React, { useRef } from 'react'
-import styled from 'styled-components'
 import Button from '@/components/ui/Button'
 import blushEmoji from '@/assets/rastr/blush.png'
 import { TextInput } from '@/components/ui/TextInput'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
-import { BackLinkButton } from '../StepControls'
+import { RedirectButton } from '../common/RedirectButton'
 import { routeNames } from '@/utils/history'
 import { useNavigate } from 'react-router-dom'
+
+import styles from './Info.module.scss'
 
 interface InfoProps {
   onNextStep(): void
   onAlert(): void
 }
-
-const Container = styled.div`
-  color: #fff;
-  padding: 20px 10px 0 10px;
-`
-
-const StepTitle = styled.h2`
-  margin: 0;
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  text-align: start;
-`
-
-const EmojiImg = styled.img`
-  width: 30px;
-  margin-left: 5px;
-`
-
-const Title = styled.p`
-  color: #ababab;
-  margin: 0;
-  margin-left: 10px;
-  margin-bottom: 40px;
-`
-
-const InputWrapper = styled.div`
-  padding: 0 5px;
-  margin-bottom: 20px;
-`
-
-const NextBotton = styled(Button)`
-  && {
-    width: 100%;
-    max-width: 210px;
-    outline: none;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 17px;
-  }
-`
 
 interface FieldProps {
   title: string
@@ -84,25 +43,26 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
   }
 
   return (
-    <Container>
-      <StepTitle>
+    <div className={styles.container}>
+      <h2 className={styles.stepTitle}>
         <span>{t('pages.upload.info.title')}</span>
-        <EmojiImg src={blushEmoji} alt={t('pages.upload.info.emojiAlt')} />
-      </StepTitle>
-      <Title>{t('pages.upload.info.subTitle')}</Title>
-      <InputWrapper>
+        <img src={blushEmoji} alt={t('pages.upload.info.emojiAlt')} className={styles.emojiImg} />
+      </h2>
+      <p className={styles.subTitle}>{t('pages.upload.info.subTitle')}</p>
+      <div className={styles.inner}>
         <TextInput name="title" placeholder={t('pages.upload.info.titleField')} />
         <TextInput name="author" placeholder={t('pages.upload.info.authorField')} />
-      </InputWrapper>
-      <NextBotton
+      </div>
+      <Button
         ref={ref}
         disabled={!!(errors.title || errors.author)}
         color="secondary"
         onClick={handleContinueClick}
+        className={styles.nextButton}
       >
         {t('pages.upload.info.nextBotton')}
-      </NextBotton>
-      <BackLinkButton onClick={handlePageLeave}>{t('pages.upload.info.link')}</BackLinkButton>
-    </Container>
+      </Button>
+      <RedirectButton onClick={handlePageLeave}>{t('pages.upload.info.link')}</RedirectButton>
+    </div>
   )
 }

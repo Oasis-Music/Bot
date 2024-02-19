@@ -1,8 +1,4 @@
-import { ITheme } from '../utils/theme'
-
-declare module 'styled-components' {
-  export interface DefaultTheme extends ITheme {}
-}
+import { Howl } from 'howler'
 
 declare module 'howler' {
   interface Howl {

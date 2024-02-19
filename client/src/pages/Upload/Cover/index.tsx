@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import clsx from 'clsx'
 import { SvgIcon } from '@/components/ui/SvgIcon'
 import DeleteIcon from '@/assets/svg/trash.svg?react'
 import { StepControls } from '../StepControls'
@@ -6,23 +7,34 @@ import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import {
-  Container,
-  StepTitle,
-  Title,
-  ContainerUpload,
-  Preview,
-  Plug,
-  PlugIcon,
-  PlugInfo,
-  ErrorMessage,
-  DeleteButton
-} from './Cover.styled'
+import { IconButton } from '@/components/ui/IconButton'
+
+import styles from './Cover.module.scss'
 
 interface CoverProps {
   onNextStep(): void
   onPrevStep(): void
   onAlert(): void
+}
+
+interface containerStyles {
+  isError: boolean
+  isDragAccept: boolean
+  isDragReject: boolean
+}
+
+const getColor = (props: containerStyles) => {
+  if (props.isDragReject) {
+    return '#ff1744'
+  }
+
+  if (props.isDragAccept) {
+    return '#00e676'
+  }
+
+  if (props.isError) {
+    return '#ff1744'
+  }
 }
 
 const MAX_COVER_SIZE = 700
@@ -100,7 +112,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
     setDropError(dropzoneCodeToMsg(code))
   }
 
-  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+  const { getRootProps, getInputProps, isDragAccept, isDragReject } = useDropzone({
     accept: {
       'image/jpeg': ['.jpg']
     },
@@ -122,32 +134,35 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
   }
 
   return (
-    <Container>
-      <StepTitle>{t('pages.upload.cover.title')}</StepTitle>
-      <Title>{t('pages.upload.cover.subTitle')}</Title>
-      <ContainerUpload
-        {...{
-          isDragActive,
-          isDragAccept,
-          isDragReject
-        }}
+    <div className={styles.container}>
+      <h2 className={styles.stepTitle}>{t('pages.upload.cover.title')}</h2>
+      <p className={styles.subTitle}>{t('pages.upload.cover.subTitle')}</p>
+      <div
         {...getRootProps()}
-        isError={Boolean(dropError)}
-        $droped={!!mainPhoto?.size}
+        className={styles.dropzone}
+        style={{
+          borderStyle: mainPhoto?.size ? 'solid' : 'dashed',
+          borderColor: getColor({
+            isDragAccept,
+            isDragReject,
+            isError: !!dropError
+          })
+        }}
       >
         <input {...getInputProps()} />
         {mainPhoto ? (
-          <Preview
+          <img
             src={mainPhoto.preview}
             alt={t('pages.upload.cover.previewAlt')}
             onLoad={() => URL.revokeObjectURL(mainPhoto.preview)}
+            className={styles.preview}
           />
         ) : (
-          <Plug>
-            <PlugIcon>
+          <div className={styles.plug}>
+            <SvgIcon className={styles.plugIcon}>
               <CoverPlaceholderIcon />
-            </PlugIcon>
-            <PlugInfo>
+            </SvgIcon>
+            <div className={styles.plugInfo}>
               <p>{t('pages.upload.cover.dropzone.title')}</p>
               <ul>
                 <li>
@@ -158,22 +173,22 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
                 <li>{t('pages.upload.cover.dropzone.ext')}</li>
                 <li>{t('pages.upload.cover.dropzone.dimension')}</li>
               </ul>
-            </PlugInfo>
-          </Plug>
+            </div>
+          </div>
         )}
         {mainPhoto && (
-          <DeleteButton withoutShadow onClick={handleRemoveClick}>
+          <IconButton onClick={handleRemoveClick} className={styles.deleteButton}>
             <SvgIcon>
               <DeleteIcon />
             </SvgIcon>
-          </DeleteButton>
+          </IconButton>
         )}
-      </ContainerUpload>
-      <ErrorMessage $err={!!dropError}>
+      </div>
+      <p className={clsx(styles.errorMessage, !!dropError && styles.showError)}>
         {t(dropError, {
           size: MAX_COVER_SIZE
         })}
-      </ErrorMessage>
+      </p>
       <StepControls
         disabled={!!dropError}
         nextText={t(
@@ -183,6 +198,6 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
         onNext={onNextStep}
         onAlert={onAlert}
       />
-    </Container>
+    </div>
   )
 }

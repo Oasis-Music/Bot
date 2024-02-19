@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Line } from './Counter.styled'
+import styles from './Counter.module.scss'
 
 interface CounterProps {
   text: string
@@ -8,12 +8,12 @@ interface CounterProps {
 
 export function Counter({ text, counter }: CounterProps) {
   return (
-    <Container>
+    <div className={styles.container}>
       <span>{text}</span>
-      <Line />
+      <div className={styles.line} />
       <span>
         {counter}/{import.meta.env.VITE_APP_MAX_TRACK_AVAILABLE}
       </span>
-    </Container>
+    </div>
   )
 }

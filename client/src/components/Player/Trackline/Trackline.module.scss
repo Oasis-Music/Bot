@@ -1,0 +1,20 @@
+.waveWrapper {
+  margin: 1vh 0;
+  margin-top: 4vh;
+  padding: 0 15px;
+
+  @include minHSX {
+    margin: 13px 0;
+    margin-top: 35px;
+  }
+}
+
+.timings {
+  display: flex;
+  margin: 0;
+  padding: 0 19px;
+  color: #b1b1b1;
+  font-weight: 500;
+  font-size: 14px;
+  justify-content: space-between;
+}

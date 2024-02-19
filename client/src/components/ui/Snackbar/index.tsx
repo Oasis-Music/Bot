@@ -1,65 +1,13 @@
 import React, { useEffect } from 'react'
-import styled, { css } from 'styled-components'
-import { SvgIcon } from '@/components/ui/SvgIcon'
+import clsx from 'clsx'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
 import TimesIcon from '@/assets/svg/times-circle.svg?react'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import { useReactiveVar } from '@apollo/client'
 import { UiMutations } from '@/apollo/cache/mutations'
 import { isSnackbarOpenVar, snackbarEventVar } from '@/apollo/cache/variables'
 
-type eventType = 'error' | 'success'
-
-const Container = styled.div<{ $open: boolean }>`
-  position: fixed;
-  background-color: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(5px);
-  display: flex;
-  align-items: center;
-  z-index: 1000;
-  width: 92%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: ${({ $open }) => ($open ? '1' : '0')};
-  bottom: ${({ $open }) => ($open ? '17%' : '-50%')};
-  color: #1e1e1e;
-  border-radius: 8px;
-  padding: 12px 15px;
-  font-weight: 500;
-  transition: all 0.2s;
-  & > p {
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`
-
-const IconWrapper = styled.div<{ $type: eventType }>`
-  padding: 7px;
-  border-radius: 8px;
-  margin-right: 10px;
-  ${({ $type }) => {
-    switch ($type) {
-      case 'success':
-        return css`
-          background-color: #80d680;
-        `
-      case 'error':
-        return css`
-          background-color: #fc4343;
-        `
-      default:
-        return css`
-          color: #bfbfbf;
-        `
-    }
-  }}
-`
-
-const SideIcon = styled(SvgIcon)`
-  display: block;
-  color: #f0f0f0;
-`
+import styles from './Snackbar.module.scss'
 
 const NOTIFICATION_ICON = {
   success: CheckIcon,
@@ -69,12 +17,6 @@ const NOTIFICATION_ICON = {
 export function Snackbar() {
   const isOpen = useReactiveVar(isSnackbarOpenVar)
   const event = useReactiveVar(snackbarEventVar)
-
-  const Icon = NOTIFICATION_ICON[event.type]
-
-  const handleSnackbarClick = () => {
-    UiMutations.closeSnackbar()
-  }
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -86,16 +28,33 @@ export function Snackbar() {
     }
   }, [isOpen])
 
+  const Icon = NOTIFICATION_ICON[event.type]
+
+  const handleSnackbarClick = () => {
+    UiMutations.closeSnackbar()
+  }
+
+  let iconStyleClass = styles.default
+
+  switch (event.type) {
+    case 'success':
+      iconStyleClass = styles.success
+      break
+    case 'error':
+      iconStyleClass = styles.error
+      break
+  }
+
   return (
-    <Container $open={isOpen} onClick={handleSnackbarClick}>
+    <div className={clsx(styles.container, isOpen && styles.open)} onClick={handleSnackbarClick}>
       <div>
-        <IconWrapper $type={event.type}>
-          <SideIcon>
+        <div className={clsx(styles.iconWrapper, iconStyleClass)}>
+          <SvgIcon className={styles.icon}>
             <Icon />
-          </SideIcon>
-        </IconWrapper>
+          </SvgIcon>
+        </div>
       </div>
       <p>{event.message}</p>
-    </Container>
+    </div>
   )
 }

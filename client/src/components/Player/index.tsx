@@ -1,12 +1,14 @@
 import React, { forwardRef } from 'react'
-import styled, { css } from 'styled-components'
+import clsx from 'clsx'
+import Trackline from './Trackline'
 import { TopControls } from './TopControls'
 import { Details } from './Details'
-import Trackline from './Trackline'
 import { Controls } from './Controls'
 import { timeFormater } from '@/utils/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
+
+import styles from './Player.module.scss'
 
 interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string
@@ -21,28 +23,6 @@ interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   onLoop(): void
   onRandom(): void
 }
-
-interface containerStylesProps {
-  $open: boolean
-}
-
-const Container = styled.div<containerStylesProps>`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  left: 0;
-  height: 100%;
-  background-color: #101318;
-  overflow-y: auto;
-  z-index: 999;
-  transform: translateY(100%);
-  transition: transform 0.3s;
-  ${({ $open }) =>
-    $open &&
-    css`
-      transform: translateY(0);
-    `}
-`
 
 const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   {
@@ -63,7 +43,7 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
-    <Container $open={isOpen}>
+    <div className={clsx(styles.player, isOpen && styles.open)}>
       <TopControls id={currentTrack.id} onClose={onClose} />
       <Details
         title={currentTrack.title}
@@ -86,7 +66,7 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         onLoop={onLoop}
         onRandom={onRandom}
       />
-    </Container>
+    </div>
   )
 }
 

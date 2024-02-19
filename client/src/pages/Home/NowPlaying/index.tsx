@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
 import PlusIcon from '@/assets/svg/plus.svg?react'
 import TrashIcon from '@/assets/svg/trash.svg?react'
 import ShareIcon from '@/assets/svg/share.svg?react'
 import CopyIcon from '@/assets/svg/copy.svg?react'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
+import Button from '@/components/ui/Button'
+import { SvgIcon } from '@/components/ui/SvgIcon'
+import { IconButton } from '@/components/ui/IconButton'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar, userVar } from '@/apollo/cache/variables'
@@ -13,19 +15,7 @@ import { UserMutations, UiMutations } from '@/apollo/cache/mutations'
 import { useAttachSoundtrackMutation } from '@/graphql/user/_gen_/attachSoundtrack.mutauion'
 import { useUnattachSoundtrackMutation } from '@/graphql/user/_gen_/unattachSoundtrack.mutation'
 
-import {
-  InnerContainer,
-  ImageWrapper,
-  Details,
-  TrackTitle,
-  AuthorTitle,
-  SaveBotton,
-  AddIcon,
-  DeleteBotton,
-  ShareBotton,
-  ControlsWrapper,
-  CopyInfoBotton
-} from './NowPlaying.styled'
+import styles from './NowPlaying.module.scss'
 
 interface NowPlayingProps {
   trackCounter?: number
@@ -115,49 +105,50 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
 
   return (
     <div>
-      <InnerContainer $isAdded={track.attached}>
-        <div>
-          <ImageWrapper>
+      <div className={styles.inner}>
+        <div className={styles.imageWrapper}>
+          <div>
             <ImagePlaceholder src={track.coverURL || ''} altText={track.title} />
-          </ImageWrapper>
+          </div>
         </div>
-        <Details>
-          <TrackTitle>{track.title}</TrackTitle>
-          <AuthorTitle>{track.author}</AuthorTitle>
+        <div className={styles.details}>
+          <h1 className={styles.title}>{track.title}</h1>
+          <p className={styles.author}>{track.author}</p>
           {track.attached ? (
-            <ControlsWrapper>
-              <DeleteBotton onClick={unattachHandler}>
+            <div className={styles.controls}>
+              <IconButton onClick={unattachHandler} className={styles.button}>
                 <SvgIcon>
                   <TrashIcon />
                 </SvgIcon>
-              </DeleteBotton>
-              <CopyInfoBotton onClick={onCopyTrackInfo}>
+              </IconButton>
+              <IconButton onClick={onCopyTrackInfo} className={styles.button}>
                 <SvgIcon>{wasCopied ? <CheckIcon /> : <CopyIcon />}</SvgIcon>
-              </CopyInfoBotton>
-              <ShareBotton>
+              </IconButton>
+              <IconButton className={styles.button}>
                 <SvgIcon>
                   <ShareIcon />
                 </SvgIcon>
-              </ShareBotton>
-            </ControlsWrapper>
+              </IconButton>
+            </div>
           ) : (
-            <SaveBotton
+            <Button
               disabled={!track.id}
               loading={attachMeta.loading}
               fullWidth
               color="secondary"
               onClick={attachHandler}
+              className={styles.saveBotton}
               startIcon={
-                <AddIcon>
+                <SvgIcon className={styles.addIcon}>
                   <PlusIcon />
-                </AddIcon>
+                </SvgIcon>
               }
             >
               {t('common.add')}
-            </SaveBotton>
+            </Button>
           )}
-        </Details>
-      </InnerContainer>
+        </div>
+      </div>
     </div>
   )
 }

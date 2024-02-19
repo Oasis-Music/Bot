@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react'
-import { Container, WaveWrapper, TimeBox } from './Trackline.styled'
+import styles from './Trackline.module.scss'
 
 interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string
@@ -11,15 +11,15 @@ const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> 
   waveContainerRef
 ) => {
   return (
-    <Container>
-      <WaveWrapper>
+    <div>
+      <div className={styles.waveWrapper}>
         <div ref={waveContainerRef} />
-      </WaveWrapper>
-      <TimeBox>
+      </div>
+      <div className={styles.timings}>
         <span>{currentTime}</span>
         <span>{duration}</span>
-      </TimeBox>
-    </Container>
+      </div>
+    </div>
   )
 }
 

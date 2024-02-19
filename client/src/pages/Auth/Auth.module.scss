@@ -1,0 +1,84 @@
+.container {
+  background-image: url('@/assets/rastr/strawberry-pattern.jpeg');
+  height: 100vh;
+  display: flex;
+  color: #fff;
+  flex-direction: column;
+}
+
+.inner {
+  box-sizing: border-box;
+  margin-top: auto;
+  background-color: #03141d;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  border-top: 2px solid #c01037;
+  padding: 6vh 20px 4vh 20px;
+}
+
+.title {
+  padding-left: 3px;
+  font-size: 3.7vh;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5vh;
+  margin-left: 10px;
+  text-align: start;
+}
+
+.emojiImg {
+  width: 30px;
+  margin-left: 5px;
+}
+
+.submitButton {
+  width: 100%;
+  max-width: 240px;
+  line-height: 24px;
+  outline: none;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 7px;
+}
+
+.errorMessage {
+  height: 15px;
+  font-size: 14px;
+  margin: 0;
+  text-align: center;
+  color: #ff182e;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0;
+}
+
+.showError {
+  opacity: 1;
+}
+
+.terms {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 4vh;
+  margin-top: 1vh;
+  & > a {
+    text-decoration: none;
+    color: var(--main-color);
+  }
+}
+
+.report {
+  display: block;
+  text-align: center;
+  outline: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  -webkit-tap-highlight-color: transparent;
+  &:active {
+    color: var(--main-color);
+  }
+}

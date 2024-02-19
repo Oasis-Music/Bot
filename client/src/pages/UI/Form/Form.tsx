@@ -1,44 +1,33 @@
 import React from 'react'
-import styled from 'styled-components'
 import { TextInput } from '@/components/ui/TextInput'
 import { Checkbox } from '@/components/ui/Checkbox'
 
-const Container = styled.section``
-
-const Box = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-
-const InputWrapper = styled.div`
-  flex-basis: 25%;
-  padding: 20px 10px;
-`
+import styles from './Form.module.scss'
 
 export function TextInputs() {
   return (
-    <Container>
+    <div>
       <h4>Text Inputs:</h4>
-      <Box>
-        <InputWrapper>
+      <div className={styles.box}>
+        <div className={styles.inputWrapper}>
           <TextInput name="simpleInput" placeholder="Simple Input" />
-        </InputWrapper>
-        <InputWrapper>
+        </div>
+        <div className={styles.inputWrapper}>
           <TextInput name="errorInput" placeholder="With Error Input" />
-        </InputWrapper>
-        <InputWrapper>
+        </div>
+        <div className={styles.inputWrapper}>
           <TextInput name="price" placeholder="Number Input" type="number" />
-        </InputWrapper>
-        <InputWrapper>
+        </div>
+        <div className={styles.inputWrapper}>
           <TextInput name="price" placeholder="Disabled" disabled />
-        </InputWrapper>
-        <InputWrapper>
+        </div>
+        <div className={styles.inputWrapper}>
           <TextInput name="password" type="password" placeholder="Password" />
-        </InputWrapper>
-        <InputWrapper>
+        </div>
+        <div className={styles.inputWrapper}>
           <TextInput name="simpleInput" placeholder="Multiline Input" multiline rows={5} />
-        </InputWrapper>
-      </Box>
+        </div>
+      </div>
       <h4>Checkbox:</h4>
       <div>
         <Checkbox name="baseCheckbox" />
@@ -46,6 +35,6 @@ export function TextInputs() {
       <div style={{ color: '#fff' }}>
         <Checkbox name="baseCheckbox" label="with label" />
       </div>
-    </Container>
+    </div>
   )
 }

@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
+import clsx from 'clsx'
 import AudioPlayer from '@/player'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
 import AudioPlaceholderIcon from '@/assets/svg/audio_placeholder.svg?react'
+import { SvgIcon } from '@/components/ui/SvgIcon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
-import {
-  ContainerUpload,
-  Plug,
-  PlugIconBox,
-  PlugIcon,
-  PlugInfo,
-  ErrorMessage
-} from './Dropzone.styled'
+
+import styles from './Dropzone.module.scss'
 
 interface DropzoneProps {
   audio: File | null
@@ -31,6 +27,26 @@ function dropzoneCodeToMsg(code: string): string {
       return 'pages.upload.audio.errors.tooLarge'
     default:
       return 'pages.upload.audio.errors.shared'
+  }
+}
+
+interface containerStyles {
+  isError: boolean
+  isDragAccept: boolean
+  isDragReject: boolean
+}
+
+const getColor = (props: containerStyles) => {
+  if (props.isDragReject) {
+    return '#ff1744'
+  }
+
+  if (props.isDragAccept) {
+    return '#00e676'
+  }
+
+  if (props.isError) {
+    return '#ff1744'
   }
 }
 
@@ -80,7 +96,7 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
     onSetAudio(null)
   }
 
-  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+  const { getRootProps, getInputProps, isDragAccept, isDragReject } = useDropzone({
     accept: {
       'audio/mpeg': ['.mp3']
     },
@@ -93,21 +109,25 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
 
   return (
     <>
-      <ContainerUpload
-        {...{
-          isDragActive,
-          isDragAccept,
-          isDragReject
-        }}
+      <div
         {...getRootProps()}
-        isError={Boolean(dropError)}
+        className={styles.dropzone}
+        style={{
+          borderColor: getColor({
+            isDragAccept,
+            isDragReject,
+            isError: !!dropError
+          })
+        }}
       >
         <input {...getInputProps()} />
-        <Plug>
-          <PlugIconBox>
-            <PlugIcon>{audio?.size ? <CheckIcon /> : <AudioPlaceholderIcon />}</PlugIcon>
-          </PlugIconBox>
-          <PlugInfo>
+        <div className={styles.plug}>
+          <div className={styles.plugIconBox}>
+            <SvgIcon className={styles.plugIcon}>
+              {audio?.size ? <CheckIcon /> : <AudioPlaceholderIcon />}
+            </SvgIcon>
+          </div>
+          <div className={styles.plugInfo}>
             <p>{t('pages.upload.audio.dropzone.title')}</p>
             <ul>
               <li>
@@ -117,14 +137,14 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
               </li>
               <li>{t('pages.upload.audio.dropzone.ext')}</li>
             </ul>
-          </PlugInfo>
-        </Plug>
-      </ContainerUpload>
-      <ErrorMessage $err={!!dropError}>
+          </div>
+        </div>
+      </div>
+      <p className={clsx(styles.errorMessage, !!dropError && styles.showError)}>
         {t(dropError, {
           size: MAX_AUDIO_SIZE
         })}
-      </ErrorMessage>
+      </p>
     </>
   )
 }

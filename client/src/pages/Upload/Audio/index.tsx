@@ -1,24 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Dropzone } from './Dropzone'
-import { SvgIcon } from '@/components/ui/SvgIcon'
-import { StepControls } from '../StepControls'
 import PlayIcon from '@/assets/svg/play.svg?react'
 import PauseIcon from '@/assets/svg/pause.svg?react'
-import { Checkbox } from '@/components/ui/Checkbox'
 import AudioPlayer from '@/player'
+import { Dropzone } from './Dropzone'
+import { IconButton } from '@/components/ui/IconButton'
+import { SvgIcon } from '@/components/ui/SvgIcon'
+import { StepControls } from '../StepControls'
+import { Checkbox } from '@/components/ui/Checkbox'
 import { timeFormater } from '@/utils/helpers'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
-import {
-  Container,
-  Title,
-  StepTitle,
-  WaveWrapper,
-  TimeBox,
-  PlayBottonWrapper,
-  PlayBotton,
-  AttachWrapper
-} from './Audio.styled'
+
+import styles from './Audio.module.scss'
 
 interface AudioProps {
   loading: boolean
@@ -98,9 +91,9 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
   }
 
   return (
-    <Container>
-      <StepTitle>{t('pages.upload.audio.title')}</StepTitle>
-      <Title>{t('pages.upload.audio.subTitle')}</Title>
+    <div className={styles.container}>
+      <h2 className={styles.stepTitle}>{t('pages.upload.audio.title')}</h2>
+      <p className={styles.subTitle}>{t('pages.upload.audio.subTitle')}</p>
       <Dropzone
         audio={audio}
         player={player}
@@ -108,25 +101,25 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
         onSetAudio={setAudio}
         onFormValue={handleSetAudioFormValue}
       />
-      <WaveWrapper>
+      <div className={styles.waveWrapper}>
         <div ref={waveContainerRef} />
-        <TimeBox>
+        <div className={styles.timings}>
           <span>{currentTime}</span>
           <span>{duration}</span>
-        </TimeBox>
-        <PlayBottonWrapper>
-          <PlayBotton disabled={!readyForPlay} withoutShadow onClick={playHandler}>
+        </div>
+        <div className={styles.playButtonWrapper}>
+          <IconButton disabled={!readyForPlay} onClick={playHandler} className={styles.playButton}>
             <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
-          </PlayBotton>
-        </PlayBottonWrapper>
-      </WaveWrapper>
-      <AttachWrapper>
+          </IconButton>
+        </div>
+      </div>
+      <div className={styles.attach}>
         <Checkbox
           name="attach"
           onChange={handleAttachCheck}
           label={t('pages.upload.audio.attach')}
         />
-      </AttachWrapper>
+      </div>
       <StepControls
         actionButtonType="submit"
         disabled={!readyForPlay}
@@ -135,6 +128,6 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
         onBack={onPrevStep}
         onAlert={onAlert}
       />
-    </Container>
+    </div>
   )
 }

@@ -1,9 +1,12 @@
 import React from 'react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
-import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
+import clsx from 'clsx'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
+import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
+import { SvgIcon } from '@/components/ui/SvgIcon'
+import { IconButton } from '@/components/ui/IconButton'
 import { useTranslation } from 'react-i18next'
-import { Container, MinimizeButton, Title, PlaylistButton } from './TopControls.styled'
+
+import styles from './TopControls.module.scss'
 
 interface TopControlsProps {
   id: string
@@ -14,18 +17,18 @@ export function TopControls({ onClose }: TopControlsProps) {
   const { t } = useTranslation()
 
   return (
-    <Container>
-      <MinimizeButton withoutShadow onClick={onClose}>
+    <div className={styles.container}>
+      <IconButton onClick={onClose} className={clsx(styles.control, styles.minimizeButton)}>
         <SvgIcon>
           <ArrowIcon />
         </SvgIcon>
-      </MinimizeButton>
-      <Title>{t('player.header')}</Title>
-      <PlaylistButton withoutShadow>
+      </IconButton>
+      <span className={styles.title}>{t('player.header')}</span>
+      <IconButton className={clsx(styles.control, styles.playlistButton)}>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>
-      </PlaylistButton>
-    </Container>
+      </IconButton>
+    </div>
   )
 }

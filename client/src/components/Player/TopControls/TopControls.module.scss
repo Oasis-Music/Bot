@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  color: #cbcbcb;
+  font-size: 3vh;
+  font-weight: 500;
+  @include minHSX {
+    font-size: 20px;
+  }
+}
+
+.control {
+  color: #838383;
+  background: none;
+  outline: none;
+
+  &:active {
+    color: #bbb;
+  }
+  &:hover:not(:disabled) {
+    background-color: #fff;
+    background-color: transparent;
+  }
+  &:focus-visible {
+    color: var(--main-color);
+  }
+}
+
+.minimizeButton {
+  font-size: 16px;
+}
+
+.playlistButton {
+  font-size: 13px;
+}

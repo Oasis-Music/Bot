@@ -1,0 +1,119 @@
+.button {
+  flex-grow: 1;
+  border-radius: 0;
+  color: #2e2e2e;
+  padding: 10px 5px;
+  background: none;
+  box-shadow: none;
+  &:active {
+    color: #bbb;
+  }
+  &:hover:not(:disabled) {
+    background-color: #fff;
+    background-color: transparent;
+  }
+}
+
+.inner {
+  display: flex;
+  position: relative;
+  padding: 3vh 1vh 2vh 3vh;
+  padding-bottom: 2vh;
+  @include minHSD {
+    padding: 15px 13px 15px 13px;
+  }
+}
+
+.imageWrapper {
+  width: 23vh;
+  height: 23vh;
+  font-size: 4.5vh;
+  margin-right: 17px;
+  border-radius: 16px;
+  background-color: #d6d6d6;
+  padding: 2px;
+  @include minHSM {
+    width: 123px;
+    height: 123px;
+  }
+}
+
+.details {
+  flex-grow: 1;
+  padding-top: 1.7vh;
+}
+
+.title {
+  font-size: 3vh;
+  color: #fff;
+  font-weight: 600;
+  margin: 0;
+  margin-bottom: 7px;
+  @include minHSM {
+    font-size: 17px;
+  }
+}
+
+.author {
+  font-size: 2.4vh;
+  color: #878787;
+  font-weight: 500;
+  margin: 0;
+  @include minHSM {
+    font-size: 14px;
+  }
+}
+
+.saveBotton {
+  color: #080808;
+  max-width: 220px;
+  padding: 2vh 2.5vh;
+  background-color: #fff;
+  font-size: 2.7vh;
+  border: none;
+  margin-top: 4vh;
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.6),
+    0 0 50px rgba(255, 255, 255, 0.45),
+    0 0 70px rgba(255, 255, 255, 0.25),
+    0 0 70px rgba(255, 255, 255, 0.1);
+
+  &:disabled {
+    box-shadow: none;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #fff;
+  }
+
+  @include minHSM {
+    padding: 1.5vh 2vh;
+    margin-top: 2.7vh;
+  }
+
+  @include minHSD {
+    padding: 7px 10px;
+    font-size: 14px;
+    max-width: 100%;
+  }
+}
+
+.addIcon {
+  font-size: 2.5vh;
+  margin-right: 5px;
+  @include minHSD {
+    font-size: 12px;
+  }
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  margin-top: 2vh;
+  background-color: #fff;
+  border-radius: 14px;
+  max-width: 175px;
+  @include minHSX {
+    margin-top: 10px;
+  }
+}
