@@ -43,7 +43,7 @@ type feedbackModal = {
 export default function Upload() {
   const navigate = useNavigate()
 
-  const [step, setStep] = useState<number>(Step.AUDIO)
+  const [step, setStep] = useState<number>(Step.INFO)
   const [isAttached, setAttached] = useState<boolean>(false)
 
   const [isAlertOpen, setAlertOpen] = useState<boolean>(false)
