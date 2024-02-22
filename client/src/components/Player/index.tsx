@@ -4,7 +4,7 @@ import Trackline from './Trackline'
 import { TopControls } from './TopControls'
 import { Details } from './Details'
 import { Controls } from './Controls'
-import { timeFormater } from '@/utils/helpers'
+import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 

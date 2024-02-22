@@ -7,7 +7,7 @@ import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { StepControls } from '../StepControls'
 import { Checkbox } from '@/shared/ui/checkbox'
-import { timeFormater } from '@/utils/helpers'
+import { timeFormater } from '@/shared/lib/helpers'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Loader } from '@/shared/ui/loader'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
-import { timeFormater } from '@/utils/helpers'
+import { timeFormater } from '@/shared/lib/helpers'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
 import type { PlaylistType } from '@/apollo/cache/types'
 
