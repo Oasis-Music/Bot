@@ -7,7 +7,7 @@ import { useReactiveVar } from '@apollo/client'
 import { UiMutations } from '@/apollo/cache/mutations'
 import { isSnackbarOpenVar, snackbarEventVar } from '@/apollo/cache/variables'
 
-import styles from './Snackbar.module.scss'
+import styles from './snackbar.module.scss'
 
 const NOTIFICATION_ICON = {
   success: CheckIcon,
