@@ -1,6 +1,6 @@
 import React from 'react'
 import { Playlist } from '@/components/Playlist'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { explorePlaylistVar } from '@/apollo/cache/variables'
 
@@ -28,7 +28,7 @@ export function List({
   if (isFirstLoad) {
     return (
       <div className={styles.container}>
-        <ScaleLoader fallback />
+        <Loader fallback />
       </div>
     )
   }

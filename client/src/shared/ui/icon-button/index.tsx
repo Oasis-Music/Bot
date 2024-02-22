@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 
 import styles from './iconButton.module.scss'
 
@@ -24,7 +24,7 @@ export function IconButton({
 }: IconButtonProps) {
   return (
     <button type={type} className={clsx(className, styles.button)} {...otherProps}>
-      {loading ? <ScaleLoader dark={darkLoader} /> : <div className={styles.inner}>{children}</div>}
+      {loading ? <Loader dark={darkLoader} /> : <div className={styles.inner}>{children}</div>}
     </button>
   )
 }

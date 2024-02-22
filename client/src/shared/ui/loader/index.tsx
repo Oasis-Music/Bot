@@ -1,14 +1,14 @@
 import React from 'react'
 import clsx from 'clsx'
 
-import styles from './Loader.module.scss'
+import styles from './loader.module.scss'
 
 interface LoaderProps {
   fallback?: boolean
   dark?: boolean
 }
 
-export function ScaleLoader({ fallback = false, dark = false }: LoaderProps) {
+export function Loader({ fallback = false, dark = false }: LoaderProps) {
   return (
     <svg
       className={clsx({

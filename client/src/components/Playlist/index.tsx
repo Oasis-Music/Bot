@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { PlaylistItem } from '../PlaylistItem'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { Soundtrack, PlaylistType } from '@/apollo/cache/types'
 
@@ -93,7 +93,7 @@ export function Playlist({
                 {isLoaderRow ? (
                   hasNextPage ? (
                     <div className={styles.loader}>
-                      <ScaleLoader fallback />
+                      <Loader fallback />
                     </div>
                   ) : (
                     'Nothing more to load'

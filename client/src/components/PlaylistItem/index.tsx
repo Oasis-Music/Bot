@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { timeFormater } from '@/utils/helpers'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
@@ -54,7 +54,7 @@ export function PlaylistItem({
         <p className={styles.author}>{author}</p>
       </div>
       <div className={styles.sideBox}>
-        {isPlaying ? <ScaleLoader fallback /> : <span>{timeFormater(duration)}</span>}
+        {isPlaying ? <Loader fallback /> : <span>{timeFormater(duration)}</span>}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react'
 import clsx from 'clsx'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 
 import styles from './button.module.scss'
 
@@ -75,7 +75,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       {!loading && startIcon}
       {loading ? (
         <div className={styles.loader}>
-          <ScaleLoader dark={color !== ButtonColor.primary} />
+          <Loader dark={color !== ButtonColor.primary} />
         </div>
       ) : (
         <span>{children}</span>
