@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { useField } from 'formik'
 
-import styles from './Checkbox.module.scss'
+import styles from './checkbox.module.scss'
 
 interface CheckboxProps {
   name: string

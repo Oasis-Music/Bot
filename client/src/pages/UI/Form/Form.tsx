@@ -1,6 +1,6 @@
 import React from 'react'
 import { TextInput } from '@/components/ui/TextInput'
-import { Checkbox } from '@/components/ui/Checkbox'
+import { Checkbox } from '@/shared/ui/checkbox'
 
 import styles from './Form.module.scss'
 
