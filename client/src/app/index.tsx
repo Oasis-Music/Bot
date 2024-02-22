@@ -7,9 +7,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { App } from './app'
 import Modal from 'react-modal'
 
+import '@/shared/lib/i18n'
 import 'normalize.css'
-
-import './i18n'
 
 Modal.setAppElement('#root')
 
