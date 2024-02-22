@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { useTranslation } from 'react-i18next'
 

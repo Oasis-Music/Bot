@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import AudioPlayer from '@/player'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
 import AudioPlaceholderIcon from '@/assets/svg/audio_placeholder.svg?react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 

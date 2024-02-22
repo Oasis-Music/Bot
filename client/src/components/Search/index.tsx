@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchIcon from '@/assets/svg/search.svg?react'
-import { SvgIcon } from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { Formik, Form, Field } from 'formik'
 import { ExploreSearchSchema, ExploreSearchSchemaTypes } from '@/utils/validationSchemas'

@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import styles from './SvgIcon.module.scss'
+import styles from './svgIcon.module.scss'
 
 interface SvgIconProps {
   className?: string

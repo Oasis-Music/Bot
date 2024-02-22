@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
-import { SvgIcon } from '@/components/ui/SvgIcon'
+import { SvgIcon } from '@/shared/ui/svg-icon'
 import DeleteIcon from '@/assets/svg/trash.svg?react'
 import { StepControls } from '../StepControls'
 import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
