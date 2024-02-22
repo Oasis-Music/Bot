@@ -7,9 +7,9 @@ import { routeNames } from '@/utils/history'
 import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 
-import styles from './Nav.module.scss'
+import styles from './navbar.module.scss'
 
-export function Nav() {
+export function NavBar() {
   const { t } = useTranslation()
 
   return (
