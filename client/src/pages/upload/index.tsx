@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Alert } from './modals/Alert'
 import { Feedback } from './modals/Feedback'
 import { Info } from './Info'
@@ -8,7 +8,7 @@ import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { Formik, Form } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { useWindowRatio } from '@/hooks'
-import { createTrackStepsSchema } from '@/utils/validationSchemas'
+import { uploadTrackSchema } from './model/validation-schema'
 import { useCreateSoundtrackMutation } from '@/graphql/soundtrack/_gen_/createSoundtrack.mutation'
 
 import styles from './Upload.module.scss'
@@ -90,10 +90,6 @@ export default function Upload() {
     }
   }
 
-  const curentSchema = useMemo(() => {
-    return createTrackStepsSchema[step]
-  }, [step])
-
   const handleFeedbackOk = () => {
     if (isAttached) {
       navigate(ROUTER_NAMES.root)
@@ -130,7 +126,7 @@ export default function Upload() {
       <Formik
         validateOnMount
         onSubmit={handleSubmit}
-        validationSchema={curentSchema}
+        validationSchema={uploadTrackSchema}
         initialValues={{
           title: '',
           author: '',
