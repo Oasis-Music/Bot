@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import blushEmoji from '@/assets/rastr/blush.png'
 import { TextInput } from '@/components/ui/TextInput'
 import { useFormikContext } from 'formik'

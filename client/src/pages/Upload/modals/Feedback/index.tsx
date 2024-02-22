@@ -1,7 +1,7 @@
 import React from 'react'
 import sunglassesEmoji from '@/assets/rastr/tada.png'
 import thinkingEmoji from '@/assets/rastr/thinking.png'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import { Modal } from '@/components/Modal'
 import { useTranslation } from 'react-i18next'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@/components/Modal'
 

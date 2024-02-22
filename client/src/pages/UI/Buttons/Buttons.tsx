@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import EyeIcon from '@/assets/svg/eye.svg?react'
 
 import styles from './Buttons.module.scss'

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import { IconButton } from '@/components/ui/IconButton'
 import { SvgIcon } from '@/components/ui/SvgIcon'

@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react'
 import clsx from 'clsx'
 import { ScaleLoader } from '@/components/ui/Loader'
 
-import styles from './Button.module.scss'
+import styles from './button.module.scss'
 
 const enum ButtonColor {
   primary = 'primary',

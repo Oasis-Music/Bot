@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import clsx from 'clsx'
-import Button from '@/components/ui/Button'
+import Button from '@/shared/ui/button'
 import handv_img from '@/assets/rastr/hand-v.png'
 import { useTranslation } from 'react-i18next'
 import { Link, redirect } from 'react-router-dom'
