@@ -3,7 +3,7 @@ import SearchIcon from '@/assets/svg/search.svg?react'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import CogIcon from '@/assets/svg/cog.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
-import { routeNames } from '@/utils/history'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 
@@ -14,22 +14,22 @@ export function NavBar() {
 
   return (
     <nav className={styles.container}>
-      <NavLink to={routeNames.explore} className={styles.navLink}>
+      <NavLink to={ROUTER_NAMES.explore} className={styles.navLink}>
         <SvgIcon>
           <SearchIcon />
         </SvgIcon>
       </NavLink>
-      <NavLink to={routeNames.root} className={styles.navLink}>
+      <NavLink to={ROUTER_NAMES.root} className={styles.navLink}>
         <SvgIcon>
           <MusicListIcon />
         </SvgIcon>
       </NavLink>
-      <NavLink to={routeNames.settings} className={styles.navLink}>
+      <NavLink to={ROUTER_NAMES.settings} className={styles.navLink}>
         <SvgIcon>
           <CogIcon />
         </SvgIcon>
       </NavLink>
-      <Link to={routeNames.upload} className={styles.uploadLink}>
+      <Link to={ROUTER_NAMES.upload} className={styles.uploadLink}>
         <span>{t('layout.upload')}</span>
       </Link>
     </nav>

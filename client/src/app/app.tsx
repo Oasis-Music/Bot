@@ -4,6 +4,7 @@ import { Fallback } from '@/components/Fallback'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from '@/hooks'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 
 import './styles/global.scss'
 
@@ -27,9 +28,9 @@ export function App() {
     <Routes>
       <Route element={<AppLayout />}>
         <Route element={<ProtectedRoute />}>
-          <Route path="/" index element={<Home />} />
+          <Route path={ROUTER_NAMES.root} index element={<Home />} />
           <Route
-            path="/explore"
+            path={ROUTER_NAMES.explore}
             element={
               <Suspense fallback={<Fallback />}>
                 <Explore />
@@ -37,7 +38,7 @@ export function App() {
             }
           />
           <Route
-            path="/upload"
+            path={ROUTER_NAMES.upload}
             element={
               <Suspense fallback={<Fallback />}>
                 <Upload />
@@ -45,7 +46,7 @@ export function App() {
             }
           />
           <Route
-            path="/settings"
+            path={ROUTER_NAMES.settings}
             element={
               <Suspense fallback={<Fallback />}>
                 <Settings />
@@ -64,10 +65,9 @@ export function App() {
             />
           )}
         </Route>
-        {/* App layout */}
       </Route>
       <Route
-        path="/auth"
+        path={ROUTER_NAMES.auth}
         element={
           <ProtectedRoute>
             <Suspense fallback={<Fallback />}>
@@ -78,14 +78,14 @@ export function App() {
       />
 
       <Route
-        path="terms"
+        path={ROUTER_NAMES.terms}
         element={
           <Suspense fallback={<Fallback />}>
             <Terms />
           </Suspense>
         }
       />
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to={ROUTER_NAMES.root} />} />
     </Routes>
   )
 }

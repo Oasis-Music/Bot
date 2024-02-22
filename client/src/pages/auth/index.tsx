@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, redirect } from 'react-router-dom'
 import { UserMutations } from '@/apollo/cache/mutations'
 import { useAuthorizeUserLazyQuery } from '@/graphql/user/_gen_/authorizeUser.query'
-import { routeNames } from '@/utils/history'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 
 import styles from './Auth.module.scss'
 
@@ -20,7 +20,7 @@ export default function Auth() {
       const ok = UserMutations.processAccessToken(data.authorizeUser.token)
       if (ok) {
         localStorage.setItem('rt', data.authorizeUser.refreshToken)
-        redirect(routeNames.root)
+        redirect(ROUTER_NAMES.root)
       }
     },
     onError(error) {

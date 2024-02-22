@@ -4,7 +4,7 @@ import { Feedback } from './modals/Feedback'
 import { Info } from './Info'
 import { Cover } from './Cover'
 import { Audio } from './Audio'
-import { routeNames } from '@/utils/history'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { Formik, Form } from 'formik'
 import { useNavigate } from 'react-router-dom'
 import { useWindowRatio } from '@/hooks'
@@ -96,10 +96,10 @@ export default function Upload() {
 
   const handleFeedbackOk = () => {
     if (isAttached) {
-      navigate(routeNames.root)
+      navigate(ROUTER_NAMES.root)
       return
     }
-    navigate(routeNames.explore)
+    navigate(ROUTER_NAMES.explore)
   }
 
   const handleFeedbackErr = () => {
@@ -118,7 +118,7 @@ export default function Upload() {
   }
 
   const handleAlertLeave = () => {
-    navigate(routeNames.root)
+    navigate(ROUTER_NAMES.root)
   }
 
   const handleAttachCheck = (value: boolean) => {

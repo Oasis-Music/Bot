@@ -5,7 +5,7 @@ import { TextInput } from '@/shared/ui/text-input'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { RedirectButton } from '../common/RedirectButton'
-import { routeNames } from '@/utils/history'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './Info.module.scss'
@@ -39,7 +39,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
       return
     }
 
-    navigate(routeNames.root)
+    navigate(ROUTER_NAMES.root)
   }
 
   return (
