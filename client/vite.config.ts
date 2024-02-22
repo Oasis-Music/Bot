@@ -9,7 +9,7 @@ export default ({ mode }: { mode: boolean }) => {
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/styles/main.scss" as *;`
+          additionalData: `@use "@/app/styles/main.scss" as *;`
         }
       }
     },

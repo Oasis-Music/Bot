@@ -7,14 +7,14 @@ import { useWindowCSSRatio } from '@/hooks'
 
 import './styles/global.scss'
 
-import Home from './pages/Home'
+import Home from '@/pages/home'
 
-const Explore = lazy(() => import('./pages/Explore'))
-const Upload = lazy(() => import('./pages/Upload'))
-const UI = lazy(() => import('./pages/UI'))
-const Terms = lazy(() => import('./pages/Terms'))
-const Auth = lazy(() => import('./pages/Auth'))
-const Settings = lazy(() => import('./pages/Settings'))
+const Explore = lazy(() => import('@/pages/explore'))
+const Upload = lazy(() => import('@/pages/upload'))
+const UI = lazy(() => import('@/pages/ui'))
+const Terms = lazy(() => import('@/pages/terms'))
+const Auth = lazy(() => import('@/pages/auth'))
+const Settings = lazy(() => import('@/pages/settings'))
 
 export function App() {
   useWindowCSSRatio()
