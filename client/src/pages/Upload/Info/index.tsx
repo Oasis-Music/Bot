@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import Button from '@/shared/ui/button'
 import blushEmoji from '@/assets/rastr/blush.png'
-import { TextInput } from '@/components/ui/TextInput'
+import { TextInput } from '@/shared/ui/text-input'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { RedirectButton } from '../common/RedirectButton'

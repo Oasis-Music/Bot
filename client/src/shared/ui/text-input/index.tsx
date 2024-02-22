@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { useField } from 'formik'
 
-import styles from './TextInput.module.scss'
+import styles from './textInput.module.scss'
 
 export interface TextInputProps {
   name: string
