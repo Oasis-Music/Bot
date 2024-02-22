@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import MusicListIcon from '@/assets/svg/list-music.svg?react'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import { SvgIcon } from '@/components/ui/SvgIcon'
-import { IconButton } from '@/components/ui/IconButton'
+import { IconButton } from '@/shared/ui/icon-button'
 import { useTranslation } from 'react-i18next'
 
 import styles from './TopControls.module.scss'

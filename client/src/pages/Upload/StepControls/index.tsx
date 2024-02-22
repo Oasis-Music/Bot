@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@/shared/ui/button'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
-import { IconButton } from '@/components/ui/IconButton'
+import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/components/ui/SvgIcon'
 import { RedirectButton } from '../common/RedirectButton'
 import { useFormikContext } from 'formik'

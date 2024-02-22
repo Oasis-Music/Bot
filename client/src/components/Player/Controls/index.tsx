@@ -6,7 +6,7 @@ import ArrowAltIcon from '@/assets/svg/arrow-alt.svg?react'
 import RepeatIcon from '@/assets/svg/repeat.svg?react'
 import RandomIcon from '@/assets/svg/random.svg?react'
 import { SvgIcon } from '@/components/ui/SvgIcon'
-import { IconButton } from '@/components/ui/IconButton'
+import { IconButton } from '@/shared/ui/icon-button'
 
 import styles from './Controls.module.scss'
 

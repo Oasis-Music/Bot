@@ -7,7 +7,7 @@ import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
 import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
-import { IconButton } from '@/components/ui/IconButton'
+import { IconButton } from '@/shared/ui/icon-button'
 
 import styles from './Cover.module.scss'
 

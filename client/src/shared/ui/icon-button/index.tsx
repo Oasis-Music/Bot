@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { ScaleLoader } from '@/components/ui/Loader'
 
-import styles from './IconButton.module.scss'
+import styles from './iconButton.module.scss'
 
 interface IconButtonProps {
   type?: 'button' | 'reset' | 'submit'
