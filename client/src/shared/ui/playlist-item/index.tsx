@@ -2,50 +2,28 @@ import React from 'react'
 import { Loader } from '@/shared/ui/loader'
 import { ImagePlaceholder } from '@/components/ImagePlaceholder'
 import { timeFormater } from '@/shared/lib/helpers'
-import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
-import type { PlaylistType } from '@/apollo/cache/types'
 
-import styles from './PlaylistItem.module.scss'
+import styles from './playlistItem.module.scss'
 
 interface PlaylistItemProps {
-  id: string
   title: string
   author: string
   duration: number
   coverURL: string
-  audioURL: string
   isPlaying: boolean
-  isAttached: boolean
-  playlist: keyof typeof PlaylistType
+  onClick(): void
 }
 
 export function PlaylistItem({
-  id,
   title,
   author,
   duration,
   coverURL,
-  audioURL,
   isPlaying,
-  isAttached,
-  playlist
+  onClick
 }: PlaylistItemProps) {
-  const trackClickHandler = () => {
-    PlaylistMutations.bindMainPlaylist(playlist)
-    SoundtrackMutations.setCurrentTrack({
-      id,
-      title,
-      author,
-      duration,
-      coverURL,
-      audioURL,
-      isPlaying,
-      attached: isAttached
-    })
-  }
-
   return (
-    <div className={styles.container} onClick={trackClickHandler}>
+    <div className={styles.container} onClick={onClick}>
       <div className={styles.image}>
         <ImagePlaceholder src={coverURL} altText={title} />
       </div>

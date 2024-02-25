@@ -1,10 +1,11 @@
 import React, { useEffect, useRef } from 'react'
-import { PlaylistItem } from '../PlaylistItem'
+import { PlaylistItem } from '@/shared/ui/playlist-item'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { Soundtrack, PlaylistType } from '@/apollo/cache/types'
+import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
 
 import styles from './Playlist.module.scss'
 
@@ -55,6 +56,11 @@ export function Playlist({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasNextPage, onFetchNextPage, allRows, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
 
+  const trackClickHandler = (track: Soundtrack) => {
+    PlaylistMutations.bindMainPlaylist(relatedTo)
+    SoundtrackMutations.setCurrentTrack(track)
+  }
+
   return (
     <div style={{ display: 'flex', flexGrow: '1' }}>
       <div
@@ -100,15 +106,12 @@ export function Playlist({
                   )
                 ) : (
                   <PlaylistItem
-                    id={track.id}
                     title={track.title}
                     author={track.author}
                     duration={track.duration}
                     coverURL={track.coverURL || ''}
-                    audioURL={track.audioURL}
                     isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-                    isAttached={track.attached}
-                    playlist={relatedTo}
+                    onClick={() => trackClickHandler(track)}
                   />
                 )}
               </li>

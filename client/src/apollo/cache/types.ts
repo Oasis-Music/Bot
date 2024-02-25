@@ -14,18 +14,11 @@ export type Soundtrack = {
   duration: number
   coverURL?: string | null
   audioURL: string
-  attached: boolean
+  attached: boolean // INFO: without user context always - false
 }
 
-export type CurrentTrack = {
-  id: string
-  title: string
-  author: string
-  duration: number
-  coverURL?: string | null | undefined
-  audioURL: string
+export interface CurrentTrack extends Soundtrack {
   isPlaying: boolean
-  attached: boolean // INFO: without user context always - false
 }
 
 export type accessToken = {
