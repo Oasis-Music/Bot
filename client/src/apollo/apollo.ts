@@ -3,7 +3,7 @@ import { onError } from '@apollo/client/link/error'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { cache } from './cache/cache'
 import { UserMutations } from './cache/mutations'
-import { promiseToObservable } from '../utils/helpers'
+import { promiseToObservable } from '@/shared/lib/helpers'
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL + 'graphql'
 

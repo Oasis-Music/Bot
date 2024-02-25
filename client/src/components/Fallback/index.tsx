@@ -1,12 +1,12 @@
 import React from 'react'
-import { ScaleLoader } from '@/components/ui/Loader'
+import { Loader } from '@/shared/ui/loader'
 
 import styles from './Fallback.module.scss'
 
 export function Fallback() {
   return (
     <div className={styles.container}>
-      <ScaleLoader fallback />
+      <Loader fallback />
     </div>
   )
 }

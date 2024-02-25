@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Player from '@/components/Player'
 import AudioPlayer from '@/player'
-import { Nav } from '@/components/Nav'
-import { Snackbar } from '@/components/ui/Snackbar'
+import { NavBar } from '@/widgets/navigation'
+import { Snackbar } from '@/shared/ui/snackbar'
 import { MiniPlayer } from '@/components/MiniPlayer'
-import { timeFormater } from '@/utils/helpers'
+import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { Outlet, useLocation } from 'react-router-dom'
@@ -118,7 +118,7 @@ export function AppLayout() {
       {location.pathname !== '/upload' && (
         <div className={styles.wrapper}>
           <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
-          <Nav />
+          <NavBar />
         </div>
       )}
       <Player

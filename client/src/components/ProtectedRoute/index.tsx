@@ -1,5 +1,5 @@
 import React from 'react'
-import { routeNames } from '@/utils/history'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useReactiveVar } from '@apollo/client'
 import { isAuthenticatedVar } from '@/apollo/cache/variables'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
@@ -8,17 +8,17 @@ export function ProtectedRoute({ children }: { children?: React.ReactNode }) {
   const { pathname } = useLocation()
   const isAuth = useReactiveVar(isAuthenticatedVar)
 
-  console.log('if', isAuth, isAuth && pathname === routeNames.auth)
+  console.log('if', isAuth, isAuth && pathname === ROUTER_NAMES.auth)
 
   // as react wrapper
   if (children) {
-    return isAuth && pathname === routeNames.auth ? (
-      <Navigate replace to={routeNames.root} />
+    return isAuth && pathname === ROUTER_NAMES.auth ? (
+      <Navigate replace to={ROUTER_NAMES.root} />
     ) : (
       children
     )
   }
 
   // as rrd wrapper
-  return isAuth ? <Outlet /> : <Navigate replace to={routeNames.auth} />
+  return isAuth ? <Outlet /> : <Navigate replace to={ROUTER_NAMES.auth} />
 }
