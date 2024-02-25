@@ -7,7 +7,7 @@ import { SvgIcon } from '@/shared/ui/svg-icon'
 import styles from './imagePlaceholder.module.scss'
 
 export interface ImagePlaceholderProps {
-  src: string
+  src: string | null
   altText: string
   plain?: boolean
   backgroundColor?: string
@@ -57,7 +57,7 @@ export function ImagePlaceholder({
     />
   )
 
-  if (src === '' || error) {
+  if (!src || error) {
     return (
       <div className={clsx(styles.wrapper, plain && styles.plain)}>
         {plain ? plainPlug : placeholderPlug}

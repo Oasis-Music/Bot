@@ -108,7 +108,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
       <div className={styles.inner}>
         <div className={styles.imageWrapper}>
           <div>
-            <ImagePlaceholder src={track.coverURL || ''} altText={track.title} />
+            <ImagePlaceholder src={track.coverURL} altText={track.title} />
           </div>
         </div>
         <div className={styles.details}>

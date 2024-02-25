@@ -22,7 +22,7 @@ export function MiniPlayer({ onPlayerOpen, onPlayPause }: MiniPlayerProps) {
     <div className={clsx(styles.container, !!currentTrack.id && styles.playing)}>
       <div className={styles.inner} onClick={onPlayerOpen}>
         <div className={styles.imageWrapper}>
-          <ImagePlaceholder src={currentTrack.coverURL || ''} altText={currentTrack.title} />
+          <ImagePlaceholder src={currentTrack.coverURL} altText={currentTrack.title} />
         </div>
         <div className={styles.info}>
           <h3 className={styles.title}>{currentTrack.title}</h3>

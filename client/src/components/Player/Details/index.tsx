@@ -9,7 +9,7 @@ import styles from './Details.module.scss'
 interface DetailsProps {
   title: string
   author: string
-  coverImage?: string | null
+  coverImage: string | null
 }
 
 export function Details({ coverImage, title, author }: DetailsProps) {
@@ -20,11 +20,7 @@ export function Details({ coverImage, title, author }: DetailsProps) {
   return (
     <div className={clsx(styles.container, pause && styles.pause)}>
       <div className={clsx(styles.imageWrapper)}>
-        <ImagePlaceholder
-          backgroundColor="rgba(21,25,30, 0.8)"
-          src={coverImage || ''}
-          altText={title}
-        />
+        <ImagePlaceholder src={coverImage} altText={title} backgroundColor="rgba(21,25,30, 0.8)" />
       </div>
       <h1 className={styles.title}>{title}</h1>
       <p className={styles.author}>{author}</p>
