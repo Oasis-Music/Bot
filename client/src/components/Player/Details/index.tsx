@@ -1,6 +1,6 @@
 import React from 'react'
 import clsx from 'clsx'
-import { ImagePlaceholder } from '@/components/ImagePlaceholder'
+import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 

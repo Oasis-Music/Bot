@@ -4,7 +4,7 @@ import LazyLoad from 'react-lazy-load'
 import PlaceholderImage from '@/assets/svg/music.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 
-import styles from './ImagePlaceholder.module.scss'
+import styles from './imagePlaceholder.module.scss'
 
 export interface ImagePlaceholderProps {
   src: string

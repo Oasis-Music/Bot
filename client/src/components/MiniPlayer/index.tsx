@@ -4,7 +4,7 @@ import PlayIcon from '@/assets/svg/play.svg?react'
 import PauseIcon from '@/assets/svg/pause.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
-import { ImagePlaceholder } from '@/components/ImagePlaceholder'
+import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 

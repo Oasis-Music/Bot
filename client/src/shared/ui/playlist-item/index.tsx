@@ -1,6 +1,6 @@
 import React from 'react'
 import { Loader } from '@/shared/ui/loader'
-import { ImagePlaceholder } from '@/components/ImagePlaceholder'
+import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { timeFormater } from '@/shared/lib/helpers'
 
 import styles from './playlistItem.module.scss'
