@@ -1,5 +1,5 @@
 import React from 'react'
-import { Playlist } from '@/components/Playlist'
+import { Playlist } from '@/widgets/playlist'
 import { NoDataPlug, ErrorPlug } from '../plugs'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'

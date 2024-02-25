@@ -7,7 +7,7 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import type { Soundtrack, PlaylistType } from '@/apollo/cache/types'
 import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
 
-import styles from './Playlist.module.scss'
+import styles from './playlist.module.scss'
 
 interface PlaylistProps {
   relatedTo: keyof typeof PlaylistType
