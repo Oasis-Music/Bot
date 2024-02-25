@@ -2,7 +2,7 @@ import React from 'react'
 import sunglassesEmoji from '@/assets/rastr/tada.png'
 import thinkingEmoji from '@/assets/rastr/thinking.png'
 import Button from '@/shared/ui/button'
-import { Modal } from '@/components/Modal'
+import { Modal } from '@/widgets/modal'
 import { useTranslation } from 'react-i18next'
 
 import styles from './Feedback.module.scss'
@@ -26,7 +26,7 @@ export function Feedback({ type, isOpen, onSubmit, onRetry }: FeedbackProps) {
   }
 
   return (
-    <Modal open={isOpen}>
+    <Modal open={isOpen} hideControls>
       <div className={styles.container}>
         <img src={type === 'success' ? sunglassesEmoji : thinkingEmoji} className={styles.image} />
         <h4 className={styles.title}>
@@ -52,19 +52,3 @@ export function Feedback({ type, isOpen, onSubmit, onRetry }: FeedbackProps) {
     </Modal>
   )
 }
-
-// interface styledReactModalProps {
-//   theme: ITheme
-// }
-
-// const StyledModal = Modal.styled`
-//   width: 70vh;
-//   aspect-ratio: 1 / 1;
-//   color: #fff;
-//   border-radius: 10px;
-//   background-color:#343434;
-//   transition : all 0.3s ease-in-out;
-//   @media ${(props: styledReactModalProps) => props.theme.media.hsm} {
-//     width: 90%;
-//   }
-// `

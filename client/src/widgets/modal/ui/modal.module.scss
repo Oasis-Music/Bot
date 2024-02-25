@@ -1,0 +1,43 @@
+.modal {
+  width: 100%;
+  border: none;
+  color: #130022;
+  background-color: #171b25;
+  border-radius: 8px;
+  padding: 15px;
+  transition: all 0.3s ease-in-out;
+  &::backdrop {
+    backdrop-filter: blur(3px);
+    background-color: rgba(0, 0, 0, 0.2);
+    -webkit-tap-highlight-color: transparent;
+  }
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+@mixin reset-button {
+  background: none;
+  border: none;
+  padding: 10px;
+  padding-bottom: 4px;
+  margin-left: 5px;
+  font-size: 15px;
+  line-height: 16px;
+}
+
+.submitButton {
+  @include reset-button;
+  color: #d9d9d9;
+}
+
+.closeButton {
+  @include reset-button;
+  color: #ff3d3d;
+}
