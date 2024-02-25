@@ -37,11 +37,6 @@
 // Color types
 .primary {
   color: var(--main-color);
-  background-color: #363636;
-  border-color: #6a6a6a;
-  &:hover:not(:disabled) {
-    background-color: #323232;
-  }
 }
 
 .secondary {
