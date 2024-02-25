@@ -19,7 +19,7 @@ import (
 
 const (
 	TELEGRAM_SEED = "WebAppData"
-	WAIT_AUTH_IN  = 3
+	AUTH_FRESH_IN = 3
 )
 
 func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
@@ -41,9 +41,12 @@ func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.U
 		return nil, ErrInitDataInvalid
 	}
 
-	authValid := isTelegramAuthDateValidIn(authDate, WAIT_AUTH_IN*time.Minute)
-	if !authValid {
-		return nil, ErrTgAuthDateExpired
+	if u.config.Environment != "development" {
+
+		authFresh := isTelegramAuthDateValidIn(authDate, AUTH_FRESH_IN*time.Minute)
+		if !authFresh {
+			return nil, ErrTgAuthDateExpired
+		}
 	}
 
 	validString := "auth_date=" + authDate + "\n" +
