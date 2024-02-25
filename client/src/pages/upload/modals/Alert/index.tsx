@@ -17,7 +17,7 @@ export function Alert({ isOpen, onLeave, onStay }: AlertProps) {
     <Modal
       open={isOpen}
       controlActionText={t('pages.upload.modals.alert.stay')}
-      controlCloseText={t('pages.upload.modals.alert.yes')}
+      controlCloseText={t('pages.upload.modals.alert.exit')}
       onSubmit={onStay}
       onClose={onLeave}
     >

@@ -82,8 +82,8 @@
         "alert": {
           "title": "Leave the page?",
           "message": "Unsaved data will be lost",
-          "yes": "Yes",
-          "stay": "Continue"
+          "exit": "Exit",
+          "stay": "Stay"
         },
         "feedback": {
           "successUpload": "Track uploaded successfully!",
