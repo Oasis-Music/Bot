@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { PlaylistItem } from '@/shared/ui/playlist-item'
+import { SoundtrackItem } from '@/entities/soundtrack'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/apollo/cache/variables'
 import { Loader } from '@/shared/ui/loader'
@@ -106,7 +106,7 @@ export function Playlist({
                     'Nothing more to load'
                   )
                 ) : (
-                  <PlaylistItem
+                  <SoundtrackItem
                     title={track.title}
                     author={track.author}
                     duration={track.duration}

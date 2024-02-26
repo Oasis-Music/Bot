@@ -3,7 +3,7 @@ import { Loader } from '@/shared/ui/loader'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { timeFormater } from '@/shared/lib/helpers'
 
-import styles from './playlistItem.module.scss'
+import styles from './styles.module.scss'
 
 interface PlaylistItemProps {
   title: string
@@ -14,7 +14,7 @@ interface PlaylistItemProps {
   onClick(): void
 }
 
-export function PlaylistItem({
+export function SoundtrackItem({
   title,
   author,
   duration,
