@@ -6,7 +6,7 @@ import { SoundtrackMutations } from '@/apollo/cache/mutations'
 import { useSearchSoundtrackLazyQuery } from '@/graphql/soundtrack/_gen_/searchSoundtrack.query'
 import { useTranslation } from 'react-i18next'
 import type { Track } from './types'
-import type { Soundtrack } from '@/apollo/cache/types'
+import type { Soundtrack } from '@/entities/soundtrack'
 
 export default function Explore() {
   const { t } = useTranslation()

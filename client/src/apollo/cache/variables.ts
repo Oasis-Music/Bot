@@ -1,5 +1,8 @@
 import { makeVar } from '@apollo/client'
-import type { User, Soundtrack, CurrentTrack, accessToken, snackbarEvent } from './types'
+import type { User, accessToken, snackbarEvent } from './types'
+// TEMP
+import type { Soundtrack, CurrentTrack } from '@/entities/soundtrack'
+///
 import jwtDecode from 'jwt-decode'
 
 // ui

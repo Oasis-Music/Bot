@@ -1,5 +1,5 @@
 import { ReactiveVar } from '@apollo/client'
-import type { CurrentTrack, Soundtrack } from '../../types'
+import type { CurrentTrack, Soundtrack } from '@/entities/soundtrack'
 
 export default (
   currentTrackVar: ReactiveVar<CurrentTrack>,

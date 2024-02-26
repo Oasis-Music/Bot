@@ -7,7 +7,7 @@ import { userVar } from '@/apollo/cache/variables'
 import { useUserSoundtracksQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
 import { Counter } from './Counter'
 import { useTranslation } from 'react-i18next'
-import type { Soundtrack } from '@/apollo/cache/types'
+import type { Soundtrack } from '@/entities/soundtrack'
 
 import styles from './Home.module.scss'
 
