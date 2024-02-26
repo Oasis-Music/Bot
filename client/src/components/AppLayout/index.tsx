@@ -8,9 +8,10 @@ import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { Outlet, useLocation } from 'react-router-dom'
-import { SoundtrackMutations, UserMutations } from '@/apollo/cache/mutations'
+import { UserMutations } from '@/apollo/cache/mutations'
 
 import styles from './AppLayout.module.scss'
+import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
@@ -22,6 +23,8 @@ export function AppLayout() {
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [loop, setLoop] = useState<boolean>(false)
   const [random, setRandom] = useState<boolean>(false)
+
+  const playPause = usePlayPauseTrack()
 
   const waveContainerRef = useRef<HTMLDivElement>(null)
 
@@ -78,7 +81,7 @@ export function AppLayout() {
         player.load(track.audioURL)
       }
     }
-  }, [track])
+  }, [track.audioURL])
 
   const handlePlayerOpen = () => {
     document.body.style.overflow = 'hidden'
@@ -90,7 +93,7 @@ export function AppLayout() {
   }
 
   const playPauseHandler = () => {
-    SoundtrackMutations.playPouse()
+    playPause()
 
     if (player) {
       player.playPause()

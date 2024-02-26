@@ -12,8 +12,9 @@ export const currentTrackVar = makeVar<CurrentTrack>({
   attached: false
 })
 
-import playTrack from './play'
+import { playTrack, playPause } from './actions'
 
 export const SoundtrackStore = {
-  play: playTrack(currentTrackVar)
+  play: playTrack(currentTrackVar),
+  playPause: playPause(currentTrackVar)
 }

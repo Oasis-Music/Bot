@@ -70,7 +70,7 @@ export function Playlist({
         ref={parentRef}
         className={styles.view}
         style={{
-          height: currentTrack.isPlaying ? `calc(${height} - 67px)` : height,
+          height: currentTrack.id ? `calc(${height} - 67px)` : height,
           width: `100%`,
           overflow: 'auto',
           paddingBottom: 0
