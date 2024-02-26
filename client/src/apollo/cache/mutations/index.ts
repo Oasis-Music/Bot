@@ -1,5 +1,4 @@
 import {
-  currentTrackVar,
   userVar,
   isAuthenticatedVar,
   mainPlaylistVar,
@@ -8,9 +7,12 @@ import {
   isSnackbarOpenVar,
   snackbarEventVar
 } from '../variables'
+
+import { currentTrackVar } from '@/entities/soundtrack'
+
 import { bindMainPlaylist } from './playlist'
 
-import { setCurrentTrack, playPouse, setExplorePlaylist, clearExplorePlaylist } from './soundtrack'
+import { playPouse, setExplorePlaylist, clearExplorePlaylist } from './soundtrack'
 import {
   playNext,
   playPrev,
@@ -25,7 +27,6 @@ import {
 import { openSnackbar, closeSnackbar } from './ui'
 
 export const SoundtrackMutations = {
-  setCurrentTrack: setCurrentTrack(currentTrackVar),
   playPouse: playPouse(currentTrackVar),
   setExplorePlaylist: setExplorePlaylist(explorePlaylistVar),
   clearExplorePlaylist: clearExplorePlaylist(explorePlaylistVar)

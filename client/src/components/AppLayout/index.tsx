@@ -6,7 +6,7 @@ import { Snackbar } from '@/shared/ui/snackbar'
 import { MiniPlayer } from '@/components/MiniPlayer'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 import { Outlet, useLocation } from 'react-router-dom'
 import { SoundtrackMutations, UserMutations } from '@/apollo/cache/mutations'
 
@@ -71,14 +71,14 @@ export function AppLayout() {
 
   useEffect(() => {
     if (player) {
-      if (track.audioURL) {
+      if (track && track.audioURL) {
         // console.log('load')
         setCurrentTime('0:00')
         player.redrawTrackline()
         player.load(track.audioURL)
       }
     }
-  }, [track.audioURL])
+  }, [track])
 
   const handlePlayerOpen = () => {
     document.body.style.overflow = 'hidden'

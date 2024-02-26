@@ -6,7 +6,7 @@ import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 
 import styles from './MiniPlayer.module.scss'
 

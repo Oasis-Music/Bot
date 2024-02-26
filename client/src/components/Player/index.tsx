@@ -6,7 +6,7 @@ import { Details } from './Details'
 import { Controls } from './Controls'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 
 import styles from './Player.module.scss'
 

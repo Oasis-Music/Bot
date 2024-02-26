@@ -1,7 +1,7 @@
 import { makeVar } from '@apollo/client'
 import type { User, accessToken, snackbarEvent } from './types'
 // TEMP
-import type { Soundtrack, CurrentTrack } from '@/entities/soundtrack'
+import type { Soundtrack } from '@/entities/soundtrack'
 ///
 import jwtDecode from 'jwt-decode'
 
@@ -13,7 +13,6 @@ export const snackbarEventVar = makeVar<snackbarEvent>({
 })
 
 // soundtrack
-export const currentTrackVar = makeVar<CurrentTrack>({} as CurrentTrack)
 export const explorePlaylistVar = makeVar<Soundtrack[]>([])
 
 // user

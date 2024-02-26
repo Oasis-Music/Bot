@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { SoundtrackItem } from '@/entities/soundtrack'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { PlaylistType } from '@/apollo/cache/types'
 import type { Soundtrack } from '@/entities/soundtrack'
-import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
+import { PlaylistMutations } from '@/apollo/cache/mutations'
 
 import styles from './playlist.module.scss'
+import { usePlaySoundtrack } from '@/features/soundtrack/play'
 
 interface PlaylistProps {
   relatedTo: keyof typeof PlaylistType
@@ -28,6 +29,8 @@ export function Playlist({
   onFetchNextPage
 }: PlaylistProps) {
   const currentTrack = useReactiveVar(currentTrackVar)
+
+  const playSoundtrack = usePlaySoundtrack()
 
   const parentRef = useRef<HTMLDivElement>(null)
 
@@ -57,10 +60,9 @@ export function Playlist({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasNextPage, onFetchNextPage, allRows, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
 
-  const trackClickHandler = (track: Soundtrack) => {
-    PlaylistMutations.bindMainPlaylist(relatedTo)
-    SoundtrackMutations.setCurrentTrack(track)
-  }
+  // const trackClickHandler = (track: Soundtrack) => {
+  //   PlaylistMutations.bindMainPlaylist(relatedTo)
+  // }
 
   return (
     <div style={{ display: 'flex', flexGrow: '1' }}>
@@ -68,7 +70,7 @@ export function Playlist({
         ref={parentRef}
         className={styles.view}
         style={{
-          height: currentTrack.id ? `calc(${height} - 67px)` : height,
+          height: currentTrack.isPlaying ? `calc(${height} - 67px)` : height,
           width: `100%`,
           overflow: 'auto',
           paddingBottom: 0
@@ -112,7 +114,7 @@ export function Playlist({
                     duration={track.duration}
                     coverURL={track.coverURL || ''}
                     isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-                    onClick={() => trackClickHandler(track)}
+                    onClick={() => playSoundtrack(track)}
                   />
                 )}
               </li>

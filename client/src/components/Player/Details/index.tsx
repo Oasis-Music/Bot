@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 
 import styles from './Details.module.scss'
 
