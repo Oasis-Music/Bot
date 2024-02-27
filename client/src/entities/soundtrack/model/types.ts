@@ -1,3 +1,5 @@
+export type PlaylistType = 'user' | 'explore'
+
 export type Soundtrack = {
   id: string
   title: string

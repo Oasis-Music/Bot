@@ -1,20 +1,19 @@
 import { ReactiveVar } from '@apollo/client'
-import type { Soundtrack } from '@/entities/soundtrack'
-import { PlaylistType } from '../../types'
+import type { PlaylistType, Soundtrack } from '../types'
 
-export default (
+export function bindMainPlaylist(
   mainPlaylistVar: ReactiveVar<Soundtrack[]>,
   userPlaylistVar: ReactiveVar<Soundtrack[]>,
   explorePlaylistVar: ReactiveVar<Soundtrack[]>
-): ((p: keyof typeof PlaylistType) => void) => {
-  return (playlist: keyof typeof PlaylistType): void => {
+): (p: PlaylistType) => void {
+  return (playlist) => {
     let target: Soundtrack[] = []
 
     switch (playlist) {
-      case 'User':
+      case 'user':
         target = userPlaylistVar()
         break
-      case 'Explore':
+      case 'explore':
         target = explorePlaylistVar()
         break
     }

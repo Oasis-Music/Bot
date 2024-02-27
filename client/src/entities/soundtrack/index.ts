@@ -1,3 +1,10 @@
-export type { Soundtrack, CurrentTrack } from './model/types'
+export type { Soundtrack, CurrentTrack, PlaylistType } from './model/types'
 export { SoundtrackItem } from './ui/item'
-export { currentTrackVar, SoundtrackStore } from './model/store'
+
+export {
+  currentTrackVar,
+  mainPlaylistVar,
+  explorePlaylistVar,
+  userPlaylistVar,
+  SoundtrackStore
+} from './model/store'

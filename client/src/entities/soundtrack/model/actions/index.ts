@@ -1,2 +1,5 @@
 export { playTrack } from './play'
 export { playPause } from './play-pause'
+export { setExplorePlaylist } from './set-explore-playlist'
+export { setUserPlaylist } from './set-user-playlist'
+export { bindMainPlaylist } from './bind-main-playlist'

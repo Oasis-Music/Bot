@@ -1,24 +1,13 @@
-import {
-  userVar,
-  isAuthenticatedVar,
-  mainPlaylistVar,
-  userPlaylistVar,
-  explorePlaylistVar,
-  isSnackbarOpenVar,
-  snackbarEventVar
-} from '../variables'
+import { userVar, isAuthenticatedVar, isSnackbarOpenVar, snackbarEventVar } from '../variables'
+
+import { mainPlaylistVar, userPlaylistVar } from '@/entities/soundtrack'
 
 import { currentTrackVar } from '@/entities/soundtrack'
 
-import { bindMainPlaylist } from './playlist'
-
-import { setExplorePlaylist, clearExplorePlaylist } from './soundtrack'
 import {
   playNext,
   playPrev,
   processAccessToken,
-  setUserPlaylist,
-  clearUserPlaylist,
   attachSoundtrack,
   unattachSoundtrack,
   logout
@@ -26,24 +15,13 @@ import {
 
 import { openSnackbar, closeSnackbar } from './ui'
 
-export const SoundtrackMutations = {
-  setExplorePlaylist: setExplorePlaylist(explorePlaylistVar),
-  clearExplorePlaylist: clearExplorePlaylist(explorePlaylistVar)
-}
-
 export const UserMutations = {
   playNext: playNext(currentTrackVar, mainPlaylistVar),
   playPrev: playPrev(currentTrackVar, mainPlaylistVar),
-  setUserPlaylist: setUserPlaylist(userPlaylistVar),
-  clearUserPlaylist: clearUserPlaylist(userPlaylistVar),
   attachSoundtrack: attachSoundtrack(currentTrackVar, userPlaylistVar),
   unattachSoundtrack: unattachSoundtrack(currentTrackVar, userPlaylistVar),
   processAccessToken: processAccessToken(userVar, isAuthenticatedVar),
   logout: logout(userVar, isAuthenticatedVar)
-}
-
-export const PlaylistMutations = {
-  bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar)
 }
 
 export const UiMutations = {

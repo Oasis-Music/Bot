@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { NowPlaying } from './NowPlaying'
 import { useReactiveVar } from '@apollo/client'
-import { UserMutations } from '@/apollo/cache/mutations'
 import { List } from './List'
 import { userVar } from '@/apollo/cache/variables'
 import { useUserSoundtracksQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
@@ -10,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import type { Soundtrack } from '@/entities/soundtrack'
 
 import styles from './Home.module.scss'
+import { useUserPlaylist } from '@/features/soundtrack/set-user-playlist'
 
 const ITEMS_PER_PAGE = 15
 
@@ -22,6 +22,8 @@ export default function Home() {
   const [firstLoad, setFirstLoad] = useState(true)
 
   const [tracksNum, setTracksNum] = useState(0)
+
+  const { setUserPlaylist } = useUserPlaylist()
 
   const { loading, error } = useUserSoundtracksQuery({
     variables: {
@@ -37,7 +39,7 @@ export default function Home() {
       const tracks = q.userSoundtracks.soundtracks
       const totalNum = q.userSoundtracks.total
 
-      UserMutations.setUserPlaylist(tracks as Soundtrack[])
+      setUserPlaylist(tracks as Soundtrack[])
       setTracksNum(totalNum)
       setHasNextPage(tracks.length < totalNum && tracks.length === ITEMS_PER_PAGE)
       setFirstLoad(false)
@@ -51,7 +53,7 @@ export default function Home() {
     return () => {
       console.log('clear playlist')
 
-      UserMutations.clearUserPlaylist()
+      setUserPlaylist([])
     }
   }, [])
 

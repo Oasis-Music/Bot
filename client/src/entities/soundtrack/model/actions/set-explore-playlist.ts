@@ -1,10 +1,10 @@
 import { ReactiveVar } from '@apollo/client'
-import type { Soundtrack } from '@/entities/soundtrack'
+import type { Soundtrack } from '../types'
 
-export default (
+export function setExplorePlaylist(
   explorePlaylistVar: ReactiveVar<Soundtrack[]>
-): ((tracks: Soundtrack[]) => void) => {
-  return (tracks): void => {
+): (tracks: Soundtrack[]) => void {
+  return (tracks) => {
     const prevTracks = explorePlaylistVar()
 
     if (prevTracks.length) {

@@ -3,7 +3,7 @@ import { Playlist } from '@/widgets/playlist'
 import { NoDataPlug, ErrorPlug } from '../plugs'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
-import { userPlaylistVar } from '@/apollo/cache/variables'
+import { userPlaylistVar } from '@/entities/soundtrack'
 
 import styles from './List.module.scss'
 
@@ -53,7 +53,7 @@ export function List({
   return (
     <div>
       <Playlist
-        relatedTo="User"
+        relatedTo="user"
         height="65vh"
         data={userPlaylist}
         hasNextPage={hasNextPage}

@@ -1,5 +1,10 @@
 import { makeVar } from '@apollo/client'
-import type { CurrentTrack } from './types'
+import type { Soundtrack, CurrentTrack } from './types'
+
+export const mainPlaylistVar = makeVar<Soundtrack[]>([])
+
+export const userPlaylistVar = makeVar<Soundtrack[]>([])
+export const explorePlaylistVar = makeVar<Soundtrack[]>([])
 
 export const currentTrackVar = makeVar<CurrentTrack>({
   isPlaying: false,
@@ -12,9 +17,18 @@ export const currentTrackVar = makeVar<CurrentTrack>({
   attached: false
 })
 
-import { playTrack, playPause } from './actions'
+import {
+  playTrack,
+  playPause,
+  setExplorePlaylist,
+  setUserPlaylist,
+  bindMainPlaylist
+} from './actions'
 
 export const SoundtrackStore = {
   play: playTrack(currentTrackVar),
-  playPause: playPause(currentTrackVar)
+  playPause: playPause(currentTrackVar),
+  setExplorePlaylist: setExplorePlaylist(explorePlaylistVar),
+  setUserPlaylist: setUserPlaylist(userPlaylistVar),
+  bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar)
 }

@@ -2,7 +2,7 @@ import React from 'react'
 import { Playlist } from '@/widgets/playlist'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
-import { explorePlaylistVar } from '@/apollo/cache/variables'
+import { explorePlaylistVar } from '@/entities/soundtrack'
 
 import styles from './List.module.scss'
 
@@ -44,7 +44,7 @@ export function List({
   return (
     <div>
       <Playlist
-        relatedTo="Explore"
+        relatedTo="explore"
         height="77vh"
         data={explorePlaylist}
         hasNextPage={hasNextPage}

@@ -4,15 +4,14 @@ import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import type { PlaylistType } from '@/apollo/cache/types'
-import type { Soundtrack } from '@/entities/soundtrack'
-import { PlaylistMutations } from '@/apollo/cache/mutations'
+import type { PlaylistType, Soundtrack } from '@/entities/soundtrack'
 
 import styles from './playlist.module.scss'
 import { usePlaySoundtrack } from '@/features/soundtrack/play'
+import { useMainPlaylist } from '@/features/soundtrack/bind-main-playlist'
 
 interface PlaylistProps {
-  relatedTo: keyof typeof PlaylistType
+  relatedTo: PlaylistType
   data: Soundtrack[]
   height: string
   hasNextPage: boolean
@@ -29,6 +28,8 @@ export function Playlist({
   onFetchNextPage
 }: PlaylistProps) {
   const currentTrack = useReactiveVar(currentTrackVar)
+
+  const { bindMainPlaylist } = useMainPlaylist()
 
   const playSoundtrack = usePlaySoundtrack()
 
@@ -60,9 +61,10 @@ export function Playlist({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasNextPage, onFetchNextPage, allRows, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
 
-  // const trackClickHandler = (track: Soundtrack) => {
-  //   PlaylistMutations.bindMainPlaylist(relatedTo)
-  // }
+  const trackClickHandler = (track: Soundtrack) => {
+    playSoundtrack(track)
+    bindMainPlaylist(relatedTo)
+  }
 
   return (
     <div style={{ display: 'flex', flexGrow: '1' }}>
@@ -114,7 +116,7 @@ export function Playlist({
                     duration={track.duration}
                     coverURL={track.coverURL || ''}
                     isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-                    onClick={() => playSoundtrack(track)}
+                    onClick={() => trackClickHandler(track)}
                   />
                 )}
               </li>
