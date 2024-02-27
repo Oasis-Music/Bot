@@ -1,8 +1,3 @@
-export const enum PlaylistType {
-  User = 1,
-  Explore
-}
-
 export type User = {
   id: string
 }
