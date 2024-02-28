@@ -8,7 +8,7 @@ import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 
-import styles from './Player.module.scss'
+import styles from './player.module.scss'
 
 interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   currentTime: string

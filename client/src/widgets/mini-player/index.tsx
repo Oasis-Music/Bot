@@ -8,7 +8,7 @@ import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 
-import styles from './MiniPlayer.module.scss'
+import styles from './styles.module.scss'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
