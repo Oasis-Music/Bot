@@ -1,4 +1,4 @@
-import { userVar, isAuthenticatedVar, isSnackbarOpenVar, snackbarEventVar } from '../variables'
+import { userVar, isAuthenticatedVar } from '../variables'
 
 import { mainPlaylistVar, userPlaylistVar } from '@/entities/soundtrack'
 
@@ -13,8 +13,6 @@ import {
   logout
 } from './user'
 
-import { openSnackbar, closeSnackbar } from './ui'
-
 export const UserMutations = {
   playNext: playNext(currentTrackVar, mainPlaylistVar),
   playPrev: playPrev(currentTrackVar, mainPlaylistVar),
@@ -22,9 +20,4 @@ export const UserMutations = {
   unattachSoundtrack: unattachSoundtrack(currentTrackVar, userPlaylistVar),
   processAccessToken: processAccessToken(userVar, isAuthenticatedVar),
   logout: logout(userVar, isAuthenticatedVar)
-}
-
-export const UiMutations = {
-  openSnackbar: openSnackbar(isSnackbarOpenVar, snackbarEventVar),
-  closeSnackbar: closeSnackbar(isSnackbarOpenVar, snackbarEventVar)
 }

@@ -7,8 +7,3 @@ export type accessToken = {
   firstName: string
   accessUuid: string
 }
-
-export type snackbarEvent = {
-  type: 'error' | 'success'
-  message: string
-}

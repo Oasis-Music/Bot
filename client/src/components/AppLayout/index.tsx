@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import Player from '@/widgets/player'
 import AudioPlayer from '@/player'
 import { NavBar } from '@/widgets/navigation'
-import { Snackbar } from '@/shared/ui/snackbar'
 import { MiniPlayer } from '@/widgets/mini-player'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
@@ -138,7 +137,6 @@ export function AppLayout() {
         onLoop={handleLoopState}
         onRandom={handleRandomState}
       />
-      <Snackbar />
     </div>
   )
 }

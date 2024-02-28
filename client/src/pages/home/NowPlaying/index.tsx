@@ -12,7 +12,8 @@ import { useReactiveVar } from '@apollo/client'
 import { userVar } from '@/apollo/cache/variables'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { useTranslation } from 'react-i18next'
-import { UserMutations, UiMutations } from '@/apollo/cache/mutations'
+import { UserMutations } from '@/apollo/cache/mutations'
+import { useSnackbar } from '@/shared/lib/snackbar'
 import { useAttachSoundtrackMutation } from '@/graphql/user/_gen_/attachSoundtrack.mutauion'
 import { useUnattachSoundtrackMutation } from '@/graphql/user/_gen_/unattachSoundtrack.mutation'
 
@@ -31,6 +32,8 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar)
 
+  const openSnackbar = useSnackbar()
+
   useEffect(() => {
     setCopied(false)
   }, [track.id])
@@ -44,7 +47,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
       }
     },
     onError: () => {
-      UiMutations.openSnackbar({
+      openSnackbar({
         type: 'error',
         message: t('snackbar.trackSaveFail')
       })
@@ -59,7 +62,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
       }
     },
     onError: () => {
-      UiMutations.openSnackbar({
+      openSnackbar({
         type: 'error',
         message: t('snackbar.trackDeleteFail')
       })

@@ -1,13 +1,6 @@
 import { makeVar } from '@apollo/client'
-import type { User, accessToken, snackbarEvent } from './types'
+import type { User, accessToken } from './types'
 import jwtDecode from 'jwt-decode'
-
-// ui
-export const isSnackbarOpenVar = makeVar<boolean>(false)
-export const snackbarEventVar = makeVar<snackbarEvent>({
-  type: 'success',
-  message: ''
-})
 
 // user
 export const userVar = makeVar<User>({} as User)
