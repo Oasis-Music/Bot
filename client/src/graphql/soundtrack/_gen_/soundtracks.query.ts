@@ -57,7 +57,8 @@ export const AllSoundtracksDocument = gql`
  * });
  */
 export function useAllSoundtracksQuery(
-  baseOptions: Apollo.QueryHookOptions<AllSoundtracksQuery, AllSoundtracksQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<AllSoundtracksQuery, AllSoundtracksQueryVariables> &
+    ({ variables: AllSoundtracksQueryVariables; skip?: boolean } | { skip: boolean })
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<AllSoundtracksQuery, AllSoundtracksQueryVariables>(

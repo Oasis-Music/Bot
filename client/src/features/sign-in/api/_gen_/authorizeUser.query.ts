@@ -1,4 +1,4 @@
-import * as Types from '../../types'
+import * as Types from '../../../../graphql/types'
 
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
@@ -38,7 +38,8 @@ export const AuthorizeUserDocument = gql`
  * });
  */
 export function useAuthorizeUserQuery(
-  baseOptions: Apollo.QueryHookOptions<AuthorizeUserQuery, AuthorizeUserQueryVariables>
+  baseOptions: Apollo.QueryHookOptions<AuthorizeUserQuery, AuthorizeUserQueryVariables> &
+    ({ variables: AuthorizeUserQueryVariables; skip?: boolean } | { skip: boolean })
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<AuthorizeUserQuery, AuthorizeUserQueryVariables>(

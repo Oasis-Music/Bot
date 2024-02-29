@@ -1,8 +1,8 @@
 import { ReactiveVar } from '@apollo/client'
-import type { User } from '../../types'
+import type { User } from '@/entities/user'
 
 export default (
-  userVar: ReactiveVar<User>,
+  userVar: ReactiveVar<User | null>,
   isAuthenticatedVar: ReactiveVar<boolean>
 ): (() => void) => {
   return (): void => {

@@ -4,6 +4,7 @@ import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { cache } from './cache/cache'
 import { UserMutations } from './cache/mutations'
 import { promiseToObservable } from '@/shared/lib/helpers'
+import { AuthStore, isTokenValid } from '@/entities/auth'
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL + 'graphql'
 
@@ -60,12 +61,12 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
             }
           })
           .then((data: refreshReponse) => {
-            const ok = UserMutations.processAccessToken(data.token)
+            const ok = isTokenValid(data.token)
             if (!ok) {
               throw new Error('new AT is broken')
             }
 
-            localStorage.setItem('rt', data.refreshToken)
+            AuthStore.signIn(data.token, data.refreshToken)
 
             return data.token
           })

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { NowPlaying } from './NowPlaying'
 import { useReactiveVar } from '@apollo/client'
 import { List } from './List'
-import { userVar } from '@/apollo/cache/variables'
+import { type User, userVar } from '@/entities/user'
 import { useUserSoundtracksQuery } from '@/graphql/user/_gen_/userSoundtracks.query'
 import { Counter } from './Counter'
 import { useTranslation } from 'react-i18next'
@@ -15,7 +15,7 @@ const ITEMS_PER_PAGE = 15
 
 export default function Home() {
   const { t } = useTranslation()
-  const currentUser = useReactiveVar(userVar)
+  const currentUser = useReactiveVar(userVar) as User
 
   const [currentPage, setCurrentPage] = useState(1)
   const [hasNextPage, setHasNextPage] = useState(false)

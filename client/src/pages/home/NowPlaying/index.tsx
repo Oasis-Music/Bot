@@ -9,7 +9,7 @@ import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
-import { userVar } from '@/apollo/cache/variables'
+import { userVar, type User } from '@/entities/user'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from '@/shared/lib/snackbar'
@@ -31,7 +31,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
 
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
-  const user = useReactiveVar(userVar)
+  const user = useReactiveVar(userVar) as User
 
   const openSnackbar = useSnackbar()
 

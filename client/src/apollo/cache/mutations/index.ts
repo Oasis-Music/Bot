@@ -1,8 +1,8 @@
-import { userVar, isAuthenticatedVar } from '../variables'
+import { userVar } from '@/entities/user'
+import { isAuthenticatedVar } from '@/entities/auth'
 
-import { processAccessToken, logout } from './user'
+import { logout } from './user'
 
 export const UserMutations = {
-  processAccessToken: processAccessToken(userVar, isAuthenticatedVar),
   logout: logout(userVar, isAuthenticatedVar)
 }
