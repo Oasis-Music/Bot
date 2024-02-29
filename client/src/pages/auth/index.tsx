@@ -1,7 +1,7 @@
 import handv_img from '@/assets/rastr/hand-v.png'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { SignInButton } from '@/features/sign-in'
+import { SignInButton } from '@/features/auth/sign-in'
 
 import styles from './Auth.module.scss'
 

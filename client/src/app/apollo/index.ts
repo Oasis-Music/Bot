@@ -1,10 +1,10 @@
 import { ApolloClient, ApolloLink, from } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
-import { cache } from './cache/cache'
-import { UserMutations } from './cache/mutations'
+import { cache } from './cache'
 import { promiseToObservable } from '@/shared/lib/helpers'
 import { AuthStore, isTokenValid } from '@/entities/auth'
+import { UserStore } from '@/entities/user'
 
 const GRAPHQL_URL = import.meta.env.VITE_API_URL + 'graphql'
 
@@ -40,7 +40,7 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
         const rt = localStorage.getItem('rt')
         if (!rt) {
           console.warn('rt not exists - logout')
-          UserMutations.logout()
+          AuthStore.logout()
           return
         }
 
@@ -73,7 +73,8 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
           .catch((err) => {
             console.warn(err)
             console.info('logout...')
-            UserMutations.logout()
+            AuthStore.logout()
+            UserStore.clearUser()
           })
 
         return promiseToObservable(refsresh).flatMap((token) => {
@@ -94,10 +95,8 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
   if (networkError) console.warn(`[Network error]: ${networkError}`)
 })
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   cache,
   link: from([authMiddleware, refreshLink, uploadLink]),
   connectToDevTools: import.meta.env.DEV
 })
-
-export default client
