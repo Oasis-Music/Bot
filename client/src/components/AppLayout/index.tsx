@@ -7,10 +7,11 @@ import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { Outlet, useLocation } from 'react-router-dom'
-import { UserMutations } from '@/apollo/cache/mutations'
+import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
+import { usePlayNextTrack } from '@/features/soundtrack/play-next'
+import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
 
 import styles from './AppLayout.module.scss'
-import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
@@ -22,6 +23,9 @@ export function AppLayout() {
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [loop, setLoop] = useState<boolean>(false)
   const [random, setRandom] = useState<boolean>(false)
+
+  const playNext = usePlayNextTrack()
+  const playPrev = usePlayPrevTrack()
 
   const playPause = usePlayPauseTrack()
 
@@ -64,11 +68,11 @@ export function AppLayout() {
   }, [])
 
   const playNextHadler = () => {
-    UserMutations.playNext()
+    playNext()
   }
 
   const playPrevHandler = () => {
-    UserMutations.playPrev()
+    playPrev()
   }
 
   useEffect(() => {

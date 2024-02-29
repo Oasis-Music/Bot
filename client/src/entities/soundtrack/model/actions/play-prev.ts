@@ -1,11 +1,11 @@
 import { ReactiveVar } from '@apollo/client'
 import type { CurrentTrack, Soundtrack } from '@/entities/soundtrack'
 
-export default (
+export function playPrev(
   currentTrackVar: ReactiveVar<CurrentTrack>,
   mainPlaylistVar: ReactiveVar<Soundtrack[]>
-): (() => void) => {
-  return (): void => {
+): () => void {
+  return () => {
     const currentTrack = currentTrackVar()
     const playList = mainPlaylistVar()
 

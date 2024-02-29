@@ -22,7 +22,9 @@ import {
   playPause,
   setExplorePlaylist,
   setUserPlaylist,
-  bindMainPlaylist
+  bindMainPlaylist,
+  playNext,
+  playPrev
 } from './actions'
 
 export const SoundtrackStore = {
@@ -30,5 +32,7 @@ export const SoundtrackStore = {
   playPause: playPause(currentTrackVar),
   setExplorePlaylist: setExplorePlaylist(explorePlaylistVar),
   setUserPlaylist: setUserPlaylist(userPlaylistVar),
-  bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar)
+  bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar),
+  playNext: playNext(currentTrackVar, mainPlaylistVar),
+  playPrev: playPrev(currentTrackVar, mainPlaylistVar)
 }
