@@ -24,7 +24,9 @@ import {
   setUserPlaylist,
   bindMainPlaylist,
   playNext,
-  playPrev
+  playPrev,
+  addToUserPlaylist,
+  removeFormUserPlaylist
 } from './actions'
 
 export const SoundtrackStore = {
@@ -34,5 +36,7 @@ export const SoundtrackStore = {
   setUserPlaylist: setUserPlaylist(userPlaylistVar),
   bindMainPlaylist: bindMainPlaylist(mainPlaylistVar, userPlaylistVar, explorePlaylistVar),
   playNext: playNext(currentTrackVar, mainPlaylistVar),
-  playPrev: playPrev(currentTrackVar, mainPlaylistVar)
+  playPrev: playPrev(currentTrackVar, mainPlaylistVar),
+  addToUserPlaylist: addToUserPlaylist(currentTrackVar, userPlaylistVar),
+  removeFormUserPlaylist: removeFormUserPlaylist(currentTrackVar, userPlaylistVar)
 }

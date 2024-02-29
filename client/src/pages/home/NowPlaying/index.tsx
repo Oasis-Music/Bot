@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PlusIcon from '@/assets/svg/plus.svg?react'
 import TrashIcon from '@/assets/svg/trash.svg?react'
 import ShareIcon from '@/assets/svg/share.svg?react'
@@ -12,10 +12,11 @@ import { useReactiveVar } from '@apollo/client'
 import { userVar } from '@/apollo/cache/variables'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { useTranslation } from 'react-i18next'
-import { UserMutations } from '@/apollo/cache/mutations'
 import { useSnackbar } from '@/shared/lib/snackbar'
 import { useAttachSoundtrackMutation } from '@/graphql/user/_gen_/attachSoundtrack.mutauion'
 import { useUnattachSoundtrackMutation } from '@/graphql/user/_gen_/unattachSoundtrack.mutation'
+import { useAddToUserPlaylist } from '@/features/soundtrack/add-to-user-playlist'
+import { useRemoveFromUserPlaylist } from '@/features/soundtrack/remove-from-user-playlist'
 
 import styles from './NowPlaying.module.scss'
 
@@ -34,13 +35,16 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
 
   const openSnackbar = useSnackbar()
 
+  const attachSoundtrack = useAddToUserPlaylist()
+  const unattachSoundtrack = useRemoveFromUserPlaylist()
+
   useEffect(() => {
     setCopied(false)
   }, [track.id])
 
   const [onAttachSoundtrack, attachMeta] = useAttachSoundtrackMutation({
     onCompleted: () => {
-      UserMutations.attachSoundtrack()
+      attachSoundtrack()
 
       if (onTrackAttach) {
         onTrackAttach()
@@ -56,7 +60,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
 
   const [onUnattachSoundtrack, _unattachMeta] = useUnattachSoundtrackMutation({
     onCompleted: () => {
-      UserMutations.unattachSoundtrack()
+      unattachSoundtrack()
       if (onTrackUnattach) {
         onTrackUnattach()
       }

@@ -1,11 +1,11 @@
 import { ReactiveVar } from '@apollo/client'
 import type { CurrentTrack, Soundtrack } from '@/entities/soundtrack'
 
-export default (
+export function removeFormUserPlaylist(
   currentTrackVar: ReactiveVar<CurrentTrack>,
   userPlaylistVar: ReactiveVar<Soundtrack[]>
-): (() => void) => {
-  return (): void => {
+): () => void {
+  return () => {
     const currentTrack = currentTrackVar()
     const playlist = userPlaylistVar()
 
