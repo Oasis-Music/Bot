@@ -1,7 +1,7 @@
 import React from 'react'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useReactiveVar } from '@apollo/client'
-import { isAuthenticatedVar } from '@/entities/auth'
+import { isAuthenticatedVar } from '../model/store'
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 
 export function ProtectedRoute({ children }: { children?: React.ReactNode }) {

@@ -1,7 +1,7 @@
 import React, { useEffect, lazy, Suspense } from 'react'
 import { AppLayout } from '@/components/AppLayout'
 import { Fallback } from '@/components/Fallback'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from '@/hooks'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
