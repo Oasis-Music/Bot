@@ -1,10 +1,9 @@
 import React from 'react'
-import { useLang } from '@/hooks'
-
-import styles from './LangSwitcher.module.scss'
+import { useLang } from '../../hooks'
+import styles from './styles.module.scss'
 
 export function LangSwitcher() {
-  const [lng, changeLang] = useLang()
+  const [language, changeLang] = useLang()
 
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     changeLang(e.target.checked ? 'ru' : 'en')
@@ -13,13 +12,13 @@ export function LangSwitcher() {
   return (
     <div className={styles.switch}>
       <input
-        id="lng-swithc"
+        id="lng-switcher"
         type="checkbox"
         onChange={checkHandler}
         className={styles.input}
-        defaultChecked={lng === 'ru'}
+        defaultChecked={language !== 'en'}
       />
-      <label htmlFor="lng-swithc" className={styles.label} />
+      <label htmlFor="lng-switcher" className={styles.label} />
     </div>
   )
 }
