@@ -1,0 +1,28 @@
+.playBotton {
+  position: relative;
+  color: #fff;
+  background-color: #1b1818;
+  font-size: 2.5vh;
+  padding: 4vh;
+  box-shadow: none;
+  &:disabled {
+    box-shadow: none;
+  }
+  &:hover:not(:disabled) {
+    background-color: #1b1818;
+  }
+
+  @include minHSX {
+    font-size: 17px;
+    padding: 30px;
+  }
+}
+
+.icon {
+  position: absolute;
+}
+
+.pauseIcon {
+  left: 50%;
+  transform: translate(-41%, 0);
+}
