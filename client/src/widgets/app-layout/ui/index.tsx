@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Player from '@/widgets/player'
 import AudioPlayer from '@/player'
 import { NavBar } from '@/widgets/navigation'
@@ -11,7 +11,7 @@ import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 import { usePlayNextTrack } from '@/features/soundtrack/play-next'
 import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
 
-import styles from './AppLayout.module.scss'
+import styles from './styles.module.scss'
 
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)

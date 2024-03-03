@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react'
-import { AppLayout } from '@/components/AppLayout'
+import { AppLayout } from '@/widgets/app-layout'
 import { Fallback } from '@/shared/ui/fallback'
 import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
