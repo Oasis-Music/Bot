@@ -10,13 +10,19 @@ import styles from './styles.module.scss'
 
 interface PlayPauseButtonProps {
   onClick(): void
+  variant?: 'plain' | 'attractive'
+  disabled?: boolean
 }
 
-export function PlayPauseButton({ onClick }: PlayPauseButtonProps) {
+export function PlayPauseButton({ onClick, variant = 'plain', disabled }: PlayPauseButtonProps) {
   const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
-    <IconButton onClick={onClick} className={styles.playBotton}>
+    <IconButton
+      disabled={disabled}
+      onClick={onClick}
+      className={clsx(styles.button, variant === 'plain' ? styles.plain : styles.attractive)}
+    >
       <SvgIcon className={clsx(styles.icon, !currentTrack.isPlaying && styles.pauseIcon)}>
         {currentTrack.isPlaying ? <PauseIcon /> : <PlayIcon />}
       </SvgIcon>

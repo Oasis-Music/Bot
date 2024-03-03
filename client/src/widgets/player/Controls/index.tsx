@@ -1,21 +1,18 @@
-import React from 'react'
 import clsx from 'clsx'
-import PlayIcon from '@/assets/svg/play.svg?react'
-import PauseIcon from '@/assets/svg/pause.svg?react'
 import ArrowAltIcon from '@/assets/svg/arrow-alt.svg?react'
 import RepeatIcon from '@/assets/svg/repeat.svg?react'
 import RandomIcon from '@/assets/svg/random.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
+import { PlayPauseButton } from '@/features/soundtrack/play-pause'
 
 import styles from './Controls.module.scss'
 
 interface ControlsProps {
-  isPlay: boolean
   readyForPlay: boolean
   withLoop: boolean
   withRandom: boolean
-  onPlayPause?(): void
+  onPlayPause(): void
   onPlayNext(): void
   onPlayPrev(): void
   onLoop(): void
@@ -23,7 +20,6 @@ interface ControlsProps {
 }
 
 export function Controls({
-  isPlay,
   withLoop,
   withRandom,
   readyForPlay,
@@ -51,15 +47,7 @@ export function Controls({
       </IconButton>
       {/*  */}
       <div className={styles.playButtonWrapper}>
-        <IconButton
-          disabled={!readyForPlay}
-          onClick={onPlayPause}
-          className={clsx(styles.playButton)}
-        >
-          <SvgIcon className={clsx(styles.playIcon, !isPlay && styles.playIconPaused)}>
-            {isPlay ? <PauseIcon /> : <PlayIcon />}
-          </SvgIcon>
-        </IconButton>
+        <PlayPauseButton variant="attractive" disabled={!readyForPlay} onClick={onPlayPause} />
       </div>
       {/*  */}
       <IconButton onClick={onPlayNext} className={styles.control}>

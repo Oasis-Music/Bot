@@ -56,7 +56,6 @@ const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         duration={timeFormater(currentTrack.duration)}
       />
       <Controls
-        isPlay={currentTrack.isPlaying}
         readyForPlay={isReadyForPlay}
         withLoop={withLoop}
         withRandom={withRandom}
