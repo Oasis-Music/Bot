@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { List } from './List'
-import { Search } from '@/components/Search'
+import { Search } from '@/widgets/search'
 import { useAllSoundtracksQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
 import { useSearchSoundtrackLazyQuery } from '@/graphql/soundtrack/_gen_/searchSoundtrack.query'
 import { useTranslation } from 'react-i18next'
