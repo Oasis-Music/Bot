@@ -1,16 +1,17 @@
 import React, { useEffect, useRef } from 'react'
-import { PlaylistItem } from '@/shared/ui/playlist-item'
+import { SoundtrackItem } from '@/entities/soundtrack'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import type { Soundtrack, PlaylistType } from '@/apollo/cache/types'
-import { PlaylistMutations, SoundtrackMutations } from '@/apollo/cache/mutations'
+import type { PlaylistType, Soundtrack } from '@/entities/soundtrack'
 
 import styles from './playlist.module.scss'
+import { usePlaySoundtrack } from '@/features/soundtrack/play'
+import { useMainPlaylist } from '@/features/soundtrack/bind-main-playlist'
 
 interface PlaylistProps {
-  relatedTo: keyof typeof PlaylistType
+  relatedTo: PlaylistType
   data: Soundtrack[]
   height: string
   hasNextPage: boolean
@@ -27,6 +28,10 @@ export function Playlist({
   onFetchNextPage
 }: PlaylistProps) {
   const currentTrack = useReactiveVar(currentTrackVar)
+
+  const { bindMainPlaylist } = useMainPlaylist()
+
+  const playSoundtrack = usePlaySoundtrack()
 
   const parentRef = useRef<HTMLDivElement>(null)
 
@@ -57,8 +62,8 @@ export function Playlist({
   }, [hasNextPage, onFetchNextPage, allRows, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
 
   const trackClickHandler = (track: Soundtrack) => {
-    PlaylistMutations.bindMainPlaylist(relatedTo)
-    SoundtrackMutations.setCurrentTrack(track)
+    playSoundtrack(track)
+    bindMainPlaylist(relatedTo)
   }
 
   return (
@@ -105,7 +110,7 @@ export function Playlist({
                     'Nothing more to load'
                   )
                 ) : (
-                  <PlaylistItem
+                  <SoundtrackItem
                     title={track.title}
                     author={track.author}
                     duration={track.duration}

@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Player from '@/components/Player'
+import Player from '@/widgets/player'
 import AudioPlayer from '@/player'
 import { NavBar } from '@/widgets/navigation'
-import { Snackbar } from '@/shared/ui/snackbar'
-import { MiniPlayer } from '@/components/MiniPlayer'
+import { MiniPlayer } from '@/widgets/mini-player'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
-import { currentTrackVar } from '@/apollo/cache/variables'
+import { currentTrackVar } from '@/entities/soundtrack'
 import { Outlet, useLocation } from 'react-router-dom'
-import { SoundtrackMutations, UserMutations } from '@/apollo/cache/mutations'
+import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
+import { usePlayNextTrack } from '@/features/soundtrack/play-next'
+import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
 
 import styles from './AppLayout.module.scss'
 
@@ -22,6 +23,11 @@ export function AppLayout() {
   const [currentTime, setCurrentTime] = useState<string>('0:00')
   const [loop, setLoop] = useState<boolean>(false)
   const [random, setRandom] = useState<boolean>(false)
+
+  const playNext = usePlayNextTrack()
+  const playPrev = usePlayPrevTrack()
+
+  const playPause = usePlayPauseTrack()
 
   const waveContainerRef = useRef<HTMLDivElement>(null)
 
@@ -62,16 +68,16 @@ export function AppLayout() {
   }, [])
 
   const playNextHadler = () => {
-    UserMutations.playNext()
+    playNext()
   }
 
   const playPrevHandler = () => {
-    UserMutations.playPrev()
+    playPrev()
   }
 
   useEffect(() => {
     if (player) {
-      if (track.audioURL) {
+      if (track && track.audioURL) {
         // console.log('load')
         setCurrentTime('0:00')
         player.redrawTrackline()
@@ -90,7 +96,7 @@ export function AppLayout() {
   }
 
   const playPauseHandler = () => {
-    SoundtrackMutations.playPouse()
+    playPause()
 
     if (player) {
       player.playPause()
@@ -135,7 +141,6 @@ export function AppLayout() {
         onLoop={handleLoopState}
         onRandom={handleRandomState}
       />
-      <Snackbar />
     </div>
   )
 }

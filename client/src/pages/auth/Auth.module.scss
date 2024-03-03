@@ -32,30 +32,6 @@
   margin-left: 5px;
 }
 
-.submitButton {
-  width: 100%;
-  max-width: 240px;
-  line-height: 24px;
-  outline: none;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 7px;
-}
-
-.errorMessage {
-  height: 15px;
-  font-size: 14px;
-  margin: 0;
-  text-align: center;
-  color: #ff182e;
-  transition: opacity 0.2s ease-in-out;
-  opacity: 0;
-}
-
-.showError {
-  opacity: 1;
-}
-
 .terms {
   font-size: 14px;
   font-weight: 500;

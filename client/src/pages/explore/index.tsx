@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react'
 import { List } from './List'
 import { Search } from '@/components/Search'
 import { useAllSoundtracksQuery } from '@/graphql/soundtrack/_gen_/soundtracks.query'
-import { SoundtrackMutations } from '@/apollo/cache/mutations'
 import { useSearchSoundtrackLazyQuery } from '@/graphql/soundtrack/_gen_/searchSoundtrack.query'
 import { useTranslation } from 'react-i18next'
+import { useExplorePlaylist } from '@/features/soundtrack/set-explore-playlist'
 import type { Track } from './types'
-import type { Soundtrack } from '@/apollo/cache/types'
+import type { Soundtrack } from '@/entities/soundtrack'
 
 export default function Explore() {
   const { t } = useTranslation()
   const [_, setTracks] = useState<Track[]>([])
+
+  const { setExplorePlaylist } = useExplorePlaylist()
 
   const [firstLoad, setFirstLoad] = useState(true)
   const [currentPage, setCurrentPage] = useState<number>(1)
@@ -26,7 +28,7 @@ export default function Explore() {
     onCompleted(q) {
       const newTracks = q.soundtracks.soundtracks as Soundtrack[]
 
-      SoundtrackMutations.setExplorePlaylist(newTracks)
+      setExplorePlaylist(newTracks)
       setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
       setFirstLoad(false)
     },
@@ -45,7 +47,7 @@ export default function Explore() {
   // when currentPage changes, we should not clean up already saved original data
   useEffect(() => {
     return () => {
-      SoundtrackMutations.clearExplorePlaylist()
+      setExplorePlaylist([])
     }
   }, [])
 
