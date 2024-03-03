@@ -1,7 +1,5 @@
-import React from 'react'
 import { Loader } from '@/shared/ui/loader'
-
-import styles from './Fallback.module.scss'
+import styles from './fallback.module.scss'
 
 export function Fallback() {
   return (

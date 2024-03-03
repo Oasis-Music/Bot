@@ -1,6 +1,6 @@
-import React, { useEffect, lazy, Suspense } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { AppLayout } from '@/components/AppLayout'
-import { Fallback } from '@/components/Fallback'
+import { Fallback } from '@/shared/ui/fallback'
 import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useWindowCSSRatio } from '@/hooks'
