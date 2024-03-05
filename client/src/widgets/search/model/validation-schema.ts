@@ -1,7 +1,7 @@
-import * as yup from 'yup'
+import { Input, object, string, toTrimmed, maxLength, minLength } from 'valibot'
 
-export const ExploreSearchSchema = yup.object({
-  searchQuery: yup.string().trim().required()
+export const SearchSchema = object({
+  searchQuery: string([toTrimmed(), minLength(1, '____'), maxLength(70, '* максимум 70 символов')])
 })
 
-export type ExploreSearchSchemaTypes = yup.InferType<typeof ExploreSearchSchema>
+export type SearchSchemaType = Input<typeof SearchSchema>

@@ -1,9 +1,9 @@
-import React from 'react'
 import SearchIcon from '@/assets/svg/search.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
-import { Formik, Form, Field } from 'formik'
-import { ExploreSearchSchema, type ExploreSearchSchemaTypes } from '../model/validation-schema'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+import { SearchSchema, type SearchSchemaType } from '../model/validation-schema'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import styles from './search.module.scss'
 
@@ -13,35 +13,31 @@ interface SearchProps {
 }
 
 export function Search({ placeholder, onSubmit }: SearchProps) {
-  const initialValues: ExploreSearchSchemaTypes = { searchQuery: '' }
+  const { register, handleSubmit } = useForm<SearchSchemaType>({
+    resolver: valibotResolver(SearchSchema)
+  })
 
-  const handleSearch = (value: ExploreSearchSchemaTypes) => {
-    onSubmit(value.searchQuery.trim())
+  const handleSearch: SubmitHandler<SearchSchemaType> = (value) => {
+    console.log('search', value)
+    onSubmit(value.searchQuery)
   }
 
   return (
     <section>
-      <Formik
-        onSubmit={handleSearch}
-        initialValues={initialValues}
-        validationSchema={ExploreSearchSchema}
-      >
-        {() => (
-          <Form noValidate className={styles.form}>
-            <Field
-              name="searchQuery"
-              autoComplete="off"
-              placeholder={placeholder}
-              className={styles.searchField}
-            />
-            <IconButton type="submit" className={styles.searchButton}>
-              <SvgIcon>
-                <SearchIcon />
-              </SvgIcon>
-            </IconButton>
-          </Form>
-        )}
-      </Formik>
+      <form noValidate onSubmit={handleSubmit(handleSearch)} className={styles.form}>
+        <input
+          type="text"
+          autoComplete="off"
+          placeholder={placeholder}
+          className={styles.searchField}
+          {...register('searchQuery')}
+        />
+        <IconButton type="submit" className={styles.searchButton}>
+          <SvgIcon>
+            <SearchIcon />
+          </SvgIcon>
+        </IconButton>
+      </form>
     </section>
   )
 }
