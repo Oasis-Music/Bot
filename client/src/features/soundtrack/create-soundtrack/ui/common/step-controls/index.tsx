@@ -4,7 +4,6 @@ import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { RedirectButton } from '../redirect-button'
 import { useTranslation } from 'react-i18next'
-import { useFormContext } from 'react-hook-form'
 
 import styles from './styles.module.scss'
 
@@ -29,16 +28,6 @@ export function StepControls({
 }: StepControlsProps) {
   const { t } = useTranslation()
 
-  const {
-    formState: { isDirty }
-  } = useFormContext()
-
-  const handleLinkButtonClick = () => {
-    if (isDirty) {
-      onAlert()
-    }
-  }
-
   return (
     <>
       <div className={styles.buttonWrapper}>
@@ -60,9 +49,7 @@ export function StepControls({
           {nextText}
         </Button>
       </div>
-      <RedirectButton onClick={handleLinkButtonClick}>
-        {t('pages.upload.shared.toMain')}
-      </RedirectButton>
+      <RedirectButton onAlert={onAlert}>{t('pages.upload.shared.toMain')}</RedirectButton>
     </>
   )
 }

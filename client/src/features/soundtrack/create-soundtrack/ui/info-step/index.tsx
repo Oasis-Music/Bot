@@ -4,8 +4,6 @@ import { TextInput } from '@/shared/ui/text-input'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { RedirectButton } from '../common/redirect-button'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
-import { useNavigate } from 'react-router-dom'
 
 import styles from './styles.module.scss'
 
@@ -21,21 +19,11 @@ interface FieldData {
 
 export function Info({ onNextStep, onAlert }: InfoProps) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
 
   const {
     register,
-    formState: { isDirty, errors }
+    formState: { errors }
   } = useFormContext<FieldData>()
-
-  const handlePageLeave = () => {
-    if (isDirty) {
-      onAlert()
-      return
-    }
-
-    navigate(ROUTER_NAMES.root)
-  }
 
   return (
     <div className={styles.container}>
@@ -66,7 +54,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
       >
         {t('pages.upload.info.nextBotton')}
       </Button>
-      <RedirectButton onClick={handlePageLeave}>{t('pages.upload.info.link')}</RedirectButton>
+      <RedirectButton onAlert={onAlert}>{t('pages.upload.info.link')}</RedirectButton>
     </div>
   )
 }
