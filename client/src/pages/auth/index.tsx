@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SignInButton } from '@/features/auth/sign-in'
 
-import styles from './Auth.module.scss'
+import styles from './styles.module.scss'
 
 export default function Auth() {
   const { t } = useTranslation()
