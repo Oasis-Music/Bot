@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import clsx from 'clsx'
 import AudioPlayer from '@/player'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
@@ -7,7 +7,7 @@ import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 
-import styles from './Dropzone.module.scss'
+import styles from './styles.module.scss'
 
 interface DropzoneProps {
   audio: File | null

@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PlayIcon from '@/assets/svg/play.svg?react'
 import PauseIcon from '@/assets/svg/pause.svg?react'
 import AudioPlayer from '@/player'
-import { Dropzone } from './Dropzone'
+import { Dropzone } from './dropzone'
 import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
-import { StepControls } from '../StepControls'
+import { StepControls } from '../common/step-controls'
 import { Checkbox } from '@/shared/ui/checkbox'
 import { timeFormater } from '@/shared/lib/helpers'
-import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { useFormContext } from 'react-hook-form'
 
-import styles from './Audio.module.scss'
+import styles from './styles.module.scss'
 
 interface AudioProps {
   loading: boolean
@@ -24,7 +24,8 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
   const { t } = useTranslation()
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
-  const { setFieldValue } = useFormikContext()
+
+  const { setValue } = useFormContext()
 
   const [player, setPlayer] = useState<AudioPlayer>()
 
@@ -68,7 +69,7 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
   }, [])
 
   const handleSetAudioFormValue = (file: File) => {
-    setFieldValue('audiofile', file)
+    setValue('audioFile', file)
   }
 
   const playHandler = () => {
@@ -122,7 +123,8 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
       </div>
       <StepControls
         actionButtonType="submit"
-        disabled={!readyForPlay}
+        // disabled={!readyForPlay}
+        disabled={false}
         loading={loading}
         nextText={t('pages.upload.audio.upload')}
         onBack={onPrevStep}

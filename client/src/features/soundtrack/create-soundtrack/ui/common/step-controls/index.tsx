@@ -1,13 +1,12 @@
-import React from 'react'
 import Button from '@/shared/ui/button'
 import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
 import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
-import { RedirectButton } from '../common/RedirectButton'
-import { useFormikContext } from 'formik'
+import { RedirectButton } from '../redirect-button'
 import { useTranslation } from 'react-i18next'
+import { useFormContext } from 'react-hook-form'
 
-import styles from './StepControls.module.scss'
+import styles from './styles.module.scss'
 
 interface StepControlsProps {
   disabled: boolean
@@ -30,10 +29,12 @@ export function StepControls({
 }: StepControlsProps) {
   const { t } = useTranslation()
 
-  const { dirty } = useFormikContext()
+  const {
+    formState: { isDirty }
+  } = useFormContext()
 
   const handleLinkButtonClick = () => {
-    if (dirty) {
+    if (isDirty) {
       onAlert()
     }
   }

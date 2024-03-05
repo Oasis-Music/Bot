@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import DeleteIcon from '@/assets/svg/trash.svg?react'
-import { StepControls } from '../StepControls'
+import { StepControls } from '../common/step-controls'
 import CoverPlaceholderIcon from '@/assets/svg/cover_placeholder.svg?react'
-import { useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { IconButton } from '@/shared/ui/icon-button'
 
-import styles from './Cover.module.scss'
+import styles from './styles.module.scss'
+import { useFormContext } from 'react-hook-form'
 
 interface CoverProps {
   onNextStep(): void
@@ -56,7 +56,9 @@ function dropzoneCodeToMsg(code: string): string {
 
 export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
   const { t } = useTranslation()
-  const { setFieldValue } = useFormikContext()
+
+  const { setValue } = useFormContext()
+
   const [mainPhoto, setMainPhoto] = useState<UploadedFile>()
   const [dropError, setDropError] = useState<string>('')
 
@@ -102,7 +104,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
       }
 
       setMainPhoto(file)
-      setFieldValue('coverImage', file)
+      setValue('coverImage', file)
     }
   }
 
@@ -130,7 +132,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     URL.revokeObjectURL(mainPhoto!.preview)
     setMainPhoto(undefined)
-    setFieldValue('coverImage', null)
+    setValue('coverImage', null)
   }
 
   return (

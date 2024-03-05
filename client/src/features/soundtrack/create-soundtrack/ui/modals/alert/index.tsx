@@ -1,8 +1,7 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@/widgets/modal'
 
-import styles from './Alert.module.scss'
+import styles from './styles.module.scss'
 
 interface AlertProps {
   isOpen: boolean

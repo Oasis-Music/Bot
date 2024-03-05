@@ -1,7 +1,6 @@
 import React from 'react'
 import Button from '@/shared/ui/button'
-
-import styles from './RedirectButton.module.scss'
+import styles from './styles.module.scss'
 
 interface RedirectButtonProps {
   onClick(): void

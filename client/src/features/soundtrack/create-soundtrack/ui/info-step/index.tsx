@@ -1,40 +1,45 @@
-import React, { useRef } from 'react'
 import Button from '@/shared/ui/button'
 import blushEmoji from '@/assets/rastr/blush.png'
 import { TextInput } from '@/shared/ui/text-input'
-import { useFormikContext } from 'formik'
+import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { RedirectButton } from '../common/RedirectButton'
+import { RedirectButton } from '../common/redirect-button'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'
 
-import styles from './Info.module.scss'
+import styles from './styles.module.scss'
 
 interface InfoProps {
   onNextStep(): void
   onAlert(): void
 }
 
-interface FieldProps {
+interface FieldData {
   title: string
   author: string
 }
 
 export function Info({ onNextStep, onAlert }: InfoProps) {
   const { t } = useTranslation()
-  const { errors, dirty, submitCount } = useFormikContext<FieldProps>()
-  const ref = useRef<HTMLButtonElement>(null)
+
+  const {
+    register,
+    formState: { isDirty, errors }
+  } = useFormContext<FieldData>()
+
+  console.log('e', errors)
+
   const navigate = useNavigate()
 
-  const handleContinueClick = () => {
-    if (ref.current) {
-      ref.current.blur()
-    }
-    onNextStep()
-  }
+  // const handleContinueClick = async () => {
+  //   if (errors.title || errors.author) return
+  //   console.log(Boolean(errors.title || errors.author))
+
+  //   // onNextStep()
+  // }
 
   const handlePageLeave = () => {
-    if (dirty && submitCount === 0) {
+    if (isDirty) {
       onAlert()
       return
     }
@@ -50,14 +55,24 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
       </h2>
       <p className={styles.subTitle}>{t('pages.upload.info.subTitle')}</p>
       <div className={styles.inner}>
-        <TextInput name="title" placeholder={t('pages.upload.info.titleField')} />
-        <TextInput name="author" placeholder={t('pages.upload.info.authorField')} />
+        <TextInput
+          name="title"
+          errors={errors}
+          register={register}
+          placeholder={t('pages.upload.info.titleField')}
+        />
+        <TextInput
+          name="author"
+          errors={errors}
+          register={register}
+          placeholder={t('pages.upload.info.authorField')}
+        />
       </div>
       <Button
-        ref={ref}
+        // type="submit"
         disabled={!!(errors.title || errors.author)}
         color="secondary"
-        onClick={handleContinueClick}
+        onClick={onNextStep}
         className={styles.nextButton}
       >
         {t('pages.upload.info.nextBotton')}

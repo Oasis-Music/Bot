@@ -1,47 +1,36 @@
-import React from 'react'
-import * as yup from 'yup'
-import { Formik, Form } from 'formik'
-
 import { TextInputs } from './Form/Form'
 import { Buttons } from './Buttons/Buttons'
+import { valibotResolver } from '@hookform/resolvers/valibot'
+import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
+import * as v from 'valibot'
 
-const UISchema = yup.object({
-  simpleInput: yup.string(),
-  errorInput: yup.string().min(10, 'Мин 10 символов').required('Необходимое поле')
+const UISchema = v.object({
+  simpleInput: v.string(),
+  errorInput: v.string([v.toTrimmed(), v.minLength(3, '* минимум 3 символова')])
 })
 
+type formValues = v.Input<typeof UISchema>
+
 export default function UI() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = (values: any) => {
-    console.log(values)
+  const handleSubmit: SubmitHandler<formValues> = (data) => {
+    console.log(data)
   }
+
+  const formMethods = useForm<formValues>({
+    mode: 'onChange',
+    resolver: valibotResolver(UISchema)
+  })
 
   return (
     <div>
       <div style={{ paddingLeft: 20, color: '#Fff' }}>
         <h3>Ваш шедевр готов!</h3>
-        <Formik
-          onSubmit={handleSubmit}
-          validationSchema={UISchema}
-          initialValues={{
-            simpleInput: '',
-            errorInput: '',
-            password: 'password',
-            price: '',
-            baseCheckbox: false
-          }}
-          initialErrors={{
-            input: '',
-            errorInput: 'errorInput'
-          }}
-        >
-          {() => (
-            <Form>
-              <TextInputs />
-              <Buttons />
-            </Form>
-          )}
-        </Formik>
+        <FormProvider {...formMethods}>
+          <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
+            <TextInputs />
+            <Buttons />
+          </form>
+        </FormProvider>
       </div>
     </div>
   )

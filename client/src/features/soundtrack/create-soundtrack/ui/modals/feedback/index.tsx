@@ -1,11 +1,10 @@
-import React from 'react'
 import sunglassesEmoji from '@/assets/rastr/tada.png'
 import thinkingEmoji from '@/assets/rastr/thinking.png'
 import Button from '@/shared/ui/button'
 import { Modal } from '@/widgets/modal'
 import { useTranslation } from 'react-i18next'
 
-import styles from './Feedback.module.scss'
+import styles from './styles.module.scss'
 
 interface FeedbackProps {
   isOpen: boolean
