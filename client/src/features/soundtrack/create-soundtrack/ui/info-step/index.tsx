@@ -21,22 +21,12 @@ interface FieldData {
 
 export function Info({ onNextStep, onAlert }: InfoProps) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
 
   const {
     register,
     formState: { isDirty, errors }
   } = useFormContext<FieldData>()
-
-  console.log('e', errors)
-
-  const navigate = useNavigate()
-
-  // const handleContinueClick = async () => {
-  //   if (errors.title || errors.author) return
-  //   console.log(Boolean(errors.title || errors.author))
-
-  //   // onNextStep()
-  // }
 
   const handlePageLeave = () => {
     if (isDirty) {
@@ -69,7 +59,6 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
         />
       </div>
       <Button
-        // type="submit"
         disabled={!!(errors.title || errors.author)}
         color="secondary"
         onClick={onNextStep}

@@ -8,7 +8,7 @@ import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { useWindowRatio } from '@/hooks'
 import { validationSchema } from '../model/validation-schema'
-import { useCreateSoundtrackMutation } from '@/graphql/soundtrack/_gen_/createSoundtrack.mutation'
+import { useCreateSoundtrackMutation } from '../api'
 import { useForm, FormProvider } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { StepSlide } from './common/slide'
@@ -43,9 +43,12 @@ export default function CreateSoundtrackForm() {
     resolver: valibotResolver(currentValidationSchema),
     defaultValues: {
       title: '',
-      author: ''
+      author: '',
+      attach: true // TODO: handle it
     }
   })
+
+  console.log(`step ${step + 1} err`, formMethods.formState.errors)
 
   const [createSoundtrack, { loading }] = useCreateSoundtrackMutation({
     onCompleted: (data) => {
@@ -78,16 +81,20 @@ export default function CreateSoundtrackForm() {
   }
 
   const handleSubmit = () => {
-    // if (step === 2) {
-    //   createSoundtrack({
-    //     variables: { ...values, title: values.title.trim(), author: values.author.trim() }
-    //   })
-
     // INFO: why getValues
     // https://github.com/orgs/react-hook-form/discussions/4028#discussioncomment-7542160
     const data = formMethods.getValues()
 
     console.log('SubmitHandler', data)
+    createSoundtrack({
+      // TODO: rename audiofile -> audioFile
+      variables: {
+        ...data,
+        title: data.title.trim(),
+        author: data.author.trim(),
+        audiofile: data.audioFile
+      }
+    })
   }
 
   const handleFeedbackOk = () => {
