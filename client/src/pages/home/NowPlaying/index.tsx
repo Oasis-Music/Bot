@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import PlusIcon from '@/assets/svg/plus.svg?react'
 import TrashIcon from '@/assets/svg/trash.svg?react'
 import ShareIcon from '@/assets/svg/share.svg?react'
 import CopyIcon from '@/assets/svg/copy.svg?react'
 import CheckIcon from '@/assets/svg/check-circle.svg?react'
-import Button from '@/shared/ui/button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
@@ -13,9 +11,8 @@ import { userVar, type User } from '@/entities/user'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from '@/shared/lib/snackbar'
-import { useAttachSoundtrackMutation } from '@/graphql/user/_gen_/attachSoundtrack.mutauion'
 import { useUnattachSoundtrackMutation } from '@/graphql/user/_gen_/unattachSoundtrack.mutation'
-import { useAddToUserPlaylist } from '@/features/soundtrack/add-to-user-playlist'
+import { AttachButton } from '@/features/soundtrack/add-to-user-playlist'
 import { useRemoveFromUserPlaylist } from '@/features/soundtrack/remove-from-user-playlist'
 
 import styles from './NowPlaying.module.scss'
@@ -35,28 +32,11 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
 
   const openSnackbar = useSnackbar()
 
-  const attachSoundtrack = useAddToUserPlaylist()
   const unattachSoundtrack = useRemoveFromUserPlaylist()
 
   useEffect(() => {
     setCopied(false)
   }, [track.id])
-
-  const [onAttachSoundtrack, attachMeta] = useAttachSoundtrackMutation({
-    onCompleted: () => {
-      attachSoundtrack()
-
-      if (onTrackAttach) {
-        onTrackAttach()
-      }
-    },
-    onError: () => {
-      openSnackbar({
-        type: 'error',
-        message: t('snackbar.trackSaveFail')
-      })
-    }
-  })
 
   const [onUnattachSoundtrack, _unattachMeta] = useUnattachSoundtrackMutation({
     onCompleted: () => {
@@ -91,15 +71,6 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
         console.log('falied')
       }
     )
-  }
-
-  const attachHandler = () => {
-    onAttachSoundtrack({
-      variables: {
-        trackId: track.id,
-        userId: user.id
-      }
-    })
   }
 
   const unattachHandler = () => {
@@ -139,21 +110,7 @@ export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) 
               </IconButton>
             </div>
           ) : (
-            <Button
-              disabled={!track.id}
-              loading={attachMeta.loading}
-              fullWidth
-              color="secondary"
-              onClick={attachHandler}
-              className={styles.saveBotton}
-              startIcon={
-                <SvgIcon className={styles.addIcon}>
-                  <PlusIcon />
-                </SvgIcon>
-              }
-            >
-              {t('common.add')}
-            </Button>
+            <AttachButton onTrackAttached={onTrackAttach} />
           )}
         </div>
       </div>
