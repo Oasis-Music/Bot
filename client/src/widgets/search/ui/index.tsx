@@ -1,4 +1,4 @@
-import SearchIcon from '@/assets/svg/search.svg?react'
+import SearchIcon from '@/shared/assets/svg/search.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { valibotResolver } from '@hookform/resolvers/valibot'

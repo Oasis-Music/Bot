@@ -1,5 +1,5 @@
 import Button from '@/shared/ui/button'
-import blushEmoji from '@/assets/rastr/blush.png'
+import blushEmoji from '@/shared/assets/rastr/blush.png'
 import { TextInput } from '@/shared/ui/text-input'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'

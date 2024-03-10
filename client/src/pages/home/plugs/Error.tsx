@@ -1,5 +1,4 @@
-import React from 'react'
-import thinkEmojiImage from '@/assets/rastr/thinking.png'
+import thinkEmojiImage from '@/shared/assets/rastr/thinking.png'
 import { useTranslation } from 'react-i18next'
 
 import styles from './Styles.module.scss'

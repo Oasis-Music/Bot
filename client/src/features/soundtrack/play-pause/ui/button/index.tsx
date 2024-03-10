@@ -1,6 +1,6 @@
 import clsx from 'clsx'
-import PlayIcon from '@/assets/svg/play.svg?react'
-import PauseIcon from '@/assets/svg/pause.svg?react'
+import PlayIcon from '@/shared/assets/svg/play.svg?react'
+import PauseIcon from '@/shared/assets/svg/pause.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { useReactiveVar } from '@apollo/client'

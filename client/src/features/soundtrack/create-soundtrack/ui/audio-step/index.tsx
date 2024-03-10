@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
-import PlayIcon from '@/assets/svg/play.svg?react'
-import PauseIcon from '@/assets/svg/pause.svg?react'
+import PlayIcon from '@/shared/assets/svg/play.svg?react'
+import PauseIcon from '@/shared/assets/svg/pause.svg?react'
 import AudioPlayer from '@/player'
 import { Dropzone } from './dropzone'
 import { IconButton } from '@/shared/ui/icon-button'

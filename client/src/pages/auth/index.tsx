@@ -1,4 +1,4 @@
-import handv_img from '@/assets/rastr/hand-v.png'
+import handv_img from '@/shared/assets/rastr/hand-v.png'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { SignInButton } from '@/features/auth/sign-in'

@@ -1,7 +1,7 @@
 import { IconButton } from '@/shared/ui/icon-button'
 import styles from './styles.module.scss'
 import { SvgIcon } from '@/shared/ui/svg-icon'
-import TrashIcon from '@/assets/svg/trash.svg?react'
+import TrashIcon from '@/shared/assets/svg/trash.svg?react'
 import { useSnackbar } from '@/shared/lib/snackbar'
 import { useUnattachSoundtrackMutation } from '../../api'
 import { useTranslation } from 'react-i18next'

@@ -1,5 +1,5 @@
 import Button from '@/shared/ui/button'
-import ArrowIcon from '@/assets/svg/angle-arrow.svg?react'
+import ArrowIcon from '@/shared/assets/svg/angle-arrow.svg?react'
 import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { RedirectButton } from '../redirect-button'

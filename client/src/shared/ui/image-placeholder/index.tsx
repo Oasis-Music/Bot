@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import clsx from 'clsx'
 import LazyLoad from 'react-lazy-load'
-import PlaceholderImage from '@/assets/svg/music.svg?react'
+import PlaceholderImage from '@/shared/assets/svg/music.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 
 import styles from './imagePlaceholder.module.scss'
