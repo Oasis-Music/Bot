@@ -13,7 +13,7 @@ type SoundtrackComposite struct {
 	UseCase soundtrack.UseCase
 }
 
-func NewSoundtrackComposite(config *config.AppConfig, db *pgxpool.Pool, sqlc *sqlc.Queries, userComposite UserComposite) SoundtrackComposite {
+func NewSoundtrackComposite(config *config.Config, db *pgxpool.Pool, sqlc *sqlc.Queries, userComposite UserComposite) SoundtrackComposite {
 	storage := trackStorage.NewSoundtrackStorage(db, config, sqlc)
 	useCase := soundtrack.New(storage, config, userComposite.UseCase)
 	return SoundtrackComposite{

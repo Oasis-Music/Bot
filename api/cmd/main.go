@@ -32,8 +32,8 @@ func init() {
 }
 
 func main() {
+	config := config.New()
 
-	config := config.NewAppConfig()
 	db, err := postgres.NewClient(context.Background(), config)
 	if err != nil {
 		fmt.Println("=============")

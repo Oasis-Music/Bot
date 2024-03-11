@@ -26,15 +26,15 @@ type AuthService interface {
 	ParseRefreshToken(string) (*refreshToken, error)
 }
 
-func NewAuthService(config *config.AppConfig, db *pgxpool.Pool) AuthService {
+func NewAuthService(config *config.Config, db *pgxpool.Pool) AuthService {
 
 	storage := authStorage.NewAuthStorage(db)
 
 	return &authService{
 		storage:  storage,
-		atSecret: []byte(config.Auth.ATsecret),
-		rtSecret: []byte(config.Auth.RTsecret),
-		atExpDur: time.Duration(config.Auth.ATexpMin) * time.Minute,
-		rtExpDur: time.Duration(config.Auth.RTexpMin) * time.Minute,
+		atSecret: []byte(config.Auth.AccessSecret),
+		rtSecret: []byte(config.Auth.RefreshSecret),
+		atExpDur: time.Duration(config.Auth.AccessTTL) * time.Minute,
+		rtExpDur: time.Duration(config.Auth.RefreshTTL) * time.Minute,
 	}
 }

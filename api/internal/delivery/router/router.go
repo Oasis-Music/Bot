@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.AuthService, rootComposite composites.RootComposite) chi.Router {
+func NewRouter(cfg *config.Config, db *pgxpool.Pool, authService auth.AuthService, rootComposite composites.RootComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -26,7 +26,7 @@ func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.Auth
 		r.Handle("/graphql", graph.NewHandler(rootComposite))
 	})
 
-	if config.Environment == "development" {
+	if cfg.Environment == config.DevEnv {
 		r.Handle("/playground", playground.Handler("GraphiQL", "/graphql"))
 	}
 

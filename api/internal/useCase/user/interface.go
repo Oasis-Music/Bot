@@ -25,12 +25,12 @@ type UseCase interface {
 }
 
 type userUseCase struct {
-	config  *config.AppConfig
+	config  *config.Config
 	storage storage.User
 	auth    auth.AuthService
 }
 
-func New(storage storage.User, config *config.AppConfig, authService auth.AuthService) UseCase {
+func New(storage storage.User, config *config.Config, authService auth.AuthService) UseCase {
 	return &userUseCase{
 		storage: storage,
 		config:  config,

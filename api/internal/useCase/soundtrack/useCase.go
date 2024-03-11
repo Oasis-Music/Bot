@@ -19,12 +19,12 @@ type UseCase interface {
 }
 
 type soundtrackUseCase struct {
-	config      *config.AppConfig
+	config      *config.Config
 	storage     storage.Soundtrack
 	userUseCase user.UseCase
 }
 
-func New(storage storage.Soundtrack, config *config.AppConfig, userUC user.UseCase) UseCase {
+func New(storage storage.Soundtrack, config *config.Config, userUC user.UseCase) UseCase {
 	return &soundtrackUseCase{
 		config:      config,
 		storage:     storage,

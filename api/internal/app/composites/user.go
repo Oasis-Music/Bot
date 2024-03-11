@@ -14,7 +14,7 @@ type UserComposite struct {
 	UseCase    user.UseCase
 }
 
-func NewUserComposite(db *pgxpool.Pool, config *config.AppConfig, authService auth.AuthService) UserComposite {
+func NewUserComposite(db *pgxpool.Pool, config *config.Config, authService auth.AuthService) UserComposite {
 	// storage := userStorage.NewUserStorage(db)
 	storage := userStorage.NewUserStorage(db, config)
 	useCase := user.New(storage, config, authService)

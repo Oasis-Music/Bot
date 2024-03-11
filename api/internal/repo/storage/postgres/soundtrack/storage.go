@@ -9,11 +9,11 @@ import (
 
 type soundtrackStorage struct {
 	database *pgxpool.Pool
-	config   *config.AppConfig
+	config   *config.Config
 	sqlc     *sqlc.Queries
 }
 
-func NewSoundtrackStorage(db *pgxpool.Pool, config *config.AppConfig, sqlc *sqlc.Queries) *soundtrackStorage {
+func NewSoundtrackStorage(db *pgxpool.Pool, config *config.Config, sqlc *sqlc.Queries) *soundtrackStorage {
 	return &soundtrackStorage{
 		database: db,
 		config:   config,

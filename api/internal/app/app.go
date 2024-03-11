@@ -21,11 +21,11 @@ import (
 )
 
 type App struct {
-	config *config.AppConfig
+	config *config.Config
 	router chi.Router
 }
 
-func NewApp(db *pgxpool.Pool, config *config.AppConfig) *App {
+func NewApp(db *pgxpool.Pool, config *config.Config) *App {
 
 	sqlc := sqlc.New(db)
 
@@ -58,14 +58,14 @@ func (a *App) Run() {
 func (a *App) Serve() {
 
 	server := &http.Server{
-		Addr:              ":" + a.config.EntryPort,
+		Addr:              ":" + a.config.Port,
 		ReadHeaderTimeout: 500 * time.Millisecond,
 		ReadTimeout:       1 * time.Second,
 		Handler:           http.TimeoutHandler(a.router, 15*time.Second, "request timeout expired"),
 	}
 
-	if a.config.Environment == "development" {
-		log.Printf("try to connect to http://localhost:%s/playground for GraphQL playground", a.config.EntryPort)
+	if a.config.Environment == config.DevEnv {
+		log.Printf("try to connect to http://localhost%s/playground for GraphQL playground", server.Addr)
 	}
 
 	go func() {
