@@ -6,7 +6,7 @@ import (
 	"oasis/api/internal/entity"
 )
 
-func (u *userUseCase) UserSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
+func (u *userService) UserSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
 
 	if err := u.checkPermission(ctx, userID); err != nil {
 		return nil, err

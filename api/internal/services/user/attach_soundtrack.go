@@ -6,7 +6,7 @@ import (
 	"oasis/api/internal/repo/storage/postgres"
 )
 
-func (u *userUseCase) AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error) {
+func (u *userService) AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error) {
 
 	err := u.storage.AttachSoundtrack(ctx, input)
 

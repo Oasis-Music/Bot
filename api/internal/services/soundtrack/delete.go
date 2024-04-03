@@ -6,7 +6,7 @@ import (
 	"oasis/api/internal/repo/storage/postgres"
 )
 
-func (s *soundtrackUseCase) Delete(ctx context.Context, id int32) (bool, error) {
+func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) {
 
 	// TODO: delete from S3 first
 

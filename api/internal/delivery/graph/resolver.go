@@ -1,8 +1,8 @@
 package graph
 
 import (
-	"oasis/api/internal/useCase/soundtrack"
-	"oasis/api/internal/useCase/user"
+	"oasis/api/internal/services/soundtrack"
+	"oasis/api/internal/services/user"
 )
 
 // This file will not be regenerated automatically.
@@ -10,6 +10,6 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	SoundtrackUC soundtrack.UseCase
-	UserUC       user.UseCase
+	SoundtrackService soundtrack.Service
+	UserService       user.Service
 }

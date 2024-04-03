@@ -4,13 +4,12 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"oasis/api/internal/app/composites"
+	"oasis/api/internal/app/composite"
 	"oasis/api/internal/delivery/graph/models"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/services/user"
 	"oasis/api/internal/utils"
 	"strings"
-
-	"oasis/api/internal/useCase/user"
 
 	gql_dataloader "github.com/graph-gophers/dataloader"
 )
@@ -51,10 +50,10 @@ func (i *DataLoader) GetUser(ctx context.Context, userID string) (*models.User, 
 }
 
 // NewDataLoader returns the instantiated Loaders struct for use in a request
-func NewDataLoader(rootComposite composites.RootComposite) *DataLoader {
+func NewDataLoader(appComposite composite.AppComposite) *DataLoader {
 
 	// instantiate the user dataloader
-	users := &userBatcher{useCase: rootComposite.UserComposite.UseCase}
+	users := &userBatcher{userService: appComposite.UserService}
 	cache := &gql_dataloader.NoCache{}
 	options := gql_dataloader.WithCache(cache)
 
@@ -71,7 +70,7 @@ func For(ctx context.Context) *DataLoader {
 
 // userBatcher wraps storage and provides a "get" method for the user dataloader
 type userBatcher struct {
-	useCase user.UseCase
+	userService user.Service
 }
 
 // the result must be in the same order of the keys
@@ -90,7 +89,7 @@ func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_
 		usersID = append(usersID, id)
 	}
 
-	dbRecords, err := u.useCase.Users(ctx, usersID)
+	dbRecords, err := u.userService.Users(ctx, usersID)
 	if err != nil {
 		return []*gql_dataloader.Result{{Data: nil, Error: err}}
 	}

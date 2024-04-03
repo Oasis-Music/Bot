@@ -1,12 +1,17 @@
 package app
 
 import (
-	"oasis/api/internal/app/composites"
+	"oasis/api/internal/app/composite"
 	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	httpAPI "oasis/api/internal/delivery/api/http"
 	"oasis/api/internal/delivery/router"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
+	"oasis/api/internal/services/soundtrack"
+	"oasis/api/internal/services/user"
+
+	soundtrackRepo "oasis/api/internal/repo/storage/postgres/soundtrack"
+	userRepo "oasis/api/internal/repo/storage/postgres/user"
 
 	"context"
 	"log"
@@ -31,17 +36,20 @@ func NewApp(db *pgxpool.Pool, config *config.Config) *App {
 
 	authService := auth.NewAuthService(config, db)
 
-	userComposite := composites.NewUserComposite(db, config, authService)
-	soundtrackComposite := composites.NewSoundtrackComposite(config, db, sqlc, userComposite)
+	userStorage := userRepo.New(config, db)
+	userService := user.New(config, userStorage, authService)
 
-	rootComposite := composites.RootComposite{
-		SoundtrackComposite: soundtrackComposite,
-		UserComposite:       userComposite,
+	soundtrackStorage := soundtrackRepo.New(config, db, sqlc)
+	soundtrackService := soundtrack.New(config, soundtrackStorage, userService)
+
+	appComposite := composite.AppComposite{
+		SoundtrackService: soundtrackService,
+		UserService:       userService,
 	}
 
-	r := router.NewRouter(config, db, authService, rootComposite)
+	r := router.NewRouter(config, db, authService, appComposite)
 
-	httpHandler := httpAPI.NewHandler(authService, userComposite.WARNSotage)
+	httpHandler := httpAPI.NewHandler(authService, userStorage)
 	httpHandler.Register(r)
 
 	return &App{

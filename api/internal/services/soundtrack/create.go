@@ -44,7 +44,7 @@ func trackDurationToInt16(d float64) (int16, error) {
 	return int16(math.Round(d)), nil
 }
 
-func (s *soundtrackUseCase) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
+func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
 	userID := s.extractCtxUserId(ctx)
 
@@ -155,7 +155,7 @@ func (s *soundtrackUseCase) Create(ctx context.Context, input entity.NewSoundtra
 	}
 
 	if input.Attach {
-		_, err := s.userUseCase.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
+		_, err := s.userService.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
 			UserID:  userID,
 			TrackID: newTrackId,
 		})
@@ -172,7 +172,7 @@ func (s *soundtrackUseCase) Create(ctx context.Context, input entity.NewSoundtra
 	return true, nil
 }
 
-func (s *soundtrackUseCase) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
+func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
 
 	var body bytes.Buffer
 	writer := multipart.NewWriter(&body)

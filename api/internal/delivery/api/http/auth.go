@@ -54,7 +54,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.WARNStorage.User(ctx, userID)
+	user, err := h.userStorage.User(ctx, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

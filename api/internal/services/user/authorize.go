@@ -23,7 +23,7 @@ const (
 	AUTH_FRESH_IN = 3
 )
 
-func (u *userUseCase) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
+func (u *userService) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
 		return nil, ErrInitDataInvalid
 	}
@@ -210,7 +210,7 @@ func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, e
 	return isChanged, updatedUser
 }
 
-func (u *userUseCase) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
+func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
 
 	rawTokenPair, err := u.auth.CreateJwtPair(userID, firstName)
 	if err != nil {

@@ -1,19 +1,11 @@
-package storage
+package user
 
 import (
 	"context"
 	"oasis/api/internal/entity"
 )
 
-type Soundtrack interface {
-	Soundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error)
-	AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error)
-	Create(ctx context.Context, params entity.NewSoundtrack) (int32, error)
-	Delete(ctx context.Context, id int32) (bool, error)
-	Search(ctx context.Context, value string, userID int64) ([]entity.Soundtrack, error)
-}
-
-type User interface {
+type UserStorage interface {
 	User(ctx context.Context, id int64) (*entity.User, error)
 	Role(ctx context.Context, id int64) (string, error)
 	UserSoundtracks(ctx context.Context, id int64, options entity.UserTracksOptions) (*entity.UserTracks, error)

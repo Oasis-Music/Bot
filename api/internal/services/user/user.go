@@ -7,7 +7,7 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-func (u *userUseCase) User(ctx context.Context, id int64) (*entity.User, error) {
+func (u *userService) User(ctx context.Context, id int64) (*entity.User, error) {
 
 	user, err := u.storage.User(ctx, id)
 	if err == pgx.ErrNoRows {

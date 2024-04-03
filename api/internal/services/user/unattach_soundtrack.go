@@ -5,7 +5,7 @@ import (
 	"oasis/api/internal/entity"
 )
 
-func (u *userUseCase) UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error) {
+func (u *userService) UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error) {
 
 	affectedRows, err := u.storage.UnattachSoundtrack(ctx, input)
 

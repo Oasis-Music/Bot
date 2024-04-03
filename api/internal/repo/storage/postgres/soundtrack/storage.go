@@ -13,10 +13,10 @@ type soundtrackStorage struct {
 	sqlc     *sqlc.Queries
 }
 
-func NewSoundtrackStorage(db *pgxpool.Pool, config *config.Config, sqlc *sqlc.Queries) *soundtrackStorage {
+func New(config *config.Config, db *pgxpool.Pool, sqlc *sqlc.Queries) *soundtrackStorage {
 	return &soundtrackStorage{
-		database: db,
 		config:   config,
+		database: db,
 		sqlc:     sqlc,
 	}
 }

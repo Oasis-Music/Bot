@@ -5,12 +5,12 @@ import (
 	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/useCase/adapters/storage"
-	"oasis/api/internal/useCase/user"
+	"oasis/api/internal/services/user"
+
 	"strconv"
 )
 
-type UseCase interface {
+type Service interface {
 	Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error)
 	AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
 	Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
@@ -18,21 +18,21 @@ type UseCase interface {
 	Search(ctx context.Context, value string) ([]entity.Soundtrack, error)
 }
 
-type soundtrackUseCase struct {
+type soundtrackService struct {
 	config      *config.Config
-	storage     storage.Soundtrack
-	userUseCase user.UseCase
+	storage     SoundtrackStorage
+	userService user.Service
 }
 
-func New(storage storage.Soundtrack, config *config.Config, userUC user.UseCase) UseCase {
-	return &soundtrackUseCase{
+func New(config *config.Config, storage SoundtrackStorage, userService user.Service) Service {
+	return &soundtrackService{
 		config:      config,
 		storage:     storage,
-		userUseCase: userUC,
+		userService: userService,
 	}
 }
 
-func (s *soundtrackUseCase) extractCtxUserId(ctx context.Context) int64 {
+func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
 
 	var userID int64 = -1
 

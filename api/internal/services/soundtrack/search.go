@@ -5,7 +5,7 @@ import (
 	"oasis/api/internal/entity"
 )
 
-func (s *soundtrackUseCase) Search(ctx context.Context, value string) ([]entity.Soundtrack, error) {
+func (s *soundtrackService) Search(ctx context.Context, value string) ([]entity.Soundtrack, error) {
 
 	userID := s.extractCtxUserId(ctx)
 

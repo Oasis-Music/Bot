@@ -7,12 +7,11 @@ import (
 )
 
 type UserStorage struct {
-	database *pgxpool.Pool
 	config   *config.Config
+	database *pgxpool.Pool
 }
 
-// return userStorage instead of interface
-func NewUserStorage(db *pgxpool.Pool, config *config.Config) *UserStorage {
+func New(config *config.Config, db *pgxpool.Pool) *UserStorage {
 	return &UserStorage{
 		database: db,
 		config:   config,

@@ -6,7 +6,6 @@ import (
 	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/useCase/adapters/storage"
 	"strconv"
 )
 
@@ -14,7 +13,7 @@ const (
 	adminRole = "admin"
 )
 
-type UseCase interface {
+type Service interface {
 	User(ctx context.Context, id int64) (*entity.User, error)
 	Role(ctx context.Context, id int64) (string, error)
 	Users(ctx context.Context, ids []int64) ([]entity.User, error)
@@ -24,21 +23,21 @@ type UseCase interface {
 	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
 }
 
-type userUseCase struct {
+type userService struct {
 	config  *config.Config
-	storage storage.User
+	storage UserStorage
 	auth    auth.AuthService
 }
 
-func New(storage storage.User, config *config.Config, authService auth.AuthService) UseCase {
-	return &userUseCase{
+func New(config *config.Config, storage UserStorage, authService auth.AuthService) Service {
+	return &userService{
 		storage: storage,
 		config:  config,
 		auth:    authService,
 	}
 }
 
-func (u *userUseCase) checkPermission(ctx context.Context, userID int64) error {
+func (u *userService) checkPermission(ctx context.Context, userID int64) error {
 
 	var noAccessErr = errors.New("you have no access")
 

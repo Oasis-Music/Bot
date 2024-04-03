@@ -8,7 +8,7 @@ import (
 	"oasis/api/internal/repo/storage/postgres"
 )
 
-func (s *soundtrackUseCase) Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
+func (s *soundtrackService) Soundtrack(ctx context.Context, id int32) (*entity.Soundtrack, error) {
 
 	userID := s.extractCtxUserId(ctx)
 

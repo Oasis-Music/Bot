@@ -5,7 +5,7 @@ import (
 	"oasis/api/internal/entity"
 )
 
-func (s *soundtrackUseCase) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
+func (s *soundtrackService) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
 
 	filter.UserID = s.extractCtxUserId(ctx)
 
