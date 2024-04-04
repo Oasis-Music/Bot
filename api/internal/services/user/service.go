@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"errors"
+	"log/slog"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/services/auth"
@@ -27,13 +28,15 @@ type userService struct {
 	config      *config.Config
 	storage     UserStorage
 	authService auth.Service
+	logger      *slog.Logger
 }
 
-func New(config *config.Config, storage UserStorage, authService auth.Service) Service {
+func New(config *config.Config, logger *slog.Logger, storage UserStorage, authService auth.Service) Service {
 	return &userService{
 		storage:     storage,
 		config:      config,
 		authService: authService,
+		logger:      logger,
 	}
 }
 

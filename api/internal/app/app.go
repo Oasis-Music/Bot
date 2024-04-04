@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log/slog"
 	"oasis/api/internal/app/composite"
 	"oasis/api/internal/config"
 	httpAPI "oasis/api/internal/delivery/api/http"
@@ -30,17 +31,17 @@ type App struct {
 	router chi.Router
 }
 
-func NewApp(db *pgxpool.Pool, config *config.Config) *App {
+func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
 
 	sqlc := sqlc.New(db)
 
 	authService := auth.New(config, db)
 
-	userStorage := userRepo.New(config, db)
-	userService := user.New(config, userStorage, authService)
+	userStorage := userRepo.New(config, logger, db)
+	userService := user.New(config, logger, userStorage, authService)
 
-	soundtrackStorage := soundtrackRepo.New(config, db, sqlc)
-	soundtrackService := soundtrack.New(config, soundtrackStorage, userService)
+	soundtrackStorage := soundtrackRepo.New(config, logger, db, sqlc)
+	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, userService)
 
 	appComposite := composite.AppComposite{
 		SoundtrackService: soundtrackService,

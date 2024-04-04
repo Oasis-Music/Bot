@@ -2,6 +2,7 @@ package soundtrack
 
 import (
 	"context"
+	"log/slog"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/services/auth"
@@ -20,13 +21,15 @@ type Service interface {
 
 type soundtrackService struct {
 	config      *config.Config
+	logger      *slog.Logger
 	storage     SoundtrackStorage
 	userService user.Service
 }
 
-func New(config *config.Config, storage SoundtrackStorage, userService user.Service) Service {
+func New(config *config.Config, logger *slog.Logger, storage SoundtrackStorage, userService user.Service) Service {
 	return &soundtrackService{
 		config:      config,
+		logger:      logger,
 		storage:     storage,
 		userService: userService,
 	}

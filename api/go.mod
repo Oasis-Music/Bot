@@ -11,6 +11,7 @@ require (
 	github.com/jackc/pgconn v1.13.0
 	github.com/jackc/pgx/v4 v4.17.2
 	github.com/joho/godotenv v1.5.1
+	github.com/lmittmann/tint v1.0.4
 	github.com/vektah/gqlparser/v2 v2.5.11
 )
 

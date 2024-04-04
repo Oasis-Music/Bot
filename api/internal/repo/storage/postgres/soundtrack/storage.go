@@ -1,6 +1,7 @@
 package soundtrack
 
 import (
+	"log/slog"
 	"oasis/api/internal/config"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
 
@@ -8,14 +9,16 @@ import (
 )
 
 type soundtrackStorage struct {
-	database *pgxpool.Pool
 	config   *config.Config
+	logger   *slog.Logger
+	database *pgxpool.Pool
 	sqlc     *sqlc.Queries
 }
 
-func New(config *config.Config, db *pgxpool.Pool, sqlc *sqlc.Queries) *soundtrackStorage {
+func New(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, sqlc *sqlc.Queries) *soundtrackStorage {
 	return &soundtrackStorage{
 		config:   config,
+		logger:   logger,
 		database: db,
 		sqlc:     sqlc,
 	}
