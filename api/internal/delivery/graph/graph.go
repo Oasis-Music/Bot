@@ -8,9 +8,9 @@ import (
 	"strings"
 
 	"oasis/api/internal/app/composite"
-	"oasis/api/internal/auth"
 	"oasis/api/internal/delivery/graph/dataloader"
 	"oasis/api/internal/delivery/graph/models"
+	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
 	"oasis/api/internal/utils"
 	"time"

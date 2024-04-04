@@ -2,9 +2,9 @@ package soundtrack
 
 import (
 	"context"
-	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
 
 	"strconv"

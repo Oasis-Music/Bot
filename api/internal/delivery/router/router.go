@@ -2,9 +2,9 @@ package router
 
 import (
 	"oasis/api/internal/app/composite"
-	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	"oasis/api/internal/delivery/graph"
+	"oasis/api/internal/services/auth"
 
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewRouter(cfg *config.Config, db *pgxpool.Pool, authService auth.AuthService, appComposite composite.AppComposite) chi.Router {
+func NewRouter(cfg *config.Config, db *pgxpool.Pool, authService auth.Service, appComposite composite.AppComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{

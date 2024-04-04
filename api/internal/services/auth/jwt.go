@@ -19,9 +19,9 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 	idString := utils.Int64ToString(userID)
 
 	r := RawTokenPair{
-		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpDur)),
+		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpIn)),
 		AtID:        uuid.New().String(),
-		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.rtExpDur)),
+		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.rtExpIn)),
 	}
 
 	r.RtID = r.AtID + "-" + idString

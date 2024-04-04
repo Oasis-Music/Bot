@@ -3,9 +3,9 @@ package user
 import (
 	"context"
 	"errors"
-	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/services/auth"
 	"strconv"
 )
 
@@ -24,16 +24,16 @@ type Service interface {
 }
 
 type userService struct {
-	config  *config.Config
-	storage UserStorage
-	auth    auth.AuthService
+	config      *config.Config
+	storage     UserStorage
+	authService auth.Service
 }
 
-func New(config *config.Config, storage UserStorage, authService auth.AuthService) Service {
+func New(config *config.Config, storage UserStorage, authService auth.Service) Service {
 	return &userService{
-		storage: storage,
-		config:  config,
-		auth:    authService,
+		storage:     storage,
+		config:      config,
+		authService: authService,
 	}
 }
 

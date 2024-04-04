@@ -212,13 +212,13 @@ func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, e
 
 func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
 
-	rawTokenPair, err := u.auth.CreateJwtPair(userID, firstName)
+	rawTokenPair, err := u.authService.CreateJwtPair(userID, firstName)
 	if err != nil {
 		fmt.Println("token parir gen", err)
 		return "", "", err
 	}
 
-	err = u.auth.SaveRefreshToken(ctx, rawTokenPair)
+	err = u.authService.SaveRefreshToken(ctx, rawTokenPair)
 	if err != nil {
 		fmt.Println("refresh token save", err)
 		return "", "", err

@@ -2,11 +2,11 @@ package app
 
 import (
 	"oasis/api/internal/app/composite"
-	"oasis/api/internal/auth"
 	"oasis/api/internal/config"
 	httpAPI "oasis/api/internal/delivery/api/http"
 	"oasis/api/internal/delivery/router"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
+	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/soundtrack"
 	"oasis/api/internal/services/user"
 
@@ -34,7 +34,7 @@ func NewApp(db *pgxpool.Pool, config *config.Config) *App {
 
 	sqlc := sqlc.New(db)
 
-	authService := auth.NewAuthService(config, db)
+	authService := auth.New(config, db)
 
 	userStorage := userRepo.New(config, db)
 	userService := user.New(config, userStorage, authService)
