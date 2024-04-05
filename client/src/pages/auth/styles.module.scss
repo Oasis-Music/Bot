@@ -1,6 +1,6 @@
 .container {
   background-image: url('@/shared/assets/rastr/strawberry-pattern.jpeg');
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   color: #fff; // TODO: should be top level value
   flex-direction: column;
@@ -9,7 +9,7 @@
 .inner {
   box-sizing: border-box;
   margin-top: auto;
-  background-color: #111318;
+  background-color: #0e121c;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
   border-top: 1px solid #f7f7f7;
