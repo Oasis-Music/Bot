@@ -1,10 +1,9 @@
-import React from 'react'
 import { Playlist } from '@/widgets/playlist'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { explorePlaylistVar } from '@/entities/soundtrack'
 
-import styles from './List.module.scss'
+import styles from './styles.module.scss'
 
 interface ListProps {
   currentPage: number
