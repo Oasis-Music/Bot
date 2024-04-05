@@ -3,7 +3,6 @@ import { AppLayout } from '@/widgets/app-layout'
 import { Fallback } from '@/shared/ui/fallback'
 import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useWindowCSSRatio } from '@/hooks'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 
 import './styles/global.scss'
@@ -18,8 +17,6 @@ const Auth = lazy(() => import('@/pages/auth'))
 const Settings = lazy(() => import('@/pages/settings'))
 
 export function App() {
-  useWindowCSSRatio()
-
   useEffect(() => {
     Telegram.WebApp.expand()
   }, [])
