@@ -2,17 +2,17 @@
   background-image: url('@/shared/assets/rastr/strawberry-pattern.jpeg');
   height: 100vh;
   display: flex;
-  color: #fff;
+  color: #fff; // TODO: should be top level value
   flex-direction: column;
 }
 
 .inner {
   box-sizing: border-box;
   margin-top: auto;
-  background-color: #03141d;
+  background-color: #111318;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
-  border-top: 2px solid #c01037;
+  border-top: 1px solid #f7f7f7;
   padding: 6vh 20px 4vh 20px;
 }
 
@@ -22,7 +22,7 @@
   margin: 0;
   display: flex;
   align-items: center;
-  margin-bottom: 5vh;
+  margin-bottom: 6vh;
   margin-left: 10px;
   text-align: start;
 }

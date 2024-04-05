@@ -10,7 +10,7 @@
   },
   "pages": {
     "auth": {
-      "welcome": "Welcome dear",
+      "welcome": "Welcome",
       "enterBtn": "Get in",
       "terms": "By clicking on «{{btn}}» button, you agree to ",
       "termsLink": "Terms and Conditions of Use",
