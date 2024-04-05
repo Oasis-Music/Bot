@@ -6,7 +6,7 @@ import { MiniPlayer } from '@/widgets/mini-player'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 import { usePlayNextTrack } from '@/features/soundtrack/play-next'
 import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
@@ -15,7 +15,6 @@ import styles from './styles.module.scss'
 
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
-  const location = useLocation()
 
   const [player, setPlayer] = useState<AudioPlayer>()
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
@@ -121,12 +120,10 @@ export function AppLayout() {
       <main>
         <Outlet />
       </main>
-      {location.pathname !== '/upload' && (
-        <div className={styles.wrapper}>
-          <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
-          <NavBar />
-        </div>
-      )}
+      <div className={styles.wrapper}>
+        <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
+        <NavBar />
+      </div>
       <Player
         ref={waveContainerRef}
         currentTime={currentTime}

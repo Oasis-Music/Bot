@@ -26,8 +26,8 @@ export function App() {
 
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
           <Route path={ROUTER_NAMES.root} index element={<Home />} />
           <Route
             path={ROUTER_NAMES.explore}
@@ -37,14 +37,7 @@ export function App() {
               </Suspense>
             }
           />
-          <Route
-            path={ROUTER_NAMES.upload}
-            element={
-              <Suspense fallback={<Fallback />}>
-                <Upload />
-              </Suspense>
-            }
-          />
+
           <Route
             path={ROUTER_NAMES.settings}
             element={
@@ -65,6 +58,14 @@ export function App() {
             />
           )}
         </Route>
+        <Route
+          path={ROUTER_NAMES.upload}
+          element={
+            <Suspense fallback={<Fallback />}>
+              <Upload />
+            </Suspense>
+          }
+        />
       </Route>
       <Route
         path={ROUTER_NAMES.auth}
