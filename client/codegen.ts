@@ -15,7 +15,7 @@ const config: CodegenConfig = {
       preset: 'near-operation-file',
       presetConfig: {
         extension: '.ts',
-        baseTypesPath: 'graphql/types.ts',
+        baseTypesPath: 'shared/lib/gql.gen.ts',
         folder: '_gen_'
       },
       plugins: ['typescript-operations', 'typescript-react-apollo'],
