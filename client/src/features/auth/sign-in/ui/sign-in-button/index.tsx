@@ -51,7 +51,7 @@ export function SignInButton() {
   return (
     <>
       <Button
-        color="secondary"
+        color="primary"
         loading={loading}
         onClick={handleButtonClick}
         className={styles.submitButton}

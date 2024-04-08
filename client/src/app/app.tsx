@@ -1,9 +1,8 @@
-import React, { useEffect, lazy, Suspense } from 'react'
-import { AppLayout } from '@/components/AppLayout'
-import { Fallback } from '@/components/Fallback'
-import { ProtectedRoute } from '@/components/ProtectedRoute'
+import { useEffect, lazy, Suspense } from 'react'
+import { AppLayout } from '@/widgets/app-layout'
+import { Fallback } from '@/shared/ui/fallback'
+import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useWindowCSSRatio } from '@/hooks'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 
 import './styles/global.scss'
@@ -18,16 +17,14 @@ const Auth = lazy(() => import('@/pages/auth'))
 const Settings = lazy(() => import('@/pages/settings'))
 
 export function App() {
-  useWindowCSSRatio()
-
   useEffect(() => {
     Telegram.WebApp.expand()
   }, [])
 
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
           <Route path={ROUTER_NAMES.root} index element={<Home />} />
           <Route
             path={ROUTER_NAMES.explore}
@@ -37,14 +34,7 @@ export function App() {
               </Suspense>
             }
           />
-          <Route
-            path={ROUTER_NAMES.upload}
-            element={
-              <Suspense fallback={<Fallback />}>
-                <Upload />
-              </Suspense>
-            }
-          />
+
           <Route
             path={ROUTER_NAMES.settings}
             element={
@@ -65,6 +55,14 @@ export function App() {
             />
           )}
         </Route>
+        <Route
+          path={ROUTER_NAMES.upload}
+          element={
+            <Suspense fallback={<Fallback />}>
+              <Upload />
+            </Suspense>
+          }
+        />
       </Route>
       <Route
         path={ROUTER_NAMES.auth}

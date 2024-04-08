@@ -24,7 +24,7 @@ type Client interface {
 	Begin(ctx context.Context) (pgx.Tx, error)
 }
 
-func NewClient(ctx context.Context, config *config.AppConfig) (*pgxpool.Pool, error) {
+func NewClient(ctx context.Context, config *config.Config) (*pgxpool.Pool, error) {
 
 	cfg := config.Database
 

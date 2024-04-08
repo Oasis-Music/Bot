@@ -2,8 +2,8 @@ package http
 
 import (
 	"net/http"
-	"oasis/api/internal/auth"
-	"oasis/api/internal/repo/storage/postgres/user"
+	"oasis/api/internal/services/auth"
+	"oasis/api/internal/services/user"
 
 	"github.com/go-chi/chi"
 )
@@ -18,14 +18,17 @@ type Handler interface {
 }
 
 type handler struct {
-	authService auth.AuthService
-	WARNStorage *user.UserStorage
+	authService auth.Service
+	userStorage user.UserStorage
 }
 
 func (h *handler) Register(router chi.Router) {
 	router.Post(refreshPath, h.RefreshToken)
 }
 
-func NewHandler(authService auth.AuthService, WARNStorage *user.UserStorage) Handler {
-	return &handler{authService: authService, WARNStorage: WARNStorage}
+func NewHandler(authService auth.Service, userStorage user.UserStorage) Handler {
+	return &handler{
+		authService: authService,
+		userStorage: userStorage,
+	}
 }

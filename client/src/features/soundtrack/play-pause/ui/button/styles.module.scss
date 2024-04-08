@@ -1,0 +1,63 @@
+.button {
+  position: relative;
+  outline: none;
+}
+
+.plain {
+  color: #fff;
+  background-color: #1b1818;
+  font-size: 2.5vh;
+  padding: 4vh;
+  box-shadow: none;
+  &:disabled {
+    box-shadow: none;
+  }
+  &:hover:not(:disabled) {
+    background-color: #1b1818;
+  }
+
+  @include minHSX {
+    font-size: 17px;
+    padding: 30px;
+  }
+}
+
+.icon {
+  position: absolute;
+}
+
+.pauseIcon {
+  left: 50%;
+  transform: translate(-39%, 0);
+}
+
+.attractive {
+  color: #1b1818;
+  background-color: #fff;
+  font-size: 3vh;
+  padding: 5.5vh;
+
+  &:focus-visible {
+    background-color: var(--main-color);
+  }
+  /* box-shadow: 0 0 10px #9521f3, 0 0 40px #c600ee, 0 0 80px #f704f7; */
+  /* box-shadow: 0 0 0px #fff, 0 0 20px #fff, 0 0 60px #fff; */
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.6),
+    0 0 50px rgba(255, 255, 255, 0.45),
+    0 0 70px rgba(255, 255, 255, 0.25),
+    0 0 70px rgba(255, 255, 255, 0.1);
+
+  &:disabled {
+    box-shadow: none;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #fff;
+  }
+
+  @include minHSX {
+    font-size: 23px;
+    padding: 41px;
+  }
+}

@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import { client } from './apollo'
-import { useDetectLang } from '@/hooks'
+import { useDetectLang } from '@/shared/lib/hooks'
 import { ApolloProvider } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Snackbar } from '@/widgets/snackbar'

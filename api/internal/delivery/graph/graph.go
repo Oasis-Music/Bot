@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"oasis/api/internal/app/composites"
-	"oasis/api/internal/auth"
+	"oasis/api/internal/app/composite"
 	"oasis/api/internal/delivery/graph/dataloader"
 	"oasis/api/internal/delivery/graph/models"
-	"oasis/api/internal/useCase/user"
+	"oasis/api/internal/services/auth"
+	"oasis/api/internal/services/user"
 	"oasis/api/internal/utils"
 	"time"
 
@@ -25,20 +25,20 @@ import (
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
 
-func NewHandler(rootComposite composites.RootComposite) http.Handler {
+func NewHandler(appComposite composite.AppComposite) http.Handler {
 
 	resolver := &Resolver{
-		SoundtrackUC: rootComposite.SoundtrackComposite.UseCase,
-		UserUC:       rootComposite.UserComposite.UseCase,
+		SoundtrackService: appComposite.SoundtrackService,
+		UserService:       appComposite.UserService,
 	}
 
 	config := Config{
 		Resolvers: resolver,
 	}
 
-	loader := dataloader.NewDataLoader(rootComposite)
+	loader := dataloader.NewDataLoader(appComposite)
 
-	config.Directives.HasRole = hasRoleDirectiveHandler(rootComposite.UserComposite.UseCase)
+	config.Directives.HasRole = hasRoleDirectiveHandler(appComposite.UserService)
 
 	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
 
@@ -64,7 +64,7 @@ func NewHandler(rootComposite composites.RootComposite) http.Handler {
 	return dataloader.Middleware(loader, srv)
 }
 
-func hasRoleDirectiveHandler(userUseCase user.UseCase) directiveHandler {
+func hasRoleDirectiveHandler(userService user.Service) directiveHandler {
 	return func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error) {
 
 		var gqlUnauthErr = &gqlerror.Error{
@@ -89,7 +89,7 @@ func hasRoleDirectiveHandler(userUseCase user.UseCase) directiveHandler {
 			return nil, errors.New("wrong user id")
 		}
 
-		userRole, err := userUseCase.Role(ctx, userID)
+		userRole, err := userService.Role(ctx, userID)
 		if err != nil {
 			return nil, &gqlerror.Error{
 				Path:    graphql.GetPath(ctx),

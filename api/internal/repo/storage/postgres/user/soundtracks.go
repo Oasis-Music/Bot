@@ -89,7 +89,7 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 		var coverImg *string
 
 		if track.CoverImage.Valid {
-			path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
+			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
 			coverImg = &path
 		}
 
@@ -99,7 +99,7 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 			Author:     track.Author,
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
-			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
 			Attached:   true, // soundtracks from user playlist attached by default
 			CreatedAt:  track.CreatedAt,
 			CreatorID:  track.CreatorID,

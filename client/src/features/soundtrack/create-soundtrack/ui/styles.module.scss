@@ -1,0 +1,10 @@
+.container {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.inner {
+  display: flex;
+  transition: transform 0.3s;
+}

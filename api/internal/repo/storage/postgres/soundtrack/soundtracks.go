@@ -72,7 +72,7 @@ func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.So
 		var coverImg *string
 
 		if track.CoverImage.Valid {
-			path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
+			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
 			coverImg = &path
 		}
 
@@ -82,7 +82,7 @@ func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.So
 			Author:     track.Author,
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
-			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
 			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,
 			CreatorID:  track.CreatorID,

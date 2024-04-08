@@ -1,18 +1,14 @@
-import React from 'react'
 import clsx from 'clsx'
-import PlayIcon from '@/assets/svg/play.svg?react'
-import PauseIcon from '@/assets/svg/pause.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-import { IconButton } from '@/shared/ui/icon-button'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
+import { PlayPauseButton } from '@/features/soundtrack/play-pause'
 
 import styles from './styles.module.scss'
 
 interface MiniPlayerProps {
   onPlayerOpen(): void
-  onPlayPause(): void
+  onPlayPause(): void // TODO: extract
 }
 
 export function MiniPlayer({ onPlayerOpen, onPlayPause }: MiniPlayerProps) {
@@ -29,12 +25,8 @@ export function MiniPlayer({ onPlayerOpen, onPlayPause }: MiniPlayerProps) {
           <p className={styles.author}>{currentTrack.author}</p>
         </div>
       </div>
-      <div className={styles.playBottonWrapper}>
-        <IconButton onClick={onPlayPause} className={styles.playBotton}>
-          <SvgIcon className={clsx(styles.icon, !currentTrack.isPlaying && styles.pauseIcon)}>
-            {currentTrack.isPlaying ? <PauseIcon /> : <PlayIcon />}
-          </SvgIcon>
-        </IconButton>
+      <div className={styles.buttonWrapper}>
+        <PlayPauseButton onClick={onPlayPause} />
       </div>
     </div>
   )

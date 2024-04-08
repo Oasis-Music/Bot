@@ -1,10 +1,10 @@
 package router
 
 import (
-	"oasis/api/internal/app/composites"
-	"oasis/api/internal/auth"
+	"oasis/api/internal/app/composite"
 	"oasis/api/internal/config"
 	"oasis/api/internal/delivery/graph"
+	"oasis/api/internal/services/auth"
 
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.AuthService, rootComposite composites.RootComposite) chi.Router {
+func NewRouter(cfg *config.Config, db *pgxpool.Pool, authService auth.Service, appComposite composite.AppComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -23,10 +23,10 @@ func NewRouter(config *config.AppConfig, db *pgxpool.Pool, authService auth.Auth
 
 	r.Group(func(r chi.Router) {
 		r.Use(authService.AuthMiddleware)
-		r.Handle("/graphql", graph.NewHandler(rootComposite))
+		r.Handle("/graphql", graph.NewHandler(appComposite))
 	})
 
-	if config.Environment == "development" {
+	if cfg.Environment == config.DevEnv {
 		r.Handle("/playground", playground.Handler("GraphiQL", "/graphql"))
 	}
 

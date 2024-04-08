@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
@@ -9,7 +8,7 @@ import styles from './Details.module.scss'
 interface DetailsProps {
   title: string
   author: string
-  coverImage: string | null
+  coverImage?: string | null
 }
 
 export function Details({ coverImage, title, author }: DetailsProps) {

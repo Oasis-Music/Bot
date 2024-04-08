@@ -1,9 +1,10 @@
-import handv_img from '@/assets/rastr/hand-v.png'
+import handv_img from '@/shared/assets/rastr/hand-v.png'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { SignInButton } from '@/features/auth/sign-in'
 
-import styles from './Auth.module.scss'
+import styles from './styles.module.scss'
 
 export default function Auth() {
   const { t } = useTranslation()
@@ -20,7 +21,7 @@ export default function Auth() {
           {t('pages.auth.terms', {
             btn: t('pages.auth.enterBtn')
           })}
-          <Link to={'#'}>{t('pages.auth.termsLink')}</Link>
+          <Link to={ROUTER_NAMES.terms}>{t('pages.auth.termsLink')}</Link>
           &nbsp;Oasis
         </p>
         <Link to={'#'} className={styles.report}>

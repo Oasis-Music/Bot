@@ -3,10 +3,10 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"log"
 	"oasis/api/internal/app"
 	"oasis/api/internal/config"
+	"oasis/api/logger"
 	"oasis/api/pkg/postgres"
 
 	"github.com/joho/godotenv"
@@ -32,18 +32,18 @@ func init() {
 }
 
 func main() {
+	config := config.New()
+	logger := logger.New(config.Environment)
 
-	config := config.NewAppConfig()
 	db, err := postgres.NewClient(context.Background(), config)
 	if err != nil {
-		fmt.Println("=============")
+		logger.Error(err.Error())
 		log.Fatal(err)
-		fmt.Println("=============")
 	}
 
 	defer db.Close()
 
-	app := app.NewApp(db, config)
+	app := app.NewApp(config, logger, db)
 
 	app.Run()
 }

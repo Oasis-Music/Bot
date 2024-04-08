@@ -26,7 +26,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 		var coverImg *string
 
 		if track.CoverImage.Valid {
-			path := s.config.ExternalAPI.CoverImageBaseURL + track.CoverImage.String
+			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
 			coverImg = &path
 		}
 
@@ -36,7 +36,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 			Author:     track.Author,
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
-			Audio:      s.config.ExternalAPI.AudioBaseURL + track.AudioFile,
+			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
 			Validated:  track.IsValidated,
 			Attached:   track.Attached,
 			CreatedAt:  track.CreatedAt,

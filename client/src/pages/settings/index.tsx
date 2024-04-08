@@ -1,6 +1,4 @@
-import React from 'react'
-import { LangSwitcher } from '@/components/LangSwitcher'
-
+import { LangSwitcher } from '@/entities/user'
 import styles from './Settings.module.scss'
 
 export default function Settings() {
