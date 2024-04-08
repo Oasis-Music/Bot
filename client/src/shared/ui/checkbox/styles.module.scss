@@ -42,18 +42,18 @@
   }
 }
 
-@keyframes wave {
-  50% {
-    transform: scale(0.9);
-  }
-}
-
-.checked {
+.input:checked ~ .uiEl {
   background: var(--main-color);
   border-color: var(--main-color);
   animation: wave 0.4s ease;
   & svg {
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes wave {
+  50% {
+    transform: scale(0.9);
   }
 }
 

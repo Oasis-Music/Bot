@@ -25,7 +25,7 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
 
-  const { setValue } = useFormContext()
+  const { setValue, register } = useFormContext()
 
   const [player, setPlayer] = useState<AudioPlayer>()
 
@@ -115,11 +115,7 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
         </div>
       </div>
       <div className={styles.attach}>
-        <Checkbox
-          name="attach"
-          onChange={handleAttachCheck}
-          label={t('pages.upload.audio.attach')}
-        />
+        <Checkbox name="attach" label={t('pages.upload.audio.attach')} register={register} />
       </div>
       <StepControls
         actionButtonType="submit"

@@ -70,10 +70,10 @@ export function TextInputs() {
       </div>
       <h4>Checkbox:</h4>
       <div>
-        <Checkbox name="baseCheckbox" />
+        <Checkbox register={register} name="baseCheckbox" />
       </div>
       <div style={{ color: '#fff' }}>
-        <Checkbox name="baseCheckbox" label="with label" />
+        <Checkbox register={register} name="baseCheckbox" label="with label" />
       </div>
     </div>
   )
