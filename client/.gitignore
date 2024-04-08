@@ -1,6 +1,9 @@
 build
 src/assets/music
 
+# dev cert
+/cert
+
 # Logs
 logs
 *.log
