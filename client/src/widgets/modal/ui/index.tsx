@@ -66,10 +66,10 @@ export function Modal(props: ModalProps) {
       {children}
       {!hideControls && (
         <div className={styles.controls}>
-          <Button onClick={props.onSubmit} className={styles.submitButton}>
+          <Button color="secondary" onClick={props.onSubmit} className={styles.submitButton}>
             {props.controlActionText}
           </Button>
-          <Button onClick={handleModalClose} className={styles.closeButton}>
+          <Button color="secondary" onClick={handleModalClose} className={styles.closeButton}>
             {props.controlCloseText}
           </Button>
         </div>
