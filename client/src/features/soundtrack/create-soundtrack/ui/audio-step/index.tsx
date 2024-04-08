@@ -17,10 +17,9 @@ interface AudioProps {
   loading: boolean
   onPrevStep(): void
   onAlert(): void
-  onAttachChecked(v: boolean): void
 }
 
-export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioProps) {
+export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
   const { t } = useTranslation()
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
@@ -85,10 +84,6 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
     if (player) {
       player.pause()
     }
-  }
-
-  const handleAttachCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onAttachChecked(!!event.target.value)
   }
 
   return (
