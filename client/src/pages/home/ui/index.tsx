@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react'
-import { NowPlaying } from './NowPlaying'
+import { useState, useEffect } from 'react'
+import { Head } from './head'
+import { List } from './list'
 import { useReactiveVar } from '@apollo/client'
-import { List } from './List'
-import { type User, userVar } from '@/entities/user'
-import { useUserSoundtracksQuery } from './api'
-import { Counter } from './Counter'
+import { useUserSoundtracksQuery } from '../api'
+import { Counter } from './counter'
 import { useTranslation } from 'react-i18next'
 import type { Soundtrack } from '@/entities/soundtrack'
+import { type User, userVar } from '@/entities/user'
 
-import styles from './Home.module.scss'
+import styles from './styles.module.scss'
 import { useUserPlaylist } from '@/features/soundtrack/set-user-playlist'
 
 const ITEMS_PER_PAGE = 15
 
-export default function Home() {
+export function Home() {
   const { t } = useTranslation()
   const currentUser = useReactiveVar(userVar) as User
 
@@ -71,7 +71,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <NowPlaying
+      <Head
         trackCounter={tracksNum}
         onTrackAttach={onTrackAttach}
         onTrackUnattach={onUnattachHandler}

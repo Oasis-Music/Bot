@@ -10,15 +10,15 @@ import { currentTrackVar } from '@/entities/soundtrack'
 import { AttachButton } from '@/features/soundtrack/add-to-user-playlist'
 import { UnattachButton } from '@/features/soundtrack/remove-from-user-playlist'
 
-import styles from './NowPlaying.module.scss'
+import styles from './styles.module.scss'
 
-interface NowPlayingProps {
+interface HeadProps {
   trackCounter?: number
   onTrackAttach?(): void
   onTrackUnattach?(): void
 }
 
-export function NowPlaying({ onTrackAttach, onTrackUnattach }: NowPlayingProps) {
+export function Head({ onTrackAttach, onTrackUnattach }: HeadProps) {
   const [wasCopied, setCopied] = useState(false)
 
   const track = useReactiveVar(currentTrackVar)
