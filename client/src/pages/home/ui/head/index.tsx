@@ -1,13 +1,11 @@
 import clsx from 'clsx'
-import ShareIcon from '@/shared/assets/svg/share.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-import { IconButton } from '@/shared/ui/icon-button'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { AttachButton } from '@/features/soundtrack/add-to-user-playlist'
 import { UnattachButton } from '@/features/soundtrack/remove-from-user-playlist'
 import { CopyInfoButton } from '@/features/soundtrack/copy-info'
+import { ShareTrackButton } from '@/features/soundtrack/share-track'
 
 import styles from './styles.module.scss'
 
@@ -38,11 +36,7 @@ export function Head({ onTrackAttach, onTrackUnattach }: HeadProps) {
               {/*  */}
               <CopyInfoButton className={styles.button} />
               {/*  */}
-              <IconButton className={styles.button}>
-                <SvgIcon>
-                  <ShareIcon />
-                </SvgIcon>
-              </IconButton>
+              <ShareTrackButton className={styles.button} />
             </div>
           ) : (
             <div className={clsx(track.id && styles.attach)}>
