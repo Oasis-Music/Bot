@@ -1,5 +1,4 @@
 import { IconButton } from '@/shared/ui/icon-button'
-import styles from './styles.module.scss'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import TrashIcon from '@/shared/assets/svg/trash.svg?react'
 import { useSnackbar } from '@/shared/lib/snackbar'
@@ -11,10 +10,11 @@ import { useRemoveFromUserPlaylist } from '../../model'
 import { type User, userVar } from '@/entities/user'
 
 interface UnattachButtonProps {
+  className: string
   onTrackUnattached?(): void
 }
 
-export function UnattachButton({ onTrackUnattached }: UnattachButtonProps) {
+export function UnattachButton({ className, onTrackUnattached }: UnattachButtonProps) {
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar) as User
@@ -48,7 +48,7 @@ export function UnattachButton({ onTrackUnattached }: UnattachButtonProps) {
   }
 
   return (
-    <IconButton loading={loading} onClick={handleClick} className={styles.button}>
+    <IconButton loading={loading} onClick={handleClick} className={className}>
       <SvgIcon>
         <TrashIcon />
       </SvgIcon>

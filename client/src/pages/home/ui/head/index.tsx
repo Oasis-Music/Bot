@@ -32,7 +32,7 @@ export function Head({ onTrackAttach, onTrackUnattach }: HeadProps) {
           {track.attached ? (
             <div className={styles.controls}>
               {/*  */}
-              <UnattachButton onTrackUnattached={onTrackUnattach} />
+              <UnattachButton className={styles.button} onTrackUnattached={onTrackUnattach} />
               {/*  */}
               <CopyInfoButton className={styles.button} />
               {/*  */}
