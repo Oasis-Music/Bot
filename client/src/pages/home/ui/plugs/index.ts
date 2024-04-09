@@ -1,2 +1,2 @@
-export { ErrorPlug } from './Error'
-export { NoDataPlug } from './NoData'
+export { ErrorPlug } from './fetch-error'
+export { NoDataPlug } from './no-data'

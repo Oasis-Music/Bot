@@ -10,6 +10,7 @@
   align-items: center;
   padding: 0 13px;
   text-align: center;
+  color: #afafaf;
   & h1 {
     font-size: 4vh;
     margin: 0;
@@ -20,16 +21,4 @@
     margin: 0 auto;
     max-width: 350px;
   }
-}
-
-.image {
-  display: block;
-  width: 18vh;
-  margin-right: 10px;
-  margin: 0 auto;
-  margin-bottom: 3vh;
-}
-
-.noDataTextBox {
-  color: #afafaf;
 }
