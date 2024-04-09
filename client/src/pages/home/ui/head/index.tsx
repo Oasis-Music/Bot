@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import ShareIcon from '@/shared/assets/svg/share.svg?react'
 import CopyIcon from '@/shared/assets/svg/copy.svg?react'
@@ -55,7 +56,7 @@ export function Head({ onTrackAttach, onTrackUnattach }: HeadProps) {
             <ImagePlaceholder src={track.coverURL} altText={track.title} />
           </div>
         </div>
-        <div className={styles.details}>
+        <div className={clsx(styles.detailsEmpty, track.id && styles.details)}>
           <h1 className={styles.title}>{track.title}</h1>
           <p className={styles.author}>{track.author}</p>
           {track.attached ? (
@@ -73,7 +74,9 @@ export function Head({ onTrackAttach, onTrackUnattach }: HeadProps) {
               </IconButton>
             </div>
           ) : (
-            <AttachButton onTrackAttached={onTrackAttach} />
+            <div className={clsx(track.id && styles.attach)}>
+              <AttachButton onTrackAttached={onTrackAttach} />
+            </div>
           )}
         </div>
       </div>
