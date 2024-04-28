@@ -11,6 +11,7 @@ import (
 	"oasis/api/internal/services/soundtrack"
 	"oasis/api/internal/services/user"
 
+	authRepo "oasis/api/internal/repo/storage/postgres/auth"
 	soundtrackRepo "oasis/api/internal/repo/storage/postgres/soundtrack"
 	userRepo "oasis/api/internal/repo/storage/postgres/user"
 
@@ -35,7 +36,8 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
 
 	sqlc := sqlc.New(db)
 
-	authService := auth.New(config, db)
+	authStorage := authRepo.New(db, sqlc)
+	authService := auth.New(config, logger, authStorage)
 
 	userStorage := userRepo.New(config, logger, db, sqlc)
 	userService := user.New(config, logger, userStorage, authService)

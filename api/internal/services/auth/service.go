@@ -2,16 +2,15 @@ package auth
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 	"oasis/api/internal/config"
-	authStorage "oasis/api/internal/repo/storage/postgres/auth"
 	"time"
-
-	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type authService struct {
-	storage  authStorage.AuthStorage
+	storage  AuthStorage
+	logger   *slog.Logger
 	atSecret []byte
 	rtSecret []byte
 	atExpIn  time.Duration
@@ -26,12 +25,11 @@ type Service interface {
 	ParseRefreshToken(string) (*refreshToken, error)
 }
 
-func New(config *config.Config, db *pgxpool.Pool) Service {
-
-	storage := authStorage.NewAuthStorage(db)
+func New(config *config.Config, logger *slog.Logger, storage AuthStorage) Service {
 
 	return &authService{
 		storage:  storage,
+		logger:   logger,
 		atSecret: []byte(config.Auth.AccessSecret),
 		rtSecret: []byte(config.Auth.RefreshSecret),
 		atExpIn:  time.Duration(config.Auth.AccessTTL) * time.Minute,
