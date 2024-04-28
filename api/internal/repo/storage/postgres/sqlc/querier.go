@@ -9,6 +9,7 @@ import (
 )
 
 type Querier interface {
+	AttachSoundtrack(ctx context.Context, arg AttachSoundtrackParams) error
 	CreateSoundtrack(ctx context.Context, arg CreateSoundtrackParams) (int32, error)
 	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
 	GetSoundtrack(ctx context.Context, arg GetSoundtrackParams) (GetSoundtrackRow, error)

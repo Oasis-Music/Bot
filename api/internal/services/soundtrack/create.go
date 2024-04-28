@@ -156,8 +156,8 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	if input.Attach {
 		_, err := s.userService.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
-			UserID:  userID,
-			TrackID: newTrackId,
+			UserID:       userID,
+			SoundtrackID: newTrackId,
 		})
 
 		if err != nil {

@@ -89,8 +89,8 @@ type UserInitData struct {
 }
 
 type AttachSoundtrackToUserParams struct {
-	UserID  int64
-	TrackID int32
+	UserID       int64
+	SoundtrackID int32
 }
 
 type UnattachSoundtrackFromUserParams struct {

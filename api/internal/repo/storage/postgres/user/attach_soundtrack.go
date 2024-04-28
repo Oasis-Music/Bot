@@ -5,22 +5,19 @@ import (
 	"errors"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
+	"oasis/api/internal/repo/storage/postgres/sqlc"
 
 	"github.com/jackc/pgconn"
 )
-
-const ADD_TRACK_QUERY = `
-INSERT INTO user_soundtrack (user_id, soundtrack_id) VALUES ($1, $2);
-`
 
 func (s *UserStorage) AttachSoundtrack(ctx context.Context, params entity.AttachSoundtrackToUserParams) error {
 
 	var pgerr *pgconn.PgError
 
-	_, err := s.database.Exec(context.Background(), ADD_TRACK_QUERY,
-		params.UserID,
-		params.TrackID,
-	)
+	err := s.sqlc.AttachSoundtrack(ctx, sqlc.AttachSoundtrackParams{
+		UserID:       params.UserID,
+		SoundtrackID: params.SoundtrackID,
+	})
 
 	if err != nil {
 		if ok := errors.As(err, &pgerr); ok {
