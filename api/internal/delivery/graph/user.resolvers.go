@@ -45,8 +45,8 @@ func (r *mutationResolver) UnattachSoundtrack(ctx context.Context, input models.
 	}
 
 	return r.UserService.UnattachSoundtrack(ctx, entity.UnattachSoundtrackFromUserParams{
-		UserID:  userId,
-		TrackID: int32(trackId),
+		UserID:       userId,
+		SoundtrackID: int32(trackId),
 	})
 }
 

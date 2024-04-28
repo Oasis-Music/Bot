@@ -22,3 +22,20 @@ func (q *Queries) AttachSoundtrack(ctx context.Context, arg AttachSoundtrackPara
 	_, err := q.db.Exec(ctx, attachSoundtrack, arg.UserID, arg.SoundtrackID)
 	return err
 }
+
+const unattachSoundtrack = `-- name: UnattachSoundtrack :execrows
+DELETE FROM user_soundtrack WHERE user_id = $1 AND soundtrack_id = $2
+`
+
+type UnattachSoundtrackParams struct {
+	UserID       int64
+	SoundtrackID int32
+}
+
+func (q *Queries) UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrackParams) (int64, error) {
+	result, err := q.db.Exec(ctx, unattachSoundtrack, arg.UserID, arg.SoundtrackID)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
+}
