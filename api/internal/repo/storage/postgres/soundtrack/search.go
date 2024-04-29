@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/repo/storage/postgres"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
 )
 
@@ -22,26 +23,12 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 	soundtracks := make([]entity.Soundtrack, 0, len(data))
 
 	for _, track := range data {
-
-		var coverImg *string
-
+		// info: track.CoverImage.Valid temp solution
 		if track.CoverImage.Valid {
-			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
-			coverImg = &path
+			track.CoverImage.String = s.config.FileApi.CoverApiURL + track.CoverImage.String
 		}
 
-		soundtracks = append(soundtracks, entity.Soundtrack{
-			ID:         track.ID,
-			Title:      track.Title,
-			Author:     track.Author,
-			Duration:   int(track.Duration),
-			CoverImage: coverImg,
-			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
-			Validated:  track.IsValidated,
-			Attached:   track.Attached,
-			CreatedAt:  track.CreatedAt,
-			CreatorID:  track.CreatorID,
-		})
+		soundtracks = append(soundtracks, postgres.SoundtrackFromDTO(postgres.SoundtrackDTO(track)))
 	}
 
 	return soundtracks, nil

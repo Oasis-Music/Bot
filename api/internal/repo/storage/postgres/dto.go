@@ -1,6 +1,7 @@
 package postgres
 
 import (
+	"database/sql"
 	"fmt"
 	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
 	"time"
@@ -23,18 +24,6 @@ func (r *RoleType) Scan(src interface{}) error {
 		return fmt.Errorf("unsupported type for RoleType: %T", src)
 	}
 	return nil
-}
-
-type SoundtrackDTO struct {
-	ID         int32
-	Title      string
-	Author     string
-	Duration   int16
-	CoverImage dbnull.NullString
-	AudioFile  string
-	Attached   bool
-	CreatorID  int64
-	CreatedAt  time.Time
 }
 
 type UserDTO struct {
@@ -64,4 +53,19 @@ type UpdateUserParams struct {
 	Username     dbnull.NullString
 	LanguageCode dbnull.NullString
 	VisitedAt    time.Time
+}
+
+// ##############################################
+
+type SoundtrackDTO struct {
+	ID          int32
+	Title       string
+	Author      string
+	Duration    int16
+	CoverImage  sql.NullString
+	AudioFile   string
+	IsValidated bool
+	CreatorID   int64
+	CreatedAt   time.Time
+	Attached    bool // generic field
 }
