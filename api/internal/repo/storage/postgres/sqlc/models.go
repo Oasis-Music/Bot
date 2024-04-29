@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+type AuthToken struct {
+	ID             sql.NullInt64
+	RefreshTokenID string
+	CreatedAt      time.Time
+}
+
 type Soundtrack struct {
 	ID          int32
 	Title       string

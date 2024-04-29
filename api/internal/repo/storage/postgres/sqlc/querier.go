@@ -11,9 +11,11 @@ import (
 type Querier interface {
 	AttachSoundtrack(ctx context.Context, arg AttachSoundtrackParams) error
 	CreateSoundtrack(ctx context.Context, arg CreateSoundtrackParams) (int32, error)
+	DeleteRefreshToken(ctx context.Context, refreshTokenID string) (int64, error)
 	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
 	GetSoundtrack(ctx context.Context, arg GetSoundtrackParams) (GetSoundtrackRow, error)
 	GetSoundtrackByTitle(ctx context.Context, arg GetSoundtrackByTitleParams) ([]GetSoundtrackByTitleRow, error)
+	SaveRefreshToken(ctx context.Context, refreshTokenID string) error
 	UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrackParams) (int64, error)
 }
 

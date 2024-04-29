@@ -51,10 +51,3 @@ CREATE TABLE user_soundtrack (
     created_at TIMESTAMP NOT NULL DEFAULT current_timestamp,
 	PRIMARY KEY (user_id, soundtrack_id)
 );
-
-
-CREATE TABLE auth_token (
-    id BIGINT GENERATED ALWAYS AS IDENTITY,
-    token_id TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT current_timestamp
-);
