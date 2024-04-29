@@ -2,15 +2,21 @@ package postgres
 
 import "oasis/api/internal/entity"
 
-func SoundtrackFromDTO(dto SoundtrackDTO) entity.Soundtrack {
+func SoundtrackFromDTO(coverURL string, audioURL string, dto SoundtrackDTO) entity.Soundtrack {
+
+	var cover string
+
+	if dto.CoverImage.Valid {
+		cover = coverURL + dto.CoverImage.String
+	}
 
 	return entity.Soundtrack{
 		ID:         dto.ID,
 		Title:      dto.Title,
 		Author:     dto.Author,
 		Duration:   int(dto.Duration),
-		CoverImage: &dto.CoverImage.String,
-		Audio:      dto.AudioFile, // AudioFile
+		CoverImage: &cover,
+		Audio:      audioURL + dto.AudioFile, // AudioFile
 		Validated:  dto.IsValidated,
 		Attached:   dto.Attached,
 		CreatorID:  dto.CreatorID,
