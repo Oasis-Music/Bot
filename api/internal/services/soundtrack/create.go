@@ -215,7 +215,7 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 		return "", nil, errors.New("failed to save media")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, "http://localhost:5000/createTrack", &body)
+	req, err := http.NewRequest(http.MethodPost, s.config.FileApiURL+"/createTrack", &body)
 	if err != nil {
 		fmt.Println("build /createTrack", err)
 		return "", nil, errors.New("failed to save media")

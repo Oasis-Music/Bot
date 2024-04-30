@@ -13,6 +13,7 @@ const (
 
 type Config struct {
 	Port        string `env:"ENTRY_PORT" env-required:"true"`
+	FileApiURL  string `env:"FILE_API_URL" env-required:"true"`
 	Environment string `env:"ENVIRONMENT" env-required:"true"`
 	Auth        AuthConfig
 	Database    PostgresConfig
