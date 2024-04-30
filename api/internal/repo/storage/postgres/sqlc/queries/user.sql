@@ -1,3 +1,24 @@
+-- name: CreateUser :one
+INSERT INTO users
+	(
+		id,
+		first_name,
+		last_name,
+		username,
+		language_code,
+		user_role
+	)
+	VALUES
+	(
+		$1,
+		$2,
+		$3,
+		$4,
+		$5,
+		$6
+	)
+RETURNING id, first_name;
+
 -- name: GetUser :one
 SELECT 
     id,
@@ -23,6 +44,15 @@ SELECT
 	created_at
 FROM users
 WHERE id = ANY($1::BIGINT[]);
+
+-- name: UpdateUser :one
+UPDATE users SET
+	first_name = $2,
+    last_name = $3,
+    username = $4,
+	language_code = $5,
+	visited_at = $6
+WHERE id = $1 RETURNING id, first_name;
 
 -- name: GetUserRole :one
 SELECT role_code FROM roles INNER JOIN users ON roles.role_code = users.user_role WHERE users.id = 1;

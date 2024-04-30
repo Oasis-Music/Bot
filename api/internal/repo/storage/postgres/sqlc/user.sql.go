@@ -7,6 +7,8 @@ package sqlc
 
 import (
 	"context"
+	"database/sql"
+	"time"
 )
 
 const attachSoundtrack = `-- name: AttachSoundtrack :exec
@@ -21,6 +23,56 @@ type AttachSoundtrackParams struct {
 func (q *Queries) AttachSoundtrack(ctx context.Context, arg AttachSoundtrackParams) error {
 	_, err := q.db.Exec(ctx, attachSoundtrack, arg.UserID, arg.SoundtrackID)
 	return err
+}
+
+const createUser = `-- name: CreateUser :one
+INSERT INTO users
+	(
+		id,
+		first_name,
+		last_name,
+		username,
+		language_code,
+		user_role
+	)
+	VALUES
+	(
+		$1,
+		$2,
+		$3,
+		$4,
+		$5,
+		$6
+	)
+RETURNING id, first_name
+`
+
+type CreateUserParams struct {
+	ID           int64
+	FirstName    string
+	LastName     sql.NullString
+	Username     sql.NullString
+	LanguageCode sql.NullString
+	UserRole     string
+}
+
+type CreateUserRow struct {
+	ID        int64
+	FirstName string
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
+	row := q.db.QueryRow(ctx, createUser,
+		arg.ID,
+		arg.FirstName,
+		arg.LastName,
+		arg.Username,
+		arg.LanguageCode,
+		arg.UserRole,
+	)
+	var i CreateUserRow
+	err := row.Scan(&i.ID, &i.FirstName)
+	return i, err
 }
 
 const getUser = `-- name: GetUser :one
@@ -122,4 +174,42 @@ func (q *Queries) UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrack
 		return 0, err
 	}
 	return result.RowsAffected(), nil
+}
+
+const updateUser = `-- name: UpdateUser :one
+UPDATE users SET
+	first_name = $2,
+    last_name = $3,
+    username = $4,
+	language_code = $5,
+	visited_at = $6
+WHERE id = $1 RETURNING id, first_name
+`
+
+type UpdateUserParams struct {
+	ID           int64
+	FirstName    string
+	LastName     sql.NullString
+	Username     sql.NullString
+	LanguageCode sql.NullString
+	VisitedAt    time.Time
+}
+
+type UpdateUserRow struct {
+	ID        int64
+	FirstName string
+}
+
+func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error) {
+	row := q.db.QueryRow(ctx, updateUser,
+		arg.ID,
+		arg.FirstName,
+		arg.LastName,
+		arg.Username,
+		arg.LanguageCode,
+		arg.VisitedAt,
+	)
+	var i UpdateUserRow
+	err := row.Scan(&i.ID, &i.FirstName)
+	return i, err
 }

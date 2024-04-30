@@ -1,17 +1,26 @@
 package dbnull
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 type NullString struct {
 	sql.NullString
 }
 
-func NewNullString(s string, valid bool) NullString {
-	return NullString{
-		NullString: sql.NullString{
-			String: s,
-			Valid:  valid,
-		},
+func NewNullString(s *string) sql.NullString {
+
+	var str string
+	var isValid bool
+
+	if s != nil {
+		isValid = true
+		str = *s
+	}
+
+	return sql.NullString{
+		String: str,
+		Valid:  isValid,
 	}
 }
 
