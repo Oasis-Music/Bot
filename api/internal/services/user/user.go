@@ -13,17 +13,8 @@ func (u *userService) User(ctx context.Context, id int64) (*entity.User, error) 
 	if err == pgx.ErrNoRows {
 		return nil, ErrUserNotFound
 	} else if err != nil {
-		return nil, err
+		return nil, ErrGetUserFailed
 	}
 
-	return &entity.User{
-		ID:           user.ID,
-		FirstName:    user.FirstName,
-		LastName:     user.LastName,
-		Username:     user.Username,
-		LanguageCode: user.LanguageCode,
-		Role:         string(user.Role),
-		VisitedAt:    user.VisitedAt,
-		CreatedAt:    user.CreatedAt,
-	}, nil
+	return user, nil
 }

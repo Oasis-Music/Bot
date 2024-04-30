@@ -1,6 +1,16 @@
 package postgres
 
-import "oasis/api/internal/entity"
+import (
+	"database/sql"
+	"oasis/api/internal/entity"
+)
+
+func StringOrNil(n sql.NullString) *string {
+	if !n.Valid {
+		return nil
+	}
+	return &n.String
+}
 
 func SoundtrackFromDTO(coverURL string, audioURL string, dto SoundtrackDTO) entity.Soundtrack {
 
@@ -21,5 +31,19 @@ func SoundtrackFromDTO(coverURL string, audioURL string, dto SoundtrackDTO) enti
 		Attached:   dto.Attached,
 		CreatorID:  dto.CreatorID,
 		CreatedAt:  dto.CreatedAt,
+	}
+}
+
+func UserFromDTO(dto UserDTO) entity.User {
+
+	return entity.User{
+		ID:           dto.ID,
+		FirstName:    dto.FirstName,
+		Username:     StringOrNil(dto.Username),
+		LastName:     StringOrNil(dto.LastName),
+		LanguageCode: StringOrNil(dto.LanguageCode),
+		Role:         string(dto.UserRole),
+		VisitedAt:    dto.VisitedAt,
+		CreatedAt:    dto.CreatedAt,
 	}
 }

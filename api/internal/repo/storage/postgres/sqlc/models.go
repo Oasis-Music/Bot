@@ -15,6 +15,11 @@ type AuthToken struct {
 	CreatedAt      time.Time
 }
 
+type Role struct {
+	RoleCode   string
+	Permission sql.NullString
+}
+
 type Soundtrack struct {
 	ID          int32
 	Title       string
@@ -25,6 +30,17 @@ type Soundtrack struct {
 	IsValidated bool
 	CreatorID   int64
 	CreatedAt   time.Time
+}
+
+type User struct {
+	ID           int64
+	FirstName    string
+	LastName     sql.NullString
+	Username     sql.NullString
+	LanguageCode sql.NullString
+	UserRole     string
+	VisitedAt    time.Time
+	CreatedAt    time.Time
 }
 
 type UserSoundtrack struct {

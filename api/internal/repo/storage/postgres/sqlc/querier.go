@@ -15,6 +15,9 @@ type Querier interface {
 	DeleteSoundtrack(ctx context.Context, id int32) (int64, error)
 	GetSoundtrack(ctx context.Context, arg GetSoundtrackParams) (GetSoundtrackRow, error)
 	GetSoundtrackByTitle(ctx context.Context, arg GetSoundtrackByTitleParams) ([]GetSoundtrackByTitleRow, error)
+	GetUser(ctx context.Context, id int64) (User, error)
+	GetUserRole(ctx context.Context) (string, error)
+	GetUsersByID(ctx context.Context, dollar_1 []int64) ([]User, error)
 	SaveRefreshToken(ctx context.Context, refreshTokenID string) error
 	UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrackParams) (int64, error)
 }

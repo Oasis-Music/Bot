@@ -26,17 +26,6 @@ func (r *RoleType) Scan(src interface{}) error {
 	return nil
 }
 
-type UserDTO struct {
-	ID           int64
-	FirstName    string
-	LastName     dbnull.NullString
-	Username     dbnull.NullString
-	LanguageCode dbnull.NullString
-	Role         RoleType
-	VisitedAt    time.Time
-	CreatedAt    time.Time
-}
-
 type CreateUserParams struct {
 	ID           int64
 	FirstName    string
@@ -68,4 +57,15 @@ type SoundtrackDTO struct {
 	CreatorID   int64
 	CreatedAt   time.Time
 	Attached    bool // generic field
+}
+
+type UserDTO struct {
+	ID           int64
+	FirstName    string
+	LastName     sql.NullString
+	Username     sql.NullString
+	LanguageCode sql.NullString
+	UserRole     string
+	VisitedAt    time.Time
+	CreatedAt    time.Time
 }

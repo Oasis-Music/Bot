@@ -23,6 +23,90 @@ func (q *Queries) AttachSoundtrack(ctx context.Context, arg AttachSoundtrackPara
 	return err
 }
 
+const getUser = `-- name: GetUser :one
+SELECT 
+    id,
+	first_name,
+	last_name,
+	username,
+	language_code,
+	user_role,
+	visited_at,
+	created_at
+FROM users
+WHERE id = $1
+`
+
+func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
+	row := q.db.QueryRow(ctx, getUser, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Username,
+		&i.LanguageCode,
+		&i.UserRole,
+		&i.VisitedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getUserRole = `-- name: GetUserRole :one
+SELECT role_code FROM roles INNER JOIN users ON roles.role_code = users.user_role WHERE users.id = 1
+`
+
+func (q *Queries) GetUserRole(ctx context.Context) (string, error) {
+	row := q.db.QueryRow(ctx, getUserRole)
+	var role_code string
+	err := row.Scan(&role_code)
+	return role_code, err
+}
+
+const getUsersByID = `-- name: GetUsersByID :many
+SELECT 
+	id,
+	first_name,
+	last_name,
+	username,
+	language_code,
+	user_role,
+	visited_at,
+	created_at
+FROM users
+WHERE id = ANY($1::BIGINT[])
+`
+
+func (q *Queries) GetUsersByID(ctx context.Context, dollar_1 []int64) ([]User, error) {
+	rows, err := q.db.Query(ctx, getUsersByID, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []User
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Username,
+			&i.LanguageCode,
+			&i.UserRole,
+			&i.VisitedAt,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const unattachSoundtrack = `-- name: UnattachSoundtrack :execrows
 DELETE FROM user_soundtrack WHERE user_id = $1 AND soundtrack_id = $2
 `

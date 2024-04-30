@@ -2,20 +2,13 @@ package user
 
 import (
 	"context"
-	"log"
 	"oasis/api/internal/entity"
-
-	"github.com/jackc/pgx/v4"
 )
 
-func (u *userService) Users(ctx context.Context, ids []int64) ([]entity.User, error) {
-
-	users, err := u.storage.Users(ctx, ids)
-	if err == pgx.ErrNoRows {
-		log.Println("GetUsers fethed no rows")
+func (u *userService) UsersByID(ctx context.Context, ids []int64) ([]entity.User, error) {
+	users, err := u.storage.UsersByID(ctx, ids)
+	if err != nil {
 		return nil, ErrUserNotFound
-	} else if err != nil {
-		return nil, err
 	}
 
 	return users, err
