@@ -25,8 +25,6 @@ func (r *RoleType) Scan(src interface{}) error {
 	return nil
 }
 
-// ##############################################
-
 type SoundtrackDTO struct {
 	ID          int32
 	Title       string
@@ -37,7 +35,7 @@ type SoundtrackDTO struct {
 	IsValidated bool
 	CreatorID   int64
 	CreatedAt   time.Time
-	Attached    bool // generic field
+	Attached    bool // info: generic field
 }
 
 type UserDTO struct {

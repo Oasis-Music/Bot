@@ -4,10 +4,6 @@ import (
 	"database/sql"
 )
 
-type NullString struct {
-	sql.NullString
-}
-
 func NewNullString(s *string) sql.NullString {
 
 	var str string
@@ -22,18 +18,4 @@ func NewNullString(s *string) sql.NullString {
 		String: str,
 		Valid:  isValid,
 	}
-}
-
-func (n NullString) ValueOrDefault() string {
-	if !n.Valid {
-		return ""
-	}
-	return n.String
-}
-
-func (n NullString) ValueOrNil() *string {
-	if !n.Valid {
-		return nil
-	}
-	return &n.String
 }

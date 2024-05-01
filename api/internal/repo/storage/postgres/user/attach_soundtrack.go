@@ -23,9 +23,9 @@ func (s *UserStorage) AttachSoundtrack(ctx context.Context, params entity.Attach
 		if ok := errors.As(err, &pgerr); ok {
 			switch pgerr.Code {
 			case postgres.DuplicateKeyErrorCode:
-				return postgres.DuplicateKeyError
+				return postgres.ErrDuplicateKey
 			case postgres.KeyIsNotPresentErrorCode:
-				return postgres.KeyIsNotPresentError
+				return postgres.ErrKeyIsNotPresent
 			default:
 				return err
 			}
