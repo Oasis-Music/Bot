@@ -62,3 +62,6 @@ INSERT INTO user_soundtrack (user_id, soundtrack_id) VALUES ($1, $2);
 
 -- name: UnattachSoundtrack :execrows
 DELETE FROM user_soundtrack WHERE user_id = $1 AND soundtrack_id = $2;
+
+-- name: UpdateVisitDate :exec
+UPDATE users SET visited_at = $2 WHERE id = $1;

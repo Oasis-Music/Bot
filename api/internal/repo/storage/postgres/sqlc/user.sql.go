@@ -213,3 +213,17 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateU
 	err := row.Scan(&i.ID, &i.FirstName)
 	return i, err
 }
+
+const updateVisitDate = `-- name: UpdateVisitDate :exec
+UPDATE users SET visited_at = $2 WHERE id = $1
+`
+
+type UpdateVisitDateParams struct {
+	ID        int64
+	VisitedAt time.Time
+}
+
+func (q *Queries) UpdateVisitDate(ctx context.Context, arg UpdateVisitDateParams) error {
+	_, err := q.db.Exec(ctx, updateVisitDate, arg.ID, arg.VisitedAt)
+	return err
+}

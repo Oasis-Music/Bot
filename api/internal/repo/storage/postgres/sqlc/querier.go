@@ -22,6 +22,7 @@ type Querier interface {
 	SaveRefreshToken(ctx context.Context, refreshTokenID string) error
 	UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrackParams) (int64, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error)
+	UpdateVisitDate(ctx context.Context, arg UpdateVisitDateParams) error
 }
 
 var _ Querier = (*Queries)(nil)

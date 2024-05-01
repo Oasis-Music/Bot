@@ -130,9 +130,10 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		fmt.Println("user data has been updated")
 
 	} else {
+		// todo: it's not best place for this
 		fmt.Println("user data has not changed")
 
-		err = u.storage.UpdateUserVisitDate(ctx, user.ID)
+		err = u.storage.UpdateVisitDate(ctx, user.ID)
 		if err != nil {
 			fmt.Println("last visit date update:", err)
 			return nil, ErrIternalAuthorizationError
