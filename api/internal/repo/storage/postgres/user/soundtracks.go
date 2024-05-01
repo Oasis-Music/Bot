@@ -11,27 +11,20 @@ import (
 const (
 	USER_SOUNDTRACKS_QUERY = `
 	WITH s AS
-	(SELECT s.id,
-		s.title,
-		s.author,
-		s.duration,
-		s.cover_image,
-		s.audio_file,
-		s.created_at,
-		s.creator_id,
-		count(s.id) over() AS total
-	FROM soundtrack s
-		WHERE EXISTS
+		(SELECT *, count(s.id) over() AS total
+	FROM soundtrack s WHERE EXISTS
 	   	(SELECT
 			FROM user_soundtrack us
 			WHERE us.soundtrack_id = s.id
 		AND us.user_id = $1) )
-   	SELECT s.id,
+   	SELECT 
+		s.id,
 		s.title,
 		s.author,
 		s.duration,
 		s.cover_image,
 		s.audio_file,
+		s.is_validated,
 		s.created_at,
 		s.creator_id,
 		s.total
@@ -55,27 +48,27 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 
 	defer rows.Close()
 
-	dbTracks := make([]postgres.SoundtrackDTO, 0, 15)
+	dbTracks := make([]postgres.SoundtrackDTO, 0, ITEMS_PER_PAGE)
 
 	var total int64
 
 	for rows.Next() {
-		var t postgres.SoundtrackDTO
+		var i postgres.SoundtrackDTO
 		if err := rows.Scan(
-			&t.ID,
-			&t.Title,
-			&t.Author,
-			&t.Duration,
-			&t.CoverImage,
-			&t.AudioFile,
-			&t.CreatedAt,
-			&t.CreatorID,
+			&i.ID,
+			&i.Title,
+			&i.Author,
+			&i.Duration,
+			&i.CoverImage,
+			&i.AudioFile,
+			&i.IsValidated,
+			&i.CreatedAt,
+			&i.CreatorID,
 			&total,
 		); err != nil {
 			return nil, err
 		}
-		// fmt.Println(t.CreatorID)
-		dbTracks = append(dbTracks, t)
+		dbTracks = append(dbTracks, i)
 	}
 
 	if err := rows.Err(); err != nil {
@@ -100,9 +93,10 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 			Duration:   int(track.Duration),
 			CoverImage: coverImg,
 			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
-			Attached:   true, // soundtracks from user playlist attached by default
+			Validated:  track.IsValidated,
 			CreatedAt:  track.CreatedAt,
 			CreatorID:  track.CreatorID,
+			Attached:   true, // soundtracks from user playlist attached by default
 		})
 	}
 
