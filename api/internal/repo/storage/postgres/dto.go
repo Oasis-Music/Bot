@@ -1,8 +1,8 @@
 package postgres
 
 import (
+	"database/sql"
 	"fmt"
-	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
 	"time"
 )
 
@@ -26,42 +26,25 @@ func (r *RoleType) Scan(src interface{}) error {
 }
 
 type SoundtrackDTO struct {
-	ID         int32
-	Title      string
-	Author     string
-	Duration   int16
-	CoverImage dbnull.NullString
-	AudioFile  string
-	Attached   bool
-	CreatorID  int64
-	CreatedAt  time.Time
+	ID          int32
+	Title       string
+	Author      string
+	Duration    int16
+	CoverImage  sql.NullString
+	AudioFile   string
+	IsValidated bool
+	CreatorID   int64
+	CreatedAt   time.Time
+	Attached    bool // info: generic field
 }
 
 type UserDTO struct {
 	ID           int64
 	FirstName    string
-	LastName     dbnull.NullString
-	Username     dbnull.NullString
-	LanguageCode dbnull.NullString
-	Role         RoleType
+	LastName     sql.NullString
+	Username     sql.NullString
+	LanguageCode sql.NullString
+	UserRole     string
 	VisitedAt    time.Time
 	CreatedAt    time.Time
-}
-
-type CreateUserParams struct {
-	ID           int64
-	FirstName    string
-	LastName     dbnull.NullString
-	Username     dbnull.NullString
-	LanguageCode dbnull.NullString
-	Role         RoleType
-}
-
-type UpdateUserParams struct {
-	ID           int64
-	FirstName    string
-	LastName     dbnull.NullString
-	Username     dbnull.NullString
-	LanguageCode dbnull.NullString
-	VisitedAt    time.Time
 }

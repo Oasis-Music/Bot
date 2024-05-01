@@ -3,7 +3,7 @@ package entity
 import "time"
 
 type User struct {
-	ID           int64
+	ID           int64 // telegram user's ID
 	FirstName    string
 	LastName     *string
 	Username     *string
@@ -89,11 +89,11 @@ type UserInitData struct {
 }
 
 type AttachSoundtrackToUserParams struct {
-	UserID  int64
-	TrackID int32
+	UserID       int64
+	SoundtrackID int32
 }
 
 type UnattachSoundtrackFromUserParams struct {
-	UserID  int64
-	TrackID int32
+	UserID       int64
+	SoundtrackID int32
 }

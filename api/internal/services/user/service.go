@@ -17,11 +17,12 @@ const (
 type Service interface {
 	User(ctx context.Context, id int64) (*entity.User, error)
 	Role(ctx context.Context, id int64) (string, error)
-	Users(ctx context.Context, ids []int64) ([]entity.User, error)
 	Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error)
 	UserSoundtracks(ctx context.Context, id int64, options entity.UserTracksOptions) (*entity.UserTracks, error)
 	AttachSoundtrack(ctx context.Context, input entity.AttachSoundtrackToUserParams) (bool, error)
 	UnattachSoundtrack(ctx context.Context, input entity.UnattachSoundtrackFromUserParams) (bool, error)
+	// resolver specific
+	UsersByID(ctx context.Context, ids []int64) ([]entity.User, error)
 }
 
 type userService struct {

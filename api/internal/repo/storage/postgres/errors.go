@@ -8,8 +8,8 @@ const (
 )
 
 var (
-	DuplicateKeyError    = errors.New("key already exists")
-	KeyIsNotPresentError = errors.New("key is not present")
+	ErrDuplicateKey    = errors.New("key already exists")
+	ErrKeyIsNotPresent = errors.New("key is not present")
 )
 
 var (

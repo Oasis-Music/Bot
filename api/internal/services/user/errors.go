@@ -9,6 +9,7 @@ var (
 // TODO: separate
 var (
 	ErrUserNotFound              = errors.New("user not found")
+	ErrGetUserFailed             = errors.New("failed to get user")
 	ErrInitDataInvalid           = errors.New("initData string invalid")
 	ErrIternalAuthorizationError = errors.New("authorization failed: internal error")
 	ErrUserTracksNotFound        = errors.New("user or tracks not found")

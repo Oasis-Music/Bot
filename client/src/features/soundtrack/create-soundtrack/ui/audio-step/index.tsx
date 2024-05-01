@@ -17,15 +17,14 @@ interface AudioProps {
   loading: boolean
   onPrevStep(): void
   onAlert(): void
-  onAttachChecked(v: boolean): void
 }
 
-export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioProps) {
+export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
   const { t } = useTranslation()
   const waveContainerRef = useRef<HTMLDivElement>(null)
   const [audio, setAudio] = useState<File | null>(null)
 
-  const { setValue } = useFormContext()
+  const { setValue, register } = useFormContext()
 
   const [player, setPlayer] = useState<AudioPlayer>()
 
@@ -87,10 +86,6 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
     }
   }
 
-  const handleAttachCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onAttachChecked(!!event.target.value)
-  }
-
   return (
     <div className={styles.container}>
       <h2 className={styles.stepTitle}>{t('pages.upload.audio.title')}</h2>
@@ -115,11 +110,7 @@ export function Audio({ loading, onPrevStep, onAlert, onAttachChecked }: AudioPr
         </div>
       </div>
       <div className={styles.attach}>
-        <Checkbox
-          name="attach"
-          onChange={handleAttachCheck}
-          label={t('pages.upload.audio.attach')}
-        />
+        <Checkbox name="attach" label={t('pages.upload.audio.attach')} register={register} />
       </div>
       <StepControls
         actionButtonType="submit"

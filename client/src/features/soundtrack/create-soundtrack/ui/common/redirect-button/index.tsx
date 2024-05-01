@@ -27,7 +27,7 @@ export function RedirectButton({ onAlert, children }: RedirectButtonProps) {
   }
 
   return (
-    <Button onClick={handleClick} className={styles.redirectButton}>
+    <Button color="secondary" onClick={handleClick} className={styles.redirectButton}>
       {children}
     </Button>
   )

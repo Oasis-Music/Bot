@@ -4,20 +4,23 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
 )
 
 const (
 	ALL_SOUNDTRACKS_QUERY = `
-	SELECT id,
+	SELECT 
+		id,
 		title,
 		author,
 		duration,
 		cover_image,
 		audio_file,
-		created_at,
+		is_validated,
 		creator_id,
+		created_at,
 		EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $1) as attached
 	FROM soundtrack
 	`
@@ -26,6 +29,9 @@ const (
 )
 
 func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error) {
+
+	coverURL := s.config.FileApi.CoverApiURL
+	audioURL := s.config.FileApi.AudioApiURL
 
 	query, err := queryBuilder(ALL_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
@@ -39,7 +45,7 @@ func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.So
 
 	defer rows.Close()
 
-	dbSoundtracks := make([]postgres.SoundtrackDTO, 0, 15)
+	dbSoundtracks := make([]postgres.SoundtrackDTO, 0, ITEMS_PER_PAGE)
 	for rows.Next() {
 		var i postgres.SoundtrackDTO
 		if err := rows.Scan(
@@ -49,44 +55,25 @@ func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.So
 			&i.Duration,
 			&i.CoverImage,
 			&i.AudioFile,
-			&i.CreatedAt,
+			&i.IsValidated,
 			&i.CreatorID,
+			&i.CreatedAt,
 			&i.Attached,
 		); err != nil {
 			return nil, err
 		}
 		dbSoundtracks = append(dbSoundtracks, i)
 	}
-	// TODO: rows.Close() no value error ???
-	// if err := rows.Close(); err != nil {
-	// 	return nil, err
-	// }
+
 	if err := rows.Err(); err != nil {
+		log.Println("storage/(AllSoundtracks) -->", err)
 		return nil, err
 	}
 
 	soundtracks := make([]entity.Soundtrack, 0, len(dbSoundtracks))
 
 	for _, track := range dbSoundtracks {
-
-		var coverImg *string
-
-		if track.CoverImage.Valid {
-			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
-			coverImg = &path
-		}
-
-		soundtracks = append(soundtracks, entity.Soundtrack{
-			ID:         track.ID,
-			Title:      track.Title,
-			Author:     track.Author,
-			Duration:   int(track.Duration),
-			CoverImage: coverImg,
-			Audio:      s.config.FileApi.AudioApiURL + track.AudioFile,
-			Attached:   track.Attached,
-			CreatedAt:  track.CreatedAt,
-			CreatorID:  track.CreatorID,
-		})
+		soundtracks = append(soundtracks, postgres.SoundtrackFromDTO(coverURL, audioURL, postgres.SoundtrackDTO(track)))
 	}
 
 	return soundtracks, nil

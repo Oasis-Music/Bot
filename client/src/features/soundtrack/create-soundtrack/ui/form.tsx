@@ -17,7 +17,7 @@ import type { FormValues, FeedbackModal } from '../model/types'
 import styles from './styles.module.scss'
 
 const enum Step {
-  INFO = 0,
+  INFO,
   COVER,
   AUDIO
 }
@@ -26,7 +26,6 @@ export default function CreateSoundtrackForm() {
   const navigate = useNavigate()
 
   const [step, setStep] = useState(Step.INFO)
-  const [isAttached, setAttached] = useState(false)
 
   const [isAlertOpen, setAlertOpen] = useState(false)
   const [feedbackModal, setFeedbackModal] = useState<FeedbackModal>({
@@ -44,7 +43,7 @@ export default function CreateSoundtrackForm() {
     defaultValues: {
       title: '',
       author: '',
-      attach: true // TODO: handle it
+      attach: false
     }
   })
 
@@ -98,7 +97,9 @@ export default function CreateSoundtrackForm() {
   }
 
   const handleFeedbackOk = () => {
-    if (isAttached) {
+    const { attach } = formMethods.getValues()
+
+    if (attach) {
       navigate(ROUTER_NAMES.root)
       return
     }
@@ -124,10 +125,6 @@ export default function CreateSoundtrackForm() {
     navigate(ROUTER_NAMES.root)
   }
 
-  const handleAttachCheck = (value: boolean) => {
-    setAttached(value)
-  }
-
   return (
     <div className={styles.container}>
       <FormProvider {...formMethods}>
@@ -145,12 +142,7 @@ export default function CreateSoundtrackForm() {
               <Cover onPrevStep={slidePrev} onNextStep={slideNext} onAlert={handleAlertInvoke} />
             </StepSlide>
             <StepSlide width={windowWidth}>
-              <Audio
-                loading={loading}
-                onPrevStep={slidePrev}
-                onAlert={handleAlertInvoke}
-                onAttachChecked={handleAttachCheck}
-              />
+              <Audio loading={loading} onPrevStep={slidePrev} onAlert={handleAlertInvoke} />
             </StepSlide>
           </div>
         </form>

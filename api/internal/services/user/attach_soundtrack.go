@@ -12,9 +12,9 @@ func (u *userService) AttachSoundtrack(ctx context.Context, input entity.AttachS
 
 	if err != nil {
 		switch err {
-		case postgres.DuplicateKeyError:
+		case postgres.ErrDuplicateKey:
 			return false, ErrTrackAlreadyAttached
-		case postgres.KeyIsNotPresentError:
+		case postgres.ErrKeyIsNotPresent:
 			return false, ErrUserOrTrackNotPresent
 		default:
 			return false, ErrTrackAttachment

@@ -1,10 +1,15 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv, type UserConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import svgr from 'vite-plugin-svgr'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
+import fs from 'fs'
 
-export default ({ mode }: { mode: boolean }) => {
+export default ({ mode = 'development' }: UserConfig) => {
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
+
+  const withHttps = process.env.VITE_WITH_HTTPS == 'true' || undefined
+
   return defineConfig({
     css: {
       preprocessorOptions: {
@@ -20,7 +25,11 @@ export default ({ mode }: { mode: boolean }) => {
     },
     plugins: [react(), svgr(), viteTsconfigPaths()],
     server: {
-      port: 3001
+      port: 3001,
+      https: withHttps && {
+        key: fs.readFileSync('./cert/localhost.key'),
+        cert: fs.readFileSync('./cert/localhost.crt')
+      }
     },
     preview: {
       open: false,

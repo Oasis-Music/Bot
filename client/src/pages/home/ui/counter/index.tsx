@@ -1,5 +1,4 @@
-import React from 'react'
-import styles from './Counter.module.scss'
+import styles from './styles.module.scss'
 
 interface CounterProps {
   text: string

@@ -53,16 +53,14 @@ export function AttachButton({ onTrackAttached }: MainButtonProps) {
     <Button
       disabled={!track.id}
       loading={loading}
-      color="secondary"
       onClick={handleClick}
-      className={styles.button}
       startIcon={
         <SvgIcon className={styles.addIcon}>
           <PlusIcon />
         </SvgIcon>
       }
     >
-      {t('common.add')}
+      {t('common.save')}
     </Button>
   )
 }

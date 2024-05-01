@@ -10,17 +10,11 @@ import (
 
 func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
 
-	soundtrackCover := dbnull.NewNullString("", false)
-
-	if params.CoverImage != nil {
-		soundtrackCover = dbnull.NewNullString(*params.CoverImage, true)
-	}
-
 	trackID, err := s.sqlc.CreateSoundtrack(context.Background(), sqlc.CreateSoundtrackParams{
 		Title:       params.Title,
 		Author:      params.Author,
 		Duration:    params.Duration,
-		CoverImage:  soundtrackCover.NullString,
+		CoverImage:  dbnull.NewNullString(params.CoverImage),
 		AudioFile:   params.AudioFile,
 		IsValidated: params.IsValidated,
 		CreatorID:   params.CreatorID,
