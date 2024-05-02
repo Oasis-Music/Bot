@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"oasis/api/internal/utils"
 	"regexp"
@@ -11,8 +10,6 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 )
-
-var ErrJwtInternal = errors.New("failed to authorize")
 
 func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPair, error) {
 
@@ -37,7 +34,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 
 	refreshToken, err := rt.SignedString(a.rtSecret)
 	if err != nil {
-		fmt.Println("RT: ", err)
+		a.logger.Error("failed to sign RT", "error", err)
 		return r, ErrJwtInternal
 	}
 
@@ -53,7 +50,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 
 	accessToken, err := at.SignedString(a.atSecret)
 	if err != nil {
-		fmt.Println("AT: ", err)
+		a.logger.Error("failed to sign AT", "error", err)
 		return r, ErrJwtInternal
 	}
 
@@ -75,7 +72,7 @@ func (a *authService) extractHeaderToken(r *http.Request) (string, error) {
 	}
 
 	if token == "" {
-		return "", errors.New("token doesn't exist")
+		return "", ErrBearerNotPresent
 	}
 
 	return token, nil
@@ -88,21 +85,21 @@ func (a *authService) ParseAccessToken(rawToken string) (*accessToken, error) {
 	token, err := jwt.ParseWithClaims(rawToken, &accessToken{}, func(token *jwt.Token) (interface{}, error) {
 		return a.atSecret, nil
 	})
-
 	if err != nil {
-		fmt.Println(">>>", err)
+		a.logger.Error("parse AT", "error", err)
 		return nil, err
 	}
 
 	claims, ok := token.Claims.(*accessToken)
 	if !(ok && token.Valid) {
-		return nil, errors.New("fail to get data from token")
+		return nil, ErrGetAccessData
 	}
 
 	return claims, nil
 }
 
 func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) {
+
 	token, err := jwt.ParseWithClaims(rawToken, &refreshToken{}, func(token *jwt.Token) (interface{}, error) {
 		return a.rtSecret, nil
 	})
@@ -111,17 +108,19 @@ func (a *authService) ParseRefreshToken(rawToken string) (*refreshToken, error) 
 		if errors.Is(err, jwt.ErrTokenExpired) {
 			claims, ok := token.Claims.(*refreshToken)
 			if !ok {
-				return nil, errors.New("fail to get data from token")
+				return nil, ErrGetRefreshData
 			}
 
+			// IMPORTANT: we should return expired token (claims) for its revocation
 			return claims, jwt.ErrTokenExpired
 		}
+		a.logger.Error("parse RT", "error", err)
 		return nil, err
 	}
 
 	claims, ok := token.Claims.(*refreshToken)
 	if !(ok && token.Valid) {
-		return nil, errors.New("fail to get data from token")
+		return nil, ErrGetRefreshData
 	}
 
 	return claims, nil
