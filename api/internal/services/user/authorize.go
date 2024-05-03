@@ -11,10 +11,9 @@ import (
 	"net/url"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
+	userStorage "oasis/api/internal/repo/storage/postgres/user"
 	"oasis/api/internal/utils"
 	"time"
-
-	"github.com/jackc/pgx/v4"
 )
 
 const (
@@ -74,10 +73,10 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		return nil, ErrInitDataInvalid
 	}
 
-	u.logger.Info("user trying to auth", "id", userData.Id)
+	u.logger.Info("user trying to auth", "user_id", userData.Id)
 
 	user, err := u.storage.User(ctx, userData.Id)
-	if err == pgx.ErrNoRows {
+	if errors.Is(err, userStorage.ErrUserNotFound) {
 
 		u.logger.Warn("user not found, create...")
 
@@ -120,7 +119,6 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		}, nil
 
 	} else if err != nil {
-		fmt.Println("Failed to get a user", err)
 		return nil, ErrIternalAuthorizationError
 	}
 
