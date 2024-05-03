@@ -126,14 +126,14 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 
 	isChanged, updatedUserData := isInitDataDifferent(userData, user)
 	if isChanged {
-		fmt.Println("user data is different")
+		u.logger.Info("user data is different", "user_id", userData.Id)
 		_, err = u.storage.UpdateUser(ctx, updatedUserData)
 		if err != nil {
 			fmt.Println(err)
 			return nil, ErrIternalAuthorizationError
 		}
 
-		fmt.Println("user data has been updated")
+		u.logger.Info("user data updated", "user_id", userData.Id)
 	}
 
 	firstName := user.FirstName
@@ -182,9 +182,7 @@ func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, e
 	}
 
 	if tgUser.LastName != user.GetLastNameValue() {
-		fmt.Println("1 GetLastNameValue")
 		if tgUser.LastName != "" {
-			fmt.Println("1 GetLastNameValue")
 			isChanged = true
 			updatedUser.LastName = &tgUser.LastName
 		}
