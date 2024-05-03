@@ -18,7 +18,15 @@ const config: CodegenConfig = {
         baseTypesPath: 'shared/lib/gqlgen.types.ts',
         folder: '_gen_'
       },
-      plugins: ['typescript-operations', 'typescript-react-apollo'],
+      plugins: [
+        'typescript-operations',
+        'typescript-react-apollo',
+        {
+          add: {
+            content: '/* eslint-disable */'
+          }
+        }
+      ],
       config: {
         preResolveTypes: true,
         withHooks: true,
