@@ -33,7 +33,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, jwt.ErrTokenExpired) {
 			err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
 			if err != nil {
-				http.Error(w, "internal error", http.StatusInternalServerError)
+				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
 			}
 		}
@@ -69,6 +69,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	err = h.authService.SaveRefreshToken(ctx, tokenPair)
 	if err != nil {
+		// todo: add logger
 		fmt.Println("refresh token save", err)
 		http.Error(w, "wrong token", http.StatusInternalServerError)
 		return

@@ -8,20 +8,25 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"log"
 	"net/url"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
+	userStorage "oasis/api/internal/repo/storage/postgres/user"
 	"oasis/api/internal/utils"
 	"time"
-
-	"github.com/jackc/pgx/v4"
 )
 
 const (
 	TELEGRAM_SEED = "WebAppData"
 	AUTH_FRESH_IN = 3
 )
+
+// Where should I place it?
+// err = u.storage.UpdateVisitDate(ctx, user.ID)
+// 	if err != nil {
+// 		fmt.Println("last visit date update:", err)
+// 		return nil, ErrIternalAuthorizationError
+// 	}
 
 func (u *userService) Authorize(ctx context.Context, initData string) (*entity.UserAuthorization, error) {
 	if initData == "" {
@@ -30,7 +35,6 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 
 	dataMap, err := url.ParseQuery(initData)
 	if err != nil {
-		log.Println(err)
 		return nil, ErrInitDataInvalid
 	}
 
@@ -38,7 +42,6 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 	authDate := dataMap.Get("auth_date")
 
 	if initDataHash == "" {
-		// fmt.Println(err)
 		return nil, ErrInitDataInvalid
 	}
 
@@ -48,6 +51,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		if !authFresh {
 			return nil, ErrTgAuthDateExpired
 		}
+
 	}
 
 	validString := "auth_date=" + authDate + "\n" +
@@ -59,28 +63,29 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 	hash := hex.EncodeToString(signTelegramData([]byte(validString), gen))
 
 	if hash != initDataHash {
-		log.Println("hash != telegram hash")
+		u.logger.Error("invalid user hash", "initData", dataMap.Get("user"))
 		return nil, errors.New("authorization failed")
 	}
 
 	var userData entity.UserInitData
 
 	if err = json.Unmarshal([]byte(dataMap.Get("user")), &userData); err != nil {
-		fmt.Println(err)
 		return nil, ErrInitDataInvalid
 	}
 
-	fmt.Printf("received user: %d\n", userData.Id)
+	u.logger.Info("user trying to auth", "user_id", userData.Id)
 
 	user, err := u.storage.User(ctx, userData.Id)
-	if err == pgx.ErrNoRows {
-		fmt.Println("user not found, create...")
+	if errors.Is(err, userStorage.ErrUserNotFound) {
+
+		u.logger.Warn("user not found, create...")
 
 		var newUser entity.NewUser
 
 		newUser.ID = userData.Id
 		newUser.FirstName = userData.FirstName
-		newUser.Role = "user" // TODO: make enum dBNewUser.Role = db.UserRole
+		// TODO: make enum dBNewUser.Role = db.UserRole
+		newUser.Role = "user"
 
 		if userData.LastName != "" {
 			newUser.LastName = &userData.LastName
@@ -100,7 +105,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 			return nil, err
 		}
 
-		fmt.Printf("created new user: %s\n", createdUser.FirstName)
+		u.logger.Info("created new user", "id", createdUser.ID)
 
 		at, rt, err := u.genTokenPairandSave(ctx, createdUser.ID, createdUser.FirstName)
 		if err != nil {
@@ -114,30 +119,21 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		}, nil
 
 	} else if err != nil {
-		fmt.Println("Failed to get a user", err)
 		return nil, ErrIternalAuthorizationError
 	}
 
+	/* Check if user change its data */
+
 	isChanged, updatedUserData := isInitDataDifferent(userData, user)
 	if isChanged {
-		fmt.Println("user data is different")
+		u.logger.Info("user data is different", "user_id", userData.Id)
 		_, err = u.storage.UpdateUser(ctx, updatedUserData)
 		if err != nil {
 			fmt.Println(err)
 			return nil, ErrIternalAuthorizationError
 		}
 
-		fmt.Println("user data has been updated")
-
-	} else {
-		// todo: it's not best place for this
-		fmt.Println("user data has not changed")
-
-		err = u.storage.UpdateVisitDate(ctx, user.ID)
-		if err != nil {
-			fmt.Println("last visit date update:", err)
-			return nil, ErrIternalAuthorizationError
-		}
+		u.logger.Info("user data updated", "user_id", userData.Id)
 	}
 
 	firstName := user.FirstName
@@ -148,7 +144,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 
 	at, rt, err := u.genTokenPairandSave(ctx, user.ID, firstName)
 	if err != nil {
-		fmt.Println("last visit date update:", err)
+		u.logger.Error("gen tokens pair", "error", err)
 		return nil, ErrIternalAuthorizationError
 	}
 
@@ -186,9 +182,7 @@ func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, e
 	}
 
 	if tgUser.LastName != user.GetLastNameValue() {
-		fmt.Println("1 GetLastNameValue")
 		if tgUser.LastName != "" {
-			fmt.Println("1 GetLastNameValue")
 			isChanged = true
 			updatedUser.LastName = &tgUser.LastName
 		}
@@ -221,7 +215,6 @@ func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, fir
 
 	err = u.authService.SaveRefreshToken(ctx, rawTokenPair)
 	if err != nil {
-		fmt.Println("refresh token save", err)
 		return "", "", err
 	}
 
@@ -232,7 +225,6 @@ func isTelegramAuthDateValidIn(src string, validIn time.Duration) bool {
 
 	authTimestamp, err := utils.StrToInt64(src)
 	if err != nil {
-		log.Println("faild parse to TG auth_date")
 		return false
 	}
 

@@ -10,7 +10,7 @@ var (
 var (
 	ErrUserNotFound              = errors.New("user not found")
 	ErrGetUserFailed             = errors.New("failed to get user")
-	ErrInitDataInvalid           = errors.New("initData string invalid")
+	ErrInitDataInvalid           = errors.New("initData is invalid")
 	ErrIternalAuthorizationError = errors.New("authorization failed: internal error")
 	ErrUserTracksNotFound        = errors.New("user or tracks not found")
 	ErrIternalUserTracksError    = errors.New("failed to fetch user soundtracks")
