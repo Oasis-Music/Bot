@@ -24,22 +24,12 @@ func (h *handler) TelegramAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	refreshTokenCookie := http.Cookie{
-		Name:     "rt",
-		Value:    authData.RefreshToken,
-		Path:     r.URL.Path,
-		MaxAge:   h.config.Auth.RefreshTTL * 60,
-		HttpOnly: true,
-		Secure:   true,
-		SameSite: http.SameSiteLaxMode,
-	}
-
 	resp := TelegramAuthResponse{
 		AccessToken: authData.AccessToken,
 	}
 
 	w.WriteHeader(http.StatusOK)
-	http.SetCookie(w, &refreshTokenCookie)
+	h.setRefreshTokenCookie(w, authData.RefreshToken)
 	err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
 		http.Error(w, "auth was failed", http.StatusInternalServerError)

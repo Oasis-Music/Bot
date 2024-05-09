@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"net/http"
 	"oasis/api/internal/config"
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
@@ -15,7 +16,6 @@ type Handler interface {
 type handler struct {
 	config      *config.Config
 	authService auth.Service
-	userStorage user.UserStorage
 	userService user.Service
 }
 
@@ -30,4 +30,18 @@ func NewHandler(config *config.Config, authService auth.Service, userService use
 		authService: authService,
 		userService: userService,
 	}
+}
+
+func (h *handler) setRefreshTokenCookie(w http.ResponseWriter, token string) {
+	cookieToken := http.Cookie{
+		Name:     RefreshTokenCookieName,
+		Value:    token,
+		Path:     "/",
+		MaxAge:   h.config.Auth.RefreshTTL * 60,
+		HttpOnly: true,
+		Secure:   true,                 // true FOR HTTPS
+		SameSite: http.SameSiteLaxMode, // http.SameSiteStrictMode in prod evn
+	}
+
+	http.SetCookie(w, &cookieToken)
 }
