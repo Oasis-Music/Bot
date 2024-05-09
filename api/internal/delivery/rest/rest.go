@@ -1,34 +1,33 @@
-package http
+package rest
 
 import (
-	"net/http"
+	"oasis/api/internal/config"
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
 
 	"github.com/go-chi/chi"
 )
 
-const (
-	refreshPath = "/refresh"
-)
-
 type Handler interface {
 	Register(r chi.Router)
-	RefreshToken(w http.ResponseWriter, r *http.Request)
 }
 
 type handler struct {
+	config      *config.Config
 	authService auth.Service
 	userStorage user.UserStorage
+	userService user.Service
 }
 
 func (h *handler) Register(router chi.Router) {
-	router.Post(refreshPath, h.RefreshToken)
+	router.Post("/refresh", h.RefreshToken)
+	router.Post("/telegram-auth", h.TelegramAuth)
 }
 
-func NewHandler(authService auth.Service, userStorage user.UserStorage) Handler {
+func NewHandler(config *config.Config, authService auth.Service, userService user.Service) Handler {
 	return &handler{
+		config:      config,
 		authService: authService,
-		userStorage: userStorage,
+		userService: userService,
 	}
 }

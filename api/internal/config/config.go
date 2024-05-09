@@ -26,7 +26,7 @@ func New() *Config {
 
 	err := cleanenv.ReadEnv(&cfg)
 	if err != nil {
-		log.Fatalln("fail to parse config")
+		log.Fatalln("fail to parse config", err)
 	}
 
 	return &cfg

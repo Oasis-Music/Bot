@@ -9,10 +9,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
-	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-func NewRouter(cfg *config.Config, db *pgxpool.Pool, authService auth.Service, appComposite composite.AppComposite) chi.Router {
+func NewRouter(cfg *config.Config, authService auth.Service, appComposite composite.AppComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
