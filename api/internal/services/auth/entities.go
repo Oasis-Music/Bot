@@ -1,6 +1,6 @@
 package auth
 
-import "github.com/golang-jwt/jwt/v4"
+import "github.com/golang-jwt/jwt/v5"
 
 type RawTokenPair struct {
 	AtID         string
