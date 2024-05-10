@@ -8,6 +8,7 @@ import fs from 'fs'
 export default ({ mode = 'development' }: UserConfig) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
 
+  const isDev = mode === 'development'
   const withHttps = process.env.VITE_WITH_HTTPS == 'true' || undefined
 
   return defineConfig({
@@ -17,6 +18,10 @@ export default ({ mode = 'development' }: UserConfig) => {
           additionalData: `@use "@/app/styles/main.scss" as *;`
         }
       }
+    },
+    define: {
+      // info: https://www.apollographql.com/docs/react/development-testing/reducing-bundle-size
+      'globalThis.__DEV__': isDev ? 'true' : 'false'
     },
     resolve: {
       alias: {
