@@ -3,21 +3,21 @@ import { onError } from '@apollo/client/link/error'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { cache } from './cache'
 import { promiseToObservable } from '@/shared/lib/helpers'
-import { AuthStore, isTokenValid } from '@/entities/auth'
+import { AuthStore, isTokenValid, accessTokenVar } from '@/entities/auth'
 import { UserStore } from '@/entities/user'
 
-const GRAPHQL_URL = import.meta.env.VITE_API_URL + 'graphql'
+const GRAPHQL_URL = import.meta.env.VITE_API_URL + '/graphql'
 
 // this link fully covers HttpLink
 const uploadLink = createUploadLink({ uri: GRAPHQL_URL })
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem('at') || ''
+  const token = accessTokenVar()
 
   operation.setContext(({ headers = {} }) => ({
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : null
+      authorization: token ? 'Bearer ' + token : null
     }
   }))
 
@@ -25,8 +25,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 })
 
 interface refreshReponse {
-  token: string
-  refreshToken: string
+  accessToken: string
 }
 
 // https://github.com/apollographql/apollo-link/issues/646
@@ -35,40 +34,32 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
     const err = graphQLErrors[0].extensions
 
     switch (err?.code) {
-      case '401':
-        console.warn('access token expired: refreshing')
-        const rt = localStorage.getItem('rt')
-        if (!rt) {
-          console.warn('rt not exists - logout')
-          AuthStore.logout()
-          return
-        }
+      case '401': {
+        console.warn('refreshing access token')
 
-        const refsresh = fetch(import.meta.env.VITE_API_URL + 'refresh', {
+        const refsresh = fetch(import.meta.env.VITE_API_URL + '/refresh', {
           method: 'POST',
           cache: 'no-cache',
-          headers: { 'Content-Type': 'application/json' },
-          body: rt
+          credentials: 'include'
         })
           .then((resp) => {
-            switch (resp.status) {
-              case 401:
-                return Promise.reject(resp)
-              case 500:
-                return Promise.reject(resp)
-              default:
-                return resp.json()
-            }
+            if (!resp.ok) throw new Error(`bad request, code ${resp.status}`)
+            return resp.json()
           })
           .then((data: refreshReponse) => {
-            const ok = isTokenValid(data.token)
+            const ok = isTokenValid(data.accessToken)
             if (!ok) {
               throw new Error('new AT is broken')
             }
 
-            AuthStore.signIn(data.token, data.refreshToken)
+            AuthStore.signIn(data.accessToken)
 
-            return data.token
+            console.log(
+              '%c authentication successfully refreshed ',
+              'background: #222; color: #bada55'
+            )
+
+            return data.accessToken
           })
           .catch((err) => {
             console.warn(err)
@@ -89,6 +80,7 @@ const refreshLink = onError(({ graphQLErrors, networkError, operation, forward }
           // retry request
           return forward(operation)
         })
+      }
     }
   }
 

@@ -3,21 +3,21 @@ import clsx from 'clsx'
 import Button from '@/shared/ui/button'
 import { useSignIn } from '../../model'
 import { useTranslation } from 'react-i18next'
-import { useAuthorizeUserLazyQuery } from '../../api'
+import { useAuthQuery } from '../../api'
+import type { AuthData } from '../../model/types'
 
 import styles from './styles.module.scss'
 
 export function SignInButton() {
   const { t } = useTranslation()
   const { signIn, setUser } = useSignIn()
+  const [error, setError] = useState<string>()
 
-  const [error, setError] = useState('')
+  const [authorize, { loading }] = useAuthQuery<AuthData>({
+    onSuccess(data) {
+      const { accessToken } = data
 
-  const [authorize, { loading }] = useAuthorizeUserLazyQuery({
-    onCompleted(data) {
-      const { token, refreshToken } = data.authorizeUser
-
-      const tokenData = signIn(token, refreshToken)
+      const tokenData = signIn(accessToken)
       if (!tokenData) {
         setError(t('errors.serverAccessErr'))
         return
@@ -26,25 +26,16 @@ export function SignInButton() {
       setUser({
         id: tokenData.userId
       })
-
-      console.log('-----', tokenData)
     },
-    onError(error) {
-      if (error.networkError) {
-        setError(t('errors.serverAccessErr'))
-        return
-      }
-
-      setError(t('errors.telegramUserDataErr'))
+    onError() {
+      setError(t('errors.serverAccessErr'))
     }
   })
 
   const handleButtonClick = () => {
-    setError('')
+    setError(undefined)
     authorize({
-      variables: {
-        initData: Telegram.WebApp.initData
-      }
+      initData: Telegram.WebApp.initData
     })
   }
 

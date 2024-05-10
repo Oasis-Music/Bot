@@ -1,14 +1,14 @@
-package http
+package rest
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
+	"log"
 	"net/http"
 	"strconv"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
@@ -16,19 +16,19 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 
 	ctx := r.Context()
 
-	b, err := io.ReadAll(r.Body)
+	cookie, err := r.Cookie(RefreshTokenCookieName)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		switch {
+		case errors.Is(err, http.ErrNoCookie):
+			http.Error(w, "cookie not found", http.StatusBadRequest)
+		default:
+			log.Println(err)
+			http.Error(w, "server error", http.StatusInternalServerError)
+		}
 		return
 	}
 
-	rt := string(b)
-	if rt == "" {
-		http.Error(w, "token not specified", http.StatusBadRequest)
-		return
-	}
-
-	token, err := h.authService.ParseRefreshToken(rt)
+	token, err := h.authService.ParseRefreshToken(cookie.Value)
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
 			err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
@@ -54,7 +54,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.userStorage.User(ctx, userID)
+	user, err := h.userService.User(ctx, userID)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -75,18 +75,17 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := struct {
-		Token        string `json:"token"`
-		RefreshToken string `json:"refreshToken"`
-	}{
-		Token:        tokenPair.AccessToken,
-		RefreshToken: tokenPair.RefreshToken,
+	resp := TelegramAuthResponse{
+		AccessToken: tokenPair.AccessToken,
 	}
 
 	w.WriteHeader(http.StatusOK)
+	h.setRefreshTokenCookie(w, tokenPair.RefreshToken)
+
 	err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
-		http.Error(w, "NewEncoder err", http.StatusInternalServerError)
+		log.Panicln(err)
+		http.Error(w, "refresh NewEncoder err", http.StatusInternalServerError)
 	}
 
 }

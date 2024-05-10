@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"oasis/api/internal/app/composite"
 	"oasis/api/internal/config"
-	httpAPI "oasis/api/internal/delivery/api/http"
+	"oasis/api/internal/delivery/rest"
 	"oasis/api/internal/delivery/router"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
 	"oasis/api/internal/services/auth"
@@ -50,14 +50,14 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
 		UserService:       userService,
 	}
 
-	r := router.NewRouter(config, db, authService, appComposite)
+	router := router.NewRouter(config, authService, appComposite)
 
-	httpHandler := httpAPI.NewHandler(authService, userStorage)
-	httpHandler.Register(r)
+	restHandler := rest.NewHandler(config, authService, userService)
+	restHandler.Register(router)
 
 	return &App{
 		config: config,
-		router: r,
+		router: router,
 	}
 }
 

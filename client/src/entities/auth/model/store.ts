@@ -3,14 +3,11 @@ import { jwtDecode } from 'jwt-decode'
 import type { AccessToken } from './types'
 
 export const isAuthenticatedVar = makeVar(false)
-
-const AT_KEY = 'at'
-const RT_KEY = 'rt'
+export const accessTokenVar = makeVar<string | null>(null)
 
 export const AuthStore = {
-  signIn: signIn(isAuthenticatedVar),
-  logout: logout(isAuthenticatedVar),
-  checkAuth: checkAuth()
+  signIn: signIn(isAuthenticatedVar, accessTokenVar),
+  logout: logout(isAuthenticatedVar, accessTokenVar)
 }
 
 export const isTokenValid = (token: string): boolean => {
@@ -24,15 +21,14 @@ export const isTokenValid = (token: string): boolean => {
 }
 
 function signIn(
-  isAuthenticatedVar: ReactiveVar<boolean>
-): (at: string, rt: string) => AccessToken | null {
-  return (accessToken, refreshToken) => {
+  isAuthenticatedVar: ReactiveVar<boolean>,
+  accessTokenVar: ReactiveVar<string | null>
+): (accessToken: string) => AccessToken | null {
+  return (accessToken) => {
     try {
       const tokenData = jwtDecode<AccessToken>(accessToken)
       isAuthenticatedVar(true)
-
-      localStorage.setItem(AT_KEY, accessToken)
-      localStorage.setItem(RT_KEY, refreshToken)
+      accessTokenVar(accessToken)
 
       return tokenData
     } catch (err) {
@@ -42,21 +38,12 @@ function signIn(
   }
 }
 
-function logout(isAuthenticatedVar: ReactiveVar<boolean>): () => void {
+function logout(
+  isAuthenticatedVar: ReactiveVar<boolean>,
+  accessTokenVar: ReactiveVar<string | null>
+): () => void {
   return () => {
     isAuthenticatedVar(false)
-    localStorage.removeItem(AT_KEY)
-    localStorage.removeItem(RT_KEY)
-  }
-}
-
-export function checkAuth(): () => [string, string] | null {
-  return () => {
-    const at = localStorage.getItem(AT_KEY)
-    const rt = localStorage.getItem(RT_KEY)
-
-    if (at === null || rt === null) return null
-
-    return [at, rt]
+    accessTokenVar(null)
   }
 }

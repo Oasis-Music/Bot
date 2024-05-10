@@ -1,6 +1,0 @@
-query AuthorizeUser($initData: String!) {
-  authorizeUser(initData: $initData) {
-    token
-    refreshToken
-  }
-}

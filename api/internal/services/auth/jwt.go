@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/golang-jwt/jwt/v4"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 )
 
@@ -23,7 +23,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 
 	r.RtID = r.AtID + "-" + idString
 
-	rt := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshToken{
+	refeshClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshToken{
 		UserId:      idString,
 		RefreshUuid: r.RtID,
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -32,13 +32,13 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 		},
 	})
 
-	refreshToken, err := rt.SignedString(a.rtSecret)
+	refreshToken, err := refeshClaims.SignedString(a.rtSecret)
 	if err != nil {
 		a.logger.Error("failed to sign RT", "error", err)
 		return r, ErrJwtInternal
 	}
 
-	at := jwt.NewWithClaims(jwt.SigningMethodHS256, accessToken{
+	accessClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, accessToken{
 		UserID:     idString,
 		FirstName:  firstName,
 		AccessUuid: r.AtID,
@@ -48,7 +48,7 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 		},
 	})
 
-	accessToken, err := at.SignedString(a.atSecret)
+	accessToken, err := accessClaims.SignedString(a.atSecret)
 	if err != nil {
 		a.logger.Error("failed to sign AT", "error", err)
 		return r, ErrJwtInternal
