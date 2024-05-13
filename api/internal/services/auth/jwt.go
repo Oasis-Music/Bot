@@ -13,18 +13,16 @@ import (
 
 func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPair, error) {
 
-	idString := utils.Int64ToString(userID)
+	userIdString := utils.Int64ToString(userID)
 
 	r := RawTokenPair{
 		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpIn)),
-		AtID:        uuid.New().String(),
+		RtID:        uuid.New().String(),
 		RtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.rtExpIn)),
 	}
 
-	r.RtID = r.AtID + "-" + idString
-
 	refeshClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshToken{
-		UserId:      idString,
+		UserId:      userIdString,
 		RefreshUuid: r.RtID,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: r.RtExpiresAt,
@@ -39,9 +37,8 @@ func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPai
 	}
 
 	accessClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, accessToken{
-		UserID:     idString,
-		FirstName:  firstName,
-		AccessUuid: r.AtID,
+		UserID:    userIdString,
+		FirstName: firstName,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: r.AtExpiresAt,
 			Issuer:    "0_o",
