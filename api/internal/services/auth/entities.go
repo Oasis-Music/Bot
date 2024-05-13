@@ -3,7 +3,6 @@ package auth
 import "github.com/golang-jwt/jwt/v5"
 
 type RawTokenPair struct {
-	AtID         string
 	AtExpiresAt  *jwt.NumericDate
 	RtID         string
 	RtExpiresAt  *jwt.NumericDate
@@ -12,9 +11,8 @@ type RawTokenPair struct {
 }
 
 type accessToken struct {
-	UserID     string `json:"userId"`
-	FirstName  string `json:"firstName"`
-	AccessUuid string `json:"accessUuid"`
+	UserID    string `json:"userId"`
+	FirstName string `json:"firstName"`
 	jwt.RegisteredClaims
 }
 
