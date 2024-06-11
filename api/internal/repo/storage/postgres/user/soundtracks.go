@@ -79,11 +79,10 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 
 	for _, track := range dbTracks {
 
-		var coverImg *string
+		var coverImg string
 
 		if track.CoverImage.Valid {
-			path := s.config.FileApi.CoverApiURL + track.CoverImage.String
-			coverImg = &path
+			coverImg = s.config.FileApi.CoverApiURL + track.CoverImage.String
 		}
 
 		soundtracks = append(soundtracks, entity.Soundtrack{

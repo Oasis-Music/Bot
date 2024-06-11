@@ -9,7 +9,7 @@ type Soundtrack struct {
 	Title      string
 	Author     string
 	Duration   int
-	CoverImage *string
+	CoverImage string
 	Audio      string
 	Validated  bool
 	Attached   bool

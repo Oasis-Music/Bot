@@ -30,3 +30,10 @@ func StrToInt64(s string) (int64, error) {
 
 	return n, nil
 }
+
+func StringToNilPtr(s string) *string {
+	if len(s) == 0 {
+		return nil
+	}
+	return &s
+}

@@ -121,7 +121,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
-			CoverURL:  track.CoverImage,
+			CoverURL:  utils.StringToNilPtr(track.CoverImage),
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
