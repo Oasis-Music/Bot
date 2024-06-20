@@ -37,7 +37,7 @@ func (i *DataLoader) GetUser(ctx context.Context, userID string) (*models.User, 
 	user := result.(entity.User)
 
 	return &models.User{
-		ID:           utils.Int64ToString(user.ID),
+		ID:           utils.IntToString(user.ID),
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
 		Username:     user.Username,
@@ -98,7 +98,7 @@ func (u *userBatcher) get(ctx context.Context, keys gql_dataloader.Keys) []*gql_
 
 	for _, record := range dbRecords {
 
-		userId := utils.Int64ToString(record.ID)
+		userId := utils.IntToString(record.ID)
 		_, ok := userMap[userId]
 		if !ok {
 			userMap[userId] = record

@@ -5,12 +5,8 @@ import (
 	"strconv"
 )
 
-func Int32ToString(n int32) string {
+func IntToString[T int32 | int64](n T) string {
 	return strconv.FormatInt(int64(n), 10)
-}
-
-func Int64ToString(n int64) string {
-	return strconv.FormatInt(n, 10)
 }
 
 func StrToInt32(s string) (int32, error) {

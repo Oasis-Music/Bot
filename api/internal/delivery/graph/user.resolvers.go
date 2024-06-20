@@ -67,7 +67,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 	}
 
 	return models.User{
-		ID:           utils.Int64ToString(user.ID),
+		ID:           utils.IntToString(user.ID),
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
 		Username:     user.Username,
@@ -125,7 +125,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.Int64ToString(track.CreatorID),
+			CreatorID: utils.IntToString(track.CreatorID),
 		})
 	}
 
