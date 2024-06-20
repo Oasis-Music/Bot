@@ -6,7 +6,7 @@ import (
 	"log"
 	"oasis/api/internal/app"
 	"oasis/api/internal/config"
-	"oasis/api/logger"
+	"oasis/api/pkg/logger"
 	"oasis/api/pkg/postgres"
 
 	"github.com/joho/godotenv"
