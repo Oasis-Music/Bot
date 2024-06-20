@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": "**/*.graphql",
+      "options": {
+        "printWidth": 140
+      }
+    }
+  ]
+}

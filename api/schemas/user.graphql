@@ -19,8 +19,8 @@ extend type Query {
 }
 
 extend type Mutation {
-  attachSoundtrack(input: AttachSoundtrackInput!): Boolean!
-  unattachSoundtrack(input: UnattachSoundtrackInput!): Boolean!
+  attachSoundtrack(input: AttachSoundtrackInput!): Boolean! @hasRole(role: [USER, ADMIN])
+  unattachSoundtrack(input: UnattachSoundtrackInput!): Boolean! @hasRole(role: [USER, ADMIN])
 }
 
 input UserSoundtracksFilter {
