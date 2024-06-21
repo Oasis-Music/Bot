@@ -3,6 +3,7 @@ import type { Soundtrack, CurrentTrack } from './types'
 
 export const mainPlaylistVar = makeVar<Soundtrack[]>([])
 
+export const USER_PLAYLIST_PAGINATION_LEN = 15
 export const userPlaylistVar = makeVar<Soundtrack[]>([])
 export const explorePlaylistVar = makeVar<Soundtrack[]>([])
 
