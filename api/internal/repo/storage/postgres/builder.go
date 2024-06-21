@@ -25,7 +25,7 @@ func SoundtrackFromDTO(coverURL string, audioURL string, dto SoundtrackDTO) enti
 		Title:      dto.Title,
 		Author:     dto.Author,
 		Duration:   int(dto.Duration),
-		CoverImage: &cover,
+		CoverImage: cover,
 		Audio:      audioURL + dto.AudioFile, // AudioFile
 		Validated:  dto.IsValidated,
 		Attached:   dto.Attached,

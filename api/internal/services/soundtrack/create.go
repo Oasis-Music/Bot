@@ -46,6 +46,11 @@ func trackDurationToInt16(d float64) (int16, error) {
 
 func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
+	err := s.validate.Struct(&input)
+	if err != nil {
+		return false, err
+	}
+
 	userID := s.extractCtxUserId(ctx)
 
 	buf, err := io.ReadAll(input.Audiofile.File)

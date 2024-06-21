@@ -9,7 +9,7 @@ type Soundtrack struct {
 	Title      string
 	Author     string
 	Duration   int
-	CoverImage *string
+	CoverImage string
 	Audio      string
 	Validated  bool
 	Attached   bool
@@ -18,10 +18,10 @@ type Soundtrack struct {
 }
 
 type NewSoundtrackInput struct {
-	Title      string
-	Author     string
+	Title      string `validate:"required,min=1,max=70"`
+	Author     string `validate:"required,min=2,max=70"`
+	Audiofile  Upload `validate:"required"`
 	CoverImage *Upload
-	Audiofile  Upload
 	Attach     bool
 }
 

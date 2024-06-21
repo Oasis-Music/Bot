@@ -5,13 +5,11 @@ import { useReactiveVar } from '@apollo/client'
 import { useUserSoundtracksQuery } from '../api'
 import { Counter } from './counter'
 import { useTranslation } from 'react-i18next'
-import type { Soundtrack } from '@/entities/soundtrack'
+import { type Soundtrack, USER_PLAYLIST_PAGINATION_LEN } from '@/entities/soundtrack'
 import { type User, userVar } from '@/entities/user'
-
-import styles from './styles.module.scss'
 import { useUserPlaylist } from '@/features/soundtrack/set-user-playlist'
 
-const ITEMS_PER_PAGE = 15
+import styles from './styles.module.scss'
 
 export function Home() {
   const { t } = useTranslation()
@@ -41,7 +39,7 @@ export function Home() {
 
       setUserPlaylist(tracks as Soundtrack[])
       setTracksNum(totalNum)
-      setHasNextPage(tracks.length < totalNum && tracks.length === ITEMS_PER_PAGE)
+      setHasNextPage(tracks.length < totalNum && tracks.length === USER_PLAYLIST_PAGINATION_LEN)
       setFirstLoad(false)
     },
     onError() {
@@ -51,11 +49,9 @@ export function Home() {
 
   useEffect(() => {
     return () => {
-      console.log('clear playlist')
-
       setUserPlaylist([])
     }
-  }, [])
+  }, [setUserPlaylist])
 
   const onTrackAttach = () => {
     setTracksNum((prev) => prev + 1)

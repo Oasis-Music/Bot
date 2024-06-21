@@ -53,13 +53,13 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 	}
 
 	soundtrack := models.Soundtrack{
-		ID:        utils.Int32ToString(track.ID),
+		ID:        utils.IntToString(track.ID),
 		Title:     track.Title,
 		Author:    track.Author,
 		Duration:  track.Duration,
-		CoverURL:  track.CoverImage,
+		CoverURL:  utils.StringToNilPtr(track.CoverImage),
 		AudioURL:  track.Audio,
-		CreatorID: utils.Int64ToString(track.CreatorID),
+		CreatorID: utils.IntToString(track.CreatorID),
 		CreatedAt: track.CreatedAt.UTC().String(),
 		Attached:  track.Attached,
 	}
@@ -82,15 +82,15 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	for _, track := range tracks.Soundtracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.Int32ToString(track.ID),
+			ID:        utils.IntToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
-			CoverURL:  track.CoverImage,
+			CoverURL:  utils.StringToNilPtr(track.CoverImage),
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.Int64ToString(track.CreatorID),
+			CreatorID: utils.IntToString(track.CreatorID),
 		})
 	}
 
@@ -119,15 +119,15 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 	for _, track := range tracks {
 
 		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.Int32ToString(track.ID),
+			ID:        utils.IntToString(track.ID),
 			Title:     track.Title,
 			Author:    track.Author,
 			Duration:  track.Duration,
-			CoverURL:  track.CoverImage,
+			CoverURL:  utils.StringToNilPtr(track.CoverImage),
 			AudioURL:  track.Audio,
 			Attached:  track.Attached,
 			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.Int64ToString(track.CreatorID),
+			CreatorID: utils.IntToString(track.CreatorID),
 		})
 	}
 

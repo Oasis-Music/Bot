@@ -13,7 +13,7 @@ import (
 
 func (a *authService) CreateJwtPair(userID int64, firstName string) (RawTokenPair, error) {
 
-	userIdString := utils.Int64ToString(userID)
+	userIdString := utils.IntToString(userID)
 
 	r := RawTokenPair{
 		AtExpiresAt: jwt.NewNumericDate(time.Now().Add(a.atExpIn)),

@@ -8,6 +8,8 @@ import (
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
 
+	"github.com/go-playground/validator/v10"
+
 	"strconv"
 )
 
@@ -24,6 +26,7 @@ type soundtrackService struct {
 	logger      *slog.Logger
 	storage     SoundtrackStorage
 	userService user.Service
+	validate    *validator.Validate
 }
 
 func New(config *config.Config, logger *slog.Logger, storage SoundtrackStorage, userService user.Service) Service {
@@ -32,6 +35,7 @@ func New(config *config.Config, logger *slog.Logger, storage SoundtrackStorage, 
 		logger:      logger,
 		storage:     storage,
 		userService: userService,
+		validate:    validator.New(validator.WithRequiredStructEnabled()),
 	}
 }
 
