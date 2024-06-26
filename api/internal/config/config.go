@@ -19,6 +19,7 @@ type Config struct {
 	Database    PostgresConfig
 	Telegram    TelegramConfig
 	FileApi     FileApiConfig
+	S3          S3Config
 }
 
 func New() *Config {
@@ -57,4 +58,11 @@ type TelegramConfig struct {
 type FileApiConfig struct {
 	AudioApiURL string `env:"AUDIO_PATH" env-required:"true"`
 	CoverApiURL string `env:"COVER_PATH" env-required:"true"`
+}
+
+type S3Config struct {
+	AccountID       string `env:"ACCOUNT_ID" env-required:"true"`
+	AccessKeyID     string `env:"ACCESS_KEY_ID" env-required:"true"`
+	AccessKeySecret string `env:"ACCESS_KEY_SECRET" env-required:"true"`
+	BucketName      string `env:"BUCKET_NAME" env-required:"true"`
 }
