@@ -17,24 +17,24 @@ import (
 	"oasis/api/internal/entity"
 )
 
-type Tags map[string]interface{}
-
 type ProbeData struct {
 	Format *Format `json:"format"`
 }
 
+// type Tags map[string]interface{}
 type Format struct {
-	Filename         string  `json:"filename"`
-	NBStreams        int     `json:"nb_streams"`
-	NBPrograms       int     `json:"nb_programs"`
-	FormatName       string  `json:"format_name"`
-	FormatLongName   string  `json:"format_long_name"`
-	StartTimeSeconds float64 `json:"start_time,string"`
-	DurationSeconds  float64 `json:"duration,string"`
-	Size             string  `json:"size"`
-	BitRate          string  `json:"bit_rate"`
-	ProbeScore       int     `json:"probe_score"`
-	TagList          Tags    `json:"tags"`
+	FormatName      string  `json:"format_name"`
+	DurationSeconds float64 `json:"duration,string"`
+	// Full:
+	// Filename         string  `json:"filename"`
+	// NBStreams        int     `json:"nb_streams"`
+	// NBPrograms       int     `json:"nb_programs"`
+	// FormatLongName   string  `json:"format_long_name"`
+	// StartTimeSeconds float64 `json:"start_time,string"`
+	// Size             string  `json:"size"`
+	// BitRate          string  `json:"bit_rate"`
+	// ProbeScore       int     `json:"probe_score"`
+	// TagList          Tags    `json:"tags"`
 }
 
 func trackDurationToInt16(d float64) (int16, error) {
@@ -59,33 +59,18 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, err
 	}
 
-	// cat test.mp3 | ffmpeg -y -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 | cat > out.mp3
+	// cat test.mp3 | ffmpeg -y -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
 	cmd := exec.Command("ffmpeg", "-y", "-hide_banner", "-i", "pipe:0", "-f", "mp3", "-map", "0:a", "-c:a", "copy", "-map_metadata", "-1", "pipe:1")
 
-	var resultBuffer = bytes.NewBuffer(make([]byte, 0))
+	var resultBuffer = bytes.NewBuffer(make([]byte, 0, 2*1024*1024)) // 2 mb pre-allocation
 
-	r, w := io.Pipe()
-
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = r
+	cmd.Stdin = bytes.NewReader(buf)
 	cmd.Stdout = resultBuffer
 
-	err = cmd.Start()
+	err = cmd.Run()
 	if err != nil {
-		fmt.Println("2:", err)
-		return false, err
-	}
-
-	_, err = w.Write(buf)
-	if err != nil {
-		fmt.Println("w.Write", err)
-		return false, err
-	}
-	w.Close()
-
-	err = cmd.Wait()
-	if err != nil {
-		fmt.Println(err)
+		// for invalid ext: exit status 234
+		fmt.Println("cmd.Run() err:", err)
 		return false, err
 	}
 
@@ -104,8 +89,27 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	fileName := tempFile.Name()
 
-	// ffprobe -v quiet -print_format json -show_format -
-	probe := exec.Command("ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", fileName)
+	/*
+		Full JSON:
+			ffprobe -v quiet -print_format json -show_format -i <file>.mp3
+		Necessary:
+			ffprobe -v quiet -print_format json -show_entries format=duration,format_name -i <file>.mp3
+
+		There is no way to get track duration from pipe:0
+		so we need a temporary file(https://trac.ffmpeg.org/ticket/4358)
+		"The file length is obviously not known with a pipe"
+	*/
+	probe := exec.Command(
+		"ffprobe",
+		"-v",
+		"quiet",
+		"-print_format",
+		"json",
+		"-show_entries",
+		"format=duration,format_name",
+		"-i",
+		fileName,
+	)
 
 	var ffprobeBuf bytes.Buffer
 
@@ -128,7 +132,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, err
 	}
 
-	fmt.Printf("Final info --> FormatName: %s, Duration: %v\n", data.Format.FormatName, data.Format.DurationSeconds)
+	fmt.Printf("audio info --> ext: %s, dur(sec): %v\n", data.Format.FormatName, data.Format.DurationSeconds)
 
 	defer os.Remove(fileName)
 
@@ -136,6 +140,8 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	if err != nil {
 		return false, err
 	}
+
+	return false, errors.New("for dev p error")
 
 	soundtrackURL, coverImageURL, err := s.saveMediaOnLocalServer(resultBuffer, input.CoverImage)
 	if err != nil {
