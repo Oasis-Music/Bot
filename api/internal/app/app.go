@@ -23,6 +23,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-chi/chi"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -32,7 +33,7 @@ type App struct {
 	router chi.Router
 }
 
-func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
+func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3client *s3.Client) *App {
 
 	sqlc := sqlc.New(db)
 
@@ -43,7 +44,7 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
 	userService := user.New(config, logger, userStorage, authService)
 
 	soundtrackStorage := soundtrackRepo.New(config, logger, db, sqlc)
-	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, userService)
+	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3client, userService)
 
 	appComposite := composite.AppComposite{
 		SoundtrackService: soundtrackService,

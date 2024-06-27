@@ -36,7 +36,7 @@ func main() {
 	config := config.New()
 	logger := logger.New(config.Environment)
 
-	_, err := s3.New(config)
+	s3client, err := s3.New(config)
 	if err != nil {
 		logger.Error(err.Error())
 		log.Fatal(err)
@@ -50,7 +50,7 @@ func main() {
 
 	defer db.Close()
 
-	app := app.NewApp(config, logger, db)
+	app := app.NewApp(config, logger, db, s3client)
 
 	app.Run()
 }
