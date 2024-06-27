@@ -2,7 +2,10 @@ package s3
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"io"
+	"log"
 	"log/slog"
 	"oasis/api/internal/config"
 
@@ -11,14 +14,12 @@ import (
 	"github.com/google/uuid"
 )
 
-const (
-	AudioPrefix = "audio/"
-	CoverPrefix = "cover/"
-)
+type ObjectPrefix string
 
-type S3store interface {
-	PutObject(prefix string, data io.Reader) error
-}
+const (
+	AudioPrefix ObjectPrefix = "audio/"
+	CoverPrefix ObjectPrefix = "cover/"
+)
 
 type objectStorage struct {
 	config *config.Config
@@ -27,7 +28,6 @@ type objectStorage struct {
 }
 
 func New(config *config.Config, logger *slog.Logger, client *s3.Client) *objectStorage {
-
 	return &objectStorage{
 		config: config,
 		logger: logger,
@@ -35,11 +35,11 @@ func New(config *config.Config, logger *slog.Logger, client *s3.Client) *objectS
 	}
 }
 
-func (s *objectStorage) PutObject(prefix string, data io.Reader) error {
+func (s *objectStorage) PutObject(ctx context.Context, prefix ObjectPrefix, data io.Reader) error {
 
 	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(s.config.S3.BucketName),
-		Key:    aws.String(prefix + uuid.NewString()),
+		Key:    aws.String(string(prefix) + uuid.NewString()),
 		Body:   data,
 	})
 
@@ -48,4 +48,19 @@ func (s *objectStorage) PutObject(prefix string, data io.Reader) error {
 	}
 
 	return nil
+}
+
+func (s *objectStorage) Test() {
+
+	output, err := s.client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
+		Bucket: aws.String(s.config.S3.BucketName),
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, object := range output.Contents {
+		obj, _ := json.MarshalIndent(object, "", "\t")
+		fmt.Println(string(obj))
+	}
 }

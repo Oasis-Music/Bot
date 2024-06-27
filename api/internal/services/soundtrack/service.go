@@ -8,7 +8,6 @@ import (
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
 
-	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-playground/validator/v10"
 
 	"strconv"
@@ -25,8 +24,8 @@ type Service interface {
 type soundtrackService struct {
 	config      *config.Config
 	logger      *slog.Logger
-	s3client    *s3.Client
 	storage     SoundtrackStorage
+	s3store     S3store
 	userService user.Service
 	validate    *validator.Validate
 }
@@ -35,7 +34,7 @@ func New(
 	config *config.Config,
 	logger *slog.Logger,
 	storage SoundtrackStorage,
-	s3client *s3.Client,
+	s3store S3store,
 	userService user.Service,
 ) Service {
 
@@ -43,7 +42,7 @@ func New(
 		config:      config,
 		logger:      logger,
 		storage:     storage,
-		s3client:    s3client,
+		s3store:     s3store,
 		userService: userService,
 		validate:    validator.New(validator.WithRequiredStructEnabled()),
 	}

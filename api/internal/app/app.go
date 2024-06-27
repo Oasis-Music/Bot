@@ -14,6 +14,7 @@ import (
 	authRepo "oasis/api/internal/repo/storage/postgres/auth"
 	soundtrackRepo "oasis/api/internal/repo/storage/postgres/soundtrack"
 	userRepo "oasis/api/internal/repo/storage/postgres/user"
+	s3Repo "oasis/api/internal/repo/storage/s3"
 
 	"context"
 	"log"
@@ -36,6 +37,7 @@ type App struct {
 func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3client *s3.Client) *App {
 
 	sqlc := sqlc.New(db)
+	s3 := s3Repo.New(config, logger, s3client)
 
 	authStorage := authRepo.New(db, sqlc)
 	authService := auth.New(config, logger, authStorage)
@@ -44,7 +46,7 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3clie
 	userService := user.New(config, logger, userStorage, authService)
 
 	soundtrackStorage := soundtrackRepo.New(config, logger, db, sqlc)
-	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3client, userService)
+	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3, userService)
 
 	appComposite := composite.AppComposite{
 		SoundtrackService: soundtrackService,
