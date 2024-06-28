@@ -35,19 +35,35 @@ func New(config *config.Config, logger *slog.Logger, client *s3.Client) *objectS
 	}
 }
 
-func (s *objectStorage) PutObject(ctx context.Context, prefix ObjectPrefix, data io.Reader) error {
+func (s *objectStorage) PutObject(ctx context.Context, prefix ObjectPrefix, data io.Reader) (string, error) {
 
-	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
-		Bucket: aws.String(s.config.S3.BucketName),
-		Key:    aws.String(string(prefix) + uuid.NewString()),
-		Body:   data,
+	id := uuid.NewString()
+	// "image/webp"
+
+	contentType := "audio/mpeg"
+	ext := ".mp3"
+
+	if prefix == CoverPrefix {
+		contentType = "image/webp"
+		ext = ".webp"
+	}
+
+	fileName := id + ext
+
+	output, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket:      aws.String(s.config.S3.BucketName),
+		Key:         aws.String(string(prefix) + fileName),
+		Body:        data,
+		ContentType: aws.String(contentType),
 	})
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	fmt.Println(output.ResultMetadata)
+
+	return fileName, nil
 }
 
 func (s *objectStorage) Test() {

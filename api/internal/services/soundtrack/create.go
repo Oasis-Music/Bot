@@ -15,6 +15,11 @@ import (
 	"os/exec"
 
 	"oasis/api/internal/entity"
+	"oasis/api/internal/repo/storage/s3"
+)
+
+const (
+	MaxCoverSize = 512 * 1024 // 512 KB
 )
 
 type ProbeData struct {
@@ -53,14 +58,76 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	userID := s.extractCtxUserId(ctx)
 
+	/*
+
+		if input.CoverImage != nil {
+
+			// check the size
+			if input.CoverImage.Size > MaxCoverSize {
+				return false, fmt.Errorf("cover is size larger than 512 KB")
+			}
+
+			// check the ext
+			ext := filepath.Ext(input.CoverImage.Filename)
+			if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
+				return false, fmt.Errorf("cover type is not: png,jpg,jpeg")
+			}
+
+			buf, err := io.ReadAll(input.CoverImage.File)
+			if err != nil {
+				fmt.Println("io.ReadAll:", err)
+				return false, err
+			}
+
+			// cat image.jpeg | ffmpeg -y -i pipe:0 -c:v libwebp -quality 50 -f webp  pipe:1 > a.webp
+			cmd := exec.Command(
+				"ffmpeg",
+				"-i", "pipe:0",
+				"-c:v", "libwebp",
+				"-quality", "50",
+				"-f", "webp",
+				"pipe:1",
+			)
+
+			cmd.Stdin = bytes.NewReader(buf)
+
+			var resultBuffer = bytes.NewBuffer(make([]byte, 0))
+
+			fmt.Println(resultBuffer)
+
+			cmd.Stdout = resultBuffer
+
+			err = cmd.Run()
+			if err != nil {
+				// for invalid ext: exit status 234
+				fmt.Println("cmd.Run() err:", err)
+				return false, err
+			}
+
+			s.saveMediaOnS32(resultBuffer)
+
+		}
+
+	*/
+
 	buf, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
 		fmt.Println("io.ReadAll:", err)
 		return false, err
 	}
 
-	// cat test.mp3 | ffmpeg -y -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
-	cmd := exec.Command("ffmpeg", "-y", "-hide_banner", "-i", "pipe:0", "-f", "mp3", "-map", "0:a", "-c:a", "copy", "-map_metadata", "-1", "pipe:1")
+	// cat test.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
+	cmd := exec.Command(
+		"ffmpeg",
+		"-loglevel", "panic",
+		// "-y",
+		"-hide_banner",
+		"-i", "pipe:0",
+		"-f", "mp3",
+		"-map", "0:a", "-c:a", "copy",
+		"-map_metadata", "-1",
+		"pipe:1",
+	)
 
 	var resultBuffer = bytes.NewBuffer(make([]byte, 0, 2*1024*1024)) // 2 mb pre-allocation
 
@@ -140,6 +207,8 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	if err != nil {
 		return false, err
 	}
+
+	s.saveMediaOnS3(resultBuffer, input.CoverImage)
 
 	return false, errors.New("for dev p error")
 
@@ -265,4 +334,30 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 	}
 
 	return data.AudioPath, data.CoverImagePath, nil
+}
+
+func (s *soundtrackService) saveMediaOnS3(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
+
+	key, err := s.s3store.PutObject(context.TODO(), s3.AudioPrefix, audio)
+
+	if err != nil {
+		return "", nil, err
+	}
+
+	fmt.Println("new key", key)
+
+	return "", &key, nil
+}
+
+func (s *soundtrackService) saveMediaOnS32(coverImage *bytes.Buffer) (string, *string, error) {
+
+	key, err := s.s3store.PutObject(context.TODO(), s3.CoverPrefix, coverImage)
+
+	if err != nil {
+		return "", nil, err
+	}
+
+	fmt.Println("new key", key)
+
+	return "", &key, nil
 }

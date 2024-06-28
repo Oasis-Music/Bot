@@ -16,6 +16,6 @@ type SoundtrackStorage interface {
 }
 
 type S3store interface {
-	PutObject(ctx context.Context, prefix s3.ObjectPrefix, data io.Reader) error
+	PutObject(ctx context.Context, prefix s3.ObjectPrefix, data io.Reader) (string, error)
 	Test()
 }
