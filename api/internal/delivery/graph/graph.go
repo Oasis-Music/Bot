@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	appConfig "oasis/api/internal/config"
 	"strconv"
 	"strings"
 
@@ -21,6 +22,10 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/vektah/gqlparser/v2/gqlerror"
+)
+
+const (
+	maxUploadSize = 20 * 1024 * 1024 // 20 Mb
 )
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
@@ -49,11 +54,13 @@ func NewHandler(appComposite composite.AppComposite) http.Handler {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
-	srv.AddTransport(transport.MultipartForm{})
+	srv.AddTransport(transport.MultipartForm{
+		MaxUploadSize: maxUploadSize,
+	})
 
 	srv.SetQueryCache(lru.New(1000))
 
-	if ENVIRONMENT == "development" {
+	if ENVIRONMENT == appConfig.DevEnv {
 		srv.Use(extension.Introspection{})
 	}
 

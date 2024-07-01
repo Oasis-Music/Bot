@@ -8,21 +8,21 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"oasis/api/internal/entity"
-	"oasis/api/internal/repo/storage/s3"
 )
 
 const (
-	MaxCoverSize = 512 * 1024 // 512 KB
+	MaxCoverSize = 512 * 1024       // 512 KB
+	MaxAudioSize = 20 * 1024 * 1024 // 20  MB
 )
 
-type ProbeData struct {
+type AudioMetaData struct {
 	Format *Format `json:"format"`
 }
 
@@ -42,13 +42,6 @@ type Format struct {
 	// TagList          Tags    `json:"tags"`
 }
 
-func trackDurationToInt16(d float64) (int16, error) {
-	if d <= 0 {
-		return 0, errors.New("track duration is 0")
-	}
-	return int16(math.Round(d)), nil
-}
-
 func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
 
 	err := s.validate.Struct(&input)
@@ -58,161 +51,71 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	userID := s.extractCtxUserId(ctx)
 
-	/*
+	if input.Audiofile.Size > MaxAudioSize {
+		return false, errors.New("audio file is too big")
+	}
 
-		if input.CoverImage != nil {
+	ext := filepath.Ext(input.Audiofile.Filename)
+	if ext != ".mp3" {
+		return false, fmt.Errorf("wrong audio format")
+	}
 
-			// check the size
-			if input.CoverImage.Size > MaxCoverSize {
-				return false, fmt.Errorf("cover is size larger than 512 KB")
-			}
+	// validate cover file
+	if input.CoverImage != nil {
 
-			// check the ext
-			ext := filepath.Ext(input.CoverImage.Filename)
-			if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
-				return false, fmt.Errorf("cover type is not: png,jpg,jpeg")
-			}
-
-			buf, err := io.ReadAll(input.CoverImage.File)
-			if err != nil {
-				fmt.Println("io.ReadAll:", err)
-				return false, err
-			}
-
-			// cat image.jpeg | ffmpeg -y -i pipe:0 -c:v libwebp -quality 50 -f webp  pipe:1 > a.webp
-			cmd := exec.Command(
-				"ffmpeg",
-				"-i", "pipe:0",
-				"-c:v", "libwebp",
-				"-quality", "50",
-				"-f", "webp",
-				"pipe:1",
-			)
-
-			cmd.Stdin = bytes.NewReader(buf)
-
-			var resultBuffer = bytes.NewBuffer(make([]byte, 0))
-
-			fmt.Println(resultBuffer)
-
-			cmd.Stdout = resultBuffer
-
-			err = cmd.Run()
-			if err != nil {
-				// for invalid ext: exit status 234
-				fmt.Println("cmd.Run() err:", err)
-				return false, err
-			}
-
-			s.saveMediaOnS32(resultBuffer)
-
+		if input.CoverImage.Size > MaxCoverSize {
+			return false, errors.New("cover image bigger than 512 KB")
 		}
 
-	*/
+		ext := filepath.Ext(input.CoverImage.Filename)
+		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
+			return false, fmt.Errorf("cover type is not an image")
+		}
+	}
 
-	buf, err := io.ReadAll(input.Audiofile.File)
+	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
 	if err != nil {
-		fmt.Println("io.ReadAll:", err)
-		return false, err
+		return false, errors.New("fail to proccess audio")
 	}
 
-	// cat test.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
-	cmd := exec.Command(
-		"ffmpeg",
-		"-loglevel", "panic",
-		// "-y",
-		"-hide_banner",
-		"-i", "pipe:0",
-		"-f", "mp3",
-		"-map", "0:a", "-c:a", "copy",
-		"-map_metadata", "-1",
-		"pipe:1",
-	)
-
-	var resultBuffer = bytes.NewBuffer(make([]byte, 0, 2*1024*1024)) // 2 mb pre-allocation
-
-	cmd.Stdin = bytes.NewReader(buf)
-	cmd.Stdout = resultBuffer
-
-	err = cmd.Run()
-	if err != nil {
-		// for invalid ext: exit status 234
-		fmt.Println("cmd.Run() err:", err)
-		return false, err
-	}
-
-	tempDirLoc := os.TempDir()
-	tempFile, err := os.CreateTemp(tempDirLoc, "oasis_audio-*.mp3")
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer tempFile.Close()
-
-	_, err = tempFile.Write(resultBuffer.Bytes())
-	if err != nil {
-		log.Println(err)
-		return false, err
-	}
-
-	fileName := tempFile.Name()
-
-	/*
-		Full JSON:
-			ffprobe -v quiet -print_format json -show_format -i <file>.mp3
-		Necessary:
-			ffprobe -v quiet -print_format json -show_entries format=duration,format_name -i <file>.mp3
-
-		There is no way to get track duration from pipe:0
-		so we need a temporary file(https://trac.ffmpeg.org/ticket/4358)
-		"The file length is obviously not known with a pipe"
-	*/
-	probe := exec.Command(
-		"ffprobe",
-		"-v",
-		"quiet",
-		"-print_format",
-		"json",
-		"-show_entries",
-		"format=duration,format_name",
-		"-i",
-		fileName,
-	)
-
-	var ffprobeBuf bytes.Buffer
-
-	probe.Stdout = &ffprobeBuf
-
-	if err = probe.Start(); err != nil {
-		fmt.Println(err)
-		return false, err
-	}
-
-	if err = probe.Wait(); err != nil {
-		fmt.Println(err)
-		return false, err
-	}
-
-	var data ProbeData
-
-	if err = json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
-		fmt.Println(err)
-		return false, err
-	}
-
-	fmt.Printf("audio info --> ext: %s, dur(sec): %v\n", data.Format.FormatName, data.Format.DurationSeconds)
-
-	defer os.Remove(fileName)
-
-	duration, err := trackDurationToInt16(data.Format.DurationSeconds)
+	duration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
 	if err != nil {
 		return false, err
 	}
 
-	s.saveMediaOnS3(resultBuffer, input.CoverImage)
+	fmt.Printf("audio ext: %s, dur(sec): %v\n", audioMeta.Format.FormatName, audioMeta.Format.DurationSeconds)
+
+	audioName, err := s.s3store.PutAudio(ctx, audioFile)
+	if err != nil {
+		return false, errors.New("audio s3 err")
+	}
+	fmt.Println("new audio on s3:", "audio/"+audioName)
+
+	if input.CoverImage != nil {
+
+		coverFile, err := proccessCover(input.CoverImage)
+		if err != nil {
+			return false, errors.New("fail to proccess cover")
+		}
+
+		coverName, err := s.s3store.PutCover(ctx, coverFile)
+		if err != nil {
+			return false, errors.New("audio s3 err")
+		}
+
+		fmt.Println("new cover on s3:", "cover/"+coverName)
+	}
+
+	/**
+	 * Why not to upload it concurrently?
+	 * https://aws.github.io/aws-sdk-go-v2/docs/making-requests/#concurrently-using-service-clients
+	 *
+	 * Because one of upload operations is optional and what about re-tries?
+	 */
 
 	return false, errors.New("for dev p error")
 
-	soundtrackURL, coverImageURL, err := s.saveMediaOnLocalServer(resultBuffer, input.CoverImage)
+	soundtrackURL, coverImageURL, err := s.saveMediaOnLocalServer(audioFile, input.CoverImage)
 	if err != nil {
 		return false, err
 	}
@@ -336,28 +239,131 @@ func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverIma
 	return data.AudioPath, data.CoverImagePath, nil
 }
 
-func (s *soundtrackService) saveMediaOnS3(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
+func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
 
-	key, err := s.s3store.PutObject(context.TODO(), s3.AudioPrefix, audio)
-
+	buf, err := io.ReadAll(cover.File)
 	if err != nil {
-		return "", nil, err
+		fmt.Println("cover io.ReadAll:", err)
+		return nil, err
 	}
 
-	fmt.Println("new key", key)
+	// cat src.jpeg | ffmpeg -y -i pipe:0 -c:v libwebp -quality 50 -f webp  pipe:1 > dst.webp
+	cmd := exec.Command(
+		"ffmpeg",
+		"-i", "pipe:0",
+		"-c:v", "libwebp",
+		"-quality", "50",
+		"-f", "webp",
+		"pipe:1",
+	)
 
-	return "", &key, nil
+	cmd.Stdin = bytes.NewReader(buf)
+
+	var resultBuffer = bytes.NewBuffer(make([]byte, 0))
+
+	cmd.Stdout = resultBuffer
+
+	err = cmd.Run()
+	if err != nil {
+		// for invalid ext: exit status 234
+		fmt.Println("cover cmd.Run() err:", err)
+		return nil, err
+	}
+
+	return resultBuffer, nil
+
 }
 
-func (s *soundtrackService) saveMediaOnS32(coverImage *bytes.Buffer) (string, *string, error) {
-
-	key, err := s.s3store.PutObject(context.TODO(), s3.CoverPrefix, coverImage)
-
+func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
+	buf, err := io.ReadAll(track.File)
 	if err != nil {
-		return "", nil, err
+		fmt.Println("io.ReadAll:", err)
+		return nil, nil, err
 	}
 
-	fmt.Println("new key", key)
+	// cat test.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
+	cmd := exec.Command(
+		"ffmpeg",
+		"-loglevel", "panic",
+		// "-y",
+		"-hide_banner",
+		"-i", "pipe:0",
+		"-f", "mp3",
+		"-map", "0:a", "-c:a", "copy",
+		"-map_metadata", "-1",
+		"pipe:1",
+	)
 
-	return "", &key, nil
+	var resultBuffer = bytes.NewBuffer(make([]byte, 0, 2*1024*1024)) // 2 mb pre-allocation
+
+	cmd.Stdin = bytes.NewReader(buf)
+	cmd.Stdout = resultBuffer
+
+	err = cmd.Run()
+	if err != nil {
+		// for invalid ext: exit status 234
+		fmt.Println("audio cmd.Run() err:", err)
+		return nil, nil, err
+	}
+
+	tempDirLoc := os.TempDir()
+	tempFile, err := os.CreateTemp(tempDirLoc, "oasis_audio-*.mp3")
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer tempFile.Close()
+
+	_, err = tempFile.Write(resultBuffer.Bytes())
+	if err != nil {
+		return nil, nil, err
+	}
+
+	fileName := tempFile.Name()
+
+	/*
+		Full JSON:
+			ffprobe -v quiet -print_format json -show_format -i <file>.mp3
+		Necessary:
+			ffprobe -v quiet -print_format json -show_entries format=duration,format_name -i <file>.mp3
+
+		There is no way to get track duration from pipe:0
+		so we need a temporary file(https://trac.ffmpeg.org/ticket/4358)
+		"The file length is obviously not known with a pipe"
+	*/
+	probe := exec.Command(
+		"ffprobe",
+		"-v",
+		"quiet",
+		"-print_format",
+		"json",
+		"-show_entries",
+		"format=duration,format_name",
+		"-i",
+		fileName,
+	)
+
+	var ffprobeBuf bytes.Buffer
+
+	probe.Stdout = &ffprobeBuf
+
+	if err = probe.Start(); err != nil {
+		fmt.Println("cmd: ffprobe start err:", err)
+		return nil, nil, err
+	}
+
+	if err = probe.Wait(); err != nil {
+		fmt.Println(err)
+		return nil, nil, err
+	}
+
+	var data AudioMetaData
+
+	if err = json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
+		fmt.Println("faile to extract audio metadata")
+		return nil, nil, err
+	}
+
+	defer os.Remove(fileName)
+
+	return resultBuffer, &data, nil
 }

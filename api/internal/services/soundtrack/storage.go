@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/repo/storage/s3"
 )
 
 type SoundtrackStorage interface {
@@ -16,6 +15,7 @@ type SoundtrackStorage interface {
 }
 
 type S3store interface {
-	PutObject(ctx context.Context, prefix s3.ObjectPrefix, data io.Reader) (string, error)
+	PutAudio(ctx context.Context, data io.Reader) (string, error)
+	PutCover(ctx context.Context, data io.Reader) (string, error)
 	Test()
 }

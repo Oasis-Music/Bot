@@ -14,11 +14,10 @@ import (
 	"github.com/google/uuid"
 )
 
-type ObjectPrefix string
-
 const (
-	AudioPrefix ObjectPrefix = "audio/"
-	CoverPrefix ObjectPrefix = "cover/"
+	AudioPrefix = "audio/"
+	CoverPrefix = "cover/"
+	testPrefix  = "test/"
 )
 
 type objectStorage struct {
@@ -35,33 +34,45 @@ func New(config *config.Config, logger *slog.Logger, client *s3.Client) *objectS
 	}
 }
 
-func (s *objectStorage) PutObject(ctx context.Context, prefix ObjectPrefix, data io.Reader) (string, error) {
+func (s *objectStorage) PutAudio(ctx context.Context, data io.Reader) (string, error) {
 
-	id := uuid.NewString()
-	// "image/webp"
+	fileName := uuid.NewString() + ".mp3"
 
-	contentType := "audio/mpeg"
-	ext := ".mp3"
-
-	if prefix == CoverPrefix {
-		contentType = "image/webp"
-		ext = ".webp"
-	}
-
-	fileName := id + ext
-
-	output, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
-		Bucket:      aws.String(s.config.S3.BucketName),
-		Key:         aws.String(string(prefix) + fileName),
+	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket: aws.String(s.config.S3.BucketName),
+		// Key:         aws.String(AudioPrefix + fileName),
+		Key:         aws.String(testPrefix + fileName),
 		Body:        data,
-		ContentType: aws.String(contentType),
+		ContentType: aws.String("audio/mpeg"),
 	})
-
 	if err != nil {
 		return "", err
 	}
 
-	fmt.Println(output.ResultMetadata)
+	// fmt.Println(output.ResultMetadata)
+
+	// like an error
+	// fmt.Printf("etag: %v", aws.ToString(result.Output.ETag))
+
+	return fileName, nil
+}
+
+func (s *objectStorage) PutCover(ctx context.Context, data io.Reader) (string, error) {
+
+	fileName := uuid.NewString() + ".webp"
+
+	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket: aws.String(s.config.S3.BucketName),
+		// Key:    aws.String(CoverPrefix + fileName),
+		Key:         aws.String(testPrefix + fileName),
+		Body:        data,
+		ContentType: aws.String("image/webp"),
+	})
+	if err != nil {
+		return "", err
+	}
+
+	// fmt.Println(output.ResultMetadata)
 
 	return fileName, nil
 }

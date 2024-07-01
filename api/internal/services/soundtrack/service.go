@@ -2,7 +2,9 @@ package soundtrack
 
 import (
 	"context"
+	"errors"
 	"log/slog"
+	"math"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/services/auth"
@@ -68,4 +70,11 @@ func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
 	userID = val
 
 	return userID
+}
+
+func trackDurationToInt16(d float64) (int16, error) {
+	if d <= 0 {
+		return 0, errors.New("track duration is 0")
+	}
+	return int16(math.Round(d)), nil
 }
