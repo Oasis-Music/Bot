@@ -93,7 +93,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		}
 
 		// TODO
-		// coverObjectKey = "cover/" + coverName
+		// coverObjectKey = s3.CoverPrefix + coverName
 		coverObjectKey = "test/" + coverName
 
 		fmt.Println("new cover on s3:", coverObjectKey)
@@ -118,6 +118,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	// fmt.Println("new audio on s3:", "audio/"+audioName)
 
 	// TODO
+	// audioObjectKey = s3.AudioPrefix + audioName
 	audioObjectKey = "test/" + audioName
 
 	/**
