@@ -17,5 +17,6 @@ type SoundtrackStorage interface {
 type S3store interface {
 	PutAudio(ctx context.Context, data io.Reader) (string, error)
 	PutCover(ctx context.Context, data io.Reader) (string, error)
+	DeleteObject(ctx context.Context, key string) (bool, error)
 	Test()
 }

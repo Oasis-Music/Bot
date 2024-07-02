@@ -77,6 +77,21 @@ func (s *objectStorage) PutCover(ctx context.Context, data io.Reader) (string, e
 	return fileName, nil
 }
 
+func (s *objectStorage) DeleteObject(ctx context.Context, key string) (bool, error) {
+	// 1. not versioned bucket
+	// 2. there is no way to do something lit this with R2
+	// Go: https://docs.aws.amazon.com/AmazonS3/latest/userguide/example_s3_DeleteObject_section.html
+	_, err := s.client.DeleteObject(ctx, &s3.DeleteObjectInput{
+		Bucket: aws.String(s.config.S3.BucketName),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (s *objectStorage) Test() {
 
 	output, err := s.client.ListObjectsV2(context.TODO(), &s3.ListObjectsV2Input{
