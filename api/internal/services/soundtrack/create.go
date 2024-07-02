@@ -42,15 +42,22 @@ type Format struct {
 	// TagList          Tags    `json:"tags"`
 }
 
-func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error) {
+func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (ok bool, err error) {
 
-	err := s.validate.Struct(&input)
+	var coverObjectKey, audioObjectKey string
+
+	defer func() {
+		if err != nil {
+			s.CreateCleanUp(coverObjectKey, audioObjectKey)
+		}
+	}()
+
+	err = s.validate.Struct(&input)
 	if err != nil {
 		return false, err
 	}
 
-	userID := s.extractCtxUserId(ctx)
-
+	// validate audio
 	if input.Audiofile.Size > MaxAudioSize {
 		return false, errors.New("audio file is too big")
 	}
@@ -60,7 +67,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, fmt.Errorf("wrong audio format")
 	}
 
-	// validate cover file
+	// validate cover
 	if input.CoverImage != nil {
 
 		if input.CoverImage.Size > MaxCoverSize {
@@ -71,6 +78,25 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
 			return false, fmt.Errorf("cover type is not an image")
 		}
+	}
+
+	if input.CoverImage != nil {
+
+		coverFile, err := proccessCover(input.CoverImage)
+		if err != nil {
+			return false, errors.New("fail to proccess cover")
+		}
+
+		coverName, err := s.s3store.PutCover(ctx, coverFile)
+		if err != nil {
+			return false, errors.New("audio s3 err")
+		}
+
+		// TODO
+		// coverObjectKey = "cover/" + coverName
+		coverObjectKey = "test/" + coverName
+
+		fmt.Println("new cover on s3:", coverObjectKey)
 	}
 
 	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
@@ -89,22 +115,10 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	if err != nil {
 		return false, errors.New("audio s3 err")
 	}
-	fmt.Println("new audio on s3:", "audio/"+audioName)
+	// fmt.Println("new audio on s3:", "audio/"+audioName)
 
-	if input.CoverImage != nil {
-
-		coverFile, err := proccessCover(input.CoverImage)
-		if err != nil {
-			return false, errors.New("fail to proccess cover")
-		}
-
-		coverName, err := s.s3store.PutCover(ctx, coverFile)
-		if err != nil {
-			return false, errors.New("audio s3 err")
-		}
-
-		fmt.Println("new cover on s3:", "cover/"+coverName)
-	}
+	// TODO
+	audioObjectKey = "test/" + audioName
 
 	/**
 	 * Why not to upload it concurrently?
@@ -119,6 +133,8 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	if err != nil {
 		return false, err
 	}
+
+	userID := s.extractCtxUserId(ctx)
 
 	var newTrack entity.NewSoundtrack
 
@@ -366,4 +382,17 @@ func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
 	defer os.Remove(fileName)
 
 	return resultBuffer, &data, nil
+}
+
+func (s *soundtrackService) CreateCleanUp(keys ...string) {
+	for _, key := range keys {
+		if key != "" {
+			go func() {
+				_, err := s.s3store.DeleteObject(context.Background(), key)
+				if err != nil {
+					log.Println(err)
+				}
+			}()
+		}
+	}
 }
