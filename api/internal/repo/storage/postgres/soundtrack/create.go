@@ -2,7 +2,6 @@ package soundtrack
 
 import (
 	"context"
-	"log"
 	"oasis/api/internal/entity"
 	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
@@ -21,7 +20,7 @@ func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtr
 	})
 
 	if err != nil {
-		log.Println("storage/soundtrack(Create) -->", err)
+		s.logger.Error("db: create_soundtrack", "err", err)
 		return -1, err
 	}
 

@@ -5,14 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 
 	"oasis/api/internal/entity"
+	"oasis/api/internal/repo/storage/s3"
 )
 
 const (
@@ -44,17 +43,13 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	var coverFileName, audioFileName string
 
-	// TODO
-	// coverObjectKey = s3.CoverPrefix + coverName
-	// s3.AudioPrefix + audioName
-
 	defer func() {
 		if err != nil {
 			var cover string
 			if coverFileName != "" {
-				cover = "test/" + coverFileName
+				cover = s3.CoverPrefix + coverFileName
 			}
-			s.CreateCleanUp(cover, "test/"+audioFileName)
+			s.CreateCleanUp(cover, s3.AudioPrefix+audioFileName)
 		}
 	}()
 
@@ -70,7 +65,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	ext := filepath.Ext(input.Audiofile.Filename)
 	if ext != ".mp3" {
-		return false, fmt.Errorf("wrong audio format")
+		return false, errors.New("wrong audio format")
 	}
 
 	// validate cover
@@ -82,7 +77,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 		ext := filepath.Ext(input.CoverImage.Filename)
 		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
-			return false, fmt.Errorf("cover is not an image")
+			return false, errors.New("cover is not an image")
 		}
 	}
 
@@ -90,12 +85,13 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 		coverFile, err := proccessCover(input.CoverImage)
 		if err != nil {
+			s.logger.Error("proccess cover", "err", err)
 			return false, errors.New("fail to proccess cover")
 		}
 
 		coverName, err := s.s3store.PutCover(ctx, coverFile)
 		if err != nil {
-			log.Println(err)
+			s.logger.Error("save S3 cover", "err", err)
 			return false, errors.New("fail to save cover")
 		}
 
@@ -104,21 +100,18 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
 	if err != nil {
-		log.Println(err)
+		s.logger.Error("proccess audio", "err", err)
 		return false, errors.New("fail to proccess audio")
 	}
 
 	trackDuration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
 	if err != nil {
-		log.Println(err)
-		return false, errors.New("fail to proccess audio metadata")
+		return false, err
 	}
-
-	fmt.Printf("audio ext: %s, dur(sec): %v\n", audioMeta.Format.FormatName, audioMeta.Format.DurationSeconds)
 
 	audioName, err := s.s3store.PutAudio(ctx, audioFile)
 	if err != nil {
-		log.Println(err)
+		s.logger.Error("save S3 audio", "err", err)
 		return false, errors.New("fail to save audio")
 	}
 
@@ -130,6 +123,10 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	 *
 	 * Because one of upload operations is optional and what about re-tries?
 	 */
+
+	// coverFileName := "plug.webp"
+	// audioFileName := "plug.mp3"
+	// var trackDuration int16 = 137
 
 	userID := s.extractCtxUserId(ctx)
 
@@ -146,15 +143,9 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		newTrack.CoverImage = &coverFileName
 	}
 
-	fmt.Println("NEW track:")
-	fmt.Printf("%+v\n", newTrack)
-
-	return false, errors.New("for dev p error")
-
 	newTrackId, err := s.storage.Create(ctx, newTrack)
 	if err != nil {
-		log.Panicln("fail to create track", err)
-		return false, err
+		return false, ErrSoundtrackCreate
 	}
 
 	if input.Attach {
@@ -162,15 +153,13 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 			UserID:       userID,
 			SoundtrackID: newTrackId,
 		})
-
 		if err != nil {
-			log.Panicln("fail to attach new track to user playlist", err)
 			return false, err
 		}
 
 	}
 
-	fmt.Println("Got ID:", newTrackId)
+	s.logger.Info("soundtrack: new track", "id", newTrackId, "user_id", userID)
 
 	return true, nil
 }
@@ -179,7 +168,6 @@ func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
 
 	buf, err := io.ReadAll(cover.File)
 	if err != nil {
-		fmt.Println("cover io.ReadAll:", err)
 		return nil, err
 	}
 
@@ -202,22 +190,19 @@ func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
 	err = cmd.Run()
 	if err != nil {
 		// for invalid ext: exit status 234
-		fmt.Println("cover cmd.Run() err:", err)
 		return nil, err
 	}
 
 	return resultBuffer, nil
-
 }
 
 func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
 	buf, err := io.ReadAll(track.File)
 	if err != nil {
-		fmt.Println("io.ReadAll:", err)
 		return nil, nil, err
 	}
 
-	// cat test.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
+	// cat in.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
 	cmd := exec.Command(
 		"ffmpeg",
 		"-loglevel", "panic",
@@ -238,14 +223,13 @@ func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
 	err = cmd.Run()
 	if err != nil {
 		// for invalid ext: exit status 234
-		fmt.Println("audio cmd.Run() err:", err)
 		return nil, nil, err
 	}
 
 	tempDirLoc := os.TempDir()
 	tempFile, err := os.CreateTemp(tempDirLoc, "oasis_audio-*.mp3")
 	if err != nil {
-		fmt.Println(err)
+		return nil, nil, err
 	}
 	defer tempFile.Close()
 
@@ -283,20 +267,17 @@ func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
 	probe.Stdout = &ffprobeBuf
 
 	if err = probe.Start(); err != nil {
-		fmt.Println("cmd: ffprobe start err:", err)
 		return nil, nil, err
 	}
 
 	if err = probe.Wait(); err != nil {
-		fmt.Println(err)
 		return nil, nil, err
 	}
 
 	var data AudioMetaData
 
 	if err = json.Unmarshal(ffprobeBuf.Bytes(), &data); err != nil {
-		fmt.Println("faile to extract audio metadata")
-		return nil, nil, err
+		return nil, nil, errors.New("faile to extract JSON audio metadata")
 	}
 
 	defer os.Remove(fileName)
@@ -310,7 +291,7 @@ func (s *soundtrackService) CreateCleanUp(keys ...string) {
 			go func() {
 				_, err := s.s3store.DeleteObject(context.Background(), key)
 				if err != nil {
-					log.Println(err)
+					s.logger.Error("create cleanup S3", "err", err)
 				}
 			}()
 		}
