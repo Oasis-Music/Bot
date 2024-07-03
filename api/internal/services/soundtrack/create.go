@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"mime/multipart"
-	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -44,12 +42,19 @@ type Format struct {
 
 func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (ok bool, err error) {
 
-	var coverObjectKey, audioObjectKey string
+	var coverFileName, audioFileName string
+
+	// TODO
+	// coverObjectKey = s3.CoverPrefix + coverName
+	// s3.AudioPrefix + audioName
 
 	defer func() {
 		if err != nil {
-			fmt.Println(coverObjectKey, audioObjectKey)
-			// s.CreateCleanUp(coverObjectKey, audioObjectKey)
+			var cover string
+			if coverFileName != "" {
+				cover = "test/" + coverFileName
+			}
+			s.CreateCleanUp(cover, "test/"+audioFileName)
 		}
 	}()
 
@@ -94,9 +99,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 			return false, errors.New("fail to save cover")
 		}
 
-		// TODO
-		// coverObjectKey = s3.CoverPrefix + coverName
-		coverObjectKey = "test/" + coverName
+		coverFileName = coverName
 	}
 
 	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
@@ -105,7 +108,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, errors.New("fail to proccess audio")
 	}
 
-	duration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
+	trackDuration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
 	if err != nil {
 		log.Println(err)
 		return false, errors.New("fail to proccess audio metadata")
@@ -119,9 +122,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, errors.New("fail to save audio")
 	}
 
-	// TODO
-	// audioObjectKey = s3.AudioPrefix + audioName
-	audioObjectKey = "test/" + audioName
+	audioFileName = audioName
 
 	/**
 	 * Why not to upload it concurrently?
@@ -130,25 +131,25 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	 * Because one of upload operations is optional and what about re-tries?
 	 */
 
-	return false, errors.New("for dev p error")
-
-	soundtrackURL, coverImageURL, err := s.saveMediaOnLocalServer(audioFile, input.CoverImage)
-	if err != nil {
-		return false, err
-	}
-
 	userID := s.extractCtxUserId(ctx)
 
-	var newTrack entity.NewSoundtrack
+	newTrack := entity.NewSoundtrack{
+		Title:       input.Title,
+		Author:      input.Author,
+		Duration:    trackDuration,
+		AudioFile:   audioFileName,
+		IsValidated: false,
+		CreatorID:   userID,
+	}
 
-	newTrack.Title = input.Title
-	newTrack.Author = input.Author
-	newTrack.Duration = duration
+	if coverFileName != "" {
+		newTrack.CoverImage = &coverFileName
+	}
 
-	newTrack.CoverImage = coverImageURL
-	newTrack.AudioFile = soundtrackURL
-	newTrack.IsValidated = false
-	newTrack.CreatorID = userID
+	fmt.Println("NEW track:")
+	fmt.Printf("%+v\n", newTrack)
+
+	return false, errors.New("for dev p error")
 
 	newTrackId, err := s.storage.Create(ctx, newTrack)
 	if err != nil {
@@ -172,90 +173,6 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	fmt.Println("Got ID:", newTrackId)
 
 	return true, nil
-}
-
-func (s *soundtrackService) saveMediaOnLocalServer(audio *bytes.Buffer, coverImage *entity.Upload) (string, *string, error) {
-
-	var body bytes.Buffer
-	writer := multipart.NewWriter(&body)
-
-	audioField, err := writer.CreateFormFile("soundtrack", "new_track.mp3")
-	if err != nil {
-		fmt.Println(err)
-		return "", nil, errors.New("failed to save media")
-
-	}
-
-	_, err = audioField.Write(audio.Bytes())
-	if err != nil {
-		fmt.Println(err)
-		return "", nil, errors.New("failed to save media")
-	}
-
-	if coverImage != nil {
-		coverImg, err := io.ReadAll(coverImage.File)
-		if err != nil {
-			fmt.Println("io.ReadAll cover:", err)
-			return "", nil, errors.New("failed to save media")
-		}
-
-		coverImageField, err := writer.CreateFormFile("cover", coverImage.Filename)
-		if err != nil {
-			fmt.Println(err)
-			return "", nil, errors.New("failed to save media")
-		}
-
-		_, err = coverImageField.Write(coverImg)
-		if err != nil {
-			fmt.Println(err)
-			return "", nil, errors.New("failed to save media")
-		}
-	}
-
-	if err := writer.Close(); err != nil {
-		fmt.Println("writer.Close()", err)
-		return "", nil, errors.New("failed to save media")
-	}
-
-	req, err := http.NewRequest(http.MethodPost, s.config.FileApiURL+"/createTrack", &body)
-	if err != nil {
-		fmt.Println("build /createTrack", err)
-		return "", nil, errors.New("failed to save media")
-
-	}
-
-	req.Header.Add("Content-Type", writer.FormDataContentType())
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		fmt.Println("make request", err)
-		return "", nil, errors.New("failed to save media")
-
-	}
-
-	respBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Println("read a r.Body", err)
-		return "", nil, errors.New("failed to save media")
-	}
-
-	defer res.Body.Close()
-
-	type responseData struct {
-		AudioPath      string  `json:"audioPath"`
-		CoverImagePath *string `json:"coverPath,omitempty"`
-	}
-
-	fmt.Println("block storage answer: ", string(respBody))
-
-	var data responseData
-
-	if err := json.Unmarshal(respBody, &data); err != nil {
-		fmt.Println("json.Unmarshal", err)
-		return "", nil, errors.New("failed to save media")
-	}
-
-	return data.AudioPath, data.CoverImagePath, nil
 }
 
 func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
