@@ -48,7 +48,8 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	defer func() {
 		if err != nil {
-			s.CreateCleanUp(coverObjectKey, audioObjectKey)
+			fmt.Println(coverObjectKey, audioObjectKey)
+			// s.CreateCleanUp(coverObjectKey, audioObjectKey)
 		}
 	}()
 
@@ -59,7 +60,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	// validate audio
 	if input.Audiofile.Size > MaxAudioSize {
-		return false, errors.New("audio file is too big")
+		return false, errors.New("audio is larger than 20MB")
 	}
 
 	ext := filepath.Ext(input.Audiofile.Filename)
@@ -71,12 +72,12 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	if input.CoverImage != nil {
 
 		if input.CoverImage.Size > MaxCoverSize {
-			return false, errors.New("cover image bigger than 512 KB")
+			return false, errors.New("cover is larger than 512KB")
 		}
 
 		ext := filepath.Ext(input.CoverImage.Filename)
 		if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
-			return false, fmt.Errorf("cover type is not an image")
+			return false, fmt.Errorf("cover is not an image")
 		}
 	}
 
@@ -89,33 +90,34 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 		coverName, err := s.s3store.PutCover(ctx, coverFile)
 		if err != nil {
-			return false, errors.New("audio s3 err")
+			log.Println(err)
+			return false, errors.New("fail to save cover")
 		}
 
 		// TODO
 		// coverObjectKey = s3.CoverPrefix + coverName
 		coverObjectKey = "test/" + coverName
-
-		fmt.Println("new cover on s3:", coverObjectKey)
 	}
 
 	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
 	if err != nil {
+		log.Println(err)
 		return false, errors.New("fail to proccess audio")
 	}
 
 	duration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
 	if err != nil {
-		return false, err
+		log.Println(err)
+		return false, errors.New("fail to proccess audio metadata")
 	}
 
 	fmt.Printf("audio ext: %s, dur(sec): %v\n", audioMeta.Format.FormatName, audioMeta.Format.DurationSeconds)
 
 	audioName, err := s.s3store.PutAudio(ctx, audioFile)
 	if err != nil {
-		return false, errors.New("audio s3 err")
+		log.Println(err)
+		return false, errors.New("fail to save audio")
 	}
-	// fmt.Println("new audio on s3:", "audio/"+audioName)
 
 	// TODO
 	// audioObjectKey = s3.AudioPrefix + audioName
