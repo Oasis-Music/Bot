@@ -41,9 +41,10 @@ func (s *objectStorage) PutAudio(ctx context.Context, data io.Reader) (string, e
 	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(s.config.S3.BucketName),
 		// Key:         aws.String(AudioPrefix + fileName),
-		Key:         aws.String(testPrefix + fileName),
-		Body:        data,
-		ContentType: aws.String("audio/mpeg"),
+		Key:          aws.String(testPrefix + fileName),
+		Body:         data,
+		ContentType:  aws.String("audio/mpeg"),
+		CacheControl: aws.String("public, max-age=31536000"),
 	})
 	if err != nil {
 		return "", err
@@ -64,9 +65,10 @@ func (s *objectStorage) PutCover(ctx context.Context, data io.Reader) (string, e
 	_, err := s.client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(s.config.S3.BucketName),
 		// Key:    aws.String(CoverPrefix + fileName),
-		Key:         aws.String(testPrefix + fileName),
-		Body:        data,
-		ContentType: aws.String("image/webp"),
+		Key:          aws.String(testPrefix + fileName),
+		Body:         data,
+		ContentType:  aws.String("image/webp"),
+		CacheControl: aws.String("public, max-age=31536000"),
 	})
 	if err != nil {
 		return "", err
