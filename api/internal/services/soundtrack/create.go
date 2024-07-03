@@ -159,7 +159,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	}
 
-	s.logger.Info("soundtrack: new track", "id", newTrackId, "user_id", userID)
+	s.logger.Info("soundtrack: create", "id", newTrackId, "user_id", userID)
 
 	return true, nil
 }
