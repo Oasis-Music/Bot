@@ -2,6 +2,7 @@ package soundtrack
 
 import (
 	"context"
+	"io"
 	"oasis/api/internal/entity"
 )
 
@@ -11,4 +12,11 @@ type SoundtrackStorage interface {
 	Create(ctx context.Context, params entity.NewSoundtrack) (int32, error)
 	Delete(ctx context.Context, id int32) (bool, error)
 	Search(ctx context.Context, value string, userID int64) ([]entity.Soundtrack, error)
+}
+
+type S3store interface {
+	PutAudio(ctx context.Context, data io.Reader) (string, error)
+	PutCover(ctx context.Context, data io.Reader) (string, error)
+	DeleteObject(ctx context.Context, key string) (bool, error)
+	Test()
 }

@@ -9,3 +9,7 @@ var (
 	ErrGetAllSoundtracks        = errors.New("internal: no soundtracks fetched")
 	ErrInternalDeleteSoundtrack = errors.New("internal: failed to delete soundtrack")
 )
+
+var (
+	ErrSoundtrackCreate = errors.New("failed to create soundtrack")
+)

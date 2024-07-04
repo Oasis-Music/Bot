@@ -14,6 +14,7 @@ import (
 	authRepo "oasis/api/internal/repo/storage/postgres/auth"
 	soundtrackRepo "oasis/api/internal/repo/storage/postgres/soundtrack"
 	userRepo "oasis/api/internal/repo/storage/postgres/user"
+	s3Repo "oasis/api/internal/repo/storage/s3"
 
 	"context"
 	"log"
@@ -23,6 +24,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-chi/chi"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
@@ -32,9 +34,10 @@ type App struct {
 	router chi.Router
 }
 
-func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
+func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3client *s3.Client) *App {
 
 	sqlc := sqlc.New(db)
+	s3 := s3Repo.New(config, logger, s3client)
 
 	authStorage := authRepo.New(db, sqlc)
 	authService := auth.New(config, logger, authStorage)
@@ -43,7 +46,7 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool) *App {
 	userService := user.New(config, logger, userStorage, authService)
 
 	soundtrackStorage := soundtrackRepo.New(config, logger, db, sqlc)
-	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, userService)
+	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3, userService)
 
 	appComposite := composite.AppComposite{
 		SoundtrackService: soundtrackService,

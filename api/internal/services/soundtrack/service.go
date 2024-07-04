@@ -2,7 +2,9 @@ package soundtrack
 
 import (
 	"context"
+	"errors"
 	"log/slog"
+	"math"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/services/auth"
@@ -25,15 +27,24 @@ type soundtrackService struct {
 	config      *config.Config
 	logger      *slog.Logger
 	storage     SoundtrackStorage
+	s3store     S3store
 	userService user.Service
 	validate    *validator.Validate
 }
 
-func New(config *config.Config, logger *slog.Logger, storage SoundtrackStorage, userService user.Service) Service {
+func New(
+	config *config.Config,
+	logger *slog.Logger,
+	storage SoundtrackStorage,
+	s3store S3store,
+	userService user.Service,
+) Service {
+
 	return &soundtrackService{
 		config:      config,
 		logger:      logger,
 		storage:     storage,
+		s3store:     s3store,
 		userService: userService,
 		validate:    validator.New(validator.WithRequiredStructEnabled()),
 	}
@@ -59,4 +70,11 @@ func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
 	userID = val
 
 	return userID
+}
+
+func trackDurationToInt16(d float64) (int16, error) {
+	if d <= 0 {
+		return 0, errors.New("track duration is 0")
+	}
+	return int16(math.Round(d)), nil
 }

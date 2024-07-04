@@ -8,6 +8,7 @@ import (
 	"oasis/api/internal/config"
 	"oasis/api/pkg/logger"
 	"oasis/api/pkg/postgres"
+	"oasis/api/pkg/s3"
 
 	"github.com/joho/godotenv"
 )
@@ -35,6 +36,12 @@ func main() {
 	config := config.New()
 	logger := logger.New(config.Environment)
 
+	s3client, err := s3.New(config)
+	if err != nil {
+		logger.Error(err.Error())
+		log.Fatal(err)
+	}
+
 	db, err := postgres.NewClient(context.Background(), config)
 	if err != nil {
 		logger.Error(err.Error())
@@ -43,7 +50,7 @@ func main() {
 
 	defer db.Close()
 
-	app := app.NewApp(config, logger, db)
+	app := app.NewApp(config, logger, db, s3client)
 
 	app.Run()
 }
