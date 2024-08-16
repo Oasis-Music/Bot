@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import Button from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import { useFormContext } from 'react-hook-form'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'

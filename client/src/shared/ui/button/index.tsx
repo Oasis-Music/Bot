@@ -1,8 +1,8 @@
-import { ReactNode, forwardRef, RefObject, MouseEvent, ForwardRefRenderFunction } from 'react'
+import { ReactNode, forwardRef, RefObject, MouseEvent } from 'react'
 import clsx from 'clsx'
 import { Loader } from '@/shared/ui/loader'
 
-import styles from './button.module.scss'
+import styles from './styles.module.scss'
 
 const enum ButtonColor {
   primary = 'primary',
@@ -11,7 +11,7 @@ const enum ButtonColor {
   danger = 'danger'
 }
 
-interface BottonProps {
+interface ButtonProps {
   to?: string
   type?: 'button' | 'reset' | 'submit'
   color?: keyof typeof ButtonColor
@@ -28,7 +28,7 @@ interface BottonProps {
   onClick?(event: MouseEvent<HTMLButtonElement>): void
 }
 
-const Button: ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     loading,
     children,
@@ -42,7 +42,7 @@ const Button: ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     ...otherProps
   },
   ref
-) => {
+) {
   let colorClass = styles.primary
 
   switch (color) {
@@ -87,6 +87,6 @@ const Button: ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       {!loading && endIcon}
     </button>
   )
-}
+})
 
-export default forwardRef(Button)
+// export default forwardRef(Button)

@@ -1,4 +1,4 @@
-import Button from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import blushEmoji from '@/shared/assets/rastr/blush.png'
 import { TextInput } from '@/shared/ui/text-input'
 import { useFormContext } from 'react-hook-form'

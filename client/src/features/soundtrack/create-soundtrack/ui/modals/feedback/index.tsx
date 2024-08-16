@@ -1,6 +1,6 @@
 import sunglassesEmoji from '@/shared/assets/rastr/tada.png'
 import thinkingEmoji from '@/shared/assets/rastr/thinking.png'
-import Button from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import { Modal } from '@/widgets/modal'
 import { useTranslation } from 'react-i18next'
 
