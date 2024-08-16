@@ -28,7 +28,7 @@ export function List({
   if (isFirstLoad) {
     return (
       <div className={styles.container}>
-        <Loader fallback />
+        <Loader />
       </div>
     )
   }

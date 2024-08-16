@@ -1,4 +1,4 @@
-import Button from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import blushEmoji from '@/shared/assets/rastr/blush.png'
 import { TextInput } from '@/shared/ui/text-input'
 import { useFormContext } from 'react-hook-form'
@@ -52,7 +52,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
         onClick={onNextStep}
         className={styles.nextButton}
       >
-        {t('pages.upload.info.nextBotton')}
+        {t('pages.upload.info.nextButton')}
       </Button>
       <RedirectButton onAlert={onAlert}>{t('pages.upload.info.link')}</RedirectButton>
     </div>

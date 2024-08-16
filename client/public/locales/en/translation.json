@@ -37,7 +37,7 @@
         "subTitle": "Add some information about the track",
         "titleField": "Title",
         "authorField": "Author",
-        "nextBotton": "Continue",
+        "nextButton": "Continue",
         "link": "Back on main",
         "emojiAlt": "emoji - smile"
       },

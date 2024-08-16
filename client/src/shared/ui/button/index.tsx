@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react'
+import { ReactNode, forwardRef, RefObject, MouseEvent } from 'react'
 import clsx from 'clsx'
 import { Loader } from '@/shared/ui/loader'
 
-import styles from './button.module.scss'
+import styles from './styles.module.scss'
 
 const enum ButtonColor {
   primary = 'primary',
@@ -11,29 +11,29 @@ const enum ButtonColor {
   danger = 'danger'
 }
 
-interface BottonProps {
+interface ButtonProps {
   to?: string
   type?: 'button' | 'reset' | 'submit'
   color?: keyof typeof ButtonColor
-  children: React.ReactNode
-  startIcon?: React.ReactNode
-  endIcon?: React.ReactNode
+  children: ReactNode
+  startIcon?: ReactNode
+  endIcon?: ReactNode
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  withShadow?: boolean
+  glow?: boolean
   tabIndex?: number
   className?: string
-  ref?: React.RefObject<HTMLButtonElement> | null
-  onClick?(event: React.MouseEvent<HTMLButtonElement>): void
+  ref?: RefObject<HTMLButtonElement> | null
+  onClick?(event: MouseEvent<HTMLButtonElement>): void
 }
 
-const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   {
     loading,
     children,
     color = ButtonColor.primary,
-    withShadow = false,
+    glow = false,
     startIcon,
     endIcon,
     type = 'button',
@@ -42,10 +42,13 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
     ...otherProps
   },
   ref
-) => {
+) {
   let colorClass = styles.primary
 
   switch (color) {
+    case ButtonColor.primary:
+      colorClass = clsx(colorClass, glow && styles.glow)
+      break
     case ButtonColor.secondary:
       colorClass = styles.secondary
       break
@@ -64,8 +67,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       className={clsx(
         {
           [styles.base]: true,
-          [styles.fullWidth]: fullWidth,
-          [styles.shadow]: withShadow
+          [styles.fullWidth]: fullWidth
         },
         className,
         colorClass
@@ -75,7 +77,9 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       {!loading && startIcon}
       {loading ? (
         <div className={styles.loader}>
-          <Loader dark={color === ButtonColor.primary} />
+          <div className={styles.loader}>
+            <Loader adaptive />
+          </div>
         </div>
       ) : (
         <span>{children}</span>
@@ -83,6 +87,6 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       {!loading && endIcon}
     </button>
   )
-}
+})
 
-export default forwardRef(Button)
+// export default forwardRef(Button)

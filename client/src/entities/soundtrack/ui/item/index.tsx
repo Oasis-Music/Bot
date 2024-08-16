@@ -1,5 +1,3 @@
-import React from 'react'
-import { Loader } from '@/shared/ui/loader'
 import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { timeFormater } from '@/shared/lib/helpers'
 
@@ -32,7 +30,7 @@ export function SoundtrackItem({
         <p className={styles.author}>{author}</p>
       </div>
       <div className={styles.sideBox}>
-        {isPlaying ? <Loader fallback /> : <span>{timeFormater(duration)}</span>}
+        {isPlaying ? <div className={styles.loader} /> : <span>{timeFormater(duration)}</span>}
       </div>
     </div>
   )

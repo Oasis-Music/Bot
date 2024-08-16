@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from 'react'
-import Button from '@/shared/ui/button'
+import { ReactNode, useRef, useEffect } from 'react'
+import { Button } from '@/shared/ui/button'
 import styles from './modal.module.scss'
 
 interface BaseProps {
   open: boolean
-  children: React.ReactNode
+  children: ReactNode
 }
 
 type ControlsProps =

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef, ComponentPropsWithRef, ForwardRefRenderFunction } from 'react'
 import clsx from 'clsx'
 import Trackline from './Trackline'
 import { TopControls } from './TopControls'
@@ -10,7 +10,7 @@ import { currentTrackVar } from '@/entities/soundtrack'
 
 import styles from './player.module.scss'
 
-interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
+interface PlayerProps extends ComponentPropsWithRef<'div'> {
   currentTime: string
   isOpen: boolean
   isReadyForPlay: boolean
@@ -24,7 +24,7 @@ interface PlayerProps extends React.ComponentPropsWithRef<'div'> {
   onRandom(): void
 }
 
-const Player: React.ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
+const Player: ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   {
     isOpen,
     currentTime,

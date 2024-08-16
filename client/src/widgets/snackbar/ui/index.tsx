@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import clsx from 'clsx'
 import CheckIcon from '@/shared/assets/svg/check-circle.svg?react'
 import TimesIcon from '@/shared/assets/svg/times-circle.svg?react'
@@ -14,13 +14,13 @@ const NOTIFICATION_ICON = {
   error: TimesIcon
 }
 
-export function Snackbar({ children }: { children: React.ReactNode }) {
+export function Snackbar({ children }: { children: ReactNode }) {
   const isOpen = useReactiveVar(isSnackbarOpenVar)
   const event = useReactiveVar(snackbarEventVar)
 
   const { openSnackbar, closeSnackbar } = SnackbarStore
 
-  // React.useEffect(() => {
+  // useEffect(() => {
   //   const t = setTimeout(() => {
   //     closeSnackbar()
   //   }, 5000)
