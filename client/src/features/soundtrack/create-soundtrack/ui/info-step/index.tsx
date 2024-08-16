@@ -52,7 +52,7 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
         onClick={onNextStep}
         className={styles.nextButton}
       >
-        {t('pages.upload.info.nextBotton')}
+        {t('pages.upload.info.nextButton')}
       </Button>
       <RedirectButton onAlert={onAlert}>{t('pages.upload.info.link')}</RedirectButton>
     </div>
