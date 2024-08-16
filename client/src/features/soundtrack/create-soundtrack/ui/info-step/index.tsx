@@ -48,7 +48,6 @@ export function Info({ onNextStep, onAlert }: InfoProps) {
       </div>
       <Button
         disabled={!!(errors.title || errors.author)}
-        color="secondary"
         onClick={onNextStep}
         className={styles.nextButton}
       >

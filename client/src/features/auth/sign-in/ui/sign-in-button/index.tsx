@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import clsx from 'clsx'
-import Button from '@/shared/ui/button'
+import { Button } from '@/shared/ui/button'
 import { useSignIn } from '../../model'
 import { useTranslation } from 'react-i18next'
 import { useAuthQuery } from '../../api'

@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import clsx from 'clsx'
 import AudioPlayer from '@/player'
-import CheckIcon from '@/shared/assets/svg/check-circle.svg?react'
-import AudioPlaceholderIcon from '@/shared/assets/svg/audio_placeholder.svg?react'
+import Mp3FileIcon from '@/shared/assets/svg/file-mp3.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
@@ -123,8 +122,8 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
         <input {...getInputProps()} />
         <div className={styles.plug}>
           <div className={styles.plugIconBox}>
-            <SvgIcon className={styles.plugIcon}>
-              {audio?.size ? <CheckIcon /> : <AudioPlaceholderIcon />}
+            <SvgIcon className={clsx(styles.plugIcon, audio?.size && styles.done)}>
+              <Mp3FileIcon />
             </SvgIcon>
           </div>
           <div className={styles.plugInfo}>
