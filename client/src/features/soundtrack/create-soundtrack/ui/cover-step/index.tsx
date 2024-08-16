@@ -1,9 +1,8 @@
 import { useState, useEffect, MouseEvent } from 'react'
 import clsx from 'clsx'
-import { SvgIcon } from '@/shared/ui/svg-icon'
 import DeleteIcon from '@/shared/assets/svg/trash.svg?react'
+import { SvgIcon } from '@/shared/ui/svg-icon'
 import { StepControls } from '../common/step-controls'
-import CoverPlaceholderIcon from '@/shared/assets/svg/cover_placeholder.svg?react'
 import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { IconButton } from '@/shared/ui/icon-button'
@@ -161,9 +160,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
           />
         ) : (
           <div className={styles.plug}>
-            <SvgIcon className={styles.plugIcon}>
-              <CoverPlaceholderIcon />
-            </SvgIcon>
+            <div className={styles.loader} />
             <div className={styles.plugInfo}>
               <p>{t('pages.upload.cover.dropzone.title')}</p>
               <ul>

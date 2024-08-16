@@ -39,7 +39,6 @@ export function StepControls({
         <Button
           loading={loading}
           type={actionButtonType}
-          color="secondary"
           tabIndex={-1}
           disabled={disabled}
           fullWidth

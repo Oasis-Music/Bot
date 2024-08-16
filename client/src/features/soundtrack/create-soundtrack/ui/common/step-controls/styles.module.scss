@@ -27,8 +27,11 @@
 .backButton {
   font-size: 20px;
   border-radius: 0;
-  padding: 10px;
+  padding: 5px 10px;
+  background-color: #fff;
   flex-basis: 30%;
+  color: #101318;
+  border-right: 1px solid #101318;
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   & > div {
