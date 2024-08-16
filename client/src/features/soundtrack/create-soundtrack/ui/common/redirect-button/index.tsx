@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import Button from '@/shared/ui/button'
 import { useFormContext } from 'react-hook-form'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
@@ -7,7 +8,7 @@ import styles from './styles.module.scss'
 
 interface RedirectButtonProps {
   onAlert(): void
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export function RedirectButton({ onAlert, children }: RedirectButtonProps) {

@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from './Terms.module.scss'
 
 const APP_NAME = 'Oasis'

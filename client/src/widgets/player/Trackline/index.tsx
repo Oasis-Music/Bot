@@ -1,12 +1,12 @@
-import React, { forwardRef } from 'react'
+import { forwardRef, ComponentPropsWithRef, ForwardRefRenderFunction } from 'react'
 import styles from './Trackline.module.scss'
 
-interface TracklineProps extends React.ComponentPropsWithRef<'div'> {
+interface TracklineProps extends ComponentPropsWithRef<'div'> {
   currentTime: string
   duration: string
 }
 
-const Trackline: React.ForwardRefRenderFunction<HTMLDivElement, TracklineProps> = (
+const Trackline: ForwardRefRenderFunction<HTMLDivElement, TracklineProps> = (
   { currentTime, duration },
   waveContainerRef
 ) => {

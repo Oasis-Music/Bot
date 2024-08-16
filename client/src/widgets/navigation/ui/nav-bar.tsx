@@ -1,4 +1,3 @@
-import React from 'react'
 import SearchIcon from '@/shared/assets/svg/search.svg?react'
 import MusicListIcon from '@/shared/assets/svg/list-music.svg?react'
 import CogIcon from '@/shared/assets/svg/cog.svg?react'

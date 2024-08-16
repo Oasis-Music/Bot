@@ -1,4 +1,3 @@
-import React from 'react'
 import clsx from 'clsx'
 import MusicListIcon from '@/shared/assets/svg/list-music.svg?react'
 import ArrowIcon from '@/shared/assets/svg/angle-arrow.svg?react'

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, MouseEvent } from 'react'
 import clsx from 'clsx'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import DeleteIcon from '@/shared/assets/svg/trash.svg?react'
@@ -7,9 +7,9 @@ import CoverPlaceholderIcon from '@/shared/assets/svg/cover_placeholder.svg?reac
 import { useTranslation } from 'react-i18next'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { IconButton } from '@/shared/ui/icon-button'
+import { useFormContext } from 'react-hook-form'
 
 import styles from './styles.module.scss'
-import { useFormContext } from 'react-hook-form'
 
 interface CoverProps {
   onNextStep(): void
@@ -125,7 +125,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
     onDropRejected: handleDropReject
   })
 
-  const handleRemoveClick = (event: React.MouseEvent<HTMLElement>): void => {
+  const handleRemoveClick = (event: MouseEvent<HTMLElement>): void => {
     event.stopPropagation()
     setDropError('')
 

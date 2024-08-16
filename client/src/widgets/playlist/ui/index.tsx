@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { SoundtrackItem } from '@/entities/soundtrack'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'

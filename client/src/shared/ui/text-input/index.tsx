@@ -1,4 +1,4 @@
-import React from 'react'
+import { ChangeEvent } from 'react'
 import clsx from 'clsx'
 import { UseFormRegister, Path, FieldValues, FieldErrors } from 'react-hook-form'
 
@@ -16,7 +16,7 @@ export interface TextInputProps<T extends FieldValues> {
   autoComplete?: string
   hiddenLabel?: boolean
   hideErrorMessage?: boolean
-  onChange?(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
+  onChange?(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
   register: UseFormRegister<T>
   errors: FieldErrors
 }
