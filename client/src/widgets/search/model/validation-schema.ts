@@ -1,7 +1,7 @@
-import { Input, object, string, toTrimmed, maxLength, minLength } from 'valibot'
+import * as v from 'valibot'
 
-export const SearchSchema = object({
-  searchQuery: string([toTrimmed(), minLength(1, '____'), maxLength(70, '* максимум 70 символов')])
+export const searchSchema = v.object({
+  searchQuery: v.pipe(v.string(), v.trim(), v.nonEmpty(), v.maxLength(70, '* максимум 70 символов'))
 })
 
-export type SearchSchemaType = Input<typeof SearchSchema>
+export type SearchSchemaType = v.InferOutput<typeof searchSchema>

@@ -1,25 +1,27 @@
-import { object, string, minLength, maxLength, optional, instance, toTrimmed } from 'valibot'
+import * as v from 'valibot'
 
 export const validationSchema = [
   // step #1
-  object({
-    title: string([
-      toTrimmed(),
-      minLength(3, '* минимум 3 символова'),
-      maxLength(70, '* максимум 70 символов')
-    ]),
-    author: string([
-      toTrimmed(),
-      minLength(3, '* минимум 3 символова'),
-      maxLength(70, '* максимум 70 символов')
-    ])
+  v.object({
+    title: v.pipe(
+      v.string(),
+      v.trim(),
+      v.minLength(3, '* минимум 3 символова'),
+      v.maxLength(70, '* максимум 70 символов')
+    ),
+    author: v.pipe(
+      v.string(),
+      v.trim(),
+      v.minLength(3, '* минимум 3 символова'),
+      v.maxLength(70, '* максимум 70 символов')
+    )
   }),
   // step #2
-  object({
-    coverImage: optional(instance(File))
+  v.object({
+    coverImage: v.optional(v.instance(File))
   }),
   // step #3
-  object({
-    audioFile: instance(File)
+  v.object({
+    audioFile: v.instance(File)
   })
 ]

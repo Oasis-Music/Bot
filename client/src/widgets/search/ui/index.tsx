@@ -2,7 +2,7 @@ import SearchIcon from '@/shared/assets/svg/search.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { SearchSchema, type SearchSchemaType } from '../model/validation-schema'
+import { searchSchema, type SearchSchemaType } from '../model/validation-schema'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import styles from './search.module.scss'
@@ -14,7 +14,7 @@ interface SearchProps {
 
 export function Search({ placeholder, onSubmit }: SearchProps) {
   const { register, handleSubmit } = useForm<SearchSchemaType>({
-    resolver: valibotResolver(SearchSchema)
+    resolver: valibotResolver(searchSchema)
   })
 
   const handleSearch: SubmitHandler<SearchSchemaType> = (value) => {

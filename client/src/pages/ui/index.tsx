@@ -6,10 +6,10 @@ import * as v from 'valibot'
 
 const UISchema = v.object({
   simpleInput: v.string(),
-  errorInput: v.string([v.toTrimmed(), v.minLength(3, '* минимум 3 символова')])
+  errorInput: v.pipe(v.string(), v.trim(), v.minLength(3, '* минимум 3 символова'))
 })
 
-type formValues = v.Input<typeof UISchema>
+type formValues = v.InferOutput<typeof UISchema>
 
 export default function UI() {
   const handleSubmit: SubmitHandler<formValues> = (data) => {
