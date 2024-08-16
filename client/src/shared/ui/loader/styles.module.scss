@@ -1,0 +1,22 @@
+.loader {
+  width: 40px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 4px solid #dadada;
+  border-right-color: #171717;
+  animation: spin 600ms infinite linear;
+}
+
+.adaptive {
+  width: auto;
+  height: auto;
+  border-width: 2px;
+  border-right-color: var(--green-light);
+  border-right-color: inherit;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}

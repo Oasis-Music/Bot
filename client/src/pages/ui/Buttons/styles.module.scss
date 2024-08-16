@@ -1,10 +1,12 @@
 .box {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
 }
 
 .section {
-  flex-basis: 25%;
+  flex-basis: 33%;
   padding: 20px 10px;
 }
 

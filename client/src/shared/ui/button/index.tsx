@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { ReactNode, forwardRef, RefObject, MouseEvent, ForwardRefRenderFunction } from 'react'
 import clsx from 'clsx'
 import { Loader } from '@/shared/ui/loader'
 
@@ -15,25 +15,25 @@ interface BottonProps {
   to?: string
   type?: 'button' | 'reset' | 'submit'
   color?: keyof typeof ButtonColor
-  children: React.ReactNode
-  startIcon?: React.ReactNode
-  endIcon?: React.ReactNode
+  children: ReactNode
+  startIcon?: ReactNode
+  endIcon?: ReactNode
   loading?: boolean
   disabled?: boolean
   fullWidth?: boolean
-  withShadow?: boolean
+  glow?: boolean
   tabIndex?: number
   className?: string
-  ref?: React.RefObject<HTMLButtonElement> | null
-  onClick?(event: React.MouseEvent<HTMLButtonElement>): void
+  ref?: RefObject<HTMLButtonElement> | null
+  onClick?(event: MouseEvent<HTMLButtonElement>): void
 }
 
-const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
+const Button: ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
   {
     loading,
     children,
     color = ButtonColor.primary,
-    withShadow = false,
+    glow = false,
     startIcon,
     endIcon,
     type = 'button',
@@ -46,6 +46,9 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
   let colorClass = styles.primary
 
   switch (color) {
+    case ButtonColor.primary:
+      colorClass = clsx(colorClass, glow && styles.glow)
+      break
     case ButtonColor.secondary:
       colorClass = styles.secondary
       break
@@ -64,8 +67,7 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       className={clsx(
         {
           [styles.base]: true,
-          [styles.fullWidth]: fullWidth,
-          [styles.shadow]: withShadow
+          [styles.fullWidth]: fullWidth
         },
         className,
         colorClass
@@ -75,7 +77,9 @@ const Button: React.ForwardRefRenderFunction<HTMLButtonElement, BottonProps> = (
       {!loading && startIcon}
       {loading ? (
         <div className={styles.loader}>
-          <Loader dark={color === ButtonColor.primary} />
+          <div className={styles.loader}>
+            <Loader adaptive />
+          </div>
         </div>
       ) : (
         <span>{children}</span>

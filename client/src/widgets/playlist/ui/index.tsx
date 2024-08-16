@@ -104,7 +104,7 @@ export function Playlist({
                 {isLoaderRow ? (
                   hasNextPage ? (
                     <div className={styles.loader}>
-                      <Loader fallback />
+                      <Loader />
                     </div>
                   ) : (
                     'Nothing more to load'

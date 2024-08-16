@@ -1,10 +1,16 @@
-import React from 'react'
+import { useState } from 'react'
 import Button from '@/shared/ui/button'
 import EyeIcon from '@/shared/assets/svg/eye.svg?react'
 
-import styles from './Buttons.module.scss'
+import styles from './styles.module.scss'
 
 export function Buttons() {
+  const [loading, setLoading] = useState(true)
+
+  const handleLoadingState = () => {
+    setLoading((prev) => !prev)
+  }
+
   return (
     <div>
       <h4>Buttons:</h4>
@@ -15,19 +21,13 @@ export function Buttons() {
         </div>
         <div className={styles.section}>
           <p>Primary: loading</p>
-          <Button loading fullWidth>
+          <Button loading={loading} fullWidth onClick={handleLoadingState}>
             Submit
           </Button>
         </div>
         <div className={styles.section}>
           <p>Primary: loading [disabled]</p>
-          <Button disabled loading fullWidth>
-            Submit
-          </Button>
-        </div>
-        <div className={styles.section}>
-          <p>Primary: without a shadow</p>
-          <Button withShadow fullWidth>
+          <Button disabled loading={loading} fullWidth onClick={handleLoadingState}>
             Submit
           </Button>
         </div>
@@ -46,12 +46,15 @@ export function Buttons() {
             </Button>
           </div>
           <div className={styles.section}>
-            <p>Primary: startIcon [content width]</p>
-            <Button startIcon={<EyeIcon className={styles.eyeIcon} />}>Submit</Button>
-          </div>
-          <div className={styles.section}>
-            <p>Primary: endIcon [content width]</p>
-            <Button endIcon={<EyeIcon className={styles.eyeIcon} />}>Submit</Button>
+            <p>Primary: glow + loading</p>
+            <Button
+              glow
+              loading={loading}
+              onClick={handleLoadingState}
+              startIcon={<EyeIcon className={styles.eyeIcon} />}
+            >
+              Hello
+            </Button>
           </div>
         </div>
         {/* Secondary */}
@@ -73,34 +76,22 @@ export function Buttons() {
             Submit
           </Button>
         </div>
-        <div className={styles.section}>
-          <p>Secondary: without a shadow</p>
-          <Button color="secondary" fullWidth>
-            Submit
-          </Button>
-        </div>
         {/* Success */}
         <div className={styles.section}>
-          <p>Success: plain</p>
+          <p>Accept: regular</p>
           <Button color="accept" fullWidth>
             Submit
           </Button>
         </div>
         <div className={styles.section}>
-          <p>Success: loading</p>
-          <Button color="accept" loading fullWidth>
+          <p>Accept: loading</p>
+          <Button color="accept" loading={loading} fullWidth onClick={handleLoadingState}>
             Submit
           </Button>
         </div>
         <div className={styles.section}>
-          <p>Success: loading [disabled]</p>
-          <Button color="accept" loading disabled fullWidth>
-            Submit
-          </Button>
-        </div>
-        <div className={styles.section}>
-          <p>Success: without a shadow</p>
-          <Button color="accept" fullWidth>
+          <p>Accept: loading [disabled]</p>
+          <Button color="accept" loading={loading} disabled fullWidth onClick={handleLoadingState}>
             Submit
           </Button>
         </div>
