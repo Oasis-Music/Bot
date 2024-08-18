@@ -1,6 +1,13 @@
 package soundtrack
 
-import "errors"
+import (
+	"errors"
+	"oasis/api/internal/repo/storage/postgres"
+)
+
+var (
+	ErrStotageNoData = postgres.ErrNoData
+)
 
 // TODO: separe
 var (

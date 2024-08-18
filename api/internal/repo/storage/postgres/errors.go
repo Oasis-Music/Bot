@@ -14,5 +14,5 @@ var (
 
 var (
 	ErrNoData             = errors.New("no data found")
-	ErrSoundtrackNotFound = errors.New("soundtrack not found")
+	ErrSoundtrackNotFound = errors.New("soundtrack not found") // todo: delete it
 )
