@@ -134,6 +134,34 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 	return soundtracks, nil
 }
 
+// CheckAudioHash is the resolver for the checkAudioHash field.
+func (r *queryResolver) CheckAudioHash(ctx context.Context, hash string) (models.SoundtrackResult, error) {
+
+	track, err := r.SoundtrackService.CheckSoundtrackHash(ctx, hash)
+	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
+		return models.NotFound{
+			Message: err.Error(),
+		}, nil
+	} else if err != nil {
+		return nil, err
+	}
+
+	soundtrack := models.Soundtrack{
+		ID:        utils.IntToString(track.ID),
+		Title:     track.Title,
+		Author:    track.Author,
+		Duration:  track.Duration,
+		CoverURL:  utils.StringToNilPtr(track.CoverImage),
+		AudioURL:  track.Audio,
+		CreatorID: utils.IntToString(track.CreatorID),
+		CreatedAt: track.CreatedAt.UTC().String(),
+		Attached:  track.Attached,
+	}
+
+	return soundtrack, nil
+
+}
+
 // Creator is the resolver for the creator field.
 func (r *soundtrackResolver) Creator(ctx context.Context, obj *models.Soundtrack) (*models.User, error) {
 	return dataloader.For(ctx).GetUser(ctx, obj.CreatorID)
