@@ -4,16 +4,15 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	appConfig "oasis/api/internal/config"
 	"strconv"
 	"strings"
 
 	"oasis/api/internal/app/composite"
+	"oasis/api/internal/config"
 	"oasis/api/internal/delivery/graph/dataloader"
 	"oasis/api/internal/delivery/graph/models"
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/user"
-	"oasis/api/internal/utils"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -30,7 +29,7 @@ const (
 
 type directiveHandler func(ctx context.Context, obj interface{}, next graphql.Resolver, role []models.Role) (res interface{}, err error)
 
-func NewHandler(appComposite composite.AppComposite) http.Handler {
+func NewHandler(appConfig *config.Config, appComposite composite.AppComposite) http.Handler {
 
 	resolver := &Resolver{
 		SoundtrackService: appComposite.SoundtrackService,
@@ -45,8 +44,6 @@ func NewHandler(appComposite composite.AppComposite) http.Handler {
 
 	config.Directives.HasRole = hasRoleDirectiveHandler(appComposite.UserService)
 
-	ENVIRONMENT := utils.GetEnv("ENVIRONMENT")
-
 	srv := handler.New(NewExecutableSchema(config))
 	srv.AddTransport(transport.Websocket{
 		KeepAlivePingInterval: 10 * time.Second,
@@ -60,7 +57,7 @@ func NewHandler(appComposite composite.AppComposite) http.Handler {
 
 	srv.SetQueryCache(lru.New(1000))
 
-	if ENVIRONMENT == appConfig.DevEnv {
+	if appConfig.IsDev {
 		srv.Use(extension.Introspection{})
 	}
 

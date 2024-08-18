@@ -78,7 +78,7 @@ func (a *App) Serve() {
 		Handler:           http.TimeoutHandler(a.router, 15*time.Second, "request timeout expired"),
 	}
 
-	if a.config.Environment == config.DevEnv {
+	if a.config.IsDev {
 		log.Printf("try to connect to http://localhost%s/playground for GraphQL playground", server.Addr)
 	}
 
