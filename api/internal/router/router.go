@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func NewRouter(cfg *config.Config, authService auth.Service, appComposite composite.AppComposite) chi.Router {
+func New(cfg *config.Config, authService auth.Service, appComposite composite.AppComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{

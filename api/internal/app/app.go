@@ -5,8 +5,8 @@ import (
 	"oasis/api/internal/app/composite"
 	"oasis/api/internal/config"
 	"oasis/api/internal/delivery/rest"
-	"oasis/api/internal/delivery/router"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
+	"oasis/api/internal/router"
 	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/soundtrack"
 	"oasis/api/internal/services/user"
@@ -53,7 +53,7 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3clie
 		UserService:       userService,
 	}
 
-	router := router.NewRouter(config, authService, appComposite)
+	router := router.New(config, authService, appComposite)
 
 	restHandler := rest.NewHandler(config, authService, userService)
 	restHandler.Register(router)
