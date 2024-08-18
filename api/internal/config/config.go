@@ -12,6 +12,7 @@ const (
 )
 
 type Config struct {
+	IsDev       bool
 	Port        string `env:"ENTRY_PORT" env-required:"true"`
 	FileApiURL  string `env:"FILE_API_URL" env-required:"true"`
 	Environment string `env:"ENVIRONMENT" env-required:"true"`
@@ -29,6 +30,8 @@ func New() *Config {
 	if err != nil {
 		log.Fatalln("fail to parse config", err)
 	}
+
+	cfg.IsDev = cfg.Environment == DevEnv
 
 	return &cfg
 }

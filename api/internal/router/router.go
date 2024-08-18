@@ -11,7 +11,7 @@ import (
 	"github.com/go-chi/cors"
 )
 
-func NewRouter(cfg *config.Config, authService auth.Service, appComposite composite.AppComposite) chi.Router {
+func New(cfg *config.Config, authService auth.Service, appComposite composite.AppComposite) chi.Router {
 
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
@@ -22,10 +22,10 @@ func NewRouter(cfg *config.Config, authService auth.Service, appComposite compos
 
 	r.Group(func(r chi.Router) {
 		r.Use(authService.AuthMiddleware)
-		r.Handle("/graphql", graph.NewHandler(appComposite))
+		r.Handle("/graphql", graph.NewHandler(cfg, appComposite))
 	})
 
-	if cfg.Environment == config.DevEnv {
+	if cfg.IsDev {
 		r.Handle("/playground", playground.Handler("GraphiQL", "/graphql"))
 	}
 

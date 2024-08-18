@@ -9,7 +9,6 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
 	userStorage "oasis/api/internal/repo/storage/postgres/user"
 	"oasis/api/internal/utils"
@@ -45,7 +44,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		return nil, ErrInitDataInvalid
 	}
 
-	if u.config.Environment != config.DevEnv {
+	if u.config.IsDev {
 
 		authFresh := isTelegramAuthDateValidIn(authDate, AUTH_FRESH_IN*time.Minute)
 		if !authFresh {
