@@ -21,6 +21,7 @@ type Service interface {
 	Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
 	Delete(ctx context.Context, id int32) (bool, error)
 	Search(ctx context.Context, value string) ([]entity.Soundtrack, error)
+	CheckSoundtrackHash(ctx context.Context, hash string) (*entity.Soundtrack, error)
 }
 
 type soundtrackService struct {

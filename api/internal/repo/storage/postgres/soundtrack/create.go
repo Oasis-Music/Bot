@@ -9,7 +9,7 @@ import (
 
 func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
 
-	trackID, err := s.sqlc.CreateSoundtrack(context.Background(), sqlc.CreateSoundtrackParams{
+	trackID, err := s.sqlc.CreateSoundtrack(ctx, sqlc.CreateSoundtrackParams{
 		Title:       params.Title,
 		Author:      params.Author,
 		Duration:    params.Duration,
@@ -20,7 +20,7 @@ func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtr
 	})
 
 	if err != nil {
-		s.logger.Error("db: create_soundtrack", "err", err)
+		s.logger.Error("storage: create soundtrack", "error", err)
 		return -1, err
 	}
 

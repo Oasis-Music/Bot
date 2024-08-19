@@ -9,25 +9,23 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-func (s *soundtrackStorage) Soundtrack(ctx context.Context, trackID int32, userID int64) (*entity.Soundtrack, error) {
+func (s *soundtrackStorage) CheckSoundtrackHash(ctx context.Context, userID int64, hash string) (*entity.Soundtrack, error) {
 
 	coverURL := s.config.FileApi.CoverApiURL
 	audioURL := s.config.FileApi.AudioApiURL
 
-	data, err := s.sqlc.GetSoundtrack(ctx, sqlc.GetSoundtrackParams{
-		ID:     trackID,
+	data, err := s.sqlc.CheckSoundtrackHash(ctx, sqlc.CheckSoundtrackHashParams{
 		UserID: userID,
+		Hash:   hash,
 	})
-
 	if err == pgx.ErrNoRows {
 		return nil, postgres.ErrNoData
 	} else if err != nil {
-		s.logger.Error("storage: soundtrack by id", "error", err)
+		s.logger.Error("storage: check audio hash", "error", err)
 		return nil, err
 	}
 
 	soundtrack := postgres.SoundtrackFromDTO(coverURL, audioURL, postgres.SoundtrackDTO(data))
 
 	return &soundtrack, nil
-
 }

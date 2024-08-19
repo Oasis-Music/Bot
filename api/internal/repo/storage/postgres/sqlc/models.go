@@ -32,6 +32,12 @@ type Soundtrack struct {
 	CreatedAt   time.Time
 }
 
+type SoundtrackHash struct {
+	ID           int64
+	Hash         string
+	SoundtrackID sql.NullInt32
+}
+
 type User struct {
 	ID           int64
 	FirstName    string

@@ -18,6 +18,7 @@ extend type Query {
   soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
+  checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
 }
 
 extend type Mutation {

@@ -44,7 +44,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		return nil, ErrInitDataInvalid
 	}
 
-	if u.config.IsDev {
+	if !u.config.IsDev {
 
 		authFresh := isTelegramAuthDateValidIn(authDate, AUTH_FRESH_IN*time.Minute)
 		if !authFresh {

@@ -11,6 +11,50 @@ import (
 	"time"
 )
 
+const checkSoundtrackHash = `-- name: CheckSoundtrackHash :one
+SELECT 
+    s.id, s.title, s.author, s.duration, s.cover_image, s.audio_file, s.is_validated, s.creator_id, s.created_at,
+    EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = s.id AND user_soundtrack.user_id = $2) as attached
+FROM soundtrack s 
+INNER JOIN soundtrack_hash sh ON sh.hash = $1 AND s.id = sh.soundtrack_id
+`
+
+type CheckSoundtrackHashParams struct {
+	Hash   string
+	UserID int64
+}
+
+type CheckSoundtrackHashRow struct {
+	ID          int32
+	Title       string
+	Author      string
+	Duration    int16
+	CoverImage  sql.NullString
+	AudioFile   string
+	IsValidated bool
+	CreatorID   int64
+	CreatedAt   time.Time
+	Attached    bool
+}
+
+func (q *Queries) CheckSoundtrackHash(ctx context.Context, arg CheckSoundtrackHashParams) (CheckSoundtrackHashRow, error) {
+	row := q.db.QueryRow(ctx, checkSoundtrackHash, arg.Hash, arg.UserID)
+	var i CheckSoundtrackHashRow
+	err := row.Scan(
+		&i.ID,
+		&i.Title,
+		&i.Author,
+		&i.Duration,
+		&i.CoverImage,
+		&i.AudioFile,
+		&i.IsValidated,
+		&i.CreatorID,
+		&i.CreatedAt,
+		&i.Attached,
+	)
+	return i, err
+}
+
 const createSoundtrack = `-- name: CreateSoundtrack :one
 INSERT INTO soundtrack (
     title,

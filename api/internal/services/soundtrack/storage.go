@@ -12,6 +12,7 @@ type SoundtrackStorage interface {
 	Create(ctx context.Context, params entity.NewSoundtrack) (int32, error)
 	Delete(ctx context.Context, id int32) (bool, error)
 	Search(ctx context.Context, value string, userID int64) ([]entity.Soundtrack, error)
+	CheckSoundtrackHash(ctx context.Context, userID int64, hash string) (*entity.Soundtrack, error)
 }
 
 type S3store interface {

@@ -3,9 +3,7 @@ package soundtrack
 import (
 	"context"
 	"errors"
-	"fmt"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/repo/storage/postgres"
 )
 
 // Get soundtrack by ID
@@ -13,15 +11,15 @@ func (s *soundtrackService) Soundtrack(ctx context.Context, id int32) (*entity.S
 
 	userID := s.extractCtxUserId(ctx)
 
-	track, err := s.storage.Soundtrack(ctx, id, userID)
-	if err != nil {
-		if errors.Is(err, postgres.ErrSoundtrackNotFound) {
-			return nil, ErrSoundtrackNotFound
-		}
-
-		fmt.Println(err)
+	soundtrack, err := s.storage.Soundtrack(ctx, id, userID)
+	if errors.Is(err, ErrStotageNoData) {
+		s.logger.Warn("soundtrack: by", "id", id, "warn", "soundtrack not found")
+		return nil, ErrSoundtrackNotFound
+	} else if err != nil {
 		return nil, ErrFailedToFetchSoundtrack
 	}
 
-	return track, nil
+	s.logger.Info("soundtrack: by", "id", soundtrack.ID)
+
+	return soundtrack, nil
 }
