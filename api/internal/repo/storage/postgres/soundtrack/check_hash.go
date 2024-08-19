@@ -2,8 +2,6 @@ package soundtrack
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
@@ -20,17 +18,14 @@ func (s *soundtrackStorage) CheckSoundtrackHash(ctx context.Context, userID int6
 		UserID: userID,
 		Hash:   hash,
 	})
-
 	if err == pgx.ErrNoRows {
-		log.Println("storage/check soundtrack hash:", err)
-		return nil, fmt.Errorf("storage: %w", postgres.ErrNoData)
+		return nil, postgres.ErrNoData
 	} else if err != nil {
-		fmt.Println(err)
+		s.logger.Error("storage: check audio hash", "error", err)
 		return nil, err
 	}
 
 	soundtrack := postgres.SoundtrackFromDTO(coverURL, audioURL, postgres.SoundtrackDTO(data))
 
 	return &soundtrack, nil
-
 }

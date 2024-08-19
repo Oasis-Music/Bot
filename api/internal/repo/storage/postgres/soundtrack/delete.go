@@ -9,6 +9,7 @@ func (s *soundtrackStorage) Delete(ctx context.Context, id int32) (bool, error) 
 
 	rowsAffected, err := s.sqlc.DeleteSoundtrack(context.Background(), id)
 	if err != nil {
+		s.logger.Error("storage: soundtrack delete", "error", err)
 		return false, err
 	}
 

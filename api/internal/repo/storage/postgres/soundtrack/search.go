@@ -2,7 +2,6 @@ package soundtrack
 
 import (
 	"context"
-	"log"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
@@ -19,7 +18,7 @@ func (s *soundtrackStorage) Search(ctx context.Context, title string, userID int
 	})
 
 	if err != nil {
-		log.Println("storage/(Search) -->", err)
+		s.logger.Error("storage: search soundtrack", "error", err)
 		return nil, err
 	}
 

@@ -35,7 +35,7 @@ func (s *soundtrackStorage) AllSoundtracks(ctx context.Context, filter entity.So
 
 	query, err := queryBuilder(ALL_SOUNDTRACKS_QUERY, filter)
 	if err != nil {
-		fmt.Println(err)
+		return nil, err
 	}
 
 	rows, err := s.database.Query(context.Background(), query, filter.UserID)

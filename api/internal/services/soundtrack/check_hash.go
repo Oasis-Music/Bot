@@ -12,10 +12,13 @@ func (s *soundtrackService) CheckSoundtrackHash(ctx context.Context, hash string
 
 	soundtrack, err := s.storage.CheckSoundtrackHash(ctx, userID, hash)
 	if errors.Is(err, ErrStotageNoData) {
+		s.logger.Warn("soundtrack: check audio hash", "warn", "hash doesn't exist")
 		return nil, ErrSoundtrackNotFound
 	} else if err != nil {
 		return nil, ErrFailedToFetchSoundtrack
 	}
+
+	s.logger.Info("soundtrack: by audio hash", "id", soundtrack.ID)
 
 	return soundtrack, nil
 

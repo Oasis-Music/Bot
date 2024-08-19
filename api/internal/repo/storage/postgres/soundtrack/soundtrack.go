@@ -2,8 +2,6 @@ package soundtrack
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
@@ -16,16 +14,15 @@ func (s *soundtrackStorage) Soundtrack(ctx context.Context, trackID int32, userI
 	coverURL := s.config.FileApi.CoverApiURL
 	audioURL := s.config.FileApi.AudioApiURL
 
-	data, err := s.sqlc.GetSoundtrack(context.Background(), sqlc.GetSoundtrackParams{
+	data, err := s.sqlc.GetSoundtrack(ctx, sqlc.GetSoundtrackParams{
 		ID:     trackID,
 		UserID: userID,
 	})
 
 	if err == pgx.ErrNoRows {
-		log.Println("storage/GetSoundtrack -->", err)
-		return nil, fmt.Errorf("storage: %w", postgres.ErrSoundtrackNotFound)
+		return nil, postgres.ErrNoData
 	} else if err != nil {
-		fmt.Println(err)
+		s.logger.Error("storage: soundtrack by id", "error", err)
 		return nil, err
 	}
 
