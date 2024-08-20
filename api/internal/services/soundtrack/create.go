@@ -99,14 +99,14 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		coverFileName = coverName
 	}
 
-	audioFile, audioMeta, err := s.proccessAudio(input.Audiofile)
+	audioData, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
-		s.logger.Error("proccess audio", "err", err)
+		s.logger.Error("read audio file error", "err", err)
 		return false, errors.New("fail to proccess audio")
 	}
 
 	// check for audio existence
-	hash, err := utils.GetSha256Hash(bytes.NewReader(audioFile.Bytes()))
+	hash, err := utils.GetSha256Hash(bytes.NewReader(audioData))
 	if err != nil {
 		return false, errors.New("cannot generate audio hash")
 	}
@@ -116,6 +116,12 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	soundtrack, _ := s.CheckHash(ctx, hash)
 	if soundtrack != nil {
 		return false, ErrSoundtrackAlreadyExists
+	}
+
+	audioFile, audioMeta, err := s.proccessAudio(audioData)
+	if err != nil {
+		s.logger.Error("proccess audio", "err", err)
+		return false, errors.New("fail to proccess audio")
 	}
 
 	trackDuration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
@@ -210,12 +216,7 @@ func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
 	return resultBuffer, nil
 }
 
-func (s *soundtrackService) proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
-
-	buf, err := io.ReadAll(track.File)
-	if err != nil {
-		return nil, nil, err
-	}
+func (s *soundtrackService) proccessAudio(track []byte) (*bytes.Buffer, *AudioMetaData, error) {
 
 	// cat in.mp3 | ffmpeg -hide_banner  -i pipe:0 -f mp3 -map 0:a -c:a copy -map_metadata -1 pipe:1 > out.mp3
 	cmd := exec.Command(
@@ -232,10 +233,10 @@ func (s *soundtrackService) proccessAudio(track entity.Upload) (*bytes.Buffer, *
 
 	var resultBuffer = bytes.NewBuffer(make([]byte, 0, 2*1024*1024)) // 2 mb pre-allocation
 
-	cmd.Stdin = bytes.NewReader(buf)
+	cmd.Stdin = bytes.NewReader(track)
 	cmd.Stdout = resultBuffer
 
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
 		// for invalid ext: exit status 234
 		return nil, nil, err
