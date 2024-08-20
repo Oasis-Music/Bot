@@ -33,3 +33,7 @@ SELECT
     EXISTS(SELECT True FROM user_soundtrack WHERE soundtrack_id = s.id AND user_soundtrack.user_id = $2) as attached
 FROM soundtrack s 
 INNER JOIN soundtrack_hash sh ON sh.hash = $1 AND s.id = sh.soundtrack_id;
+
+
+-- name: SaveSoundtrackHash :exec
+INSERT INTO soundtrack_hash (hash, soundtrack_id) VALUES ($1, $2);

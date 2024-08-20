@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"crypto/sha256"
 	"fmt"
+	"io"
 	"strconv"
 )
 
@@ -10,6 +12,7 @@ func IntToString[T int32 | int64](n T) string {
 }
 
 func StrToInt32(s string) (int32, error) {
+
 	n, err := strconv.ParseInt(s, 10, 32)
 	if err != nil {
 		return 0, fmt.Errorf("failed to convert %q to int32", s)
@@ -32,4 +35,14 @@ func StringToNilPtr(s string) *string {
 		return nil
 	}
 	return &s
+}
+
+func GetSha256Hash(src io.Reader) (string, error) {
+	h := sha256.New()
+
+	if _, err := io.Copy(h, src); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }

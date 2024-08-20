@@ -17,5 +17,5 @@ CREATE TABLE soundtrack_hash (
 	id BIGSERIAL PRIMARY KEY,
 	hash TEXT UNIQUE NOT NULL,
 	soundtrack_id INT, -- todo: make not NULL then
-	CONSTRAINT fk_soundtrack_id FOREIGN KEY (soundtrack_id) REFERENCES soundtrack(id)
+	CONSTRAINT fk_soundtrack_id FOREIGN KEY (soundtrack_id) REFERENCES soundtrack(id) ON DELETE CASCADE
 );

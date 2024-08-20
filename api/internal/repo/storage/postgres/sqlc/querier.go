@@ -21,6 +21,7 @@ type Querier interface {
 	GetUserRole(ctx context.Context) (string, error)
 	GetUsersByID(ctx context.Context, dollar_1 []int64) ([]User, error)
 	SaveRefreshToken(ctx context.Context, refreshTokenID string) error
+	SaveSoundtrackHash(ctx context.Context, arg SaveSoundtrackHashParams) error
 	UnattachSoundtrack(ctx context.Context, arg UnattachSoundtrackParams) (int64, error)
 	UpdateUser(ctx context.Context, arg UpdateUserParams) (UpdateUserRow, error)
 	UpdateVisitDate(ctx context.Context, arg UpdateVisitDateParams) error
