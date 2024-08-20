@@ -204,3 +204,17 @@ func (q *Queries) GetSoundtrackByTitle(ctx context.Context, arg GetSoundtrackByT
 	}
 	return items, nil
 }
+
+const saveSoundtrackHash = `-- name: SaveSoundtrackHash :exec
+INSERT INTO soundtrack_hash (hash, soundtrack_id) VALUES ($1, $2)
+`
+
+type SaveSoundtrackHashParams struct {
+	Hash         string
+	SoundtrackID sql.NullInt32
+}
+
+func (q *Queries) SaveSoundtrackHash(ctx context.Context, arg SaveSoundtrackHashParams) error {
+	_, err := q.db.Exec(ctx, saveSoundtrackHash, arg.Hash, arg.SoundtrackID)
+	return err
+}

@@ -12,6 +12,7 @@ import (
 
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/s3"
+	"oasis/api/internal/utils"
 )
 
 const (
@@ -98,10 +99,23 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		coverFileName = coverName
 	}
 
-	audioFile, audioMeta, err := proccessAudio(input.Audiofile)
+	audioFile, audioMeta, err := s.proccessAudio(input.Audiofile)
 	if err != nil {
 		s.logger.Error("proccess audio", "err", err)
 		return false, errors.New("fail to proccess audio")
+	}
+
+	// check for audio existence
+	hash, err := utils.GetSha256Hash(bytes.NewReader(audioFile.Bytes()))
+	if err != nil {
+		return false, errors.New("cannot generate audio hash")
+	}
+
+	s.logger.Info("Get hash", "hash", hash)
+
+	soundtrack, _ := s.CheckSoundtrackHash(ctx, hash)
+	if soundtrack != nil {
+		return false, ErrSoundtrackAlreadyExists
 	}
 
 	trackDuration, err := trackDurationToInt16(audioMeta.Format.DurationSeconds)
@@ -143,7 +157,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		newTrack.CoverImage = &coverFileName
 	}
 
-	newTrackId, err := s.storage.Create(ctx, newTrack)
+	newTrackId, err := s.storage.Create(ctx, newTrack, hash)
 	if err != nil {
 		return false, ErrSoundtrackCreate
 	}
@@ -196,7 +210,8 @@ func proccessCover(cover *entity.Upload) (*bytes.Buffer, error) {
 	return resultBuffer, nil
 }
 
-func proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
+func (s *soundtrackService) proccessAudio(track entity.Upload) (*bytes.Buffer, *AudioMetaData, error) {
+
 	buf, err := io.ReadAll(track.File)
 	if err != nil {
 		return nil, nil, err

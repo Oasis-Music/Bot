@@ -9,17 +9,17 @@ import (
 )
 
 type soundtrackStorage struct {
-	config   *config.Config
-	logger   *slog.Logger
-	database *pgxpool.Pool
-	sqlc     *sqlc.Queries
+	config *config.Config
+	logger *slog.Logger
+	db     *pgxpool.Pool
+	sqlc   *sqlc.Queries
 }
 
 func New(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, sqlc *sqlc.Queries) *soundtrackStorage {
 	return &soundtrackStorage{
-		config:   config,
-		logger:   logger,
-		database: db,
-		sqlc:     sqlc,
+		config: config,
+		logger: logger,
+		db:     db,
+		sqlc:   sqlc,
 	}
 }

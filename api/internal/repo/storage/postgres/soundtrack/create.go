@@ -3,24 +3,49 @@ package soundtrack
 import (
 	"context"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/repo/storage/postgres"
 	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
 )
 
-func (s *soundtrackStorage) Create(ctx context.Context, params entity.NewSoundtrack) (int32, error) {
+func (s *soundtrackStorage) Create(ctx context.Context, track entity.NewSoundtrack, hash string) (int32, error) {
 
-	trackID, err := s.sqlc.CreateSoundtrack(ctx, sqlc.CreateSoundtrackParams{
-		Title:       params.Title,
-		Author:      params.Author,
-		Duration:    params.Duration,
-		CoverImage:  dbnull.NewNullString(params.CoverImage),
-		AudioFile:   params.AudioFile,
-		IsValidated: params.IsValidated,
-		CreatorID:   params.CreatorID,
+	tx, err := s.db.Begin(ctx)
+	if err != nil {
+		s.logger.Error("storage: create soundtrack/begin", "error", err)
+		return -1, err
+	}
+
+	defer tx.Rollback(ctx)
+
+	qtx := s.sqlc.WithTx(tx)
+
+	trackID, err := qtx.CreateSoundtrack(ctx, sqlc.CreateSoundtrackParams{
+		Title:       track.Title,
+		Author:      track.Author,
+		Duration:    track.Duration,
+		CoverImage:  dbnull.NewNullString(track.CoverImage),
+		AudioFile:   track.AudioFile,
+		IsValidated: track.IsValidated,
+		CreatorID:   track.CreatorID,
 	})
-
 	if err != nil {
 		s.logger.Error("storage: create soundtrack", "error", err)
+		return -1, err
+	}
+
+	err = qtx.SaveSoundtrackHash(ctx, sqlc.SaveSoundtrackHashParams{
+		Hash:         hash,
+		SoundtrackID: postgres.NewNullInt32(trackID),
+	})
+	if err != nil {
+		s.logger.Error("storage: create soundtrack/save hash", "error", err)
+		return -1, err
+	}
+
+	err = tx.Commit(ctx)
+	if err != nil {
+		s.logger.Error("storage: create soundtrack/commit", "error", err)
 		return -1, err
 	}
 
