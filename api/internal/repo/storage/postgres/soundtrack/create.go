@@ -4,7 +4,6 @@ import (
 	"context"
 	"oasis/api/internal/entity"
 	"oasis/api/internal/repo/storage/postgres"
-	dbnull "oasis/api/internal/repo/storage/postgres/db-null"
 	"oasis/api/internal/repo/storage/postgres/sqlc"
 )
 
@@ -24,7 +23,7 @@ func (s *soundtrackStorage) Create(ctx context.Context, track entity.NewSoundtra
 		Title:       track.Title,
 		Author:      track.Author,
 		Duration:    track.Duration,
-		CoverImage:  dbnull.NewNullString(track.CoverImage),
+		CoverImage:  postgres.NewNullPtrString(track.CoverImage),
 		AudioFile:   track.AudioFile,
 		IsValidated: track.IsValidated,
 		CreatorID:   track.CreatorID,
