@@ -113,7 +113,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	s.logger.Info("Get hash", "hash", hash)
 
-	soundtrack, _ := s.CheckSoundtrackHash(ctx, hash)
+	soundtrack, _ := s.CheckHash(ctx, hash)
 	if soundtrack != nil {
 		return false, ErrSoundtrackAlreadyExists
 	}

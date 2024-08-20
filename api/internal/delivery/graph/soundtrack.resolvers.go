@@ -136,7 +136,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 
 // CheckAudioHash is the resolver for the checkAudioHash field.
 func (r *queryResolver) CheckAudioHash(ctx context.Context, hash string) (models.SoundtrackResult, error) {
-	track, err := r.SoundtrackService.CheckSoundtrackHash(ctx, hash)
+	track, err := r.SoundtrackService.CheckHash(ctx, hash)
 	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
 		return models.NotFound{
 			Message: err.Error(),

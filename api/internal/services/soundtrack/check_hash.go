@@ -6,11 +6,11 @@ import (
 	"oasis/api/internal/entity"
 )
 
-func (s *soundtrackService) CheckSoundtrackHash(ctx context.Context, hash string) (*entity.Soundtrack, error) {
+func (s *soundtrackService) CheckHash(ctx context.Context, hash string) (*entity.Soundtrack, error) {
 
 	userID := s.extractCtxUserId(ctx)
 
-	soundtrack, err := s.storage.CheckSoundtrackHash(ctx, userID, hash)
+	soundtrack, err := s.storage.CheckHash(ctx, userID, hash)
 	if errors.Is(err, ErrStotageNoData) {
 		s.logger.Warn("soundtrack: check audio hash", "warn", "hash doesn't exist")
 		return nil, ErrSoundtrackNotFound

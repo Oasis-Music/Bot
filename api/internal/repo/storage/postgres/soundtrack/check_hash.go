@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v4"
 )
 
-func (s *soundtrackStorage) CheckSoundtrackHash(ctx context.Context, userID int64, hash string) (*entity.Soundtrack, error) {
+func (s *soundtrackStorage) CheckHash(ctx context.Context, userID int64, hash string) (*entity.Soundtrack, error) {
 
 	coverURL := s.config.FileApi.CoverApiURL
 	audioURL := s.config.FileApi.AudioApiURL
