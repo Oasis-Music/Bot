@@ -5,6 +5,7 @@ import Mp3FileIcon from '@/shared/assets/svg/file-mp3.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
+import { sha256 } from 'js-sha256'
 
 import styles from './styles.module.scss'
 
@@ -54,7 +55,7 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
 
   const [dropError, setDropError] = useState<string>('')
 
-  const handleFileDrop = (acceptedFiles: globalThis.File[]) => {
+  const handleFileDrop = (acceptedFiles: File[]) => {
     if (audio) {
       if (player?.isPlaying()) onStop()
     }
@@ -82,6 +83,22 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
       }
 
       reader.readAsDataURL(file)
+
+      // for check
+
+      const arrayBufferReader = new FileReader()
+
+      arrayBufferReader.onload = function (evt) {
+        if (evt.target) {
+          const data = new Uint8Array(evt.target.result as ArrayBuffer)
+
+          const audioHash = sha256(data)
+
+          console.log('hash', audioHash)
+        }
+      }
+
+      arrayBufferReader.readAsArrayBuffer(file)
     }
   }
 

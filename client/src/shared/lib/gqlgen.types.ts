@@ -71,6 +71,7 @@ export type NotFound = {
 export type Query = {
   __typename?: 'Query'
   authorizeUser: AuthorizationResponse
+  checkAudioHash?: Maybe<SoundtrackResult>
   searchSoundtrack: Array<Soundtrack>
   soundtrack?: Maybe<SoundtrackResult>
   soundtracks: SoundtracksResponse
@@ -80,6 +81,10 @@ export type Query = {
 
 export type QueryAuthorizeUserArgs = {
   initData: Scalars['String']['input']
+}
+
+export type QueryCheckAudioHashArgs = {
+  hash: Scalars['String']['input']
 }
 
 export type QuerySearchSoundtrackArgs = {
