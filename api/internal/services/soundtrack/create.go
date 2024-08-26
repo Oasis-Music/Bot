@@ -106,7 +106,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	}
 
 	// check for audio existence
-	hash, err := utils.GetSha256Hash(bytes.NewReader(audioData))
+	hash, err := utils.GetMD5Hash(bytes.NewReader(audioData))
 	if err != nil {
 		return false, errors.New("cannot generate audio hash")
 	}

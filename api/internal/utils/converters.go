@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"crypto/sha256"
+	"crypto/md5"
 	"fmt"
 	"io"
 	"strconv"
@@ -37,8 +37,8 @@ func StringToNilPtr(s string) *string {
 	return &s
 }
 
-func GetSha256Hash(src io.Reader) (string, error) {
-	h := sha256.New()
+func GetMD5Hash(src io.Reader) (string, error) {
+	h := md5.New()
 
 	if _, err := io.Copy(h, src); err != nil {
 		return "", err
