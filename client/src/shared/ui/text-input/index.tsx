@@ -2,7 +2,7 @@ import { ChangeEvent } from 'react'
 import clsx from 'clsx'
 import { UseFormRegister, Path, FieldValues, FieldErrors } from 'react-hook-form'
 
-import styles from './textInput.module.scss'
+import styles from './styles.module.scss'
 
 export interface TextInputProps<T extends FieldValues> {
   name: Path<T>
