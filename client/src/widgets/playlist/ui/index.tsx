@@ -5,10 +5,10 @@ import { currentTrackVar } from '@/entities/soundtrack'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { PlaylistType, Soundtrack } from '@/entities/soundtrack'
-
-import styles from './playlist.module.scss'
-import { usePlaySoundtrack } from '@/features/soundtrack/play'
+import { usePlaySoundtrack } from '@/entities/soundtrack'
 import { useMainPlaylist } from '@/features/soundtrack/bind-main-playlist'
+
+import styles from './styles.module.scss'
 
 interface PlaylistProps {
   relatedTo: PlaylistType

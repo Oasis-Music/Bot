@@ -1,14 +1,15 @@
 import { useEffect } from 'react'
-import styles from './styles.module.scss'
+import clsx from 'clsx'
 import { Loader } from '@/shared/ui/loader'
 import { useCheckAudioHashLazyQuery } from '../../../api'
 import { soundtrackExists } from '@/shared/ui/toaster'
 import { Soundtrack, SoundtrackItem } from '@/entities/soundtrack'
-import { usePlaySoundtrack } from '@/features/soundtrack/play'
+import { usePlaySoundtrack } from '@/entities/soundtrack'
 import { useNavigate } from 'react-router-dom'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { toast } from 'sonner'
-import clsx from 'clsx'
+
+import styles from './styles.module.scss'
 
 interface CheckExistenceProps {
   hash: string

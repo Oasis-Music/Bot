@@ -1,4 +1,4 @@
-import { SoundtrackStore } from '@/entities/soundtrack'
+import { SoundtrackStore } from './store'
 
 export const usePlaySoundtrack = () => {
   return SoundtrackStore.play

@@ -9,3 +9,5 @@ export {
   userPlaylistVar,
   SoundtrackStore
 } from './model/store'
+
+export * from './model/hooks'
