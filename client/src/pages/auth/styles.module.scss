@@ -1,5 +1,8 @@
 .container {
-  background-image: url('@/shared/assets/rastr/strawberry-pattern.jpeg');
+  background-image: image-set(
+    url('@/shared/assets/rastr/pattern.webp') type('image/webp'),
+    url('@/shared/assets/rastr/pattern.jpeg') type('image/jpeg')
+  );
   height: 100dvh;
   display: flex;
   color: #fff; // TODO: should be top level value
@@ -7,9 +10,12 @@
 }
 
 .inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   box-sizing: border-box;
   margin-top: auto;
-  background-color: #0e121c;
+  background-color: #00020b;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
   border-top: 1px solid #f7f7f7;
@@ -17,14 +23,11 @@
 }
 
 .title {
-  padding-left: 3px;
   font-size: 3.7vh;
   margin: 0;
   display: flex;
   align-items: center;
   margin-bottom: 6vh;
-  margin-left: 10px;
-  text-align: start;
 }
 
 .emojiImg {

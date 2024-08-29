@@ -11,7 +11,7 @@ import styles from './styles.module.scss'
 export function SignInButton() {
   const { t } = useTranslation()
   const { signIn, setUser } = useSignIn()
-  const [error, setError] = useState<string>()
+  const [error, setError] = useState('')
 
   const [authorize, { loading }] = useAuthQuery<AuthData>({
     onSuccess(data) {
@@ -33,7 +33,7 @@ export function SignInButton() {
   })
 
   const handleButtonClick = () => {
-    setError(undefined)
+    setError('')
     authorize({
       initData: Telegram.WebApp.initData
     })
@@ -41,12 +41,7 @@ export function SignInButton() {
 
   return (
     <>
-      <Button
-        color="primary"
-        loading={loading}
-        onClick={handleButtonClick}
-        className={styles.submitButton}
-      >
+      <Button glow loading={loading} onClick={handleButtonClick} className={styles.submitButton}>
         {t('pages.auth.enterBtn')}
       </Button>
       <p className={clsx(styles.errorMessage, !!error && styles.showError)}>{error}</p>
