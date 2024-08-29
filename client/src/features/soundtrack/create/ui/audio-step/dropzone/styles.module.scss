@@ -4,8 +4,7 @@
   border: 2px dashed;
   border-color: #b5b5b5;
   border-radius: 8px;
-  width: 85vw;
-  margin: 0 auto;
+  width: 96%;
   outline: none;
   transition: border 0.3s;
   margin: 0 auto;
@@ -25,24 +24,24 @@
 }
 
 .plugIcon {
-  font-size: 6vh;
+  font-size: 5vh;
+  fill: #b5b5b5;
 }
 
 .done {
-  fill: var(--green-light);
+  fill: #fff;
 }
 
 .plugInfo {
   padding-bottom: 1.5vh;
+  font-size: 2vh;
   & > p {
-    font-size: 2.4vh;
-    padding: 0 5px;
+    padding: 0 10px;
     text-align: center;
     margin-top: 1.5vh;
     margin-bottom: 1.5vh;
   }
   & > ul {
-    font-size: 2.3vh;
     color: #b5b5b5;
     list-style: disc;
     display: table;

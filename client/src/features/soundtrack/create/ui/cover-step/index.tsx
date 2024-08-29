@@ -115,7 +115,7 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
 
   const { getRootProps, getInputProps, isDragAccept, isDragReject } = useDropzone({
     accept: {
-      'image/jpeg': ['.jpg']
+      'image/jpeg': ['.jpg'] // if ext != ".jpg" && ext != ".jpeg" && ext != ".png" {
     },
     maxSize: 716800,
     maxFiles: 1,

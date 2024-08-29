@@ -16,7 +16,9 @@ import styles from './styles.module.scss'
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
 
-  const [player, setPlayer] = useState<AudioPlayer>()
+  const playerRef = useRef<AudioPlayer | null>(null)
+
+  const waveContainerRef = useRef<HTMLDivElement>(null)
   const [isPlayerOpen, setPlayerOpen] = useState<boolean>(false)
   const [readyForPlay, setReadyForPlay] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<string>('0:00')
@@ -27,8 +29,6 @@ export function AppLayout() {
   const playPrev = usePlayPrevTrack()
 
   const playPause = usePlayPauseTrack()
-
-  const waveContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (waveContainerRef.current) {
@@ -58,7 +58,7 @@ export function AppLayout() {
         playNextHadler()
       })
 
-      setPlayer(pl)
+      playerRef.current = pl
 
       return () => {
         pl.clean()
@@ -75,12 +75,11 @@ export function AppLayout() {
   }
 
   useEffect(() => {
-    if (player) {
-      if (track && track.audioURL) {
-        // console.log('load')
+    if (playerRef.current) {
+      if (track.audioURL) {
         setCurrentTime('0:00')
-        player.redrawTrackline()
-        player.load(track.audioURL)
+        playerRef.current.redrawTrackline()
+        playerRef.current.load(track.audioURL)
       }
     }
   }, [track.audioURL])
@@ -97,15 +96,15 @@ export function AppLayout() {
   const playPauseHandler = () => {
     playPause()
 
-    if (player) {
-      player.playPause()
+    if (playerRef.current) {
+      playerRef.current.playPause()
     }
   }
 
   const handleLoopState = () => {
     setLoop((prev) => {
-      if (player) {
-        player.setLoop(!prev)
+      if (playerRef.current) {
+        playerRef.current.setLoop(!prev)
       }
       return !prev
     })

@@ -1,0 +1,29 @@
+.base {
+  position: relative;
+  background-color: #000;
+  border: 1px solid #fff;
+  color: #fff;
+  padding: 7px 5px;
+  border-radius: 8px;
+  & p {
+    margin: 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.track {
+  border-radius: 6px;
+  background-color: rgb(16, 19, 24);
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  transform: rotate(45deg);
+  color: #fff;
+  background: none;
+  font-size: 13px;
+}

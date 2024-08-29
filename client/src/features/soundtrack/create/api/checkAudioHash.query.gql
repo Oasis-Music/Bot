@@ -1,0 +1,20 @@
+query CheckAudioHash($hash: String!) {
+  checkAudioHash(hash: $hash) {
+    __typename
+    ... on Soundtrack {
+      id
+      title
+      author
+      duration
+      coverURL
+      audioURL
+      validated
+      creatorId
+      createdAt
+      attached
+    }
+    ... on NotFound {
+      message
+    }
+  }
+}

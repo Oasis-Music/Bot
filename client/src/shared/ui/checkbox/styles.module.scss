@@ -7,11 +7,6 @@
   transition: all 0.2s ease;
   padding: 5px 8px;
   border-radius: 5px;
-  &:hover {
-    & > span {
-      border-color: var(--main-color);
-    }
-  }
 }
 
 .uiEl {
@@ -21,7 +16,7 @@
   height: 24px;
   border-radius: 4px;
   transform: scale(1);
-  border: 2px solid #dcdcdc;
+  border: 2px solid #fff;
   transition: all 0.2s ease;
   box-shadow: 0 1px 1px rgba(0, 16, 75, 0.05);
 
@@ -43,8 +38,8 @@
 }
 
 .input:checked ~ .uiEl {
-  background: var(--main-color);
-  border-color: var(--main-color);
+  background: #fff;
+  border-color: #fff;
   animation: wave 0.4s ease;
   & svg {
     stroke-dashoffset: 0;

@@ -3,7 +3,7 @@ import { client } from './apollo'
 import { useDetectLang } from '@/shared/lib/hooks'
 import { ApolloProvider } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
-import { Snackbar } from '@/widgets/snackbar'
+import { Toast } from '@/widgets/toast'
 import { App } from './app'
 
 import '@/shared/lib/i18n'
@@ -17,9 +17,8 @@ function Application() {
     <AppLoader>
       <BrowserRouter>
         <ApolloProvider client={client}>
-          <Snackbar>
-            <App />
-          </Snackbar>
+          <App />
+          <Toast />
         </ApolloProvider>
       </BrowserRouter>
     </AppLoader>

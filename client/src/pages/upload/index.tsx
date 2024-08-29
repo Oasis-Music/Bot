@@ -1,4 +1,4 @@
-import CreateSoundtrackForm from '@/features/soundtrack/create-soundtrack/ui/form'
+import { CreateSoundtrackForm } from '@/features/soundtrack/create'
 
 export default function Upload() {
   return <CreateSoundtrackForm />
