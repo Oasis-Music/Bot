@@ -1,0 +1,13 @@
+.errorToast {
+  background: rgb(73 0 0 / 60%);
+  backdrop-filter: blur(5px);
+  border-color: hsl(359deg 100% 58%);
+  color: hsl(0deg 100% 93.61%);
+}
+
+.successToast {
+  background: rgb(43 96 0 / 60%);
+  backdrop-filter: blur(5px);
+  border-color: hsl(95.81deg 79.36% 43.38%);
+  color: hsl(0deg 100% 93.61%);
+}

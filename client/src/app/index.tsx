@@ -3,9 +3,8 @@ import { client } from './apollo'
 import { useDetectLang } from '@/shared/lib/hooks'
 import { ApolloProvider } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
-import { Snackbar } from '@/widgets/snackbar'
+import { Toast } from '@/widgets/toast'
 import { App } from './app'
-import { Toaster } from 'sonner'
 
 import '@/shared/lib/i18n'
 import 'normalize.css'
@@ -18,10 +17,8 @@ function Application() {
     <AppLoader>
       <BrowserRouter>
         <ApolloProvider client={client}>
-          <Snackbar>
-            <App />
-          </Snackbar>
-          <Toaster position="bottom-center" visibleToasts={2} />
+          <App />
+          <Toast />
         </ApolloProvider>
       </BrowserRouter>
     </AppLoader>

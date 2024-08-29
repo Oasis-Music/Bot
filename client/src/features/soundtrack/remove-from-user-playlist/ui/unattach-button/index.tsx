@@ -1,13 +1,13 @@
 import { IconButton } from '@/shared/ui/icon-button'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import TrashIcon from '@/shared/assets/svg/trash.svg?react'
-import { useSnackbar } from '@/shared/lib/snackbar'
 import { useUnattachSoundtrackMutation } from '../../api'
 import { useTranslation } from 'react-i18next'
 import { currentTrackVar } from '@/entities/soundtrack'
 import { useReactiveVar } from '@apollo/client'
 import { useRemoveFromUserPlaylist } from '../../model'
 import { type User, userVar } from '@/entities/user'
+import { toast } from 'sonner'
 
 interface UnattachButtonProps {
   className: string
@@ -19,8 +19,6 @@ export function UnattachButton({ className, onTrackUnattached }: UnattachButtonP
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar) as User
 
-  const openSnackbar = useSnackbar()
-
   const unattachSoundtrack = useRemoveFromUserPlaylist()
 
   const [onUnattachSoundtrack, { loading }] = useUnattachSoundtrackMutation({
@@ -31,10 +29,7 @@ export function UnattachButton({ className, onTrackUnattached }: UnattachButtonP
       }
     },
     onError: () => {
-      openSnackbar({
-        type: 'error',
-        message: t('snackbar.trackDeleteFail')
-      })
+      toast.error(t('snackbar.trackDeleteFail'), { duration: 3000 })
     }
   })
 

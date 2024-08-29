@@ -4,10 +4,10 @@ import { useReactiveVar } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/button'
 import PlusIcon from '@/shared/assets/svg/plus.svg?react'
-import { useSnackbar } from '@/shared/lib/snackbar'
 import { useAddToUserPlaylist } from '../../model'
 import { useAttachSoundtrackMutation } from '../../api'
 import { type User, userVar } from '@/entities/user'
+import { toast } from 'sonner'
 
 import styles from './styles.module.scss'
 
@@ -18,7 +18,6 @@ interface MainButtonProps {
 export function AttachButton({ onTrackAttached }: MainButtonProps) {
   const user = useReactiveVar(userVar) as User
 
-  const openSnackbar = useSnackbar()
   const { t } = useTranslation()
 
   const attachSoundtrack = useAddToUserPlaylist()
@@ -33,14 +32,11 @@ export function AttachButton({ onTrackAttached }: MainButtonProps) {
       }
     },
     onError: () => {
-      openSnackbar({
-        type: 'error',
-        message: t('snackbar.trackSaveFail')
-      })
+      toast.error(t('snackbar.trackSaveFail'), { duration: 3000 })
     }
   })
 
-  const handleClick = () => {
+  const handleAttachClick = () => {
     onAttachSoundtrack({
       variables: {
         trackId: track.id,
@@ -53,7 +49,7 @@ export function AttachButton({ onTrackAttached }: MainButtonProps) {
     <Button
       disabled={!track.id}
       loading={loading}
-      onClick={handleClick}
+      onClick={handleAttachClick}
       startIcon={
         <SvgIcon className={styles.addIcon}>
           <PlusIcon />
