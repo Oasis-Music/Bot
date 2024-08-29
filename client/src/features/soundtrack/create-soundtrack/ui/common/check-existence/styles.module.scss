@@ -1,0 +1,22 @@
+.contaier {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  margin-bottom: 15px;
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
+}
+
+.title {
+  display: flex;
+  margin: 0;
+}
+
+.loaderWrapper {
+  margin-left: 5px;
+  width: 15px;
+  height: 15px;
+}

@@ -10,7 +10,7 @@ export type CheckAudioHashQueryVariables = Types.Exact<{
 
 export type CheckAudioHashQuery = {
   __typename?: 'Query'
-  checkAudioHash?:
+  checkAudioHash:
     | { __typename: 'NotFound'; message: string }
     | {
         __typename: 'Soundtrack'
@@ -25,7 +25,6 @@ export type CheckAudioHashQuery = {
         createdAt: any
         attached: boolean
       }
-    | null
 }
 
 export const CheckAudioHashDocument = gql`

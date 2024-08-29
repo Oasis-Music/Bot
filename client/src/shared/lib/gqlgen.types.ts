@@ -71,7 +71,7 @@ export type NotFound = {
 export type Query = {
   __typename?: 'Query'
   authorizeUser: AuthorizationResponse
-  checkAudioHash?: Maybe<SoundtrackResult>
+  checkAudioHash: SoundtrackResult
   searchSoundtrack: Array<Soundtrack>
   soundtrack?: Maybe<SoundtrackResult>
   soundtracks: SoundtracksResponse

@@ -5,7 +5,7 @@ import Mp3FileIcon from '@/shared/assets/svg/file-mp3.svg?react'
 import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
-import { sha256 } from 'js-sha256'
+import { md5 } from 'js-md5'
 
 import styles from './styles.module.scss'
 
@@ -14,6 +14,7 @@ interface DropzoneProps {
   player: AudioPlayer | undefined
   onStop(): void
   onSetAudio(f: File | null): void
+  onSetHash(hash: string): void
   onFormValue(f: File): void
 }
 
@@ -50,10 +51,17 @@ const getColor = (props: containerStyles) => {
   }
 }
 
-export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: DropzoneProps) {
+export function Dropzone({
+  audio,
+  player,
+  onStop,
+  onSetAudio,
+  onFormValue,
+  onSetHash
+}: DropzoneProps) {
   const { t } = useTranslation()
 
-  const [dropError, setDropError] = useState<string>('')
+  const [dropError, setDropError] = useState('')
 
   const handleFileDrop = (acceptedFiles: File[]) => {
     if (audio) {
@@ -91,10 +99,8 @@ export function Dropzone({ audio, player, onStop, onSetAudio, onFormValue }: Dro
       arrayBufferReader.onload = function (evt) {
         if (evt.target) {
           const data = new Uint8Array(evt.target.result as ArrayBuffer)
-
-          const audioHash = sha256(data)
-
-          console.log('hash', audioHash)
+          const audioHash = md5(data)
+          onSetHash(audioHash)
         }
       }
 

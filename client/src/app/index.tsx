@@ -5,6 +5,7 @@ import { ApolloProvider } from '@apollo/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Snackbar } from '@/widgets/snackbar'
 import { App } from './app'
+import { Toaster } from 'sonner'
 
 import '@/shared/lib/i18n'
 import 'normalize.css'
@@ -20,6 +21,7 @@ function Application() {
           <Snackbar>
             <App />
           </Snackbar>
+          <Toaster position="bottom-center" visibleToasts={2} />
         </ApolloProvider>
       </BrowserRouter>
     </AppLoader>
