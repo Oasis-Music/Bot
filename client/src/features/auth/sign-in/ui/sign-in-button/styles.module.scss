@@ -1,23 +1,5 @@
 .submitButton {
   width: 100%;
   max-width: 240px;
-  line-height: 24px;
-  outline: none;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 10px;
-}
-
-.errorMessage {
-  height: 15px;
-  font-size: 14px;
-  margin: 0;
-  text-align: center;
-  color: #ff182e;
-  transition: opacity 0.2s ease-in-out;
-  opacity: 0;
-}
-
-.showError {
-  opacity: 1;
+  margin-bottom: 25px;
 }

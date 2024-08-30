@@ -5,8 +5,7 @@
     "add": "Добавить"
   },
   "errors": {
-    "telegramUserDataErr": "* ошибка данных пользователя Telegram",
-    "serverAccessErr": "* сервис не доступен повторите попытку позже"
+    "serverAccessErr": "Сервис не доступен, повторите попытку позже"
   },
   "pages": {
     "auth": {

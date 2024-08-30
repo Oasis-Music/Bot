@@ -25,7 +25,7 @@ const enum Step {
 export function CreateSoundtrackForm() {
   const navigate = useNavigate()
 
-  const [step, setStep] = useState(Step.AUDIO)
+  const [step, setStep] = useState(Step.INFO)
 
   const [isAlertOpen, setAlertOpen] = useState(false)
   const [feedbackModal, setFeedbackModal] = useState<FeedbackModal>({

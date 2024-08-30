@@ -3,7 +3,7 @@ import { ImagePlaceholder } from '@/shared/ui/image-placeholder'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 
-import styles from './Details.module.scss'
+import styles from './styles.module.scss'
 
 interface DetailsProps {
   title: string

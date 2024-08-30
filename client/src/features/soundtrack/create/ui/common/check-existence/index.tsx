@@ -18,9 +18,10 @@ interface CheckExistenceProps {
 
 export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
   const navigate = useNavigate()
-  const playSoundtrack = usePlaySoundtrack() // warn: fsd slices cannot use each other on same layer
+  const playSoundtrack = usePlaySoundtrack()
 
   const handleTrackClick = (track: Soundtrack) => {
+    toast.dismiss()
     playSoundtrack(track)
     navigate(ROUTER_NAMES.root)
   }
@@ -30,8 +31,6 @@ export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
       setExistance(false)
     },
     onCompleted(data) {
-      console.log(data.checkAudioHash)
-
       if (data.checkAudioHash.__typename === 'Soundtrack') {
         const track = data.checkAudioHash
         setExistance(true)
@@ -57,7 +56,6 @@ export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
 
   useEffect(() => {
     if (hash) {
-      console.log('hash changed', hash)
       toast.dismiss()
       checkAudio({
         variables: { hash }
@@ -68,11 +66,9 @@ export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
   return (
     <div className={clsx(styles.contaier, loading && styles.show)}>
       <p className={styles.title}>Проверка</p>
-      {true && (
-        <div className={styles.loaderWrapper}>
-          <Loader adaptive />
-        </div>
-      )}
+      <div className={styles.loaderWrapper}>
+        <Loader adaptive />
+      </div>
     </div>
   )
 }

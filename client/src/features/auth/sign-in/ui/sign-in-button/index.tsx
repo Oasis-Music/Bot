@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import clsx from 'clsx'
+import { toast } from 'sonner'
 import { Button } from '@/shared/ui/button'
 import { useSignIn } from '../../model'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +10,6 @@ import styles from './styles.module.scss'
 export function SignInButton() {
   const { t } = useTranslation()
   const { signIn, setUser } = useSignIn()
-  const [error, setError] = useState<string>()
 
   const [authorize, { loading }] = useAuthQuery<AuthData>({
     onSuccess(data) {
@@ -19,7 +17,7 @@ export function SignInButton() {
 
       const tokenData = signIn(accessToken)
       if (!tokenData) {
-        setError(t('errors.serverAccessErr'))
+        toast.error(t('errors.serverAccessErr'), { duration: 3000 })
         return
       }
 
@@ -28,28 +26,20 @@ export function SignInButton() {
       })
     },
     onError() {
-      setError(t('errors.serverAccessErr'))
+      toast.error(t('errors.serverAccessErr'), { duration: 3000 })
     }
   })
 
   const handleButtonClick = () => {
-    setError(undefined)
+    toast.dismiss()
     authorize({
       initData: Telegram.WebApp.initData
     })
   }
 
   return (
-    <>
-      <Button
-        color="primary"
-        loading={loading}
-        onClick={handleButtonClick}
-        className={styles.submitButton}
-      >
-        {t('pages.auth.enterBtn')}
-      </Button>
-      <p className={clsx(styles.errorMessage, !!error && styles.showError)}>{error}</p>
-    </>
+    <Button glow loading={loading} onClick={handleButtonClick} className={styles.submitButton}>
+      {t('pages.auth.enterBtn')}
+    </Button>
   )
 }
