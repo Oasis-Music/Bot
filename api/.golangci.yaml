@@ -4,6 +4,9 @@ run:
 linters-settings:
   errcheck:
     check-type-assertions: true
+  dupl:
+    # Tokens count to trigger issue.
+    threshold: 150
   custom:
     nilaway:
       type: "module"
@@ -16,5 +19,9 @@ linters:
   fast: false
   enable:
     - errcheck
+    - bodyclose
+    - dupl
+    - canonicalheader
+    - durationcheck
   disable:
     - nilaway
