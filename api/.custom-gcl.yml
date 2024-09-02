@@ -1,0 +1,6 @@
+version: v1.60.3
+name: custom-gcl
+plugins:
+  - module: "go.uber.org/nilaway"
+    import: "go.uber.org/nilaway/cmd/gclplugin"
+    version: latest # Or a fixed version for reproducible builds.

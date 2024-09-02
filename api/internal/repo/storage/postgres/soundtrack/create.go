@@ -15,7 +15,16 @@ func (s *soundtrackStorage) Create(ctx context.Context, track entity.NewSoundtra
 		return -1, err
 	}
 
-	defer tx.Rollback(ctx)
+	defer func() {
+		if err := tx.Rollback(ctx); err != nil {
+
+			s.logger.Error(
+				"storage: create soundtrack tx.Rollback",
+				"error", err,
+			)
+		}
+
+	}()
 
 	qtx := s.sqlc.WithTx(tx)
 

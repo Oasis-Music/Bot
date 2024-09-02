@@ -34,7 +34,10 @@ func (i *DataLoader) GetUser(ctx context.Context, userID string) (*models.User, 
 		return nil, err
 	}
 
-	user := result.(entity.User)
+	user, ok := result.(entity.User)
+	if !ok {
+		panic("something is not ok")
+	}
 
 	return &models.User{
 		ID:           utils.IntToString(user.ID),

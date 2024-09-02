@@ -8,10 +8,20 @@ prod:
 	go run ./cmd/main.go -env=prod
 gqlgen:
 	go run github.com/99designs/gqlgen generate
-lint:
-	golangci-lint run --verbose
 sqlc:
 	sqlc generate
+
+# Lint
+# Lint Modules https://golangci-lint.run/plugins/module-plugins/
+# nilaway config: https://github.com/uber-go/nilaway/wiki/Configuration
+lint:
+	./custom-gcl run --verbose
+lint-init:
+	golangci-lint custom -v
+lint-pure:
+	golangci-lint run --verbose
+nilaway:
+	nilaway -exclude-errors-in-files="./internal/delivery/graph/generated.go" ./...
 
 # DB
 backup:
