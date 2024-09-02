@@ -1,0 +1,20 @@
+run:
+  concurrency: 4
+  tests: false
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+  custom:
+    nilaway:
+      type: "module"
+      description: Static analysis tool to detect potential nil panics in Go code.
+      settings:
+        include-pkgs: ""
+        pretty-print: "true"
+        # exclude-errors-in-files: "./internal/delivery/graph/generated.go" # doesn't work
+linters:
+  fast: false
+  enable:
+    - errcheck
+  disable:
+    - nilaway

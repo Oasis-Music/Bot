@@ -25,16 +25,15 @@ func NewNullString(s string) sql.NullString {
 
 func NewNullPtrString(s *string) sql.NullString {
 
-	var str string
-	var valid bool
-
 	if s != nil {
-		valid = true
-		str = *s
+		return sql.NullString{
+			String: *s,
+			Valid:  true,
+		}
 	}
 
 	return sql.NullString{
-		String: str,
-		Valid:  valid,
+		String: "",
+		Valid:  false,
 	}
 }
