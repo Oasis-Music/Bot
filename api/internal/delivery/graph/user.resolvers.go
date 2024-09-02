@@ -11,53 +11,52 @@ import (
 	"oasis/api/internal/entity"
 	UserService "oasis/api/internal/services/user"
 	"oasis/api/internal/utils"
-	"strconv"
 )
 
 // AttachSoundtrack is the resolver for the attachSoundtrack field.
 func (r *mutationResolver) AttachSoundtrack(ctx context.Context, input models.AttachSoundtrackInput) (bool, error) {
-	userId, err := strconv.ParseInt(input.UserID, 10, 64)
+	userId, err := utils.StrToInt64(input.UserID)
 	if err != nil {
 		return false, errors.New("invalid user ID")
 	}
 
-	trackId, err := strconv.ParseInt(input.TrackID, 10, 32)
+	trackId, err := utils.StrToInt32(input.TrackID)
 	if err != nil {
 		return false, errors.New("invalid track ID")
 	}
 
 	return r.UserService.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
 		UserID:       userId,
-		SoundtrackID: int32(trackId),
+		SoundtrackID: trackId,
 	})
 }
 
 // UnattachSoundtrack is the resolver for the unattachSoundtrack field.
 func (r *mutationResolver) UnattachSoundtrack(ctx context.Context, input models.UnattachSoundtrackInput) (bool, error) {
-	userId, err := strconv.ParseInt(input.UserID, 10, 64)
+	userId, err := utils.StrToInt64(input.UserID)
 	if err != nil {
 		return false, errors.New("invalid user ID")
 	}
 
-	trackId, err := strconv.ParseInt(input.TrackID, 10, 32)
+	trackId, err := utils.StrToInt32(input.TrackID)
 	if err != nil {
 		return false, errors.New("invalid track ID")
 	}
 
 	return r.UserService.UnattachSoundtrack(ctx, entity.UnattachSoundtrackFromUserParams{
 		UserID:       userId,
-		SoundtrackID: int32(trackId),
+		SoundtrackID: trackId,
 	})
 }
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult, error) {
-	parsedId, err := strconv.ParseInt(id, 10, 64)
+	userId, err := utils.StrToInt64(id)
 	if err != nil {
 		return nil, errors.New("invalid user id")
 	}
 
-	user, err := r.UserService.User(ctx, parsedId)
+	user, err := r.UserService.User(ctx, userId)
 	if errors.Is(err, UserService.ErrUserNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
@@ -66,16 +65,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 		return nil, err
 	}
 
-	return models.User{
-		ID:           utils.IntToString(user.ID),
-		FirstName:    user.FirstName,
-		LastName:     user.LastName,
-		Username:     user.Username,
-		LanguageCode: user.LanguageCode,
-		Role:         user.Role,
-		VisitedAt:    user.VisitedAt.UTC().String(),
-		CreatedAt:    user.CreatedAt.UTC().String(),
-	}, nil
+	return buildUserModel(user), nil
 }
 
 // AuthorizeUser is the resolver for the authorizeUser field.
@@ -93,7 +83,7 @@ func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*mo
 
 // UserSoundtracks is the resolver for the userSoundtracks field.
 func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter models.UserSoundtracksFilter) (models.UserSoundtracksResult, error) {
-	userId, err := strconv.ParseInt(id, 10, 64)
+	userId, err := utils.StrToInt64(id)
 	if err != nil {
 		return nil, errors.New("invalid user id")
 	}
@@ -115,18 +105,7 @@ func (r *queryResolver) UserSoundtracks(ctx context.Context, id string, filter m
 	soundtracks := make([]models.Soundtrack, 0, len(tracks.Soundtracks))
 
 	for _, track := range tracks.Soundtracks {
-
-		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        strconv.Itoa(int(track.ID)),
-			Title:     track.Title,
-			Author:    track.Author,
-			Duration:  track.Duration,
-			CoverURL:  utils.StringToNilPtr(track.CoverImage),
-			AudioURL:  track.Audio,
-			Attached:  track.Attached,
-			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.IntToString(track.CreatorID),
-		})
+		soundtracks = append(soundtracks, buildSoundtrackModel(track))
 	}
 
 	return models.UserSoundtracksResponse{

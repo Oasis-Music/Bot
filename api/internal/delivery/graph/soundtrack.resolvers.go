@@ -12,7 +12,6 @@ import (
 	"oasis/api/internal/entity"
 	"oasis/api/internal/services/soundtrack"
 	"oasis/api/internal/utils"
-	"strconv"
 )
 
 // CreateSoundtrack is the resolver for the createSoundtrack field.
@@ -38,12 +37,12 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 
 // Soundtrack is the resolver for the soundtrack field.
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
-	trackId, err := strconv.ParseInt(id, 10, 32)
+	trackId, err := utils.StrToInt32(id)
 	if err != nil {
 		return nil, errors.New("invalid track id")
 	}
 
-	track, err := r.SoundtrackService.Soundtrack(ctx, int32(trackId))
+	track, err := r.SoundtrackService.Soundtrack(ctx, trackId)
 	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
@@ -52,19 +51,7 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 		return nil, err
 	}
 
-	soundtrack := models.Soundtrack{
-		ID:        utils.IntToString(track.ID),
-		Title:     track.Title,
-		Author:    track.Author,
-		Duration:  track.Duration,
-		CoverURL:  utils.StringToNilPtr(track.CoverImage),
-		AudioURL:  track.Audio,
-		CreatorID: utils.IntToString(track.CreatorID),
-		CreatedAt: track.CreatedAt.UTC().String(),
-		Attached:  track.Attached,
-	}
-
-	return soundtrack, nil
+	return buildSoundtrackModel(*track), nil
 }
 
 // Soundtracks is the resolver for the soundtracks field.
@@ -80,18 +67,7 @@ func (r *queryResolver) Soundtracks(ctx context.Context, filter models.Soundtrac
 	soundtracks := make([]models.Soundtrack, 0, len(tracks.Soundtracks))
 
 	for _, track := range tracks.Soundtracks {
-
-		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.IntToString(track.ID),
-			Title:     track.Title,
-			Author:    track.Author,
-			Duration:  track.Duration,
-			CoverURL:  utils.StringToNilPtr(track.CoverImage),
-			AudioURL:  track.Audio,
-			Attached:  track.Attached,
-			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.IntToString(track.CreatorID),
-		})
+		soundtracks = append(soundtracks, buildSoundtrackModel(track))
 	}
 
 	return &models.SoundtracksResponse{
@@ -114,21 +90,10 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 		return nil, err
 	}
 
-	var soundtracks []models.Soundtrack
+	soundtracks := make([]models.Soundtrack, 0, len(tracks))
 
 	for _, track := range tracks {
-
-		soundtracks = append(soundtracks, models.Soundtrack{
-			ID:        utils.IntToString(track.ID),
-			Title:     track.Title,
-			Author:    track.Author,
-			Duration:  track.Duration,
-			CoverURL:  utils.StringToNilPtr(track.CoverImage),
-			AudioURL:  track.Audio,
-			Attached:  track.Attached,
-			CreatedAt: track.CreatedAt.UTC().String(),
-			CreatorID: utils.IntToString(track.CreatorID),
-		})
+		soundtracks = append(soundtracks, buildSoundtrackModel(track))
 	}
 
 	return soundtracks, nil
@@ -145,19 +110,7 @@ func (r *queryResolver) CheckAudioHash(ctx context.Context, hash string) (models
 		return nil, err
 	}
 
-	soundtrack := models.Soundtrack{
-		ID:        utils.IntToString(track.ID),
-		Title:     track.Title,
-		Author:    track.Author,
-		Duration:  track.Duration,
-		CoverURL:  utils.StringToNilPtr(track.CoverImage),
-		AudioURL:  track.Audio,
-		CreatorID: utils.IntToString(track.CreatorID),
-		CreatedAt: track.CreatedAt.UTC().String(),
-		Attached:  track.Attached,
-	}
-
-	return soundtrack, nil
+	return buildSoundtrackModel(*track), nil
 }
 
 // Creator is the resolver for the creator field.

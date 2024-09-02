@@ -31,7 +31,7 @@ func StrToInt64(s string) (int64, error) {
 }
 
 func StringToNilPtr(s string) *string {
-	if len(s) == 0 {
+	if s == "" {
 		return nil
 	}
 	return &s
