@@ -5,7 +5,7 @@ $common-radius: 10px;
   padding: 20px 10px;
 }
 
-.searchField {
+.searchInput {
   padding: 0 10px 0 15px;
   width: 100%;
   background-color: #3c4144;
@@ -16,6 +16,9 @@ $common-radius: 10px;
   font-size: 15px;
   color: #fff;
   font-weight: 500;
+  &:placeholder-shown {
+    text-overflow: ellipsis;
+  }
 }
 
 .searchButton {

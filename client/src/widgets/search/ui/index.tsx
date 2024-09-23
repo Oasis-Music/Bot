@@ -5,7 +5,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { searchSchema, type SearchSchemaType } from '../model/validation-schema'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
-import styles from './search.module.scss'
+import styles from './styles.module.scss'
 
 interface SearchProps {
   placeholder?: string
@@ -29,7 +29,7 @@ export function Search({ placeholder, onSubmit }: SearchProps) {
           type="text"
           autoComplete="off"
           placeholder={placeholder}
-          className={styles.searchField}
+          className={styles.searchInput}
           {...register('searchQuery')}
         />
         <IconButton type="submit" className={styles.searchButton}>
