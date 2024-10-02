@@ -15,6 +15,8 @@ import (
 	"oasis/api/internal/services/user"
 	"time"
 
+	"github.com/vektah/gqlparser/v2/ast"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/extension"
@@ -55,14 +57,14 @@ func NewHandler(appConfig *config.Config, appComposite composite.AppComposite) h
 		MaxUploadSize: maxUploadSize,
 	})
 
-	srv.SetQueryCache(lru.New(1000))
+	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
 
 	if appConfig.IsDev {
 		srv.Use(extension.Introspection{})
 	}
 
 	srv.Use(extension.AutomaticPersistedQuery{
-		Cache: lru.New(100),
+		Cache: lru.New[string](100),
 	})
 
 	return dataloader.Middleware(loader, srv)
