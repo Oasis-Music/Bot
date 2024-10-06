@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"net/http"
+	"oasis/api/pkg/logger"
 )
 
 func (a *authService) AuthMiddleware(next http.Handler) http.Handler {
@@ -11,7 +12,7 @@ func (a *authService) AuthMiddleware(next http.Handler) http.Handler {
 
 		rawToken, err := a.extractHeaderToken(r)
 
-		processToken := func(r *http.Request) {
+		processToken := func() {
 
 			token, err := a.ParseAccessToken(rawToken)
 			if err != nil {
@@ -20,10 +21,11 @@ func (a *authService) AuthMiddleware(next http.Handler) http.Handler {
 			}
 
 			ctx = context.WithValue(ctx, UserID, token.UserID)
+			ctx = logger.Handler(ctx, token.UserID)
 		}
 
 		if rawToken != "" && err == nil {
-			processToken(r)
+			processToken()
 		} else {
 			ctx = context.WithValue(ctx, UserID, UnknownUserID)
 		}
