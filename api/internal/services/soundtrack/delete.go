@@ -23,7 +23,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 
 	if soundtrack.ID != id {
 		msg := "anomaly of tracks existence"
-		s.logger.Warn(msg)
+		s.logger.WarnContext(ctx, msg)
 		return false, errors.New(msg)
 	}
 
@@ -45,7 +45,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 				defer wg.Done()
 				_, err := s.s3store.DeleteObject(context.Background(), key)
 				if err != nil {
-					s.logger.Error("delete with soundtrack S3", "err", err)
+					s.logger.ErrorContext(ctx, "delete with soundtrack S3", "err", err)
 					results <- err
 				}
 			}()
@@ -56,7 +56,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 	close(results)
 
 	if len(results) != 0 {
-		s.logger.Error("soundtrack: failed to delete S3 data during soundtrack deletion")
+		s.logger.ErrorContext(ctx, "soundtrack: failed to delete S3 data during soundtrack deletion")
 		return false, ErrInternalDeleteSoundtrack
 	}
 
@@ -73,7 +73,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 		return false, ErrSoundtrackNotFound
 	}
 
-	s.logger.Info("soundtrack: delete", "id", id)
+	s.logger.InfoContext(ctx, "soundtrack: delete", "id", id)
 
 	return success, nil
 }

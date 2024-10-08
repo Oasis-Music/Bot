@@ -86,13 +86,13 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 		coverFile, err := proccessCover(input.CoverImage)
 		if err != nil {
-			s.logger.Error("proccess cover", "err", err)
+			s.logger.ErrorContext(ctx, "proccess cover", "err", err)
 			return false, errors.New("fail to proccess cover")
 		}
 
 		coverName, err := s.s3store.PutCover(ctx, coverFile)
 		if err != nil {
-			s.logger.Error("save S3 cover", "err", err)
+			s.logger.ErrorContext(ctx, "save S3 cover", "err", err)
 			return false, errors.New("fail to save cover")
 		}
 
@@ -101,7 +101,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	audioData, err := io.ReadAll(input.Audiofile.File)
 	if err != nil {
-		s.logger.Error("read audio file error", "err", err)
+		s.logger.ErrorContext(ctx, "read audio file error", "err", err)
 		return false, errors.New("fail to proccess audio")
 	}
 
@@ -111,7 +111,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 		return false, errors.New("cannot generate audio hash")
 	}
 
-	s.logger.Info("Get hash", "hash", hash)
+	s.logger.InfoContext(ctx, "got hash", "hash", hash)
 
 	soundtrack, _ := s.CheckHash(ctx, hash)
 	if soundtrack != nil {
@@ -120,7 +120,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	audioFile, audioMeta, err := s.proccessAudio(audioData)
 	if err != nil {
-		s.logger.Error("proccess audio", "err", err)
+		s.logger.ErrorContext(ctx, "proccess audio", "err", err)
 		return false, errors.New("fail to proccess audio")
 	}
 
@@ -131,7 +131,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	audioName, err := s.s3store.PutAudio(ctx, audioFile)
 	if err != nil {
-		s.logger.Error("save S3 audio", "err", err)
+		s.logger.ErrorContext(ctx, "save S3 audio", "err", err)
 		return false, errors.New("fail to save audio")
 	}
 
@@ -179,7 +179,7 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 
 	}
 
-	s.logger.Info("soundtrack: create", "id", newTrackId, "user_id", userID)
+	s.logger.InfoContext(ctx, "soundtrack: create", "id", newTrackId)
 
 	return true, nil
 }
