@@ -3,7 +3,7 @@ package config
 import (
 	"log"
 
-	"github.com/ilyakaznacheev/cleanenv"
+	"github.com/caarlos0/env/v11"
 )
 
 const (
@@ -13,8 +13,8 @@ const (
 
 type Config struct {
 	IsDev       bool
-	Port        string `env:"ENTRY_PORT" env-required:"true"`
-	Environment string `env:"ENVIRONMENT" env-required:"true"`
+	Port        string `env:"ENTRY_PORT,required"`
+	Environment string `env:"ENVIRONMENT,required"`
 	Auth        AuthConfig
 	Database    PostgresConfig
 	Telegram    TelegramConfig
@@ -25,7 +25,7 @@ type Config struct {
 func New() *Config {
 	var cfg Config
 
-	err := cleanenv.ReadEnv(&cfg)
+	err := env.Parse(&cfg)
 	if err != nil {
 		log.Fatalln("fail to parse config", err)
 	}
@@ -36,35 +36,35 @@ func New() *Config {
 }
 
 type AuthConfig struct {
-	AccessSecret  string `env:"AT_SECRET" env-required:"true"`
-	RefreshSecret string `env:"RT_SECRET" env-required:"true"`
-	AccessTTL     int    `env:"AT_EXP_MIN" env-required:"true"`
-	RefreshTTL    int    `env:"RT_EXP_MIN" env-required:"true"`
+	AccessSecret  string `env:"AT_SECRET,required"`
+	RefreshSecret string `env:"RT_SECRET,required"`
+	AccessTTL     int    `env:"AT_EXP_MIN,required"`
+	RefreshTTL    int    `env:"RT_EXP_MIN,required"`
 }
 
 type PostgresConfig struct {
-	Host     string `env:"DB_HOST" env-required:"true"`
-	Port     string `env:"DB_PORT" env-required:"true"`
-	Name     string `env:"DB_NAME" env-required:"true"`
-	Username string `env:"DB_USER" env-required:"true"`
-	Password string `env:"DB_PASSWORD" env-required:"true"`
-	SSLMode  string `env:"DB_SSLMODE" env-required:"true"`
+	Host     string `env:"DB_HOST,required"`
+	Port     string `env:"DB_PORT,required"`
+	Name     string `env:"DB_NAME,required"`
+	Username string `env:"DB_USER,required"`
+	Password string `env:"DB_PASSWORD,required"`
+	SSLMode  string `env:"DB_SSLMODE,required"`
 }
 
 type TelegramConfig struct {
-	ApiURL    string `env:"TG_HOST" env-required:"true"`
-	Token     string `env:"TG_TOKEN" env-required:"true"`
-	EventPool int    `env:"TG_EVENTPOOL" env-required:"true"`
+	ApiURL    string `env:"TG_HOST,required"`
+	Token     string `env:"TG_TOKEN,required"`
+	EventPool int    `env:"TG_EVENTPOOL,required"`
 }
 
 type FileApiConfig struct {
-	AudioApiURL string `env:"AUDIO_PATH" env-required:"true"`
-	CoverApiURL string `env:"COVER_PATH" env-required:"true"`
+	AudioApiURL string `env:"AUDIO_PATH,required"`
+	CoverApiURL string `env:"COVER_PATH,required"`
 }
 
 type S3Config struct {
-	AccountID       string `env:"ACCOUNT_ID" env-required:"true"`
-	AccessKeyID     string `env:"ACCESS_KEY_ID" env-required:"true"`
-	AccessKeySecret string `env:"ACCESS_KEY_SECRET" env-required:"true"`
-	BucketName      string `env:"BUCKET_NAME" env-required:"true"`
+	AccountID       string `env:"ACCOUNT_ID,required"`
+	AccessKeyID     string `env:"ACCESS_KEY_ID,required"`
+	AccessKeySecret string `env:"ACCESS_KEY_SECRET,required"`
+	BucketName      string `env:"BUCKET_NAME,required"`
 }
