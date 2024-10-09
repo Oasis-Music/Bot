@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"log"
 	"oasis/api/internal/entity"
 )
 
@@ -14,7 +13,7 @@ func (u *userService) UserSoundtracks(ctx context.Context, userID int64, options
 
 	result, err := u.storage.UserSoundtracks(ctx, userID, options)
 	if err != nil {
-		log.Println(err)
+		u.logger.ErrorContext(ctx, err)
 		return nil, ErrIternalUserTracksError
 	}
 
