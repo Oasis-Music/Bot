@@ -12,13 +12,13 @@ func (u *userService) User(ctx context.Context, id int64) (*entity.User, error) 
 	user, err := u.storage.User(ctx, id)
 	if err != nil {
 		if errors.Is(err, userStorage.ErrUserNotFound) {
-			u.logger.Info("user not found", "user_id", id)
+			u.logger.WarnContext(ctx, "user not found", "requested_user", id)
 			return nil, ErrUserNotFound
 		}
 		return nil, ErrGetUserFailed
 	}
 
-	u.logger.Info("user request", "user_id", id)
+	u.logger.InfoContext(ctx, "get user", "requested_user", id)
 	return user, nil
 
 }

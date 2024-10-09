@@ -13,13 +13,13 @@ func (s *soundtrackService) Soundtrack(ctx context.Context, id int32) (*entity.S
 
 	soundtrack, err := s.storage.Soundtrack(ctx, id, userID)
 	if errors.Is(err, ErrStotageNoData) {
-		s.logger.Warn("soundtrack: by", "id", id, "warn", "soundtrack not found")
+		s.logger.WarnContext(ctx, "soundtrack not found", "id", id)
 		return nil, ErrSoundtrackNotFound
 	} else if err != nil {
 		return nil, ErrFailedToFetchSoundtrack
 	}
 
-	s.logger.Info("soundtrack: by", "id", soundtrack.ID)
+	s.logger.InfoContext(ctx, "get soundtrack", "id", soundtrack.ID)
 
 	return soundtrack, nil
 }

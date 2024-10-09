@@ -2,11 +2,15 @@ package user
 
 import (
 	"context"
-	"log"
+	"errors"
 	"oasis/api/internal/entity"
 )
 
 func (u *userService) UserSoundtracks(ctx context.Context, userID int64, options entity.UserTracksOptions) (*entity.UserTracks, error) {
+
+	if options.Page <= 0 {
+		return nil, errors.New("page should be greater than 0")
+	}
 
 	if err := u.checkPermission(ctx, userID); err != nil {
 		return nil, err
@@ -14,11 +18,9 @@ func (u *userService) UserSoundtracks(ctx context.Context, userID int64, options
 
 	result, err := u.storage.UserSoundtracks(ctx, userID, options)
 	if err != nil {
-		log.Println(err)
-		return nil, ErrIternalUserTracksError
+		return nil, ErrGetUserTracks
 	}
 
-	// INFO: without ErrNoRows -> https://github.com/jackc/pgx/issues/465
 	if len(result.Soundtracks) == 0 {
 		return nil, ErrUserTracksNotFound
 	}

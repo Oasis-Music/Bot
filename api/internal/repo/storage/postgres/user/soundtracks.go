@@ -17,7 +17,7 @@ const (
 			FROM user_soundtrack us
 			WHERE us.soundtrack_id = s.id
 		AND us.user_id = $1) )
-   	SELECT 
+   	SELECT
 		s.id,
 		s.title,
 		s.author,
@@ -38,11 +38,13 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 
 	query, err := queryBuilder(USER_SOUNDTRACKS_QUERY, options)
 	if err != nil {
+		s.logger.ErrorContext(ctx, "storage: user soundtracks query builder", "error", err)
 		return nil, err
 	}
 
 	rows, err := s.database.Query(context.Background(), query, userID)
 	if err != nil {
+		s.logger.ErrorContext(ctx, "storage: user soundtracks db query", "error", err)
 		return nil, err
 	}
 
@@ -72,6 +74,7 @@ func (s *UserStorage) UserSoundtracks(ctx context.Context, userID int64, options
 	}
 
 	if err := rows.Err(); err != nil {
+		s.logger.ErrorContext(ctx, "storage: user soundtracks", "error", err)
 		return nil, err
 	}
 
