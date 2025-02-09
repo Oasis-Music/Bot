@@ -1,49 +1,3 @@
-.container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 0 11px 0 7px;
-}
-
-.image {
-  font-size: 2vh;
-  margin-right: 7px;
-  color: #dddddd;
-  width: 50px;
-  height: 50px;
-  flex-shrink: 0;
-}
-
-.info {
-  width: 74%;
-}
-
-.title {
-  font-size: 15px;
-  color: #fff;
-  font-weight: 500;
-  margin: 0;
-  margin-bottom: 5px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.author {
-  font-size: 11px;
-  color: #bbbbbb;
-  font-weight: 400;
-  margin: 0;
-}
-
-.sideBox {
-  margin-left: auto;
-  font-size: 16px;
-  margin-left: auto;
-  color: #878787;
-  font-weight: 400;
-}
-
 .loader {
   width: 25px;
   aspect-ratio: 0.75;
@@ -54,6 +8,7 @@
     var(--c) 100% 50%;
   animation: l7 1s infinite linear alternate;
 }
+
 @keyframes l7 {
   0% {
     background-size:
