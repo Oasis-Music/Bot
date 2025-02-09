@@ -1,15 +1,12 @@
 import { cva } from 'cva'
-import SearchIcon from '@/shared/assets/svg/search.svg?react'
-import MusicListIcon from '@/shared/assets/svg/list-music.svg?react'
-import CogIcon from '@/shared/assets/svg/cog.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
-import { useTranslation } from 'react-i18next'
+import { Icon } from '@/shared/ui/icon'
 import { Link, NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 
 import styles from './navbar.module.css'
 
-const navLink = cva('inline-flex p-4 text-base transition-colors', {
+const navLink = cva('inline-flex p-4 text-[24px] transition-colors', {
   variants: {
     isActive: {
       true: 'text-white',
@@ -24,19 +21,13 @@ export function NavBar() {
   return (
     <nav className="relative z-40 flex items-center justify-center bg-[#070c13]">
       <NavLink to={ROUTER_NAMES.explore} className={({ isActive }) => navLink({ isActive })}>
-        <SvgIcon>
-          <SearchIcon />
-        </SvgIcon>
+        <Icon name="common/search" />
       </NavLink>
       <NavLink to={ROUTER_NAMES.root} className={({ isActive }) => navLink({ isActive })}>
-        <SvgIcon>
-          <MusicListIcon />
-        </SvgIcon>
+        <Icon name="common/list-music" />
       </NavLink>
       <NavLink to={ROUTER_NAMES.settings} className={({ isActive }) => navLink({ isActive })}>
-        <SvgIcon>
-          <CogIcon />
-        </SvgIcon>
+        <Icon name="common/settings" />
       </NavLink>
       <Link
         to={ROUTER_NAMES.upload}
