@@ -1,7 +1,7 @@
 import { forwardRef, ComponentPropsWithRef, ForwardRefRenderFunction } from 'react'
 import clsx from 'clsx'
 import Trackline from './Trackline'
-import { TopControls } from './TopControls'
+import { TopControls } from './top-controls'
 import { Details } from './Details'
 import { Controls } from './Controls'
 import { timeFormater } from '@/shared/lib/helpers'
