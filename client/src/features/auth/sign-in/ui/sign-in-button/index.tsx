@@ -33,7 +33,9 @@ export function SignInButton() {
   const handleButtonClick = () => {
     toast.dismiss()
     authorize({
-      initData: Telegram.WebApp.initData
+      // initData: Telegram.WebApp.initData
+      initData:
+        'query_id=AAHloZkbAAAAAOWhmRuj1nhB&user=%7B%22id%22%3A463053285%2C%22first_name%22%3A%22Vlad%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22xkatz01%22%2C%22language_code%22%3A%22en%22%2C%22is_premium%22%3Atrue%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1709840373&hash=7947ba8d932210b0a892988a2d0eb52878aa94dfe8eb460061a2289ae0cf6e84'
     })
   }
 

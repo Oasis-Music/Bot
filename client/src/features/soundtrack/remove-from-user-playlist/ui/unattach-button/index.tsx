@@ -9,12 +9,11 @@ import { useRemoveFromUserPlaylist } from '../../model'
 import { type User, userVar } from '@/entities/user'
 import { toast } from 'sonner'
 
-interface UnattachButtonProps {
-  className: string
+export interface UnattachButtonProps {
   onTrackUnattached?(): void
 }
 
-export function UnattachButton({ className, onTrackUnattached }: UnattachButtonProps) {
+export function UnattachButton({ onTrackUnattached }: UnattachButtonProps) {
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar) as User
@@ -43,7 +42,7 @@ export function UnattachButton({ className, onTrackUnattached }: UnattachButtonP
   }
 
   return (
-    <IconButton loading={loading} onClick={handleClick} className={className}>
+    <IconButton loading={loading} onClick={handleClick} className="text-black">
       <SvgIcon>
         <TrashIcon />
       </SvgIcon>

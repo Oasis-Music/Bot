@@ -6,11 +6,9 @@ import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
 
-interface CopyInfoButtonProps {
-  className: string
-}
+export interface CopyInfoButtonProps {}
 
-export function CopyInfoButton({ className }: CopyInfoButtonProps) {
+export function CopyInfoButton({}: CopyInfoButtonProps) {
   const [wasCopied, setCopied] = useState(false)
 
   const track = useReactiveVar(currentTrackVar)
@@ -40,7 +38,7 @@ export function CopyInfoButton({ className }: CopyInfoButtonProps) {
   }
 
   return (
-    <IconButton onClick={onCopyTrackInfo} className={className}>
+    <IconButton onClick={onCopyTrackInfo} className="text-black">
       <SvgIcon>{wasCopied ? <CheckIcon /> : <CopyIcon />}</SvgIcon>
     </IconButton>
   )

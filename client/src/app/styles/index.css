@@ -2,6 +2,9 @@
 
 @theme {
   --spacing-1e: 1em;
+
+  --shadow-white-glow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
+    0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
 }
 
 @utility icon {
