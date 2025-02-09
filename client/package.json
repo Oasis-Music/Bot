@@ -69,6 +69,7 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-operations": "^4.2.3",
     "@graphql-codegen/typescript-react-apollo": "^4.3.0",
+    "@neodx/svg": "^0.7.1",
     "@types/apollo-upload-client": "^18.0.0",
     "@types/howler": "^2.2.11",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
