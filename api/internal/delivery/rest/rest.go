@@ -39,7 +39,7 @@ func (h *handler) setRefreshTokenCookie(w http.ResponseWriter, token string) {
 		Path:     "/",
 		MaxAge:   h.config.Auth.RefreshTTL * 60,
 		HttpOnly: true,
-		Secure:   true,                 // true FOR HTTPS
+		Secure:   false,                // true FOR HTTPS
 		SameSite: http.SameSiteLaxMode, // http.SameSiteStrictMode in prod evn
 	}
 
