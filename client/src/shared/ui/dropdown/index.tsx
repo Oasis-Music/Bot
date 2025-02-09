@@ -1,8 +1,6 @@
 import { ReactNode, useState, useEffect, useRef } from 'react'
+import { ExpandIcon } from '../expand-icon'
 import clsx from 'clsx'
-import ArrowIcon from '@/shared/assets/svg/angle-arrow.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-
 import styles from './styles.module.scss'
 
 export type Option = {
@@ -66,14 +64,7 @@ export function Dropdown({ selected, placeholder, options, onClose, onChange }: 
           ))}
         </ul>
       )}
-      <SvgIcon
-        className={clsx({
-          [styles.expandIcon]: true,
-          [styles.collapsed]: open
-        })}
-      >
-        <ArrowIcon />
-      </SvgIcon>
+      <ExpandIcon expanded={!open} />
     </div>
   )
 }
