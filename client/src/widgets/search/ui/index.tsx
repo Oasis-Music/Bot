@@ -1,5 +1,4 @@
-import SearchIcon from '@/shared/assets/svg/search.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
+import { Icon } from '@/shared/ui/icon'
 import { IconButton } from '@/shared/ui/icon-button'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { searchSchema, type SearchSchemaType } from '../model/validation-schema'
@@ -33,9 +32,7 @@ export function Search({ placeholder, onSubmit }: SearchProps) {
           {...register('searchQuery')}
         />
         <IconButton type="submit" className={styles.searchButton}>
-          <SvgIcon>
-            <SearchIcon />
-          </SvgIcon>
+          <Icon name="common/search" className="text-[24px]" />
         </IconButton>
       </form>
     </section>

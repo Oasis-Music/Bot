@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
 import fs from 'fs'
+import svg from '@neodx/svg/vite'
 
 export default ({ mode = 'development' }: UserConfig) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -29,7 +30,25 @@ export default ({ mode = 'development' }: UserConfig) => {
         '@': path.resolve(__dirname, 'src')
       }
     },
-    plugins: [react(), svgr(), viteTsconfigPaths(), tailwindcss()],
+    plugins: [
+      react(),
+      svgr(),
+      viteTsconfigPaths(),
+      tailwindcss(),
+      svg({
+        root: 'src/shared/assets/svg-icons',
+        output: 'public/sprites',
+        group: true,
+        fileName: '{name}.{hash:8}.svg',
+        metadata: {
+          path: 'src/shared/lib/sprite.gen.ts',
+          runtime: {
+            size: true,
+            viewBox: true
+          }
+        }
+      })
+    ],
     server: {
       port: 3001,
       https: withHttps && {

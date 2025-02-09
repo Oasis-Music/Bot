@@ -7,7 +7,6 @@ import { Toast } from '@/widgets/toast'
 import { App } from './app'
 
 import '@/shared/lib/i18n'
-import 'normalize.css'
 import { AppLoader } from './app-loader'
 
 function Application() {

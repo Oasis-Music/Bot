@@ -1,7 +1,6 @@
+import { Icon } from '@/shared/ui/icon'
 import { Button } from '@/shared/ui/button'
-import ArrowIcon from '@/shared/assets/svg/angle-arrow.svg?react'
 import { IconButton } from '@/shared/ui/icon-button'
-import { SvgIcon } from '@/shared/ui/svg-icon'
 import { RedirectButton } from '../redirect-button'
 import { useTranslation } from 'react-i18next'
 
@@ -32,9 +31,7 @@ export function StepControls({
     <>
       <div className={styles.buttonWrapper}>
         <IconButton onClick={onBack} className={styles.backButton}>
-          <SvgIcon>
-            <ArrowIcon />
-          </SvgIcon>
+          <Icon name="common/angle-arrow" className="text-[27px]" />
         </IconButton>
         <Button
           loading={loading}

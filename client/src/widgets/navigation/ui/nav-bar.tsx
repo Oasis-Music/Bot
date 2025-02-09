@@ -1,35 +1,41 @@
-import SearchIcon from '@/shared/assets/svg/search.svg?react'
-import MusicListIcon from '@/shared/assets/svg/list-music.svg?react'
-import CogIcon from '@/shared/assets/svg/cog.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
-import { useTranslation } from 'react-i18next'
+import { cva } from 'cva'
+import { Icon } from '@/shared/ui/icon'
 import { Link, NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import { ROUTER_NAMES } from '@/shared/constants/routes'
 
-import styles from './navbar.module.scss'
+import styles from './navbar.module.css'
+
+const navLink = cva('inline-flex p-4 text-[24px] transition-colors', {
+  variants: {
+    isActive: {
+      true: 'text-white',
+      false: 'text-slate-300'
+    }
+  }
+})
 
 export function NavBar() {
   const { t } = useTranslation()
 
   return (
-    <nav className={styles.container}>
-      <NavLink to={ROUTER_NAMES.explore} className={styles.navLink}>
-        <SvgIcon>
-          <SearchIcon />
-        </SvgIcon>
+    <nav className="relative z-40 flex items-center justify-center bg-[#070c13]">
+      <NavLink to={ROUTER_NAMES.explore} className={({ isActive }) => navLink({ isActive })}>
+        <Icon name="common/search" />
       </NavLink>
-      <NavLink to={ROUTER_NAMES.root} className={styles.navLink}>
-        <SvgIcon>
-          <MusicListIcon />
-        </SvgIcon>
+      <NavLink to={ROUTER_NAMES.root} className={({ isActive }) => navLink({ isActive })}>
+        <Icon name="common/list-music" />
       </NavLink>
-      <NavLink to={ROUTER_NAMES.settings} className={styles.navLink}>
-        <SvgIcon>
-          <CogIcon />
-        </SvgIcon>
+      <NavLink to={ROUTER_NAMES.settings} className={({ isActive }) => navLink({ isActive })}>
+        <Icon name="common/settings" />
       </NavLink>
-      <Link to={ROUTER_NAMES.upload} className={styles.uploadLink}>
-        <span>{t('layout.upload')}</span>
+      <Link
+        to={ROUTER_NAMES.upload}
+        className="flex w-32 items-center justify-center rounded-xl border-2 border-[#2fc7bf] py-1.5"
+      >
+        <div className={styles.shine}>
+          <span>{t('layout.upload')}</span>
+        </div>
       </Link>
     </nav>
   )
