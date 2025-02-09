@@ -10,7 +10,7 @@
     "@types/node": "^22.3.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react-swc": "^3.7.0",
+    "@vitejs/plugin-react-swc": "^3.8.0",
     "apollo-upload-client": "^18.0.1",
     "clsx": "^2.1.1",
     "graphql": "^16.9.0",
@@ -20,8 +20,8 @@
     "js-md5": "^0.8.3",
     "jwt-decode": "^4.0.0",
     "normalize.css": "^8.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^18",
+    "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.52.2",
     "react-i18next": "^15.0.1",
@@ -31,9 +31,9 @@
     "soundbeam": "^0.0.7",
     "typescript": "^5.5.4",
     "valibot": "^0.37.0",
-    "vite": "^5.4.1",
-    "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^5.0.1"
+    "vite": "^6.1.0",
+    "vite-plugin-svgr": "^4.3.0",
+    "vite-tsconfig-paths": "^5.1.4"
   },
   "scripts": {
     "dev": "vite --host",
