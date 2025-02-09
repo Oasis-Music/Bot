@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import Trackline from './Trackline'
 import { TopControls } from './top-controls'
 import { Details } from './Details'
-import { Controls } from './Controls'
+import { MainControls } from './main-controls'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
@@ -55,7 +55,7 @@ const Player: ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
         currentTime={currentTime}
         duration={timeFormater(currentTrack.duration)}
       />
-      <Controls
+      <MainControls
         readyForPlay={isReadyForPlay}
         withLoop={withLoop}
         withRandom={withRandom}
