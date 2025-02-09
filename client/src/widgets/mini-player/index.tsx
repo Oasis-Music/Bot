@@ -26,7 +26,7 @@ export function MiniPlayer({ onPlayerOpen, onPlayPause }: MiniPlayerProps) {
         </div>
       </div>
       <div className={styles.buttonWrapper}>
-        <PlayPauseButton onClick={onPlayPause} />
+        <PlayPauseButton variant="plain" onClick={onPlayPause} />
       </div>
     </div>
   )

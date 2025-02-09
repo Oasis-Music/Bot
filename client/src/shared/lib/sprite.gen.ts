@@ -1,5 +1,14 @@
 export interface SpritesMap {
-  common: 'angle-arrow' | 'arrow-alt' | 'list-music' | 'random' | 'repeat' | 'search' | 'settings'
+  common:
+    | 'angle-arrow'
+    | 'arrow-alt'
+    | 'list-music'
+    | 'pause'
+    | 'play'
+    | 'random'
+    | 'repeat'
+    | 'search'
+    | 'settings'
 }
 export const SPRITES_META: {
   [Key in keyof SpritesMap]: {
@@ -15,7 +24,7 @@ export const SPRITES_META: {
   }
 } = {
   common: {
-    filePath: 'common.9856a927.svg',
+    filePath: 'common.0b383065.svg',
     items: {
       'angle-arrow': {
         viewBox: '0 0 320 512',
@@ -30,6 +39,16 @@ export const SPRITES_META: {
       'list-music': {
         viewBox: '0 0 512 512',
         width: 512,
+        height: 512
+      },
+      pause: {
+        viewBox: '0 0 448 512',
+        width: 448,
+        height: 512
+      },
+      play: {
+        viewBox: '0 0 448 512',
+        width: 448,
         height: 512
       },
       random: {

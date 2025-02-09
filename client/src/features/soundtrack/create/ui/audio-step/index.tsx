@@ -1,10 +1,8 @@
+import { Icon } from '@/shared/ui/icon'
 import { useState, useEffect, useRef } from 'react'
-import PlayIcon from '@/shared/assets/svg/play.svg?react'
-import PauseIcon from '@/shared/assets/svg/pause.svg?react'
 import AudioPlayer from '@/player'
 import { Dropzone } from './dropzone'
 import { IconButton } from '@/shared/ui/icon-button'
-import { SvgIcon } from '@/shared/ui/svg-icon'
 import { StepControls } from '../common/step-controls'
 import { Checkbox } from '@/shared/ui/checkbox'
 import { timeFormater } from '@/shared/lib/helpers'
@@ -120,7 +118,7 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
         </div>
         <div className={styles.playButtonWrapper}>
           <IconButton disabled={!readyForPlay} onClick={playHandler} className={styles.playButton}>
-            <SvgIcon>{isPlay ? <PauseIcon /> : <PlayIcon />}</SvgIcon>
+            <Icon name={`common/${isPlay ? 'pause' : 'play'}`} />
           </IconButton>
         </div>
       </div>
