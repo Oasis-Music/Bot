@@ -25,7 +25,7 @@ export function SoundtrackItem({
         <ImagePlaceholder src={coverURL} altText={title} />
       </div>
       <div className="w-[74%]">
-        <p className="mb-1.5 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white">
+        <p className="mb-1 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white">
           {title}
         </p>
         <p className="text-[11px] text-gray-400">{author}</p>
