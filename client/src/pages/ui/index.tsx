@@ -1,4 +1,4 @@
-import { TextInputs } from './Form/Form'
+import { Inputs } from './inputs'
 import { Buttons } from './Buttons/Buttons'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useForm, FormProvider, SubmitHandler } from 'react-hook-form'
@@ -22,12 +22,12 @@ export default function UI() {
   })
 
   return (
-    <div>
-      <div style={{ paddingLeft: 20, color: '#Fff' }}>
+    <div className="bg-black">
+      <div style={{ color: '#Fff' }}>
         <h3>Ваш шедевр готов!</h3>
         <FormProvider {...formMethods}>
           <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
-            <TextInputs />
+            <Inputs />
             <Buttons />
           </form>
         </FormProvider>
