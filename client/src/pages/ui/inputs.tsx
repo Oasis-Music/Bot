@@ -1,10 +1,7 @@
 import { Checkbox } from '@/shared/ui/checkbox'
 import { Input } from '@/shared/ui/input'
-import { useFormContext } from 'react-hook-form'
 
 export function Inputs() {
-  const { register } = useFormContext()
-
   return (
     <div>
       <h2 className="mb-2 text-2xl">Text Inputs</h2>
@@ -24,10 +21,10 @@ export function Inputs() {
       </div>
       <h4>Checkbox</h4>
       <div>
-        <Checkbox register={register} name="baseCheckbox" />
+        <Checkbox name="baseCheckbox" />
       </div>
       <div style={{ color: '#fff' }}>
-        <Checkbox register={register} name="baseCheckbox" label="with label" />
+        <Checkbox name="baseCheckbox" label="with label" />
       </div>
     </div>
   )

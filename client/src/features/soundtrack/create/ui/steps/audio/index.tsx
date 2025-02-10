@@ -24,7 +24,7 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
     exists: false
   })
 
-  const { setValue, register } = useFormContext()
+  const { setValue } = useFormContext()
 
   const [player, setPlayer] = useState<AudioPlayer>()
 
@@ -127,7 +127,7 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
         </div>
       </div>
       <div className="mb-10 flex justify-center">
-        <Checkbox name="attach" label={t('pages.upload.audio.attach')} register={register} />
+        <Checkbox name="attach" label={t('pages.upload.audio.attach')} />
       </div>
       <StepControls
         actionButtonType="submit"
