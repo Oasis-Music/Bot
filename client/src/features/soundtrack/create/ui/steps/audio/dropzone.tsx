@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import clsx from 'clsx'
-import AudioPlayer from '@/player'
-import Mp3FileIcon from '@/shared/assets/svg/file-mp3.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
+import { md5 } from 'js-md5'
+import { cva } from 'cva'
+import { Icon } from '@/shared/ui/icon'
 import { useDropzone, FileRejection } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
-import { md5 } from 'js-md5'
-
-import styles from './styles.module.scss'
+import { ErrorMessage } from '@/shared/ui/error-message'
+import AudioPlayer from '@/player'
+import { dropzoneFeedbackColor } from '../../common/utils'
 
 interface DropzoneProps {
   audio: File | null
@@ -31,25 +30,14 @@ function dropzoneCodeToMsg(code: string): string {
   }
 }
 
-interface containerStyles {
-  isError: boolean
-  isDragAccept: boolean
-  isDragReject: boolean
-}
-
-const getColor = (props: containerStyles) => {
-  if (props.isDragReject) {
-    return '#ff1744'
+const mp3Icon = cva('text-[61px]', {
+  variants: {
+    state: {
+      accepted: 'text-[#00e676]',
+      default: 'text-gray-400'
+    }
   }
-
-  if (props.isDragAccept) {
-    return '#00e676'
-  }
-
-  if (props.isError) {
-    return '#ff1744'
-  }
-}
+})
 
 export function Dropzone({
   audio,
@@ -61,7 +49,7 @@ export function Dropzone({
 }: DropzoneProps) {
   const { t } = useTranslation()
 
-  const [dropError, setDropError] = useState('')
+  const [dropError, setDropError] = useState<string | null>('')
 
   const handleFileDrop = (acceptedFiles: File[]) => {
     if (audio) {
@@ -69,7 +57,7 @@ export function Dropzone({
     }
 
     if (acceptedFiles.length) {
-      if (dropError) setDropError('')
+      if (dropError) setDropError(null)
       const file = acceptedFiles[0] as File
       onSetAudio(file)
 
@@ -133,25 +121,26 @@ export function Dropzone({
     <>
       <div
         {...getRootProps()}
-        className={styles.dropzone}
-        style={{
-          borderColor: getColor({
-            isDragAccept,
-            isDragReject,
-            isError: !!dropError
-          })
-        }}
+        className="relative m-auto w-[96%] rounded-xl bg-[#1c1c1e] px-4 py-6"
       >
         <input {...getInputProps()} />
-        <div className={styles.plug}>
-          <div className={styles.plugIconBox}>
-            <SvgIcon className={clsx(styles.plugIcon, audio?.size && styles.done)}>
-              <Mp3FileIcon />
-            </SvgIcon>
+        <div className="flex items-center justify-around">
+          <div className="flex basis-1/3 justify-center">
+            <Icon
+              name="other/file-mp3"
+              className={mp3Icon({ state: audio?.size ? 'accepted' : 'default' })}
+              style={{
+                color: dropzoneFeedbackColor({
+                  isDragAccept,
+                  isDragReject,
+                  isError: !!dropError
+                })
+              }}
+            />
           </div>
-          <div className={styles.plugInfo}>
-            <p>{t('pages.upload.audio.dropzone.title')}</p>
-            <ul>
+          <div className="basis-2/3">
+            <p className="mb-2 text-center">{t('pages.upload.audio.dropzone.title')}</p>
+            <ul className="flex list-disc flex-col items-center text-sm text-gray-400">
               <li>
                 {t('pages.upload.audio.dropzone.size', {
                   size: MAX_AUDIO_SIZE
@@ -162,11 +151,13 @@ export function Dropzone({
           </div>
         </div>
       </div>
-      <p className={clsx(styles.errorMessage, !!dropError && styles.showError)}>
-        {t(dropError, {
-          size: MAX_AUDIO_SIZE
-        })}
-      </p>
+      <div className="my-4">
+        <ErrorMessage align="center" show={!!dropError}>
+          {t(dropError as string, {
+            size: MAX_AUDIO_SIZE
+          })}
+        </ErrorMessage>
+      </div>
     </>
   )
 }

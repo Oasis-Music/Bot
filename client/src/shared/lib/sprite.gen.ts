@@ -1,4 +1,5 @@
 export interface SpritesMap {
+  action: 'trash'
   common:
     | 'angle-arrow'
     | 'arrow-alt'
@@ -9,6 +10,7 @@ export interface SpritesMap {
     | 'repeat'
     | 'search'
     | 'settings'
+  other: 'file-mp3'
 }
 export const SPRITES_META: {
   [Key in keyof SpritesMap]: {
@@ -23,6 +25,16 @@ export const SPRITES_META: {
     >
   }
 } = {
+  action: {
+    filePath: 'action.8daedcba.svg',
+    items: {
+      trash: {
+        viewBox: '0 0 448 512',
+        width: 448,
+        height: 512
+      }
+    }
+  },
   common: {
     filePath: 'common.0b383065.svg',
     items: {
@@ -70,6 +82,16 @@ export const SPRITES_META: {
         viewBox: '0 0 20 20',
         width: 20,
         height: 20
+      }
+    }
+  },
+  other: {
+    filePath: 'other.03a6a34f.svg',
+    items: {
+      'file-mp3': {
+        viewBox: '0 0 512 512',
+        width: 512,
+        height: 512
       }
     }
   }

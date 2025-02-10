@@ -1,16 +1,13 @@
-import { Icon } from '@/shared/ui/icon'
 import { useState, useEffect, useRef } from 'react'
 import AudioPlayer from '@/player'
 import { Dropzone } from './dropzone'
-import { IconButton } from '@/shared/ui/icon-button'
-import { StepControls } from '../common/step-controls'
+import { StepControls } from '../../common/step-controls'
 import { Checkbox } from '@/shared/ui/checkbox'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
-import { CheckExistence } from '../common/check-existence'
-
-import styles from './styles.module.scss'
+import { CheckExistence } from '../../common/check-existence'
+import { PlayPauseButtonUI } from '@/shared/ui/play-pause-button'
 
 interface AudioProps {
   loading: boolean
@@ -98,9 +95,11 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
   }
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.stepTitle}>{t('pages.upload.audio.title')}</h2>
-      <p className={styles.subTitle}>{t('pages.upload.audio.subTitle')}</p>
+    <div className="px-3 pt-6">
+      <h2 className="mb-2 flex items-center text-3xl font-medium">
+        {t('pages.upload.audio.title')}
+      </h2>
+      <p className="text-gray-400">{t('pages.upload.audio.subTitle')}</p>
       <CheckExistence hash={hash.hash} setExistance={handleExistanceSet} />
       <Dropzone
         audio={audio}
@@ -110,19 +109,24 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
         onSetAudio={setAudio}
         onFormValue={handleSetAudioFormValue}
       />
-      <div className={styles.waveWrapper}>
+
+      <div className="px-4">
         <div ref={waveContainerRef} />
-        <div className={styles.timings}>
+
+        <div className="mt-2.5 flex justify-between px-5 text-sm font-medium text-gray-400">
           <span>{currentTime}</span>
           <span>{duration}</span>
         </div>
-        <div className={styles.playButtonWrapper}>
-          <IconButton disabled={!readyForPlay} onClick={playHandler} className={styles.playButton}>
-            <Icon name={`common/${isPlay ? 'pause' : 'play'}`} />
-          </IconButton>
+        <div className="my-6 flex justify-center">
+          <PlayPauseButtonUI
+            variant="attractive"
+            isPlaying={isPlay}
+            disabled={!readyForPlay}
+            onClick={playHandler}
+          />
         </div>
       </div>
-      <div className={styles.attach}>
+      <div className="mb-10 flex justify-center">
         <Checkbox name="attach" label={t('pages.upload.audio.attach')} register={register} />
       </div>
       <StepControls
