@@ -58,7 +58,8 @@ export default ({ mode = 'development' }: UserConfig) => {
     },
     preview: {
       open: false,
-      port: 3001
+      port: 3001,
+      host: true
     },
     build: {
       outDir: 'build'
