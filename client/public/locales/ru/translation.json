@@ -2,7 +2,12 @@
   "common": {
     "save": "Сохранить",
     "soundtrack": "Саундтрек",
-    "add": "Добавить"
+    "add": "Добавить",
+    "validation": {
+      "requiredField": "* обязательное поле",
+      "minLength2": "* минимум 2 символа",
+      "maxLength70": "* максимум 70 символов"
+    }
   },
   "errors": {
     "serverAccessErr": "Сервис не доступен, повторите попытку позже"
@@ -37,8 +42,7 @@
         "titleField": "Название",
         "authorField": "Автор",
         "nextButton": "Продолжить",
-        "link": "На главную",
-        "emojiAlt": "смайлик - улыбка"
+        "link": "На главную"
       },
       "cover": {
         "title": "Шаг #2",
