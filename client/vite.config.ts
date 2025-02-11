@@ -1,6 +1,5 @@
 import { defineConfig, loadEnv, type UserConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
@@ -32,7 +31,6 @@ export default ({ mode = 'development' }: UserConfig) => {
     },
     plugins: [
       react(),
-      svgr(),
       viteTsconfigPaths(),
       tailwindcss(),
       svg({
