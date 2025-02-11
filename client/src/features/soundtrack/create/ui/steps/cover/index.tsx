@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { StepControls } from '../../common/step-controls'
 import { useTranslation } from 'react-i18next'
-
+import { BackButton } from '../../common/back-button'
 import { CoverDropzone } from './dropzone'
 
 interface CoverProps {
@@ -38,9 +38,10 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
 
   return (
     <div className="px-3 pt-6">
-      <h2 className="mb-2 flex items-center text-3xl font-medium">
-        {t('pages.upload.cover.title')}
-      </h2>
+      <div className="mb-2 flex justify-between">
+        <h2 className="flex items-center text-3xl font-medium">{t('pages.upload.cover.title')}</h2>
+        <BackButton onClick={onPrevStep} />
+      </div>
       <p className="text-gray-400">{t('pages.upload.cover.subTitle')}</p>
       <CoverDropzone
         coverFile={coverFile}
@@ -50,11 +51,10 @@ export function Cover({ onNextStep, onPrevStep, onAlert }: CoverProps) {
       />
       <StepControls
         disabled={!!dropError}
-        nextText={t(
+        actionText={t(
           !!dropError || !coverFile ? 'pages.upload.cover.skip' : 'pages.upload.cover.continue'
         )}
-        onBack={onPrevStep}
-        onNext={onNextStep}
+        onActionClick={onNextStep}
         onAlert={onAlert}
       />
     </div>

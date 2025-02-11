@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
 import { CheckExistence } from '../../common/check-existence'
 import { PlayPauseButtonUI } from '@/shared/ui/play-pause-button'
+import { BackButton } from '../../common/back-button'
 
 interface AudioProps {
   loading: boolean
@@ -96,9 +97,10 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
 
   return (
     <div className="px-3 pt-6">
-      <h2 className="mb-2 flex items-center text-3xl font-medium">
-        {t('pages.upload.audio.title')}
-      </h2>
+      <div className="mb-2 flex justify-between">
+        <h2 className="flex items-center text-3xl font-medium">{t('pages.upload.audio.title')}</h2>
+        <BackButton onClick={onPrevStep} />
+      </div>
       <p className="text-gray-400">{t('pages.upload.audio.subTitle')}</p>
       <CheckExistence hash={hash.hash} setExistance={handleExistanceSet} />
       <Dropzone
@@ -133,8 +135,7 @@ export function Audio({ loading, onPrevStep, onAlert }: AudioProps) {
         actionButtonType="submit"
         disabled={!readyForPlay || hash.exists}
         loading={loading}
-        nextText={t('pages.upload.audio.upload')}
-        onBack={onPrevStep}
+        actionText={t('pages.upload.audio.upload')}
         onAlert={onAlert}
       />
     </div>

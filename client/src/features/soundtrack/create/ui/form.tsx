@@ -11,7 +11,7 @@ import { validationSchema } from '../model/validation-schema'
 import { useCreateSoundtrackMutation } from '../api'
 import { useForm, FormProvider } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { StepSlide } from './common/slide'
+import { StepSlide } from './common/step-slide'
 import type { FormValues, FeedbackModal } from '../model/types'
 
 const enum Step {
@@ -23,7 +23,7 @@ const enum Step {
 export function CreateSoundtrackForm() {
   const navigate = useNavigate()
 
-  const [step, setStep] = useState(Step.INFO)
+  const [step, setStep] = useState(Step.COVER)
 
   const [isAlertOpen, setAlertOpen] = useState(false)
   const [feedbackModal, setFeedbackModal] = useState<FeedbackModal>({

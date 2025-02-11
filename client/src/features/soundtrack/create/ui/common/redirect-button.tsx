@@ -4,14 +4,7 @@ import { useFormContext } from 'react-hook-form'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'
 
-import styles from './styles.module.scss'
-
-interface RedirectButtonProps {
-  onAlert(): void
-  children: ReactNode
-}
-
-export function RedirectButton({ onAlert, children }: RedirectButtonProps) {
+export function RedirectButton({ onAlert, children }: { onAlert(): void; children: ReactNode }) {
   const navigate = useNavigate()
 
   const {
@@ -28,7 +21,7 @@ export function RedirectButton({ onAlert, children }: RedirectButtonProps) {
   }
 
   return (
-    <Button color="secondary" onClick={handleClick} className={styles.redirectButton}>
+    <Button color="secondary" onClick={handleClick} className="bg-transparent underline">
       {children}
     </Button>
   )

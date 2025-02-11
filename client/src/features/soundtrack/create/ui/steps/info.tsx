@@ -1,8 +1,7 @@
 import { Input } from '@/shared/ui/input'
-import { Button } from '@/shared/ui/button'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { RedirectButton } from '../common/redirect-button'
+import { StepControls } from '../common/step-controls'
 import blushEmoji from '@/shared/assets/rastr/blush.png'
 import type { InfoValues } from '../../model/validation-schema'
 
@@ -24,12 +23,12 @@ export function Info({ onNextStep, onAlert }: { onNextStep(): void; onAlert(): v
         <Input name="title" placeholder={t('pages.upload.info.titleField')} />
         <Input name="author" placeholder={t('pages.upload.info.authorField')} />
       </div>
-      <div className="mb-4 flex justify-center">
-        <Button disabled={!!(errors.title || errors.author)} onClick={onNextStep}>
-          {t('pages.upload.info.nextButton')}
-        </Button>
-      </div>
-      <RedirectButton onAlert={onAlert}>{t('pages.upload.info.link')}</RedirectButton>
+      <StepControls
+        disabled={!!(errors.title || errors.author)}
+        actionText={t('pages.upload.info.nextButton')}
+        onActionClick={onNextStep}
+        onAlert={onAlert}
+      />
     </div>
   )
 }
