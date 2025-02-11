@@ -1,11 +1,9 @@
 import { toast } from 'sonner'
 import { Button } from '@/shared/ui/button'
-import { useSignIn } from '../../model'
+import { useSignIn } from '../model'
 import { useTranslation } from 'react-i18next'
-import { useAuthQuery } from '../../api'
-import type { AuthData } from '../../model/types'
-
-import styles from './styles.module.scss'
+import { useAuthQuery } from '../api'
+import type { AuthData } from '../model/types'
 
 export function SignInButton() {
   const { t } = useTranslation()
@@ -38,7 +36,7 @@ export function SignInButton() {
   }
 
   return (
-    <Button glow loading={loading} onClick={handleButtonClick} className={styles.submitButton}>
+    <Button glow loading={loading} fullWidth onClick={handleButtonClick}>
       {t('pages.auth.enterBtn')}
     </Button>
   )

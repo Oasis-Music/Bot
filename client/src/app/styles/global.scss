@@ -30,7 +30,7 @@
 
 body {
   color: #fff;
-  background-color: #101318;
+  background-color: #000;
   font-family: Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
@@ -40,14 +40,4 @@ main {
 
 a {
   -webkit-tap-highlight-color: transparent;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type='number'] {
-  -moz-appearance: textfield;
 }
