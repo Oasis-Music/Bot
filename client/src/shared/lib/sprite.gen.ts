@@ -10,7 +10,7 @@ export interface SpritesMap {
     | 'repeat'
     | 'search'
     | 'settings'
-  other: 'file-mp3'
+  other: 'eye' | 'file-mp3'
 }
 export const SPRITES_META: {
   [Key in keyof SpritesMap]: {
@@ -86,8 +86,13 @@ export const SPRITES_META: {
     }
   },
   other: {
-    filePath: 'other.03a6a34f.svg',
+    filePath: 'other.c9a1fec3.svg',
     items: {
+      eye: {
+        viewBox: '0 0 576 512',
+        width: 576,
+        height: 512
+      },
       'file-mp3': {
         viewBox: '0 0 512 512',
         width: 512,
