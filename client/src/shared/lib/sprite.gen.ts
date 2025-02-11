@@ -1,8 +1,9 @@
 export interface SpritesMap {
-  action: 'trash'
+  action: 'copy' | 'trash'
   common:
     | 'angle-arrow'
     | 'arrow-alt'
+    | 'check'
     | 'list-music'
     | 'music'
     | 'pause'
@@ -11,6 +12,7 @@ export interface SpritesMap {
     | 'repeat'
     | 'search'
     | 'settings'
+    | 'share'
   other: 'eye' | 'file-mp3'
 }
 export const SPRITES_META: {
@@ -27,8 +29,13 @@ export const SPRITES_META: {
   }
 } = {
   action: {
-    filePath: 'action.8daedcba.svg',
+    filePath: 'action.06b43d60.svg',
     items: {
+      copy: {
+        viewBox: '0 0 448 512',
+        width: 448,
+        height: 512
+      },
       trash: {
         viewBox: '0 0 448 512',
         width: 448,
@@ -37,7 +44,7 @@ export const SPRITES_META: {
     }
   },
   common: {
-    filePath: 'common.43707632.svg',
+    filePath: 'common.7d2fce2c.svg',
     items: {
       'angle-arrow': {
         viewBox: '0 0 320 512',
@@ -47,6 +54,11 @@ export const SPRITES_META: {
       'arrow-alt': {
         viewBox: '0 0 448 512',
         width: 448,
+        height: 512
+      },
+      check: {
+        viewBox: '0 0 512 512',
+        width: 512,
         height: 512
       },
       'list-music': {
@@ -85,6 +97,11 @@ export const SPRITES_META: {
         height: 512
       },
       settings: {
+        viewBox: '0 0 20 20',
+        width: 20,
+        height: 20
+      },
+      share: {
         viewBox: '0 0 20 20',
         width: 20,
         height: 20

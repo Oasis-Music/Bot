@@ -1,6 +1,5 @@
-import ShareIcon from '@/shared/assets/svg/share.svg?react'
+import { Icon } from '@/shared/ui/icon'
 import { IconButton } from '@/shared/ui/icon-button'
-import { SvgIcon } from '@/shared/ui/svg-icon'
 
 export interface ShareTrackButtonProps {}
 
@@ -11,9 +10,7 @@ export function ShareTrackButton({}: ShareTrackButtonProps) {
 
   return (
     <IconButton onClick={handleButtonClick} className="text-black">
-      <SvgIcon>
-        <ShareIcon />
-      </SvgIcon>
+      <Icon name="common/share" className="text-[24px]" />
     </IconButton>
   )
 }
