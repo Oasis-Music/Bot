@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import clsx from 'clsx'
+import { cva } from 'cva'
 import { Loader } from '@/shared/ui/loader'
 import { useCheckAudioHashLazyQuery } from '../../../api'
 import { soundtrackExists } from '@/shared/ui/toaster'
@@ -9,22 +9,24 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { toast } from 'sonner'
 
-import styles from './styles.module.scss'
+const container = cva('mb-2 ml-2.5 flex items-center justify-end pr-4', {
+  variants: {
+    show: {
+      true: 'visible',
+      false: 'invisible'
+    }
+  }
+})
 
-interface CheckExistenceProps {
+export function CheckExistence({
+  hash,
+  setExistance
+}: {
   hash: string
   setExistance(exists: boolean): void
-}
-
-export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
+}) {
   const navigate = useNavigate()
   const playSoundtrack = usePlaySoundtrack()
-
-  const handleTrackClick = (track: Soundtrack) => {
-    toast.dismiss()
-    playSoundtrack(track)
-    navigate(ROUTER_NAMES.root)
-  }
 
   const [checkAudio, { loading }] = useCheckAudioHashLazyQuery({
     onError() {
@@ -63,10 +65,16 @@ export function CheckExistence({ hash, setExistance }: CheckExistenceProps) {
     }
   }, [hash])
 
+  const handleTrackClick = (track: Soundtrack) => {
+    toast.dismiss()
+    playSoundtrack(track)
+    navigate(ROUTER_NAMES.root)
+  }
+
   return (
-    <div className={clsx(styles.contaier, loading && styles.show)}>
-      <p className={styles.title}>Проверка</p>
-      <div className={styles.loaderWrapper}>
+    <div className={container({ show: loading })}>
+      <p>Проверка</p>
+      <div className="ml-1 size-4">
         <Loader adaptive />
       </div>
     </div>

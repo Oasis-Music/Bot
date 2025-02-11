@@ -6,7 +6,7 @@ import { Checkbox } from '@/shared/ui/checkbox'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
-import { CheckExistence } from '../../common/check-existence'
+import { CheckExistence } from './check-existence'
 import { PlayPauseButtonUI } from '@/shared/ui/play-pause-button'
 import { BackButton } from '../../common/back-button'
 
