@@ -19,7 +19,7 @@ export function NavBar() {
   const { t } = useTranslation()
 
   return (
-    <nav className="relative z-40 flex items-center justify-center bg-[#070c13]">
+    <nav className="relative z-40 flex items-center justify-center bg-black/50 backdrop-blur-xs">
       <NavLink to={ROUTER_NAMES.explore} className={({ isActive }) => navLink({ isActive })}>
         <Icon name="common/search" />
       </NavLink>

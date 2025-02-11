@@ -4,6 +4,7 @@ export interface SpritesMap {
     | 'angle-arrow'
     | 'arrow-alt'
     | 'list-music'
+    | 'music'
     | 'pause'
     | 'play'
     | 'random'
@@ -36,7 +37,7 @@ export const SPRITES_META: {
     }
   },
   common: {
-    filePath: 'common.0b383065.svg',
+    filePath: 'common.43707632.svg',
     items: {
       'angle-arrow': {
         viewBox: '0 0 320 512',
@@ -49,6 +50,11 @@ export const SPRITES_META: {
         height: 512
       },
       'list-music': {
+        viewBox: '0 0 512 512',
+        width: 512,
+        height: 512
+      },
+      music: {
         viewBox: '0 0 512 512',
         width: 512,
         height: 512

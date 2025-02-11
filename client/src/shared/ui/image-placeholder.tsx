@@ -1,17 +1,30 @@
 import { useState, useEffect } from 'react'
-import clsx from 'clsx'
+import { cva } from 'cva'
+import { Icon } from './icon'
 import LazyLoad from 'react-lazy-load'
-import PlaceholderImage from '@/shared/assets/svg/music.svg?react'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-
-import styles from './imagePlaceholder.module.scss'
 
 export interface ImagePlaceholderProps {
-  src: string | null | undefined
+  src?: string | null
   altText: string
   plain?: boolean
   backgroundColor?: string
 }
+
+const wrapper = cva('relative h-auto translate-z-[0] overflow-hidden pt-[100%]', {
+  variants: {
+    plain: {
+      true: 'h-full pt-0'
+    }
+  }
+})
+
+const plugWrapper = cva('absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center')
+
+const image = cva(
+  'absolute top-0 right-0 bottom-0 left-0 max-h-full max-w-full object-cover select-none'
+)
+
+const shineBox = cva('size-full rounded-2xl')
 
 export function ImagePlaceholder({
   src,
@@ -27,29 +40,27 @@ export function ImagePlaceholder({
 
   const placeholderPlug = (
     <div
-      className={styles.imageStyles}
+      className={image()}
       style={{
         borderRadius: plain ? '10px' : '15px'
       }}
     >
       <div
-        className={styles.shineBox}
+        className={shineBox()}
         style={{
           backgroundColor: backgroundColor ? backgroundColor : '#15191e',
           borderRadius: plain ? '10px' : '15px'
         }}
       />
-      <div className={styles.imageWrapper}>
-        <SvgIcon className={styles.plugIcon}>
-          <PlaceholderImage />
-        </SvgIcon>
+      <div className={plugWrapper()}>
+        <Icon name="common/music" />
       </div>
     </div>
   )
 
   const plainPlug = (
     <div
-      className={styles.shineBox}
+      className={shineBox()}
       style={{
         backgroundColor: backgroundColor ? backgroundColor : '#15191e',
         borderRadius: plain ? '10px' : '15px'
@@ -58,11 +69,7 @@ export function ImagePlaceholder({
   )
 
   if (!src || error) {
-    return (
-      <div className={clsx(styles.wrapper, plain && styles.plain)}>
-        {plain ? plainPlug : placeholderPlug}
-      </div>
-    )
+    return <div className={wrapper({ plain })}>{plain ? plainPlug : placeholderPlug}</div>
   }
 
   const handleImageLoadErr = () => {
@@ -70,11 +77,10 @@ export function ImagePlaceholder({
   }
 
   return (
-    <LazyLoad className={clsx(styles.wrapper, plain && styles.plain)}>
+    <LazyLoad className={wrapper({ plain })}>
       <img
-        className={styles.imageStyles}
+        className={image()}
         style={{
-          opacity: 1,
           borderRadius: plain ? '10px' : '15px'
         }}
         src={src}

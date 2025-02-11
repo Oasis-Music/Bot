@@ -8,8 +8,6 @@ import type { PlaylistType, Soundtrack } from '@/entities/soundtrack'
 import { usePlaySoundtrack } from '@/entities/soundtrack'
 import { useMainPlaylist } from '@/features/soundtrack/bind-main-playlist'
 
-import styles from './styles.module.scss'
-
 interface PlaylistProps {
   relatedTo: PlaylistType
   data: Soundtrack[]
@@ -67,10 +65,10 @@ export function Playlist({
   }
 
   return (
-    <div style={{ display: 'flex', flexGrow: '1' }}>
+    <div className="flex grow">
       <div
         ref={parentRef}
-        className={styles.view}
+        className="scroll-bar"
         style={{
           height: currentTrack.id ? `calc(${height} - 67px)` : height,
           width: `100%`,
@@ -103,7 +101,7 @@ export function Playlist({
               >
                 {isLoaderRow ? (
                   hasNextPage ? (
-                    <div className={styles.loader}>
+                    <div className="flex justify-center">
                       <Loader />
                     </div>
                   ) : (

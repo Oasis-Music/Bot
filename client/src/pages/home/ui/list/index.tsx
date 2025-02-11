@@ -1,6 +1,6 @@
 import { cva } from 'cva'
 import { Playlist } from '@/widgets/playlist'
-import { NoDataPlug, ErrorPlug } from '../plugs'
+import { FeedbackPlug } from '../plugs/feedback'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { userPlaylistVar } from '@/entities/soundtrack'
@@ -37,7 +37,7 @@ export function List({
   if (error) {
     return (
       <div className={container()}>
-        <ErrorPlug />
+        <FeedbackPlug errorType="fetch" />
       </div>
     )
   }
@@ -45,7 +45,7 @@ export function List({
   if (!isLoad && userPlaylist.length === 0) {
     return (
       <div className={container()}>
-        <NoDataPlug />
+        <FeedbackPlug errorType="nodata" />
       </div>
     )
   }

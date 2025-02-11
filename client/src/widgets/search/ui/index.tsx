@@ -1,10 +1,8 @@
-import { Icon } from '@/shared/ui/icon'
-import { IconButton } from '@/shared/ui/icon-button'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { searchSchema, type SearchSchemaType } from '../model/validation-schema'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, FormProvider } from 'react-hook-form'
 
-import styles from './styles.module.scss'
+import { SearchField } from '@/shared/ui/search-field'
 
 interface SearchProps {
   placeholder?: string
@@ -12,7 +10,7 @@ interface SearchProps {
 }
 
 export function Search({ placeholder, onSubmit }: SearchProps) {
-  const { register, handleSubmit } = useForm<SearchSchemaType>({
+  const formMethods = useForm<SearchSchemaType>({
     resolver: valibotResolver(searchSchema)
   })
 
@@ -23,18 +21,15 @@ export function Search({ placeholder, onSubmit }: SearchProps) {
 
   return (
     <section>
-      <form noValidate onSubmit={handleSubmit(handleSearch)} className={styles.form}>
-        <input
-          type="text"
-          autoComplete="off"
-          placeholder={placeholder}
-          className={styles.searchInput}
-          {...register('searchQuery')}
-        />
-        <IconButton type="submit" className={styles.searchButton}>
-          <Icon name="common/search" className="text-[24px]" />
-        </IconButton>
-      </form>
+      <FormProvider {...formMethods}>
+        <form
+          noValidate
+          onSubmit={formMethods.handleSubmit(handleSearch)}
+          className="flex px-1.5 py-5"
+        >
+          <SearchField name="searchQuery" placeholder={placeholder} />
+        </form>
+      </FormProvider>
     </section>
   )
 }

@@ -1,9 +1,8 @@
 import { Loader } from '@/shared/ui/loader'
-import styles from './fallback.module.scss'
 
 export function Fallback() {
   return (
-    <div className={styles.container}>
+    <div className="flex h-screen items-center justify-center">
       <Loader />
     </div>
   )
