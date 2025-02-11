@@ -124,7 +124,7 @@ export function CreateSoundtrackForm() {
   }
 
   return (
-    <div className="h-screen overflow-x-hidden overflow-y-auto bg-black">
+    <div className="h-screen overflow-x-hidden overflow-y-auto">
       <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
           <div
