@@ -1,10 +1,11 @@
+import { cva } from 'cva'
 import { Playlist } from '@/widgets/playlist'
 import { NoDataPlug, ErrorPlug } from '../plugs'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { userPlaylistVar } from '@/entities/soundtrack'
 
-import styles from './styles.module.scss'
+const container = cva('flex h-full items-center justify-center')
 
 interface ListProps {
   currentPage: number
@@ -27,7 +28,7 @@ export function List({
 
   if (isFirstLoad) {
     return (
-      <div className={styles.container}>
+      <div className={container()}>
         <Loader />
       </div>
     )
@@ -35,7 +36,7 @@ export function List({
 
   if (error) {
     return (
-      <div className={styles.container}>
+      <div className={container()}>
         <ErrorPlug />
       </div>
     )
@@ -43,7 +44,7 @@ export function List({
 
   if (!isLoad && userPlaylist.length === 0) {
     return (
-      <div className={styles.container}>
+      <div className={container()}>
         <NoDataPlug />
       </div>
     )
