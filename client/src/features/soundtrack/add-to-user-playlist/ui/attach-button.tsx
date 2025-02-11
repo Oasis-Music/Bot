@@ -1,21 +1,13 @@
 import { currentTrackVar } from '@/entities/soundtrack'
-import { SvgIcon } from '@/shared/ui/svg-icon'
 import { useReactiveVar } from '@apollo/client'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/shared/ui/button'
-import PlusIcon from '@/shared/assets/svg/plus.svg?react'
-import { useAddToUserPlaylist } from '../../model'
-import { useAttachSoundtrackMutation } from '../../api'
-import { type User, userVar } from '@/entities/user'
+import { useAddToUserPlaylist } from '../model'
+import { useAttachSoundtrackMutation } from '../api'
 import { toast } from 'sonner'
+import { type User, userVar } from '@/entities/user'
 
-import styles from './styles.module.scss'
-
-interface MainButtonProps {
-  onTrackAttached?(): void
-}
-
-export function AttachButton({ onTrackAttached }: MainButtonProps) {
+export function AttachButton({ onTrackAttached }: { onTrackAttached?(): void }) {
   const user = useReactiveVar(userVar) as User
 
   const { t } = useTranslation()
@@ -46,16 +38,7 @@ export function AttachButton({ onTrackAttached }: MainButtonProps) {
   }
 
   return (
-    <Button
-      disabled={!track.id}
-      loading={loading}
-      onClick={handleAttachClick}
-      startIcon={
-        <SvgIcon className={styles.addIcon}>
-          <PlusIcon />
-        </SvgIcon>
-      }
-    >
+    <Button disabled={!track.id} loading={loading} onClick={handleAttachClick}>
       {t('common.save')}
     </Button>
   )
