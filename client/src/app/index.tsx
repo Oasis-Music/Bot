@@ -6,9 +6,11 @@ import { ApolloProvider } from '@apollo/client'
 import { Toast } from '@/widgets/toast'
 
 import { AppLoader } from './app-loader'
+import { urqlClient } from './urql'
 
 import { routeTree } from '@/shared/lib/routeTree.gen'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { Provider } from 'urql'
 
 const router = createRouter({ routeTree })
 
@@ -26,10 +28,12 @@ function Application() {
 
   return (
     <AppLoader>
-      <ApolloProvider client={client}>
-        <RouterProvider router={router} />
-        <Toast />
-      </ApolloProvider>
+      <Provider value={urqlClient}>
+        <ApolloProvider client={client}>
+          <RouterProvider router={router} />
+          <Toast />
+        </ApolloProvider>
+      </Provider>
     </AppLoader>
   )
 }
