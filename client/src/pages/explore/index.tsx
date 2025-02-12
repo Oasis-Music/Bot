@@ -1,1 +1,1 @@
-export { Explore as default } from './ui'
+export { ExplorePage } from './ui'

@@ -1,6 +1,6 @@
 const APP_NAME = 'Oasis'
 
-export default function Terms() {
+export function TermsPage() {
   return (
     <div className="px-2.5">
       <h1>Terms of Use</h1>

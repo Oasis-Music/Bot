@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useExplorePlaylist } from '@/features/soundtrack/set-explore-playlist'
 import type { Soundtrack } from '@/entities/soundtrack'
 
-export function Explore() {
+export function ExplorePage() {
   const { t } = useTranslation()
   const [_, setTracks] = useState<Soundtrack[]>([])
 

@@ -4,10 +4,12 @@ import { useSignIn } from '../model'
 import { useTranslation } from 'react-i18next'
 import { useAuthQuery } from '../api'
 import type { AuthData } from '../model/types'
+import { useNavigate } from '@tanstack/react-router'
 
 export function SignInButton() {
   const { t } = useTranslation()
   const { signIn, setUser } = useSignIn()
+  const navigate = useNavigate({ from: '/auth' })
 
   const [authorize, { loading }] = useAuthQuery<AuthData>({
     onSuccess(data) {
@@ -22,6 +24,8 @@ export function SignInButton() {
       setUser({
         id: tokenData.userId
       })
+
+      navigate({ to: '/' })
     },
     onError() {
       toast.error(t('errors.serverAccessErr'), { duration: 3000 })

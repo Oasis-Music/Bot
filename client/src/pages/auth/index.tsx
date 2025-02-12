@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { SignInButton } from '@/features/auth/sign-in'
+import { Link } from '@tanstack/react-router'
 
-export default function Auth() {
+export function AuthPage() {
   const { t } = useTranslation()
 
   return (
@@ -16,11 +15,11 @@ export default function Auth() {
           {t('pages.auth.terms', {
             btn: t('pages.auth.enterBtn')
           })}
-          <Link to={ROUTER_NAMES.terms} className="text-accept">
+          <Link to="/terms" className="text-accept">
             {t('pages.auth.termsLink')}
           </Link>
         </p>
-        <Link to={'#'} className="underline">
+        <Link to="." className="underline">
           {t('pages.auth.report')}
         </Link>
       </div>

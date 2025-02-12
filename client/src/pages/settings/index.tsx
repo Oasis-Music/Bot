@@ -1,6 +1,6 @@
 import { LangSelector } from '@/features/user/change-lang'
 
-export default function Settings() {
+export function SettingsPage() {
   return (
     <div className="p-10">
       <LangSelector />

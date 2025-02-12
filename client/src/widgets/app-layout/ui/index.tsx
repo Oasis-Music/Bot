@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import Player from '@/widgets/player'
 import AudioPlayer from '@/player'
 import { NavBar } from '@/widgets/navigation'
@@ -6,12 +6,11 @@ import { MiniPlayer } from '@/widgets/mini-player'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
-import { Outlet } from 'react-router-dom'
 import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 import { usePlayNextTrack } from '@/features/soundtrack/play-next'
 import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
 
-export function AppLayout() {
+export function AppLayout({ children }: { children?: ReactNode }) {
   const track = useReactiveVar(currentTrackVar)
 
   const playerRef = useRef<AudioPlayer | null>(null)
@@ -114,9 +113,7 @@ export function AppLayout() {
 
   return (
     <div className="relative">
-      <main>
-        <Outlet />
-      </main>
+      <main>{children}</main>
       <div className="fixed bottom-0 w-full">
         <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
         <NavBar />

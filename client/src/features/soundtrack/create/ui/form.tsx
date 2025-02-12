@@ -4,8 +4,7 @@ import { Feedback } from './modals/feedback'
 import { Info } from './steps/info'
 import { Cover } from './steps/cover'
 import { Audio } from './steps/audio'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 import { useWindowRatio } from '@/shared/lib/hooks'
 import { validationSchema } from '../model/validation-schema'
 import { useCreateSoundtrackMutation } from '../api'
@@ -98,10 +97,10 @@ export function CreateSoundtrackForm() {
     const { attach } = formMethods.getValues()
 
     if (attach) {
-      navigate(ROUTER_NAMES.root)
+      navigate({ to: '/' })
       return
     }
-    navigate(ROUTER_NAMES.explore)
+    navigate({ to: '/explore' })
   }
 
   const handleFeedbackErr = () => {
@@ -120,7 +119,7 @@ export function CreateSoundtrackForm() {
   }
 
   const handleAlertLeave = () => {
-    navigate(ROUTER_NAMES.root)
+    navigate({ to: '/' })
   }
 
   return (

@@ -5,9 +5,8 @@ import { useCheckAudioHashLazyQuery } from '../../../api'
 import { soundtrackExistsToast } from './toast'
 import { Soundtrack, SoundtrackItem } from '@/entities/soundtrack'
 import { usePlaySoundtrack } from '@/entities/soundtrack'
-import { useNavigate } from 'react-router-dom'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { toast } from 'sonner'
+import { useNavigate } from '@tanstack/react-router'
 
 const container = cva('mb-2 ml-2.5 flex items-center justify-end pr-4', {
   variants: {
@@ -68,7 +67,7 @@ export function CheckExistence({
   const handleTrackClick = (track: Soundtrack) => {
     toast.dismiss()
     playSoundtrack(track)
-    navigate(ROUTER_NAMES.root)
+    navigate({ to: '/' })
   }
 
   return (

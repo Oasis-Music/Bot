@@ -1,5 +1,5 @@
 import { CreateSoundtrackForm } from '@/features/soundtrack/create'
 
-export default function Upload() {
+export function UploadPage() {
   return <CreateSoundtrackForm />
 }

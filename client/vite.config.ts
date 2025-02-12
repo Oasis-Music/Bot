@@ -1,10 +1,11 @@
 import { defineConfig, loadEnv, type UserConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
-import tailwindcss from '@tailwindcss/vite'
-import viteTsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
 import fs from 'fs'
 import svg from '@neodx/svg/vite'
+import viteReact from '@vitejs/plugin-react-swc'
+import tailwindcss from '@tailwindcss/vite'
+import viteTsconfigPaths from 'vite-tsconfig-paths'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
 export default ({ mode = 'development' }: UserConfig) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) }
@@ -23,7 +24,12 @@ export default ({ mode = 'development' }: UserConfig) => {
       }
     },
     plugins: [
-      react(),
+      TanStackRouterVite({
+        autoCodeSplitting: true,
+        routesDirectory: './src/pages/routes',
+        generatedRouteTree: './src/shared/lib/routeTree.gen.ts'
+      }),
+      viteReact(),
       viteTsconfigPaths(),
       tailwindcss(),
       svg({

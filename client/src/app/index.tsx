@@ -1,28 +1,38 @@
-import { createRoot } from 'react-dom/client'
+// import { StrictMode } from 'react'
+import ReactDOM from 'react-dom/client'
 import { client } from './apollo'
 import { useDetectLang } from '@/shared/lib/hooks'
 import { ApolloProvider } from '@apollo/client'
-import { BrowserRouter } from 'react-router-dom'
 import { Toast } from '@/widgets/toast'
-import { App } from './app'
+
+import { AppLoader } from './app-loader'
+
+import { routeTree } from '@/shared/lib/routeTree.gen'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+
+const router = createRouter({ routeTree })
 
 import '@/shared/lib/i18n'
-import { AppLoader } from './app-loader'
+import './styles/index.css'
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
 
 function Application() {
   useDetectLang()
 
   return (
     <AppLoader>
-      <BrowserRouter>
-        <ApolloProvider client={client}>
-          <App />
-          <Toast />
-        </ApolloProvider>
-      </BrowserRouter>
+      <ApolloProvider client={client}>
+        <RouterProvider router={router} />
+        <Toast />
+      </ApolloProvider>
     </AppLoader>
   )
 }
 
-const root = createRoot(document.getElementById('root') as HTMLElement)
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(<Application />)

@@ -1,8 +1,7 @@
 import { ReactNode } from 'react'
 import { Button } from '@/shared/ui/button'
 import { useFormContext } from 'react-hook-form'
-import { ROUTER_NAMES } from '@/shared/constants/routes'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from '@tanstack/react-router'
 
 export function RedirectButton({ onAlert, children }: { onAlert(): void; children: ReactNode }) {
   const navigate = useNavigate()
@@ -17,7 +16,7 @@ export function RedirectButton({ onAlert, children }: { onAlert(): void; childre
       return
     }
 
-    navigate(ROUTER_NAMES.root)
+    navigate({ to: '/' })
   }
 
   return (

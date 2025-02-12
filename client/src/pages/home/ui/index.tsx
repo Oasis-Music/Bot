@@ -9,7 +9,7 @@ import { type Soundtrack, USER_PLAYLIST_PAGINATION_LEN } from '@/entities/soundt
 import { type User, userVar } from '@/entities/user'
 import { useUserPlaylist } from '@/features/soundtrack/set-user-playlist'
 
-export function Home() {
+export function HomePage() {
   const { t } = useTranslation()
   const currentUser = useReactiveVar(userVar) as User
 
