@@ -4,8 +4,6 @@ import { Button } from '@/shared/ui/button'
 import { Modal } from '@/widgets/modal'
 import { useTranslation } from 'react-i18next'
 
-import styles from './styles.module.scss'
-
 interface FeedbackProps {
   isOpen: boolean
   type: 'success' | 'fail'
@@ -26,27 +24,27 @@ export function Feedback({ type, isOpen, onSubmit, onRetry }: FeedbackProps) {
 
   return (
     <Modal open={isOpen} hideControls>
-      <div className={styles.container}>
-        <img src={type === 'success' ? sunglassesEmoji : thinkingEmoji} className={styles.image} />
-        <h4 className={styles.title}>
+      <div className="pb-2.5">
+        <img
+          src={type === 'success' ? sunglassesEmoji : thinkingEmoji}
+          className="m-auto mt-4 w-[37%]"
+        />
+        <h4 className="text-center text-2xl">
           {t(
             type === 'success'
               ? 'pages.upload.modals.feedback.successUpload'
               : 'pages.upload.modals.feedback.uploadFail'
           )}
         </h4>
-        <Button
-          fullWidth
-          color="secondary"
-          onClick={handleActionClick}
-          className={styles.actionButton}
-        >
-          {t(
-            type === 'success'
-              ? 'pages.upload.modals.feedback.fine'
-              : 'pages.upload.modals.feedback.close'
-          )}
-        </Button>
+        <div className="mt-4 flex justify-center">
+          <Button onClick={handleActionClick}>
+            {t(
+              type === 'success'
+                ? 'pages.upload.modals.feedback.fine'
+                : 'pages.upload.modals.feedback.close'
+            )}
+          </Button>
+        </div>
       </div>
     </Modal>
   )

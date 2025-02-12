@@ -20,12 +20,12 @@ export function SoundtrackItem({
   onClick
 }: PlaylistItemProps) {
   return (
-    <div className="mb-2.5 flex items-center pr-2.5 pl-1.5" onClick={onClick}>
+    <div className="mb-2.5 flex items-center pr-2" onClick={onClick}>
       <div className="mr-2 size-12">
         <ImagePlaceholder src={coverURL} altText={title} />
       </div>
       <div className="w-[74%]">
-        <p className="mb-1.5 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white">
+        <p className="mb-1 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white">
           {title}
         </p>
         <p className="text-[11px] text-gray-400">{author}</p>

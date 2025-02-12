@@ -1,10 +1,8 @@
-import styles from './Terms.module.scss'
-
 const APP_NAME = 'Oasis'
 
 export default function Terms() {
   return (
-    <div className={styles.container}>
+    <div className="px-2.5">
       <h1>Terms of Use</h1>
       <h2>1. Introduction</h2>
       <p>

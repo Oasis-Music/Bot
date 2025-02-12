@@ -1,14 +1,12 @@
 import { forwardRef, ComponentPropsWithRef, ForwardRefRenderFunction } from 'react'
-import clsx from 'clsx'
-import Trackline from './Trackline'
+import { cva } from 'cva'
+import Trackline from './trackline'
 import { TopControls } from './top-controls'
 import { Details } from './Details'
 import { MainControls } from './main-controls'
 import { timeFormater } from '@/shared/lib/helpers'
 import { useReactiveVar } from '@apollo/client'
 import { currentTrackVar } from '@/entities/soundtrack'
-
-import styles from './player.module.scss'
 
 interface PlayerProps extends ComponentPropsWithRef<'div'> {
   currentTime: string
@@ -23,6 +21,18 @@ interface PlayerProps extends ComponentPropsWithRef<'div'> {
   onLoop(): void
   onRandom(): void
 }
+
+const player = cva(
+  'fixed top-0 left-0 z-50 h-full w-full overflow-y-auto bg-black transition-transform',
+  {
+    variants: {
+      open: {
+        true: 'translate-y-px',
+        false: 'translate-y-full'
+      }
+    }
+  }
+)
 
 const Player: ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   {
@@ -43,7 +53,7 @@ const Player: ForwardRefRenderFunction<HTMLDivElement, PlayerProps> = (
   const currentTrack = useReactiveVar(currentTrackVar)
 
   return (
-    <div className={clsx(styles.player, isOpen && styles.open)}>
+    <div className={player({ open: isOpen })}>
       <TopControls id={currentTrack.id} onClose={onClose} />
       <Details
         title={currentTrack.title}

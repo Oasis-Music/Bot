@@ -1,6 +1,5 @@
 import { defineConfig, loadEnv, type UserConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import svgr from 'vite-plugin-svgr'
 import tailwindcss from '@tailwindcss/vite'
 import viteTsconfigPaths from 'vite-tsconfig-paths'
 import path from 'path'
@@ -14,13 +13,6 @@ export default ({ mode = 'development' }: UserConfig) => {
   const withHttps = process.env.VITE_WITH_HTTPS == 'true' || undefined
 
   return defineConfig({
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "@/app/styles/main.scss" as *;`
-        }
-      }
-    },
     define: {
       // info: https://www.apollographql.com/docs/react/development-testing/reducing-bundle-size
       'globalThis.__DEV__': isDev ? 'true' : 'false'
@@ -32,7 +24,6 @@ export default ({ mode = 'development' }: UserConfig) => {
     },
     plugins: [
       react(),
-      svgr(),
       viteTsconfigPaths(),
       tailwindcss(),
       svg({
@@ -58,7 +49,8 @@ export default ({ mode = 'development' }: UserConfig) => {
     },
     preview: {
       open: false,
-      port: 3001
+      port: 3001,
+      host: true
     },
     build: {
       outDir: 'build'

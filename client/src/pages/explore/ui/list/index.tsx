@@ -1,9 +1,10 @@
+import { cva } from 'cva'
 import { Playlist } from '@/widgets/playlist'
 import { Loader } from '@/shared/ui/loader'
 import { ApolloError, useReactiveVar } from '@apollo/client'
 import { explorePlaylistVar } from '@/entities/soundtrack'
 
-import styles from './styles.module.scss'
+const container = cva('flex h-full items-center justify-center')
 
 interface ListProps {
   currentPage: number
@@ -26,18 +27,18 @@ export function List({
 
   if (isFirstLoad) {
     return (
-      <div className={styles.container}>
+      <div className={container()}>
         <Loader />
       </div>
     )
   }
 
   if (error) {
-    return <div className={styles.container}>Error</div>
+    return <div className={container()}>Error</div>
   }
 
   if (!isLoad && explorePlaylist.length === 0) {
-    return <div className={styles.container}>nothing found</div>
+    return <div className={container()}>nothing found</div>
   }
 
   return (

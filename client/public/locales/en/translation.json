@@ -2,14 +2,18 @@
   "common": {
     "save": "Save",
     "soundtrack": "Soundtrack",
-    "add": "Add"
+    "add": "Add",
+    "validation": {
+      "requiredField": "* required field",
+      "minLength2": "* minimum 2 characters",
+      "maxLength70": "* max 70 characters"
+    }
   },
   "errors": {
     "serverAccessErr": "Service not available please try again later"
   },
   "pages": {
     "auth": {
-      "welcome": "Welcome",
       "enterBtn": "Get in",
       "terms": "By clicking on «{{btn}}» button, you agree to ",
       "termsLink": "Terms and Conditions of Use",
@@ -37,8 +41,7 @@
         "titleField": "Title",
         "authorField": "Author",
         "nextButton": "Continue",
-        "link": "Back on main",
-        "emojiAlt": "emoji - smile"
+        "link": "Back on main"
       },
       "cover": {
         "title": "Step #2",

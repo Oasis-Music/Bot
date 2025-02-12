@@ -1,15 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Head } from './head'
+import { Counter } from './counter'
 import { List } from './list'
 import { useReactiveVar } from '@apollo/client'
 import { useUserSoundtracksQuery } from '../api'
-import { Counter } from './counter'
 import { useTranslation } from 'react-i18next'
 import { type Soundtrack, USER_PLAYLIST_PAGINATION_LEN } from '@/entities/soundtrack'
 import { type User, userVar } from '@/entities/user'
 import { useUserPlaylist } from '@/features/soundtrack/set-user-playlist'
-
-import styles from './styles.module.scss'
 
 export function Home() {
   const { t } = useTranslation()
@@ -66,7 +64,7 @@ export function Home() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="flex h-screen flex-col px-1.5">
       <Head
         trackCounter={tracksNum}
         onTrackAttach={onTrackAttach}

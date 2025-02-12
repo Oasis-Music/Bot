@@ -4,6 +4,6 @@ module.exports = {
   future: {
     hoverOnlyWhenSupported: true
   },
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}']
-  // plugins: [require('tailwindcss-animate'), require('tailwind-gradient-mask-image')]
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  plugins: [require('tailwindcss-animate')] // require('tailwind-gradient-mask-image')
 }

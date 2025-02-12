@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Alert } from './modals/alert'
 import { Feedback } from './modals/feedback'
-import { Info } from './info-step'
-import { Cover } from './cover-step'
-import { Audio } from './audio-step'
+import { Info } from './steps/info'
+import { Cover } from './steps/cover'
+import { Audio } from './steps/audio'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 import { useNavigate } from 'react-router-dom'
 import { useWindowRatio } from '@/shared/lib/hooks'
@@ -11,10 +11,8 @@ import { validationSchema } from '../model/validation-schema'
 import { useCreateSoundtrackMutation } from '../api'
 import { useForm, FormProvider } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { StepSlide } from './common/slide'
+import { StepSlide } from './common/step-slide'
 import type { FormValues, FeedbackModal } from '../model/types'
-
-import styles from './styles.module.scss'
 
 const enum Step {
   INFO,
@@ -25,7 +23,7 @@ const enum Step {
 export function CreateSoundtrackForm() {
   const navigate = useNavigate()
 
-  const [step, setStep] = useState(Step.INFO)
+  const [step, setStep] = useState(Step.AUDIO)
 
   const [isAlertOpen, setAlertOpen] = useState(false)
   const [feedbackModal, setFeedbackModal] = useState<FeedbackModal>({
@@ -126,11 +124,11 @@ export function CreateSoundtrackForm() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="h-screen overflow-x-hidden overflow-y-auto">
       <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(handleSubmit)}>
           <div
-            className={styles.inner}
+            className="flex transition-transform duration-400"
             style={{
               transform: `translate3d(-${step * window.innerWidth}px, 0, 0)`
             }}

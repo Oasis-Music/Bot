@@ -1,6 +1,4 @@
 import { IconButton } from '@/shared/ui/icon-button'
-import { SvgIcon } from '@/shared/ui/svg-icon'
-import TrashIcon from '@/shared/assets/svg/trash.svg?react'
 import { useUnattachSoundtrackMutation } from '../../api'
 import { useTranslation } from 'react-i18next'
 import { currentTrackVar } from '@/entities/soundtrack'
@@ -8,13 +6,13 @@ import { useReactiveVar } from '@apollo/client'
 import { useRemoveFromUserPlaylist } from '../../model'
 import { type User, userVar } from '@/entities/user'
 import { toast } from 'sonner'
+import { Icon } from '@/shared/ui/icon'
 
-interface UnattachButtonProps {
-  className: string
+export interface UnattachButtonProps {
   onTrackUnattached?(): void
 }
 
-export function UnattachButton({ className, onTrackUnattached }: UnattachButtonProps) {
+export function UnattachButton({ onTrackUnattached }: UnattachButtonProps) {
   const { t } = useTranslation()
   const track = useReactiveVar(currentTrackVar)
   const user = useReactiveVar(userVar) as User
@@ -43,10 +41,8 @@ export function UnattachButton({ className, onTrackUnattached }: UnattachButtonP
   }
 
   return (
-    <IconButton loading={loading} onClick={handleClick} className={className}>
-      <SvgIcon>
-        <TrashIcon />
-      </SvgIcon>
+    <IconButton loading={loading} onClick={handleClick} className="text-[24px] text-black">
+      <Icon name="action/trash" />
     </IconButton>
   )
 }

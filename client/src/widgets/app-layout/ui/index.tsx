@@ -11,8 +11,6 @@ import { usePlayPauseTrack } from '@/features/soundtrack/play-pause'
 import { usePlayNextTrack } from '@/features/soundtrack/play-next'
 import { usePlayPrevTrack } from '@/features/soundtrack/play-prev'
 
-import styles from './styles.module.scss'
-
 export function AppLayout() {
   const track = useReactiveVar(currentTrackVar)
 
@@ -115,11 +113,11 @@ export function AppLayout() {
   }
 
   return (
-    <div className={styles.container}>
+    <div className="relative">
       <main>
         <Outlet />
       </main>
-      <div className={styles.wrapper}>
+      <div className="fixed bottom-0 w-full">
         <MiniPlayer onPlayerOpen={handlePlayerOpen} onPlayPause={playPauseHandler} />
         <NavBar />
       </div>

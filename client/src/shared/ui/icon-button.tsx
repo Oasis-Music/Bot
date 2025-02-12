@@ -13,7 +13,7 @@ export interface IconButtonProps {
 }
 
 const button = cva(
-  'relative inline-flex flex-initial items-center justify-center overflow-visible rounded-full bg-transparent p-3 text-center align-middle no-underline outline-0 select-none'
+  'relative inline-flex flex-initial items-center justify-center overflow-visible rounded-full p-3 text-center align-middle no-underline outline-0 select-none'
 )
 
 export function IconButton({
