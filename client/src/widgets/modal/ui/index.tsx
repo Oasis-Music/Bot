@@ -1,6 +1,5 @@
 import { ReactNode, useRef, useEffect } from 'react'
 import { Button } from '@/shared/ui/button'
-import styles from './modal.module.scss'
 
 interface BaseProps {
   open: boolean
@@ -62,14 +61,17 @@ export function Modal(props: ModalProps) {
   }
 
   return (
-    <dialog ref={modalRef} className={styles.modal}>
-      {children}
+    <dialog
+      ref={modalRef}
+      className="animate-in fade-in zoom-in m-auto w-full rounded-lg bg-[#1c1c1e] p-2.5 backdrop:bg-black/30 backdrop:backdrop-blur-xs"
+    >
+      <div>{children}</div>
       {!hideControls && (
-        <div className={styles.controls}>
-          <Button color="secondary" onClick={props.onSubmit} className={styles.submitButton}>
+        <div className="flex justify-end pt-2.5">
+          <Button color="secondary" onClick={props.onSubmit} className="text-gray-200">
             {props.controlActionText}
           </Button>
-          <Button color="secondary" onClick={handleModalClose} className={styles.closeButton}>
+          <Button color="secondary" onClick={handleModalClose} className="text-red-600">
             {props.controlCloseText}
           </Button>
         </div>

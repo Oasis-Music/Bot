@@ -13,13 +13,6 @@ export default ({ mode = 'development' }: UserConfig) => {
   const withHttps = process.env.VITE_WITH_HTTPS == 'true' || undefined
 
   return defineConfig({
-    css: {
-      preprocessorOptions: {
-        scss: {
-          additionalData: `@use "@/app/styles/main.scss" as *;`
-        }
-      }
-    },
     define: {
       // info: https://www.apollographql.com/docs/react/development-testing/reducing-bundle-size
       'globalThis.__DEV__': isDev ? 'true' : 'false'

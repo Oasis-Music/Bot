@@ -6,7 +6,8 @@
   --spacing-1e: 1em;
   --color-accept: #00e676;
 
-  --shadow-white-glow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
+  --shadow-white-glow:
+    0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.45),
     0 0 70px rgba(255, 255, 255, 0.25), 0 0 70px rgba(255, 255, 255, 0.1);
 }
 
@@ -42,4 +43,40 @@
     /* scale vertically */
     @apply h-[1em];
   }
+}
+
+.hide {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.LazyLoad {
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.is-visible {
+  opacity: 1;
+}
+
+body {
+  color: #fff;
+  background-color: #000;
+  font-family: Roboto, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
+main {
+  height: 100dvh;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
 }

@@ -1,15 +1,15 @@
 import { useTranslation } from 'react-i18next'
 import { Modal } from '@/widgets/modal'
 
-import styles from './styles.module.scss'
-
-interface AlertProps {
+export function Alert({
+  isOpen,
+  onLeave,
+  onStay
+}: {
   isOpen: boolean
   onLeave(): void
   onStay(): void
-}
-
-export function Alert({ isOpen, onLeave, onStay }: AlertProps) {
+}) {
   const { t } = useTranslation()
 
   return (
@@ -20,9 +20,9 @@ export function Alert({ isOpen, onLeave, onStay }: AlertProps) {
       onSubmit={onStay}
       onClose={onLeave}
     >
-      <div className={styles.container}>
-        <h4 className={styles.title}>{t('pages.upload.modals.alert.title')}</h4>
-        <p className={styles.subTitle}>{t('pages.upload.modals.alert.message')}</p>
+      <div className="pb-10 text-center">
+        <h4 className="text-2xl text-gray-100">{t('pages.upload.modals.alert.title')}</h4>
+        <p className="text-gray-400">{t('pages.upload.modals.alert.message')}</p>
       </div>
     </Modal>
   )

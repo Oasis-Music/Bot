@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { cva } from 'cva'
 import { Loader } from '@/shared/ui/loader'
 import { useCheckAudioHashLazyQuery } from '../../../api'
-import { soundtrackExists } from '@/shared/ui/toaster'
+import { soundtrackExistsToast } from './toast'
 import { Soundtrack, SoundtrackItem } from '@/entities/soundtrack'
 import { usePlaySoundtrack } from '@/entities/soundtrack'
 import { useNavigate } from 'react-router-dom'
@@ -36,7 +36,7 @@ export function CheckExistence({
       if (data.checkAudioHash.__typename === 'Soundtrack') {
         const track = data.checkAudioHash
         setExistance(true)
-        soundtrackExists({
+        soundtrackExistsToast({
           soundtrack: (
             <SoundtrackItem
               title={track.title}

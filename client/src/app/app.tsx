@@ -5,7 +5,6 @@ import { ProtectedRoute } from '@/entities/auth'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ROUTER_NAMES } from '@/shared/constants/routes'
 
-import './styles/global.scss'
 import './styles/index.css'
 
 import Home from '@/pages/home'
