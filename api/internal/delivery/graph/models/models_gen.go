@@ -66,7 +66,7 @@ type Soundtrack struct {
 	ID        string  `json:"id"`
 	Title     string  `json:"title"`
 	Author    string  `json:"author"`
-	Duration  int     `json:"duration"`
+	Duration  int64   `json:"duration"`
 	CoverURL  *string `json:"coverURL,omitempty"`
 	AudioURL  string  `json:"audioURL"`
 	Validated bool    `json:"validated"`
@@ -81,7 +81,7 @@ func (Soundtrack) IsSoundtrackResult() {}
 func (Soundtrack) IsSoundtrackPayload() {}
 
 type SoundtracksFilter struct {
-	Page int `json:"page"`
+	Page int64 `json:"page"`
 }
 
 type SoundtracksResponse struct {
@@ -107,11 +107,11 @@ type User struct {
 func (User) IsUserResult() {}
 
 type UserSoundtracksFilter struct {
-	Page int `json:"page"`
+	Page int64 `json:"page"`
 }
 
 type UserSoundtracksResponse struct {
-	Total       int          `json:"total"`
+	Total       int64        `json:"total"`
 	Soundtracks []Soundtrack `json:"soundtracks"`
 }
 
@@ -141,7 +141,7 @@ func (e Role) String() string {
 	return string(e)
 }
 
-func (e *Role) UnmarshalGQL(v interface{}) error {
+func (e *Role) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")

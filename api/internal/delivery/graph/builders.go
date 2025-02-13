@@ -13,7 +13,7 @@ func buildSoundtrackModel(s entity.Soundtrack) models.Soundtrack {
 		ID:        utils.IntToString(s.ID),
 		Title:     s.Title,
 		Author:    s.Author,
-		Duration:  s.Duration,
+		Duration:  int64(s.Duration),
 		CoverURL:  utils.StringToNilPtr(s.CoverImage),
 		AudioURL:  s.Audio,
 		Validated: s.Validated,
