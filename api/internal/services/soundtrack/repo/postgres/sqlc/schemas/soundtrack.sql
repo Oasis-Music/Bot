@@ -5,7 +5,7 @@ CREATE TABLE soundtrack (
   duration smallint NOT NULL,
   cover_image text,
   audio_file text NOT NULL,
-  creator_id bigint NOT NULL REFERENCES users (id),
+  creator_id bigint NOT NULL REFERENCES users (user_id),
   updated_at timestamp NOT NULL DEFAULT current_timestamp,
   created_at timestamp NOT NULL DEFAULT current_timestamp
 );

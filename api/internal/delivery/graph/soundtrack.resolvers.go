@@ -37,7 +37,6 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 
 // Soundtrack is the resolver for the soundtrack field.
 func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackPayload, error) {
-
 	soundtrackID, err := parseSoundtrackID(id)
 	if err != nil {
 		return nil, err

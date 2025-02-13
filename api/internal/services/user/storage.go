@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/services/user/entities"
 )
 
 type UserStorage interface {
@@ -15,4 +16,9 @@ type UserStorage interface {
 	AttachSoundtrack(ctx context.Context, params entity.AttachSoundtrackToUserParams) error
 	UnattachSoundtrack(ctx context.Context, params entity.UnattachSoundtrackFromUserParams) (int64, error)
 	UsersByID(ctx context.Context, ids []int64) ([]entity.User, error)
+}
+
+type UserModularStorage interface {
+	User(ctx context.Context, id int64) (*entities.User, error)
+	CreateUser(ctx context.Context, input entities.NewUser) (*entities.NewUserResult, error)
 }

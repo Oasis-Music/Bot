@@ -17,7 +17,7 @@ func (h *handler) WebAppAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	authData, err := h.userService.Authorize(r.Context(), data.InitData)
+	authData, err := h.userService.WebAppAuth(r.Context(), data.InitData)
 	if err != nil {
 		// http.StatusConflict
 		http.Error(w, err.Error(), http.StatusBadRequest)

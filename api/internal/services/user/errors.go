@@ -1,15 +1,22 @@
 package user
 
-import "errors"
+import (
+	"errors"
+	"oasis/api/pkg/postgres"
+)
 
 var (
 	ErrTgAuthDateExpired = errors.New("telegram auth_date expired")
 )
 
+var (
+	ErrStorageNoData = postgres.ErrNoData
+)
+
 // TODO: separate | refactor
 var (
 	ErrUserNotFound              = errors.New("user not found")
-	ErrGetUserFailed             = errors.New("failed to get user")
+	ErrFailedGetUser             = errors.New("failed to get user")
 	ErrInitDataInvalid           = errors.New("initData is invalid")
 	ErrIternalAuthorizationError = errors.New("authorization failed: internal error")
 	ErrTrackAlreadyAttached      = errors.New("soundtrack already attached to user")

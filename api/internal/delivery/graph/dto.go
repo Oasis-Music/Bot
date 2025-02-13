@@ -4,6 +4,7 @@ import (
 	"errors"
 	"oasis/api/internal/delivery/graph/models"
 	soundtrackEntities "oasis/api/internal/services/soundtrack/entities"
+	userEntities "oasis/api/internal/services/user/entities"
 	"oasis/api/internal/utils"
 )
 
@@ -31,5 +32,19 @@ func buildSoundtrackModelV2(s *soundtrackEntities.Soundtrack) models.Soundtrack 
 		Attached:  s.Attached,
 		CreatedAt: utils.FormatDate(s.CreatedAt),
 		// toto: add UpdatetAt
+	}
+}
+
+func buildUserModel(u *userEntities.User) models.User {
+
+	return models.User{
+		ID:           utils.IntToString(u.ID),
+		FirstName:    u.FirstName,
+		LastName:     u.LastName,
+		Username:     u.TgUsername,
+		LanguageCode: u.LanguageCode,
+		Role:         string(u.Role),
+		VisitedAt:    utils.FormatDate(u.OnlineAt),
+		CreatedAt:    utils.FormatDate(u.CreatedAt),
 	}
 }

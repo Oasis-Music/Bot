@@ -9,6 +9,17 @@ sql:
   #       sql_package: "pgx/v4"
   #       out: "internal/repo/storage/postgres/sqlc"
   #       emit_interface: true
+  - queries: "internal/services/auth/repo/postgres/sqlc/queries"
+    schema:
+      - "internal/services/auth/repo/postgres/sqlc/schemas"
+      - "internal/services/user/repo/postgres/sqlc/schemas"
+    engine: "postgresql"
+    gen:
+      go:
+        package: "sqlc"
+        sql_package: "pgx/v4"
+        out: "internal/services/auth/repo/postgres/sqlc"
+        emit_interface: true
   - queries: "internal/services/soundtrack/repo/postgres/sqlc/queries"
     schema: "internal/services/soundtrack/repo/postgres/sqlc/schemas"
     engine: "postgresql"
@@ -17,4 +28,15 @@ sql:
         package: "sqlc"
         sql_package: "pgx/v4"
         out: "internal/services/soundtrack/repo/postgres/sqlc"
+        emit_interface: true
+  - queries: "internal/services/user/repo/postgres/sqlc/queries"
+    schema:
+      - "internal/services/user/repo/postgres/sqlc/schemas"
+      - "internal/services/auth/repo/postgres/sqlc/schemas"
+    engine: "postgresql"
+    gen:
+      go:
+        package: "sqlc"
+        sql_package: "pgx/v4"
+        out: "internal/services/user/repo/postgres/sqlc"
         emit_interface: true

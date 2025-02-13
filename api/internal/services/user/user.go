@@ -3,22 +3,24 @@ package user
 import (
 	"context"
 	"errors"
-	"oasis/api/internal/entity"
-	userStorage "oasis/api/internal/repo/storage/postgres/user"
+	"fmt"
+	"oasis/api/internal/services/user/entities"
 )
 
-func (u *userService) User(ctx context.Context, id int64) (*entity.User, error) {
+func (u userService) User(ctx context.Context, id int64) (*entities.User, error) {
 
-	user, err := u.storage.User(ctx, id)
+	user, err := u.storageV2.User(ctx, id)
 	if err != nil {
-		if errors.Is(err, userStorage.ErrUserNotFound) {
-			u.logger.WarnContext(ctx, "user not found", "requested_user", id)
-			return nil, ErrUserNotFound
+		if errors.Is(err, ErrStorageNoData) {
+			u.logger.Warn("user not found", "user_id", id)
+			return nil, fmt.Errorf("(%d) %w", id, ErrUserNotFound)
 		}
-		return nil, ErrGetUserFailed
+
+		u.logger.Error("get user", "user_id", id, "error", err)
+		return nil, ErrFailedGetUser
 	}
 
-	u.logger.InfoContext(ctx, "get user", "requested_user", id)
-	return user, nil
+	u.logger.Info("get user", "user_id", id)
 
+	return user, nil
 }

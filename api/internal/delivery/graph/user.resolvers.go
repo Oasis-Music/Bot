@@ -70,7 +70,7 @@ func (r *queryResolver) User(ctx context.Context, id string) (models.UserResult,
 
 // AuthorizeUser is the resolver for the authorizeUser field.
 func (r *queryResolver) AuthorizeUser(ctx context.Context, initData string) (*models.AuthorizationResponse, error) {
-	authResp, err := r.UserService.Authorize(ctx, initData)
+	authResp, err := r.UserService.WebAppAuth(ctx, initData)
 	if err != nil {
 		return nil, err
 	}

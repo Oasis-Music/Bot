@@ -6,20 +6,6 @@ import (
 	"oasis/api/internal/utils"
 )
 
-func buildUserModel(u *entity.User) models.User {
-
-	return models.User{
-		ID:           utils.IntToString(u.ID),
-		FirstName:    u.FirstName,
-		LastName:     u.LastName,
-		Username:     u.Username,
-		LanguageCode: u.LanguageCode,
-		Role:         u.Role,
-		VisitedAt:    utils.FormatDate(u.VisitedAt),
-		CreatedAt:    utils.FormatDate(u.CreatedAt),
-	}
-}
-
 // todo: del
 func buildSoundtrackModel(s entity.Soundtrack) models.Soundtrack {
 
