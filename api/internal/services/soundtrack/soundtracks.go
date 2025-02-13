@@ -7,7 +7,12 @@ import (
 
 func (s *soundtrackService) AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error) {
 
-	filter.UserID = s.extractCtxUserId(ctx)
+	userID, err := s.authService.ContextUserIdValue(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	filter.UserID = userID
 
 	tracks, err := s.storage.AllSoundtracks(ctx, filter)
 	if err != nil {

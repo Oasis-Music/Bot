@@ -8,7 +8,10 @@ import (
 
 func (s *soundtrackService) CheckHash(ctx context.Context, hash string) (*entity.Soundtrack, error) {
 
-	userID := s.extractCtxUserId(ctx)
+	userID, err := s.authService.ContextUserIdValue(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	soundtrack, err := s.storage.CheckHash(ctx, userID, hash)
 	if errors.Is(err, ErrStorageNoData) {
@@ -21,5 +24,4 @@ func (s *soundtrackService) CheckHash(ctx context.Context, hash string) (*entity
 	s.logger.InfoContext(ctx, "soundtrack by hash", "id", soundtrack.ID)
 
 	return soundtrack, nil
-
 }

@@ -7,6 +7,7 @@ import (
 	"math"
 	"oasis/api/internal/config"
 	"oasis/api/internal/entity"
+	"oasis/api/internal/services/auth"
 	"oasis/api/internal/services/soundtrack/entities"
 	"oasis/api/internal/services/soundtrack/repo/postgres"
 	"oasis/api/internal/services/user"
@@ -32,6 +33,7 @@ type soundtrackService struct {
 	s3store     S3store
 	userService user.Service
 	validate    *validator.Validate
+	authService auth.Service
 }
 
 func New(
@@ -41,6 +43,7 @@ func New(
 	s3store S3store,
 	userService user.Service,
 	db *pgxpool.Pool,
+	authService auth.Service,
 ) Service {
 
 	storageV2 := postgres.New(logger, db)
@@ -52,14 +55,9 @@ func New(
 		storageV2:   storageV2,
 		s3store:     s3store,
 		userService: userService,
+		authService: authService,
 		validate:    validator.New(validator.WithRequiredStructEnabled()),
 	}
-}
-
-// todo: del
-func (s *soundtrackService) extractCtxUserId(ctx context.Context) int64 {
-
-	return -1
 }
 
 func trackDurationToInt16(d float64) (int16, error) {

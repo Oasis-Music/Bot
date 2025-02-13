@@ -42,6 +42,11 @@ type Format struct {
 
 func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtrackInput) (ok bool, err error) {
 
+	userID, err := s.authService.ContextUserIdValue(ctx)
+	if err != nil {
+		return false, err
+	}
+
 	var coverFileName, audioFileName string
 
 	defer func() {
@@ -147,8 +152,6 @@ func (s *soundtrackService) Create(ctx context.Context, input entity.NewSoundtra
 	// coverFileName := "plug.webp"
 	// audioFileName := "plug.mp3"
 	// var trackDuration int16 = 137
-
-	userID := s.extractCtxUserId(ctx)
 
 	newTrack := entity.NewSoundtrack{
 		Title:       input.Title,

@@ -8,7 +8,10 @@ import (
 
 func (s *soundtrackService) Soundtrack(ctx context.Context, soundtrackID int64) (*entities.Soundtrack, error) {
 
-	userID := s.extractCtxUserId(ctx) // todo: from auth
+	userID, err := s.authService.ContextUserIdValue(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	soundtrack, err := s.storageV2.Soundtrack(ctx, soundtrackID, userID)
 	if err != nil {
