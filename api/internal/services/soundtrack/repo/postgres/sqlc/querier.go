@@ -11,11 +11,7 @@ import (
 type Querier interface {
 	CreateSoundtrack(ctx context.Context, arg CreateSoundtrackParams) (int64, error)
 	DeleteSoundtrack(ctx context.Context, id int64) (int64, error)
-	// -- name: GetSoundtrack :one
-	// SELECT *, EXISTS
-	//     (SELECT TRUE FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) AS attached
-	// FROM soundtrack WHERE id = $1;
-	GetSoundtrack(ctx context.Context, id int64) (Soundtrack, error)
+	GetSoundtrack(ctx context.Context, arg GetSoundtrackParams) (GetSoundtrackRow, error)
 	SaveSoundtrackHash(ctx context.Context, arg SaveSoundtrackHashParams) error
 }
 

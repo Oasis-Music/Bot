@@ -8,7 +8,6 @@ import (
 )
 
 type SoundtrackStorage interface {
-	Soundtrack(ctx context.Context, id int32, userID int64) (*entity.Soundtrack, error)
 	AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) ([]entity.Soundtrack, error)
 	Create(ctx context.Context, track entity.NewSoundtrack, hash string) (int32, error)
 	Delete(ctx context.Context, id int32) (bool, error)

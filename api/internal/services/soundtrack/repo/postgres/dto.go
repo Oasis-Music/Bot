@@ -17,6 +17,7 @@ type SoundtrackDB struct {
 	CreatorID  int64
 	UpdatedAt  time.Time
 	CreatedAt  time.Time
+	Attached   bool
 }
 
 func buildSoundtrackEntity(s SoundtrackDB) entities.Soundtrack {
@@ -28,7 +29,7 @@ func buildSoundtrackEntity(s SoundtrackDB) entities.Soundtrack {
 		Duration:   int(s.Duration),
 		CoverImage: postgres.ParseNullStringPtr(s.CoverImage),
 		Audio:      s.AudioFile,
-		Attached:   false, // temp
+		Attached:   s.Attached,
 		CreatorID:  s.CreatorID,
 		UpdatedAt:  s.UpdatedAt,
 		CreatedAt:  s.CreatedAt,

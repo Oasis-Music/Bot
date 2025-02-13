@@ -26,3 +26,9 @@ type SoundtrackHash struct {
 	Hash         string
 	SoundtrackID int64
 }
+
+type UserSoundtrack struct {
+	UserID       int64
+	SoundtrackID int64
+	CreatedAt    time.Time
+}

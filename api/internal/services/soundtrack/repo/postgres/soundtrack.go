@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"oasis/api/internal/services/soundtrack/entities"
+	"oasis/api/internal/services/soundtrack/repo/postgres/sqlc"
 	"oasis/api/pkg/postgres"
 
 	"github.com/jackc/pgx/v4"
@@ -11,7 +12,10 @@ import (
 
 func (s *storage) Soundtrack(ctx context.Context, soundtrackID int64, userID int64) (*entities.Soundtrack, error) {
 
-	data, err := s.sqlc.GetSoundtrack(ctx, soundtrackID)
+	data, err := s.sqlc.GetSoundtrack(ctx, sqlc.GetSoundtrackParams{
+		ID:     soundtrackID,
+		UserID: userID,
+	})
 	if err != nil {
 		if errors.Is(err, pgx.ErrNoRows) {
 			return nil, postgres.ErrNoData

@@ -1,11 +1,16 @@
--- -- name: GetSoundtrack :one
--- SELECT *, EXISTS
---     (SELECT TRUE FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) AS attached
--- FROM soundtrack WHERE id = $1;
-
-
 -- name: GetSoundtrack :one
-SELECT * FROM soundtrack WHERE id = $1;
+SELECT
+  id,
+  title,
+  author,
+  duration,
+  cover_image,
+  audio_file,
+  creator_id,
+  updated_at,
+  created_at,
+  EXISTS(SELECT TRUE FROM user_soundtrack WHERE soundtrack_id = s.id AND user_soundtrack.user_id = $2) AS attached
+FROM soundtrack s WHERE s.id = $1;
 
 -- -- name: GetSoundtrackByTitle :many
 -- SELECT *,

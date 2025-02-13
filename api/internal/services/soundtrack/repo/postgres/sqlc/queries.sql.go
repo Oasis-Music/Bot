@@ -7,23 +7,46 @@ package sqlc
 
 import (
 	"context"
+	"database/sql"
+	"time"
 )
 
 const getSoundtrack = `-- name: GetSoundtrack :one
-
-
-SELECT id, title, author, duration, cover_image, audio_file, creator_id, updated_at, created_at FROM soundtrack WHERE id = $1
+SELECT
+  id,
+  title,
+  author,
+  duration,
+  cover_image,
+  audio_file,
+  creator_id,
+  updated_at,
+  created_at,
+  EXISTS(SELECT TRUE FROM user_soundtrack WHERE soundtrack_id = s.id AND user_soundtrack.user_id = $2) AS attached
+FROM soundtrack s WHERE s.id = $1
 `
 
-// -- name: GetSoundtrack :one
-// SELECT *, EXISTS
-//
-//	(SELECT TRUE FROM user_soundtrack WHERE soundtrack_id = id AND user_soundtrack.user_id = $2) AS attached
-//
-// FROM soundtrack WHERE id = $1;
-func (q *Queries) GetSoundtrack(ctx context.Context, id int64) (Soundtrack, error) {
-	row := q.db.QueryRow(ctx, getSoundtrack, id)
-	var i Soundtrack
+type GetSoundtrackParams struct {
+	ID     int64
+	UserID int64
+}
+
+type GetSoundtrackRow struct {
+	ID         int64
+	Title      string
+	Author     string
+	Duration   int16
+	CoverImage sql.NullString
+	AudioFile  string
+	CreatorID  int64
+	UpdatedAt  time.Time
+	CreatedAt  time.Time
+	Attached   bool
+}
+
+func (q *Queries) GetSoundtrack(ctx context.Context, arg GetSoundtrackParams) (GetSoundtrackRow, error) {
+	row := q.db.QueryRow(ctx, getSoundtrack, arg.ID, arg.UserID)
+	var i GetSoundtrackRow
 	err := row.Scan(
 		&i.ID,
 		&i.Title,
@@ -34,6 +57,7 @@ func (q *Queries) GetSoundtrack(ctx context.Context, id int64) (Soundtrack, erro
 		&i.CreatorID,
 		&i.UpdatedAt,
 		&i.CreatedAt,
+		&i.Attached,
 	)
 	return i, err
 }

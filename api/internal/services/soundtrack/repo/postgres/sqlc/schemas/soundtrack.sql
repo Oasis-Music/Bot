@@ -15,3 +15,10 @@ CREATE TABLE soundtrack_hash (
   hash text UNIQUE NOT NULL,
   soundtrack_id bigint NOT NULL REFERENCES soundtrack (id) ON DELETE CASCADE
 );
+
+CREATE TABLE user_soundtrack (
+  user_id bigint REFERENCES users (user_id) ON DELETE CASCADE,
+  soundtrack_id bigint REFERENCES soundtrack (id) ON DELETE CASCADE,
+  created_at timestamp NOT NULL DEFAULT current_timestamp,
+  PRIMARY KEY (user_id, soundtrack_id)
+);
