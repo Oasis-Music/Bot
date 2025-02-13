@@ -6,7 +6,7 @@ CREATE TABLE users (
   language_code text,
   tg_photo_url text,
   tg_premium boolean NOT NULL,
-  role_id int NOT NULL REFERENCES users (user_id),
+  role_id int NOT NULL REFERENCES user_role (role_id),
   online_at timestamp NOT NULL DEFAULT current_timestamp,
   updated_at timestamp NOT NULL DEFAULT current_timestamp,
   created_at timestamp NOT NULL DEFAULT current_timestamp

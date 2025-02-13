@@ -2,7 +2,6 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -84,7 +83,6 @@ func hasRoleDirectiveHandler(authService auth.Service) hasRoleDirective {
 			return nil, extension401Err(ctx, "role directive: no user authorized")
 		}
 
-		fmt.Println("try to get user role", userId)
 		userRole, err := authService.UserRole(ctx, userId)
 		if err != nil {
 			return nil, extension401Err(ctx, err.Error())
