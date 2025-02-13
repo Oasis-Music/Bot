@@ -11,8 +11,15 @@ import (
 	"net/url"
 	"oasis/api/internal/entity"
 	userStorage "oasis/api/internal/repo/storage/postgres/user"
+	"oasis/api/internal/services/auth/entities"
 	"oasis/api/internal/utils"
 	"time"
+
+	authEntities "oasis/api/internal/services/auth/entities"
+)
+
+type (
+	JwtPairPayload = authEntities.JwtPairPayload
 )
 
 const (
@@ -106,7 +113,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 
 		u.logger.Info("created new user", "id", createdUser.ID)
 
-		at, rt, err := u.genTokenPairandSave(ctx, createdUser.ID, createdUser.FirstName)
+		at, rt, err := u.getAuthTokenPair(ctx, createdUser.ID, createdUser.FirstName, "admin")
 		if err != nil {
 			fmt.Println("last visit date update:", err)
 			return nil, ErrIternalAuthorizationError
@@ -141,7 +148,7 @@ func (u *userService) Authorize(ctx context.Context, initData string) (*entity.U
 		firstName = updatedUserData.FirstName
 	}
 
-	at, rt, err := u.genTokenPairandSave(ctx, user.ID, firstName)
+	at, rt, err := u.getAuthTokenPair(ctx, user.ID, firstName, "admin") // todo: provide
 	if err != nil {
 		u.logger.Error("gen tokens pair", "error", err)
 		return nil, ErrIternalAuthorizationError
@@ -204,11 +211,14 @@ func isInitDataDifferent(tgUser entity.UserInitData, user *entity.User) (bool, e
 	return isChanged, updatedUser
 }
 
-func (u *userService) genTokenPairandSave(ctx context.Context, userID int64, firstName string) (string, string, error) {
+func (u *userService) getAuthTokenPair(ctx context.Context, userId int64, firstName string, userRole entities.UserRole) (string, string, error) {
 
-	rawTokenPair, err := u.authService.CreateJwtPair(userID, firstName)
+	rawTokenPair, err := u.authService.CreateJwtPair(entities.JwtPairPayload{
+		UserID:    userId,
+		FirstName: firstName,
+		UserRole:  string(userRole),
+	})
 	if err != nil {
-		fmt.Println("token parir gen", err)
 		return "", "", err
 	}
 

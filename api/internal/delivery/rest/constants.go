@@ -1,3 +1,9 @@
 package rest
 
-const RefreshTokenCookieName = "rt"
+const (
+	RefreshTokenCookieName = "rt"
+)
+
+const (
+	ContentTypeJSON = "application/json"
+)

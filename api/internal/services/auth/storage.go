@@ -2,15 +2,13 @@ package auth
 
 import (
 	"context"
+	"fmt"
+	"oasis/api/internal/services/auth/entities"
 )
 
-type AuthStorage interface {
-	DeleteRefreshToken(ctx context.Context, id string) error
-	SaveRefreshToken(ctx context.Context, id string) error
-}
+func (a *authService) SaveRefreshToken(ctx context.Context, raw entities.TokenPair) error {
 
-func (a *authService) SaveRefreshToken(ctx context.Context, raw RawTokenPair) error {
-	err := a.storage.SaveRefreshToken(ctx, raw.RtID)
+	err := a.storage.SaveRefreshToken(ctx, raw.RtID, raw.RtExpiresAt.Local())
 	if err != nil {
 		a.logger.Error("save RT/storage", "error", err)
 		return ErrFailToSaveRT
@@ -26,4 +24,14 @@ func (a *authService) RevokeRefreshToken(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+func (a *authService) UserRole(ctx context.Context, userId int64) (string, error) {
+	role, err := a.storage.UserRole(ctx, userId)
+	if err != nil {
+		a.logger.Error("auth-db: get user role", "error", err)
+		return "", fmt.Errorf("failed to get user(%d) role", userId)
+	}
+
+	return role, nil
 }

@@ -1,6 +1,6 @@
 package rest
 
-type TelegramAuthRequest struct {
+type WebAppAuthData struct {
 	InitData string `json:"initData"`
 }
 

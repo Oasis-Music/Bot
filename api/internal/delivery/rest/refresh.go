@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
+	authEntities "oasis/api/internal/services/auth/entities"
+	"oasis/api/internal/utils"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", ContentTypeJSON)
 
 	ctx := r.Context()
 
@@ -23,6 +24,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "cookie not found", http.StatusBadRequest)
 		default:
 			log.Println(err)
+
 			http.Error(w, "server error", http.StatusInternalServerError)
 		}
 		return
@@ -31,7 +33,7 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	token, err := h.authService.ParseRefreshToken(cookie.Value)
 	if err != nil {
 		if errors.Is(err, jwt.ErrTokenExpired) {
-			err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
+			err = h.authService.RevokeRefreshToken(ctx, token.RefreshId)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -41,26 +43,29 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.authService.RevokeRefreshToken(ctx, token.RefreshUuid)
+	err = h.authService.RevokeRefreshToken(ctx, token.RefreshId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	userID, err := strconv.ParseInt(token.UserId, 10, 64)
+	parsedId, err := utils.ParseInt64(token.UserId)
 	if err != nil {
-		fmt.Println(err)
-		http.Error(w, "invalid user ID", http.StatusBadRequest)
+		http.Error(w, "wrong user id", http.StatusBadRequest)
 		return
 	}
 
-	user, err := h.userService.User(ctx, userID)
+	user, err := h.userService.User(ctx, parsedId)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	tokenPair, err := h.authService.CreateJwtPair(user.ID, user.FirstName)
+	tokenPair, err := h.authService.CreateJwtPair(authEntities.JwtPairPayload{
+		UserID:    user.ID,
+		FirstName: user.FirstName,
+		UserRole:  string(user.Role),
+	})
 	if err != nil {
 		fmt.Println("token parir gen", err)
 		http.Error(w, "wrong token", http.StatusInternalServerError)
@@ -75,17 +80,17 @@ func (h *handler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	h.SetRefreshTokenCookie(w, tokenPair.RefreshToken)
+
+	w.WriteHeader(http.StatusOK)
+
 	resp := TelegramAuthResponse{
 		AccessToken: tokenPair.AccessToken,
 	}
 
-	w.WriteHeader(http.StatusOK)
-	h.setRefreshTokenCookie(w, tokenPair.RefreshToken)
-
 	err = json.NewEncoder(w).Encode(resp)
 	if err != nil {
-		log.Panicln(err)
-		http.Error(w, "refresh NewEncoder err", http.StatusInternalServerError)
+		http.Error(w, "auth was failed", http.StatusInternalServerError)
 	}
 
 }

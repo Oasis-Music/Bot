@@ -12,10 +12,6 @@ func (u *userService) UserSoundtracks(ctx context.Context, userID int64, options
 		return nil, errors.New("page should be greater than 0")
 	}
 
-	if err := u.checkPermission(ctx, userID); err != nil {
-		return nil, err
-	}
-
 	result, err := u.storage.UserSoundtracks(ctx, userID, options)
 	if err != nil {
 		return nil, ErrGetUserTracks

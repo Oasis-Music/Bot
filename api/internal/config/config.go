@@ -36,10 +36,10 @@ func New() *Config {
 }
 
 type AuthConfig struct {
-	AccessSecret  string `env:"AT_SECRET,required"`
-	RefreshSecret string `env:"RT_SECRET,required"`
-	AccessTTL     int    `env:"AT_EXP_MIN,required"`
-	RefreshTTL    int    `env:"RT_EXP_MIN,required"`
+	AccessTokenSecret  string `env:"AT_SECRET,required"`
+	RefreshTokenSecret string `env:"RT_SECRET,required"`
+	SessionTTL         int    `env:"SESSION_TTL_MIN,required"`
+	SessionRefreshTTL  int    `env:"SESSION_REFRESH_TTL_MIN,required"`
 }
 
 type PostgresConfig struct {
