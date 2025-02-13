@@ -9,9 +9,11 @@ import (
 	"sync"
 )
 
-func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) {
+func (s *soundtrackService) Delete(ctx context.Context, _id int32) (bool, error) {
 
-	soundtrack, err := s.Soundtrack(ctx, id)
+	var soundtrackID int64 = -1
+
+	soundtrack, err := s.Soundtrack(ctx, soundtrackID)
 	if err != nil {
 		return false, err
 	}
@@ -21,7 +23,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 		return parts[len(parts)-1]
 	}
 
-	if soundtrack.ID != id {
+	if soundtrack.ID != soundtrackID {
 		msg := "anomaly of tracks existence"
 		s.logger.WarnContext(ctx, msg)
 		return false, errors.New(msg)
@@ -30,8 +32,8 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 	keys := make([]string, 0, 2)
 	keys = append(keys, s3.AudioPrefix+extractName(soundtrack.Audio))
 
-	if soundtrack.CoverImage != "" {
-		keys = append(keys, s3.CoverPrefix+extractName(soundtrack.CoverImage))
+	if soundtrack.CoverImage != nil {
+		keys = append(keys, s3.CoverPrefix+extractName(*soundtrack.CoverImage))
 	}
 
 	results := make(chan error, len(keys))
@@ -60,7 +62,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 		return false, ErrInternalDeleteSoundtrack
 	}
 
-	success, err := s.storage.Delete(ctx, id)
+	success, err := s.storage.Delete(ctx, -1) // todo: provide
 	if err != nil {
 		if errors.Is(err, postgres.ErrSoundtrackNotFound) {
 			return false, ErrSoundtrackNotFound
@@ -73,7 +75,7 @@ func (s *soundtrackService) Delete(ctx context.Context, id int32) (bool, error) 
 		return false, ErrSoundtrackNotFound
 	}
 
-	s.logger.InfoContext(ctx, "soundtrack: delete", "id", id)
+	s.logger.InfoContext(ctx, "soundtrack: delete", "id", soundtrackID)
 
 	return success, nil
 }

@@ -10,7 +10,7 @@ import (
 	"oasis/api/internal/delivery/graph/dataloader"
 	"oasis/api/internal/delivery/graph/models"
 	"oasis/api/internal/entity"
-	"oasis/api/internal/services/soundtrack"
+	soundtrackServices "oasis/api/internal/services/soundtrack"
 	"oasis/api/internal/utils"
 )
 
@@ -36,22 +36,24 @@ func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (boo
 }
 
 // Soundtrack is the resolver for the soundtrack field.
-func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error) {
-	trackId, err := utils.StrToInt32(id)
-	if err != nil {
-		return nil, errors.New("invalid track id")
-	}
+func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.SoundtrackPayload, error) {
 
-	track, err := r.SoundtrackService.Soundtrack(ctx, trackId)
-	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
-		return models.NotFound{
-			Message: err.Error(),
-		}, nil
-	} else if err != nil {
+	soundtrackID, err := parseSoundtrackID(id)
+	if err != nil {
 		return nil, err
 	}
 
-	return buildSoundtrackModel(*track), nil
+	soundtrack, err := r.SoundtrackService.Soundtrack(ctx, soundtrackID)
+	if err != nil {
+		if errors.Is(err, soundtrackServices.ErrSoundtrackNotFound) {
+			return models.NotFound{
+				Message: err.Error(),
+			}, nil
+		}
+		return nil, err
+	}
+
+	return buildSoundtrackModelV2(soundtrack), nil
 }
 
 // Soundtracks is the resolver for the soundtracks field.
@@ -102,7 +104,7 @@ func (r *queryResolver) SearchSoundtrack(ctx context.Context, value string) ([]m
 // CheckAudioHash is the resolver for the checkAudioHash field.
 func (r *queryResolver) CheckAudioHash(ctx context.Context, hash string) (models.SoundtrackResult, error) {
 	track, err := r.SoundtrackService.CheckHash(ctx, hash)
-	if errors.Is(err, soundtrack.ErrSoundtrackNotFound) {
+	if errors.Is(err, soundtrackServices.ErrSoundtrackNotFound) {
 		return models.NotFound{
 			Message: err.Error(),
 		}, nil

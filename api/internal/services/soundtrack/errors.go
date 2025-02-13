@@ -2,18 +2,20 @@ package soundtrack
 
 import (
 	"errors"
-	"oasis/api/internal/repo/storage/postgres"
+	"oasis/api/pkg/postgres"
 )
 
 var (
-	ErrStotageNoData = postgres.ErrNoData
+	ErrStorageNoData = postgres.ErrNoData
 )
 
 // TODO: separe
 var (
-	ErrSoundtrackNotFound       = errors.New("soundtrack not found")
+	ErrSoundtrackNotFound  = errors.New("soundtrack not found")
+	ErrFailedGetSoundtrack = errors.New("failed to get soundtrack")
+	// ------------------------------------------------------------------------------------
 	ErrSoundtrackAlreadyExists  = errors.New("soundtrack already exists")
-	ErrFailedToFetchSoundtrack  = errors.New("internal: failed to fetch soundtrack")
+	ErrFailedToFetchSoundtrack  = errors.New("internal: failed to fetch soundtrack") // todo del
 	ErrGetAllSoundtracks        = errors.New("internal: no soundtracks fetched")
 	ErrInternalDeleteSoundtrack = errors.New("internal: failed to delete soundtrack")
 )

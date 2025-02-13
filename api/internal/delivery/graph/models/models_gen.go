@@ -10,6 +10,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+type SoundtrackPayload interface {
+	IsSoundtrackPayload()
+}
+
 type SoundtrackResult interface {
 	IsSoundtrackResult()
 }
@@ -49,6 +53,8 @@ type NotFound struct {
 
 func (NotFound) IsSoundtrackResult() {}
 
+func (NotFound) IsSoundtrackPayload() {}
+
 func (NotFound) IsUserResult() {}
 
 func (NotFound) IsUserSoundtracksResult() {}
@@ -71,6 +77,8 @@ type Soundtrack struct {
 }
 
 func (Soundtrack) IsSoundtrackResult() {}
+
+func (Soundtrack) IsSoundtrackPayload() {}
 
 type SoundtracksFilter struct {
 	Page int `json:"page"`

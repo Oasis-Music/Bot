@@ -116,7 +116,7 @@ type MutationResolver interface {
 	UnattachSoundtrack(ctx context.Context, input models.UnattachSoundtrackInput) (bool, error)
 }
 type QueryResolver interface {
-	Soundtrack(ctx context.Context, id string) (models.SoundtrackResult, error)
+	Soundtrack(ctx context.Context, id string) (models.SoundtrackPayload, error)
 	Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
 	SearchSoundtrack(ctx context.Context, value string) ([]models.Soundtrack, error)
 	CheckAudioHash(ctx context.Context, hash string) (models.SoundtrackResult, error)
@@ -599,10 +599,11 @@ type NotFound {
   attached: Boolean!
 }
 
-union SoundtrackResult = Soundtrack | NotFound
+union SoundtrackResult = Soundtrack | NotFound # todo: del then
+union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
-  soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
+  soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
@@ -1747,11 +1748,11 @@ func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			role, err := ec.unmarshalNRole2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []interface{}{"ADMIN", "USER"})
 			if err != nil {
-				var zeroVal models.SoundtrackResult
+				var zeroVal models.SoundtrackPayload
 				return zeroVal, err
 			}
 			if ec.directives.HasRole == nil {
-				var zeroVal models.SoundtrackResult
+				var zeroVal models.SoundtrackPayload
 				return zeroVal, errors.New("directive hasRole is not implemented")
 			}
 			return ec.directives.HasRole(ctx, nil, directive0, role)
@@ -1764,10 +1765,10 @@ func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql
 		if tmp == nil {
 			return nil, nil
 		}
-		if data, ok := tmp.(models.SoundtrackResult); ok {
+		if data, ok := tmp.(models.SoundtrackPayload); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/api/internal/delivery/graph/models.SoundtrackResult`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be oasis/api/internal/delivery/graph/models.SoundtrackPayload`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1776,9 +1777,9 @@ func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(models.SoundtrackResult)
+	res := resTmp.(models.SoundtrackPayload)
 	fc.Result = res
-	return ec.marshalOSoundtrackResult2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackResult(ctx, field.Selections, res)
+	return ec.marshalOSoundtrackPayload2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackPayload(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_soundtrack(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1788,7 +1789,7 @@ func (ec *executionContext) fieldContext_Query_soundtrack(ctx context.Context, f
 		IsMethod:   true,
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type SoundtrackResult does not have child fields")
+			return nil, errors.New("field of type SoundtrackPayload does not have child fields")
 		},
 	}
 	defer func() {
@@ -5430,6 +5431,29 @@ func (ec *executionContext) unmarshalInputUserSoundtracksFilter(ctx context.Cont
 
 // region    ************************** interface.gotpl ***************************
 
+func (ec *executionContext) _SoundtrackPayload(ctx context.Context, sel ast.SelectionSet, obj models.SoundtrackPayload) graphql.Marshaler {
+	switch obj := (obj).(type) {
+	case nil:
+		return graphql.Null
+	case models.Soundtrack:
+		return ec._Soundtrack(ctx, sel, &obj)
+	case *models.Soundtrack:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._Soundtrack(ctx, sel, obj)
+	case models.NotFound:
+		return ec._NotFound(ctx, sel, &obj)
+	case *models.NotFound:
+		if obj == nil {
+			return graphql.Null
+		}
+		return ec._NotFound(ctx, sel, obj)
+	default:
+		panic(fmt.Errorf("unexpected type %T", obj))
+	}
+}
+
 func (ec *executionContext) _SoundtrackResult(ctx context.Context, sel ast.SelectionSet, obj models.SoundtrackResult) graphql.Marshaler {
 	switch obj := (obj).(type) {
 	case nil:
@@ -5617,7 +5641,7 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 	return out
 }
 
-var notFoundImplementors = []string{"NotFound", "SoundtrackResult", "UserResult", "UserSoundtracksResult"}
+var notFoundImplementors = []string{"NotFound", "SoundtrackResult", "SoundtrackPayload", "UserResult", "UserSoundtracksResult"}
 
 func (ec *executionContext) _NotFound(ctx context.Context, sel ast.SelectionSet, obj *models.NotFound) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, notFoundImplementors)
@@ -5851,7 +5875,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
-var soundtrackImplementors = []string{"Soundtrack", "SoundtrackResult"}
+var soundtrackImplementors = []string{"Soundtrack", "SoundtrackResult", "SoundtrackPayload"}
 
 func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSet, obj *models.Soundtrack) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, soundtrackImplementors)
@@ -7005,6 +7029,13 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOSoundtrackPayload2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackPayload(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackPayload) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SoundtrackPayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSoundtrackResult2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackResult(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackResult) graphql.Marshaler {

@@ -11,7 +11,7 @@ func (s *soundtrackService) CheckHash(ctx context.Context, hash string) (*entity
 	userID := s.extractCtxUserId(ctx)
 
 	soundtrack, err := s.storage.CheckHash(ctx, userID, hash)
-	if errors.Is(err, ErrStotageNoData) {
+	if errors.Is(err, ErrStorageNoData) {
 		s.logger.WarnContext(ctx, "soundtrack hash not found", "hash", hash)
 		return nil, ErrSoundtrackNotFound
 	} else if err != nil {

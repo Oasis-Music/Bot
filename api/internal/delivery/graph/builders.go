@@ -15,11 +15,12 @@ func buildUserModel(u *entity.User) models.User {
 		Username:     u.Username,
 		LanguageCode: u.LanguageCode,
 		Role:         u.Role,
-		VisitedAt:    utils.FormatISODate(u.VisitedAt),
-		CreatedAt:    utils.FormatISODate(u.CreatedAt),
+		VisitedAt:    utils.FormatDate(u.VisitedAt),
+		CreatedAt:    utils.FormatDate(u.CreatedAt),
 	}
 }
 
+// todo: del
 func buildSoundtrackModel(s entity.Soundtrack) models.Soundtrack {
 
 	return models.Soundtrack{
@@ -31,7 +32,7 @@ func buildSoundtrackModel(s entity.Soundtrack) models.Soundtrack {
 		AudioURL:  s.Audio,
 		Validated: s.Validated,
 		Attached:  s.Attached,
-		CreatedAt: utils.FormatISODate(s.CreatedAt),
+		CreatedAt: utils.FormatDate(s.CreatedAt),
 		CreatorID: utils.IntToString(s.CreatorID),
 	}
 }

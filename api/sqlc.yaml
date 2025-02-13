@@ -1,11 +1,20 @@
 version: "2"
 sql:
-  - engine: "postgresql"
-    queries: "internal/repo/storage/postgres/sqlc/queries"
-    schema: "internal/repo/storage/postgres/sqlc/schemas"
+  # - engine: "postgresql"
+  #   queries: "internal/repo/storage/postgres/sqlc/queries"
+  #   schema: "internal/repo/storage/postgres/sqlc/schemas"
+  #   gen:
+  #     go:
+  #       package: "sqlc"
+  #       sql_package: "pgx/v4"
+  #       out: "internal/repo/storage/postgres/sqlc"
+  #       emit_interface: true
+  - queries: "internal/services/soundtrack/repo/postgres/sqlc/queries"
+    schema: "internal/services/soundtrack/repo/postgres/sqlc/schemas"
+    engine: "postgresql"
     gen:
       go:
         package: "sqlc"
         sql_package: "pgx/v4"
-        out: "internal/repo/storage/postgres/sqlc"
+        out: "internal/services/soundtrack/repo/postgres/sqlc"
         emit_interface: true

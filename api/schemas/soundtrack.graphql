@@ -12,10 +12,11 @@ type Soundtrack {
   attached: Boolean!
 }
 
-union SoundtrackResult = Soundtrack | NotFound
+union SoundtrackResult = Soundtrack | NotFound # todo: del then
+union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
-  soundtrack(id: ID!): SoundtrackResult @hasRole(role: [ADMIN, USER])
+  soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
   soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])

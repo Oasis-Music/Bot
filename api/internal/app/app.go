@@ -46,7 +46,7 @@ func NewApp(config *config.Config, logger *slog.Logger, db *pgxpool.Pool, s3clie
 	userService := user.New(config, logger, userStorage, authService)
 
 	soundtrackStorage := soundtrackRepo.New(config, logger, db, sqlc)
-	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3, userService)
+	soundtrackService := soundtrack.New(config, logger, soundtrackStorage, s3, userService, db)
 
 	appComposite := composite.AppComposite{
 		SoundtrackService: soundtrackService,
