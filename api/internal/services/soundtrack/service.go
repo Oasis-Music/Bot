@@ -18,7 +18,7 @@ import (
 
 type Service interface {
 	Soundtrack(ctx context.Context, id int64) (*entities.Soundtrack, error)
-	AllSoundtracks(ctx context.Context, filter entity.SoundtrackFilter) (*entity.SoundtrackList, error)
+	Soundtracks(ctx context.Context, limit int64, after int64, before int64, filter entities.SoundtrackFilter) (*entities.SoundtrackConnection, error)
 	Create(ctx context.Context, input entity.NewSoundtrackInput) (bool, error)
 	Delete(ctx context.Context, id int32) (bool, error)
 	Search(ctx context.Context, value string) ([]entity.Soundtrack, error)

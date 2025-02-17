@@ -44,10 +44,12 @@ type NewSoundtrack struct {
 }
 
 type SoundtrackFilter struct {
-	Page   int
-	UserID int64
+	Duration int
 }
 
-type SoundtrackList struct {
+type SoundtrackConnection struct {
+	TotalCount  int64
 	Soundtracks []Soundtrack
+	HasNextPage bool
+	HasPrevPage bool
 }

@@ -14,3 +14,10 @@ enum Role {
 type NotFound {
   message: String!
 }
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}

@@ -59,6 +59,13 @@ func (NotFound) IsUserResult() {}
 
 func (NotFound) IsUserSoundtracksResult() {}
 
+type PageInfo struct {
+	EndCursor       *string `json:"endCursor,omitempty"`
+	HasNextPage     bool    `json:"hasNextPage"`
+	HasPreviousPage bool    `json:"hasPreviousPage"`
+	StartCursor     *string `json:"startCursor,omitempty"`
+}
+
 type Query struct {
 }
 
@@ -80,12 +87,19 @@ func (Soundtrack) IsSoundtrackResult() {}
 
 func (Soundtrack) IsSoundtrackPayload() {}
 
-type SoundtracksFilter struct {
-	Page int64 `json:"page"`
+type SoundtrackConnection struct {
+	TotalCount int64            `json:"totalCount"`
+	Edges      []SoundtrackEdge `json:"edges"`
+	PageInfo   *PageInfo        `json:"pageInfo"`
 }
 
-type SoundtracksResponse struct {
-	Soundtracks []Soundtrack `json:"soundtracks"`
+type SoundtrackEdge struct {
+	Node   *Soundtrack `json:"node"`
+	Cursor string      `json:"cursor"`
+}
+
+type SoundtrackFilter struct {
+	Duration *int64 `json:"duration,omitempty"`
 }
 
 type UnattachSoundtrackInput struct {

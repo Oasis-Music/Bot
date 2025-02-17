@@ -34,12 +34,3 @@ type NewSoundtrack struct {
 	IsValidated bool
 	CreatorID   int64
 }
-
-type SoundtrackFilter struct {
-	Page   int
-	UserID int64
-}
-
-type SoundtrackList struct {
-	Soundtracks []Soundtrack
-}

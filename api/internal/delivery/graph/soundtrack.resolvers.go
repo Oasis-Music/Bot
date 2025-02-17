@@ -11,6 +11,7 @@ import (
 	"oasis/api/internal/delivery/graph/models"
 	"oasis/api/internal/entity"
 	soundtrackServices "oasis/api/internal/services/soundtrack"
+	soundtrackEntities "oasis/api/internal/services/soundtrack/entities"
 	"oasis/api/internal/utils"
 )
 
@@ -56,23 +57,79 @@ func (r *queryResolver) Soundtrack(ctx context.Context, id string) (models.Sound
 }
 
 // Soundtracks is the resolver for the soundtracks field.
-func (r *queryResolver) Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error) {
-	tracks, err := r.SoundtrackService.AllSoundtracks(ctx, entity.SoundtrackFilter{
-		Page: int(filter.Page), // todo: unsafe - temp
-	})
+func (r *queryResolver) Soundtracks(ctx context.Context, first int64, after *string, before *string, where *models.SoundtrackFilter) (*models.SoundtrackConnection, error) {
+	var filter soundtrackEntities.SoundtrackFilter
 
+	if where != nil {
+
+		if where.Duration != nil {
+			filter.Duration = int(*where.Duration) // todo: then int64
+		}
+	}
+
+	// Cursors 'after' | 'before'
+	var afterCursor int64
+	if after != nil {
+		cursor, err := parsePaginationCursor(*after)
+		if err != nil {
+			return nil, err
+		}
+		afterCursor = cursor
+	}
+
+	var beforeCursor int64
+	if before != nil {
+		cursor, err := parsePaginationCursor(*before)
+		if err != nil {
+			return nil, err
+		}
+
+		beforeCursor = cursor
+	}
+
+	payload, err := r.SoundtrackService.Soundtracks(ctx, first, afterCursor, beforeCursor, filter)
 	if err != nil {
 		return nil, err
 	}
 
-	soundtracks := make([]models.Soundtrack, 0, len(tracks.Soundtracks))
+	soundtracks := make([]models.Soundtrack, 0, len(payload.Soundtracks))
 
-	for _, track := range tracks.Soundtracks {
-		soundtracks = append(soundtracks, buildSoundtrackModel(track))
+	for _, s := range payload.Soundtracks {
+		soundtracks = append(soundtracks, buildSoundtrackModelV2(&s))
 	}
 
-	return &models.SoundtracksResponse{
-		Soundtracks: soundtracks,
+	edges := make([]models.SoundtrackEdge, 0, len(soundtracks))
+
+	for _, s := range soundtracks {
+		edges = append(edges, models.SoundtrackEdge{
+			Cursor: utils.StringToBase64(s.ID),
+			Node:   &s,
+		})
+	}
+
+	edgesLen := len(edges)
+
+	var startCursor *string
+	if edgesLen > 0 {
+		v := utils.StringToBase64(edges[0].Node.ID)
+		startCursor = &v
+	}
+
+	var endCursor *string
+	if edgesLen > 0 {
+		v := utils.StringToBase64(edges[edgesLen-1].Node.ID)
+		endCursor = &v
+	}
+
+	return &models.SoundtrackConnection{
+		TotalCount: payload.TotalCount,
+		Edges:      edges,
+		PageInfo: &models.PageInfo{
+			EndCursor:       endCursor,
+			HasNextPage:     payload.HasNextPage,
+			HasPreviousPage: payload.HasPrevPage,
+			StartCursor:     startCursor,
+		},
 	}, nil
 }
 

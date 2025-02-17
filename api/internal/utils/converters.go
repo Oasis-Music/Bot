@@ -2,6 +2,8 @@ package utils
 
 import (
 	"crypto/md5"
+	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"strconv"
@@ -43,7 +45,7 @@ func GetMD5Hash(src io.Reader) (string, error) {
 	return fmt.Sprintf("%x", h.Sum(nil)), nil
 }
 
-// ==============================================================================
+// ============================================================================== NEW
 
 func IntToString[T int32 | int64](n T) string {
 	return strconv.FormatInt(int64(n), 10)
@@ -69,4 +71,23 @@ func ParseInt64(s string) (int64, error) {
 	}
 
 	return n, nil
+}
+
+func Base64ToInt64(encodedString string) (int64, error) {
+
+	decodedBytes, err := base64.StdEncoding.DecodeString(encodedString)
+	if err != nil {
+		return 0, err
+	}
+
+	n, err := strconv.ParseInt(string(decodedBytes), 10, 64)
+	if err != nil {
+		return 0, errors.New("failed to convert encodedString to int64")
+	}
+
+	return n, nil
+}
+
+func StringToBase64(src string) string {
+	return base64.StdEncoding.EncodeToString([]byte(src))
 }

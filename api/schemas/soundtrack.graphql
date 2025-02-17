@@ -17,7 +17,7 @@ union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
-  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
+  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection!
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
 }
@@ -27,18 +27,25 @@ extend type Mutation {
   deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
-input SoundtracksFilter {
-  page: Int!
-}
-
-type SoundtracksResponse {
-  soundtracks: [Soundtrack!]!
-}
-
 input CreateSoundtrackInput {
   title: String!
   author: String!
   coverImage: Upload
   audiofile: Upload!
   attach: Boolean!
+}
+
+type SoundtrackConnection {
+  totalCount: Int!
+  edges: [SoundtrackEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SoundtrackEdge {
+  node: Soundtrack!
+  cursor: String!
+}
+
+input SoundtrackFilter {
+  duration: Int # plug filter value [ignore it for now]
 }

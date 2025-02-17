@@ -64,12 +64,19 @@ type ComplexityRoot struct {
 		Message func(childComplexity int) int
 	}
 
+	PageInfo struct {
+		EndCursor       func(childComplexity int) int
+		HasNextPage     func(childComplexity int) int
+		HasPreviousPage func(childComplexity int) int
+		StartCursor     func(childComplexity int) int
+	}
+
 	Query struct {
 		AuthorizeUser    func(childComplexity int, initData string) int
 		CheckAudioHash   func(childComplexity int, hash string) int
 		SearchSoundtrack func(childComplexity int, value string) int
 		Soundtrack       func(childComplexity int, id string) int
-		Soundtracks      func(childComplexity int, filter models.SoundtracksFilter) int
+		Soundtracks      func(childComplexity int, first int64, after *string, before *string, where *models.SoundtrackFilter) int
 		User             func(childComplexity int, id string) int
 		UserSoundtracks  func(childComplexity int, id string, filter models.UserSoundtracksFilter) int
 	}
@@ -88,8 +95,15 @@ type ComplexityRoot struct {
 		Validated func(childComplexity int) int
 	}
 
-	SoundtracksResponse struct {
-		Soundtracks func(childComplexity int) int
+	SoundtrackConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	SoundtrackEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
 	}
 
 	User struct {
@@ -117,7 +131,7 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Soundtrack(ctx context.Context, id string) (models.SoundtrackPayload, error)
-	Soundtracks(ctx context.Context, filter models.SoundtracksFilter) (*models.SoundtracksResponse, error)
+	Soundtracks(ctx context.Context, first int64, after *string, before *string, where *models.SoundtrackFilter) (*models.SoundtrackConnection, error)
 	SearchSoundtrack(ctx context.Context, value string) ([]models.Soundtrack, error)
 	CheckAudioHash(ctx context.Context, hash string) (models.SoundtrackResult, error)
 	User(ctx context.Context, id string) (models.UserResult, error)
@@ -216,6 +230,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.NotFound.Message(childComplexity), true
 
+	case "PageInfo.endCursor":
+		if e.complexity.PageInfo.EndCursor == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.EndCursor(childComplexity), true
+
+	case "PageInfo.hasNextPage":
+		if e.complexity.PageInfo.HasNextPage == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.HasNextPage(childComplexity), true
+
+	case "PageInfo.hasPreviousPage":
+		if e.complexity.PageInfo.HasPreviousPage == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.HasPreviousPage(childComplexity), true
+
+	case "PageInfo.startCursor":
+		if e.complexity.PageInfo.StartCursor == nil {
+			break
+		}
+
+		return e.complexity.PageInfo.StartCursor(childComplexity), true
+
 	case "Query.authorizeUser":
 		if e.complexity.Query.AuthorizeUser == nil {
 			break
@@ -274,7 +316,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Soundtracks(childComplexity, args["filter"].(models.SoundtracksFilter)), true
+		return e.complexity.Query.Soundtracks(childComplexity, args["first"].(int64), args["after"].(*string), args["before"].(*string), args["where"].(*models.SoundtrackFilter)), true
 
 	case "Query.user":
 		if e.complexity.Query.User == nil {
@@ -377,12 +419,40 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Soundtrack.Validated(childComplexity), true
 
-	case "SoundtracksResponse.soundtracks":
-		if e.complexity.SoundtracksResponse.Soundtracks == nil {
+	case "SoundtrackConnection.edges":
+		if e.complexity.SoundtrackConnection.Edges == nil {
 			break
 		}
 
-		return e.complexity.SoundtracksResponse.Soundtracks(childComplexity), true
+		return e.complexity.SoundtrackConnection.Edges(childComplexity), true
+
+	case "SoundtrackConnection.pageInfo":
+		if e.complexity.SoundtrackConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.SoundtrackConnection.PageInfo(childComplexity), true
+
+	case "SoundtrackConnection.totalCount":
+		if e.complexity.SoundtrackConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.SoundtrackConnection.TotalCount(childComplexity), true
+
+	case "SoundtrackEdge.cursor":
+		if e.complexity.SoundtrackEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.SoundtrackEdge.Cursor(childComplexity), true
+
+	case "SoundtrackEdge.node":
+		if e.complexity.SoundtrackEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.SoundtrackEdge.Node(childComplexity), true
 
 	case "User.createdAt":
 		if e.complexity.User.CreatedAt == nil {
@@ -464,7 +534,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
 		ec.unmarshalInputAttachSoundtrackInput,
 		ec.unmarshalInputCreateSoundtrackInput,
-		ec.unmarshalInputSoundtracksFilter,
+		ec.unmarshalInputSoundtrackFilter,
 		ec.unmarshalInputUnattachSoundtrackInput,
 		ec.unmarshalInputUserSoundtracksFilter,
 	)
@@ -584,6 +654,13 @@ enum Role {
 type NotFound {
   message: String!
 }
+
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
 `, BuiltIn: false},
 	{Name: "../../../schemas/soundtrack.graphql", Input: `type Soundtrack {
   id: ID!
@@ -604,7 +681,7 @@ union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
-  soundtracks(filter: SoundtracksFilter!): SoundtracksResponse! @hasRole(role: [ADMIN, USER])
+  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection!
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
 }
@@ -614,20 +691,27 @@ extend type Mutation {
   deleteSoundtrack(id: ID!): Boolean! @hasRole(role: [ADMIN])
 }
 
-input SoundtracksFilter {
-  page: Int!
-}
-
-type SoundtracksResponse {
-  soundtracks: [Soundtrack!]!
-}
-
 input CreateSoundtrackInput {
   title: String!
   author: String!
   coverImage: Upload
   audiofile: Upload!
   attach: Boolean!
+}
+
+type SoundtrackConnection {
+  totalCount: Int!
+  edges: [SoundtrackEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SoundtrackEdge {
+  node: Soundtrack!
+  cursor: String!
+}
+
+input SoundtrackFilter {
+  duration: Int # plug filter value [ignore it for now]
 }
 `, BuiltIn: false},
 	{Name: "../../../schemas/user.graphql", Input: `type User {
@@ -969,28 +1053,97 @@ func (ec *executionContext) field_Query_soundtrack_argsID(
 func (ec *executionContext) field_Query_soundtracks_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := ec.field_Query_soundtracks_argsFilter(ctx, rawArgs)
+	arg0, err := ec.field_Query_soundtracks_argsFirst(ctx, rawArgs)
 	if err != nil {
 		return nil, err
 	}
-	args["filter"] = arg0
+	args["first"] = arg0
+	arg1, err := ec.field_Query_soundtracks_argsAfter(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg1
+	arg2, err := ec.field_Query_soundtracks_argsBefore(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := ec.field_Query_soundtracks_argsWhere(ctx, rawArgs)
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg3
 	return args, nil
 }
-func (ec *executionContext) field_Query_soundtracks_argsFilter(
+func (ec *executionContext) field_Query_soundtracks_argsFirst(
 	ctx context.Context,
 	rawArgs map[string]any,
-) (models.SoundtracksFilter, error) {
-	if _, ok := rawArgs["filter"]; !ok {
-		var zeroVal models.SoundtracksFilter
+) (int64, error) {
+	if _, ok := rawArgs["first"]; !ok {
+		var zeroVal int64
 		return zeroVal, nil
 	}
 
-	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("filter"))
-	if tmp, ok := rawArgs["filter"]; ok {
-		return ec.unmarshalNSoundtracksFilter2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksFilter(ctx, tmp)
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("first"))
+	if tmp, ok := rawArgs["first"]; ok {
+		return ec.unmarshalNInt2int64(ctx, tmp)
 	}
 
-	var zeroVal models.SoundtracksFilter
+	var zeroVal int64
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_soundtracks_argsAfter(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*string, error) {
+	if _, ok := rawArgs["after"]; !ok {
+		var zeroVal *string
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+	if tmp, ok := rawArgs["after"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_soundtracks_argsBefore(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*string, error) {
+	if _, ok := rawArgs["before"]; !ok {
+		var zeroVal *string
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+	if tmp, ok := rawArgs["before"]; ok {
+		return ec.unmarshalOString2ᚖstring(ctx, tmp)
+	}
+
+	var zeroVal *string
+	return zeroVal, nil
+}
+
+func (ec *executionContext) field_Query_soundtracks_argsWhere(
+	ctx context.Context,
+	rawArgs map[string]any,
+) (*models.SoundtrackFilter, error) {
+	if _, ok := rawArgs["where"]; !ok {
+		var zeroVal *models.SoundtrackFilter
+		return zeroVal, nil
+	}
+
+	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("where"))
+	if tmp, ok := rawArgs["where"]; ok {
+		return ec.unmarshalOSoundtrackFilter2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackFilter(ctx, tmp)
+	}
+
+	var zeroVal *models.SoundtrackFilter
 	return zeroVal, nil
 }
 
@@ -1719,6 +1872,176 @@ func (ec *executionContext) fieldContext_NotFound_message(_ context.Context, fie
 	return fc, nil
 }
 
+func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *models.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_endCursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EndCursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_endCursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *models.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasNextPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_hasNextPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_hasPreviousPage(ctx context.Context, field graphql.CollectedField, obj *models.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.HasPreviousPage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_hasPreviousPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PageInfo_startCursor(ctx context.Context, field graphql.CollectedField, obj *models.PageInfo) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_PageInfo_startCursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StartCursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_PageInfo_startCursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PageInfo",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_soundtrack(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_soundtrack(ctx, field)
 	if err != nil {
@@ -1811,35 +2134,8 @@ func (ec *executionContext) _Query_soundtracks(ctx context.Context, field graphq
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		directive0 := func(rctx context.Context) (any, error) {
-			ctx = rctx // use context from middleware stack in children
-			return ec.resolvers.Query().Soundtracks(rctx, fc.Args["filter"].(models.SoundtracksFilter))
-		}
-
-		directive1 := func(ctx context.Context) (any, error) {
-			role, err := ec.unmarshalNRole2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []any{"ADMIN", "USER"})
-			if err != nil {
-				var zeroVal *models.SoundtracksResponse
-				return zeroVal, err
-			}
-			if ec.directives.HasRole == nil {
-				var zeroVal *models.SoundtracksResponse
-				return zeroVal, errors.New("directive hasRole is not implemented")
-			}
-			return ec.directives.HasRole(ctx, nil, directive0, role)
-		}
-
-		tmp, err := directive1(rctx)
-		if err != nil {
-			return nil, graphql.ErrorOnPath(ctx, err)
-		}
-		if tmp == nil {
-			return nil, nil
-		}
-		if data, ok := tmp.(*models.SoundtracksResponse); ok {
-			return data, nil
-		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *oasis/api/internal/delivery/graph/models.SoundtracksResponse`, tmp)
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Soundtracks(rctx, fc.Args["first"].(int64), fc.Args["after"].(*string), fc.Args["before"].(*string), fc.Args["where"].(*models.SoundtrackFilter))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1851,9 +2147,9 @@ func (ec *executionContext) _Query_soundtracks(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*models.SoundtracksResponse)
+	res := resTmp.(*models.SoundtrackConnection)
 	fc.Result = res
-	return ec.marshalNSoundtracksResponse2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx, field.Selections, res)
+	return ec.marshalNSoundtrackConnection2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_soundtracks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1864,10 +2160,14 @@ func (ec *executionContext) fieldContext_Query_soundtracks(ctx context.Context, 
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "soundtracks":
-				return ec.fieldContext_SoundtracksResponse_soundtracks(ctx, field)
+			case "totalCount":
+				return ec.fieldContext_SoundtrackConnection_totalCount(ctx, field)
+			case "edges":
+				return ec.fieldContext_SoundtrackConnection_edges(ctx, field)
+			case "pageInfo":
+				return ec.fieldContext_SoundtrackConnection_pageInfo(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type SoundtracksResponse", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type SoundtrackConnection", field.Name)
 		},
 	}
 	defer func() {
@@ -2948,8 +3248,8 @@ func (ec *executionContext) fieldContext_Soundtrack_attached(_ context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _SoundtracksResponse_soundtracks(ctx context.Context, field graphql.CollectedField, obj *models.SoundtracksResponse) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_SoundtracksResponse_soundtracks(ctx, field)
+func (ec *executionContext) _SoundtrackConnection_totalCount(ctx context.Context, field graphql.CollectedField, obj *models.SoundtrackConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SoundtrackConnection_totalCount(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -2962,7 +3262,7 @@ func (ec *executionContext) _SoundtracksResponse_soundtracks(ctx context.Context
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Soundtracks, nil
+		return obj.TotalCount, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2974,14 +3274,162 @@ func (ec *executionContext) _SoundtracksResponse_soundtracks(ctx context.Context
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]models.Soundtrack)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNSoundtrack2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackᚄ(ctx, field.Selections, res)
+	return ec.marshalNInt2int64(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_SoundtrackConnection_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
-		Object:     "SoundtracksResponse",
+		Object:     "SoundtrackConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SoundtrackConnection_edges(ctx context.Context, field graphql.CollectedField, obj *models.SoundtrackConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SoundtrackConnection_edges(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Edges, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]models.SoundtrackEdge)
+	fc.Result = res
+	return ec.marshalNSoundtrackEdge2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackEdgeᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SoundtrackConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SoundtrackConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "node":
+				return ec.fieldContext_SoundtrackEdge_node(ctx, field)
+			case "cursor":
+				return ec.fieldContext_SoundtrackEdge_cursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SoundtrackEdge", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SoundtrackConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *models.SoundtrackConnection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SoundtrackConnection_pageInfo(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PageInfo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.PageInfo)
+	fc.Result = res
+	return ec.marshalNPageInfo2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐPageInfo(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SoundtrackConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SoundtrackConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "endCursor":
+				return ec.fieldContext_PageInfo_endCursor(ctx, field)
+			case "hasNextPage":
+				return ec.fieldContext_PageInfo_hasNextPage(ctx, field)
+			case "hasPreviousPage":
+				return ec.fieldContext_PageInfo_hasPreviousPage(ctx, field)
+			case "startCursor":
+				return ec.fieldContext_PageInfo_startCursor(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type PageInfo", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SoundtrackEdge_node(ctx context.Context, field graphql.CollectedField, obj *models.SoundtrackEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SoundtrackEdge_node(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Node, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*models.Soundtrack)
+	fc.Result = res
+	return ec.marshalNSoundtrack2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrack(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SoundtrackEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SoundtrackEdge",
 		Field:      field,
 		IsMethod:   false,
 		IsResolver: false,
@@ -3011,6 +3459,50 @@ func (ec *executionContext) fieldContext_SoundtracksResponse_soundtracks(_ conte
 				return ec.fieldContext_Soundtrack_attached(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Soundtrack", field.Name)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SoundtrackEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *models.SoundtrackEdge) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_SoundtrackEdge_cursor(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Cursor, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_SoundtrackEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SoundtrackEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type String does not have child fields")
 		},
 	}
 	return fc, nil
@@ -5511,27 +6003,27 @@ func (ec *executionContext) unmarshalInputCreateSoundtrackInput(ctx context.Cont
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputSoundtracksFilter(ctx context.Context, obj any) (models.SoundtracksFilter, error) {
-	var it models.SoundtracksFilter
+func (ec *executionContext) unmarshalInputSoundtrackFilter(ctx context.Context, obj any) (models.SoundtrackFilter, error) {
+	var it models.SoundtrackFilter
 	asMap := map[string]any{}
 	for k, v := range obj.(map[string]any) {
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"page"}
+	fieldsInOrder := [...]string{"duration"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
 			continue
 		}
 		switch k {
-		case "page":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("page"))
-			data, err := ec.unmarshalNInt2int64(ctx, v)
+		case "duration":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("duration"))
+			data, err := ec.unmarshalOInt2ᚖint64(ctx, v)
 			if err != nil {
 				return it, err
 			}
-			it.Page = data
+			it.Duration = data
 		}
 	}
 
@@ -5829,6 +6321,54 @@ func (ec *executionContext) _NotFound(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var pageInfoImplementors = []string{"PageInfo"}
+
+func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *models.PageInfo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pageInfoImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PageInfo")
+		case "endCursor":
+			out.Values[i] = ec._PageInfo_endCursor(ctx, field, obj)
+		case "hasNextPage":
+			out.Values[i] = ec._PageInfo_hasNextPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "hasPreviousPage":
+			out.Values[i] = ec._PageInfo_hasPreviousPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "startCursor":
+			out.Values[i] = ec._PageInfo_startCursor(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6164,19 +6704,73 @@ func (ec *executionContext) _Soundtrack(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
-var soundtracksResponseImplementors = []string{"SoundtracksResponse"}
+var soundtrackConnectionImplementors = []string{"SoundtrackConnection"}
 
-func (ec *executionContext) _SoundtracksResponse(ctx context.Context, sel ast.SelectionSet, obj *models.SoundtracksResponse) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, soundtracksResponseImplementors)
+func (ec *executionContext) _SoundtrackConnection(ctx context.Context, sel ast.SelectionSet, obj *models.SoundtrackConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, soundtrackConnectionImplementors)
 
 	out := graphql.NewFieldSet(fields)
 	deferred := make(map[string]*graphql.FieldSet)
 	for i, field := range fields {
 		switch field.Name {
 		case "__typename":
-			out.Values[i] = graphql.MarshalString("SoundtracksResponse")
-		case "soundtracks":
-			out.Values[i] = ec._SoundtracksResponse_soundtracks(ctx, field, obj)
+			out.Values[i] = graphql.MarshalString("SoundtrackConnection")
+		case "totalCount":
+			out.Values[i] = ec._SoundtrackConnection_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "edges":
+			out.Values[i] = ec._SoundtrackConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._SoundtrackConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
+
+	for label, dfs := range deferred {
+		ec.processDeferredGroup(graphql.DeferredGroup{
+			Label:    label,
+			Path:     graphql.GetPath(ctx),
+			FieldSet: dfs,
+			Context:  ctx,
+		})
+	}
+
+	return out
+}
+
+var soundtrackEdgeImplementors = []string{"SoundtrackEdge"}
+
+func (ec *executionContext) _SoundtrackEdge(ctx context.Context, sel ast.SelectionSet, obj *models.SoundtrackEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, soundtrackEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := make(map[string]*graphql.FieldSet)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SoundtrackEdge")
+		case "node":
+			out.Values[i] = ec._SoundtrackEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._SoundtrackEdge_cursor(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6731,6 +7325,16 @@ func (ec *executionContext) marshalNInt2int64(ctx context.Context, sel ast.Selec
 	return res
 }
 
+func (ec *executionContext) marshalNPageInfo2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *models.PageInfo) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._PageInfo(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNRole2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRole(ctx context.Context, v any) (models.Role, error) {
 	var res models.Role
 	err := res.UnmarshalGQL(v)
@@ -6850,23 +7454,76 @@ func (ec *executionContext) marshalNSoundtrack2ᚕoasisᚋapiᚋinternalᚋdeliv
 	return ret
 }
 
-func (ec *executionContext) unmarshalNSoundtracksFilter2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksFilter(ctx context.Context, v any) (models.SoundtracksFilter, error) {
-	res, err := ec.unmarshalInputSoundtracksFilter(ctx, v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNSoundtracksResponse2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v models.SoundtracksResponse) graphql.Marshaler {
-	return ec._SoundtracksResponse(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNSoundtracksResponse2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtracksResponse(ctx context.Context, sel ast.SelectionSet, v *models.SoundtracksResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNSoundtrack2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrack(ctx context.Context, sel ast.SelectionSet, v *models.Soundtrack) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
-	return ec._SoundtracksResponse(ctx, sel, v)
+	return ec._Soundtrack(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSoundtrackConnection2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackConnection(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackConnection) graphql.Marshaler {
+	return ec._SoundtrackConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSoundtrackConnection2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackConnection(ctx context.Context, sel ast.SelectionSet, v *models.SoundtrackConnection) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._SoundtrackConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSoundtrackEdge2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackEdge(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackEdge) graphql.Marshaler {
+	return ec._SoundtrackEdge(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNSoundtrackEdge2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []models.SoundtrackEdge) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNSoundtrackEdge2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackEdge(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
@@ -7210,6 +7867,30 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	}
 	res := graphql.MarshalBoolean(*v)
 	return res
+}
+
+func (ec *executionContext) unmarshalOInt2ᚖint64(ctx context.Context, v any) (*int64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt64(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint64(ctx context.Context, sel ast.SelectionSet, v *int64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	res := graphql.MarshalInt64(*v)
+	return res
+}
+
+func (ec *executionContext) unmarshalOSoundtrackFilter2ᚖoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackFilter(ctx context.Context, v any) (*models.SoundtrackFilter, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSoundtrackFilter(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalOSoundtrackPayload2oasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐSoundtrackPayload(ctx context.Context, sel ast.SelectionSet, v models.SoundtrackPayload) graphql.Marshaler {
