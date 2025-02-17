@@ -20,14 +20,14 @@ func (r *mutationResolver) AttachSoundtrack(ctx context.Context, input models.At
 		return false, errors.New("invalid user ID")
 	}
 
-	trackId, err := utils.StrToInt32(input.TrackID)
+	soundtrackID, err := parseSoundtrackID(input.TrackID)
 	if err != nil {
-		return false, errors.New("invalid track ID")
+		return false, err
 	}
 
 	return r.UserService.AttachSoundtrack(ctx, entity.AttachSoundtrackToUserParams{
 		UserID:       userId,
-		SoundtrackID: trackId,
+		SoundtrackID: int32(soundtrackID),
 	})
 }
 
@@ -38,14 +38,14 @@ func (r *mutationResolver) UnattachSoundtrack(ctx context.Context, input models.
 		return false, errors.New("invalid user ID")
 	}
 
-	trackId, err := utils.StrToInt32(input.TrackID)
+	soundtrackID, err := parseSoundtrackID(input.TrackID)
 	if err != nil {
-		return false, errors.New("invalid track ID")
+		return false, err
 	}
 
 	return r.UserService.UnattachSoundtrack(ctx, entity.UnattachSoundtrackFromUserParams{
 		UserID:       userId,
-		SoundtrackID: trackId,
+		SoundtrackID: int32(soundtrackID),
 	})
 }
 

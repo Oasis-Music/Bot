@@ -6,6 +6,15 @@ import (
 	"oasis/api/internal/utils"
 )
 
+func parseSoundtrackID(id string) (int64, error) {
+	trackID, err := utils.ParseInt64(id)
+	if err != nil {
+		return -1, errors.New("invalid soundtrack id")
+	}
+
+	return trackID, nil
+}
+
 func parsePaginationCursor(src string) (int64, error) {
 
 	parsedCursor, err := utils.Base64ToInt64(src)

@@ -1,21 +1,11 @@
 package graph
 
 import (
-	"errors"
 	"oasis/api/internal/delivery/graph/models"
 	soundtrackEntities "oasis/api/internal/services/soundtrack/entities"
 	userEntities "oasis/api/internal/services/user/entities"
 	"oasis/api/internal/utils"
 )
-
-func parseSoundtrackID(id string) (int64, error) {
-	trackID, err := utils.ParseInt64(id)
-	if err != nil {
-		return -1, errors.New("invalid soundtrack id")
-	}
-
-	return trackID, nil
-}
 
 func buildSoundtrackModelV2(s *soundtrackEntities.Soundtrack) models.Soundtrack {
 

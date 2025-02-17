@@ -28,12 +28,12 @@ func (r *mutationResolver) CreateSoundtrack(ctx context.Context, input models.Cr
 
 // DeleteSoundtrack is the resolver for the deleteSoundtrack field.
 func (r *mutationResolver) DeleteSoundtrack(ctx context.Context, id string) (bool, error) {
-	trackId, err := utils.StrToInt32(id)
+	soundtrackID, err := parseSoundtrackID(id)
 	if err != nil {
-		return false, errors.New("invalid track id")
+		return false, err
 	}
 
-	return r.SoundtrackService.Delete(ctx, trackId)
+	return r.SoundtrackService.Delete(ctx, int32(soundtrackID))
 }
 
 // Soundtrack is the resolver for the soundtrack field.
