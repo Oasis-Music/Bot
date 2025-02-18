@@ -3,6 +3,10 @@ import { SoundtrackItem } from '@/entities/soundtrack'
 import { Loader } from '@/shared/ui/loader'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { Button } from '@/shared/ui/button'
+import { usePlaySoundtrack } from '@/entities/soundtrack'
+import type { Soundtrack } from '@/entities/soundtrack'
+import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '@/entities/soundtrack'
 
 export type edge = {
   cursor: string
@@ -38,6 +42,9 @@ export function VirtualizedPlaylist({
 }: VirtualizedPlaylistProps) {
   const parentRef = useRef<HTMLDivElement>(null)
 
+  const playSoundtrack = usePlaySoundtrack()
+  const currentTrack = useReactiveVar(currentTrackVar)
+
   const rowVirtualizer = useVirtualizer({
     count: hasNextPage ? soundtracks.length + 1 : soundtracks.length,
     getScrollElement: () => parentRef.current,
@@ -54,6 +61,10 @@ export function VirtualizedPlaylist({
       onFetchMore()
     }
   }, [hasNextPage, soundtracks.length, isFetchingNextPage, rowVirtualizer.getVirtualItems()])
+
+  const trackClickHandler = (track: Soundtrack) => {
+    playSoundtrack(track)
+  }
 
   if (error) {
     return (
@@ -119,8 +130,8 @@ export function VirtualizedPlaylist({
                     author={soundtrack.node.author}
                     duration={soundtrack.node.duration}
                     coverURL={soundtrack.node.coverURL}
-                    isPlaying={false} // isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-                    onClick={console.log}
+                    isPlaying={currentTrack.id === soundtrack.node.id && currentTrack.isPlaying}
+                    onClick={() => trackClickHandler(soundtrack.node)}
                   />
                 </div>
               )}

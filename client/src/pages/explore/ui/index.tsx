@@ -4,11 +4,15 @@ import { useSoundtracksQuery, type SoundtracksQueryVariables, type SoundtracksQu
 import { VirtualizedPlaylist } from './virtualized-playlist'
 import { useTranslation } from 'react-i18next'
 import { Loader } from '@/shared/ui/loader'
+import { useReactiveVar } from '@apollo/client'
+import { currentTrackVar } from '@/entities/soundtrack'
 
 type soundtrackEdges = SoundtracksQuery['soundtracks']['edges']
 
 export function ExplorePage() {
   const { t } = useTranslation()
+
+  const currentTrack = useReactiveVar(currentTrackVar)
 
   const [variables, setVariables] = useState<SoundtracksQueryVariables>({
     first: 30,
@@ -62,8 +66,15 @@ export function ExplorePage() {
 
   const searchPlaceholder = t('pages.explore.searchInput')
 
+  // p 132px
+
   return (
-    <div className="flex h-full flex-col pb-14">
+    <div
+      className="z-30 flex h-full flex-col"
+      style={{
+        paddingBottom: currentTrack.id ? '132px' : '56px'
+      }}
+    >
       <Search onSubmit={handleSearchSubmit} placeholder={searchPlaceholder} />
 
       {!wasFirstLoad ? (
