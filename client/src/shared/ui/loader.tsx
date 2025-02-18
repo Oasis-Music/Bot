@@ -4,7 +4,7 @@ const loader = cva('aspect-square animate-spin rounded-full border-solid border-
   variants: {
     adaptive: {
       true: 'size-auto border-2',
-      false: 'w-10 border-6'
+      false: 'w-8 border-4'
     }
   },
   defaultVariants: {
