@@ -20,18 +20,27 @@ type SoundtrackDB struct {
 	Attached   bool
 }
 
-func buildSoundtrackEntity(s SoundtrackDB) entities.Soundtrack {
+func (s *storage) buildSoundtrackEntity(db SoundtrackDB) entities.Soundtrack {
+
+	var cover *string
+
+	dbCover := postgres.ParseNullStringValue(db.CoverImage)
+
+	if dbCover != "" {
+		x := s.config.FileApi.CoverApiURL + dbCover
+		cover = &x
+	}
 
 	return entities.Soundtrack{
-		ID:         s.ID,
-		Title:      s.Title,
-		Author:     s.Author,
-		Duration:   int(s.Duration),
-		CoverImage: postgres.ParseNullStringPtr(s.CoverImage),
-		Audio:      s.AudioFile,
-		Attached:   s.Attached,
-		CreatorID:  s.CreatorID,
-		UpdatedAt:  s.UpdatedAt,
-		CreatedAt:  s.CreatedAt,
+		ID:         db.ID,
+		Title:      db.Title,
+		Author:     db.Author,
+		Duration:   int(db.Duration),
+		CoverImage: cover,
+		Audio:      s.config.FileApi.AudioApiURL + db.AudioFile,
+		Attached:   db.Attached,
+		CreatorID:  db.CreatorID,
+		UpdatedAt:  db.UpdatedAt,
+		CreatedAt:  db.CreatedAt,
 	}
 }

@@ -46,7 +46,7 @@ func New(
 	authService auth.Service,
 ) Service {
 
-	storageV2 := postgres.New(logger, db)
+	storageV2 := postgres.New(config, logger, db)
 
 	return &soundtrackService{
 		config:      config,

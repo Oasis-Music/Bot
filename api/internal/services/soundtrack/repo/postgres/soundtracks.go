@@ -29,7 +29,7 @@ const (
 
 func (s *storage) Soundtracks(ctx context.Context, limit int64, after int64, before int64, filter entities.SoundtrackFilter, userID int64) (*entities.SoundtrackConnection, error) {
 
-	showLog := true
+	showLog := false
 
 	if limit <= 0 {
 		return nil, errors.New("limit is zero or negative")
@@ -88,12 +88,12 @@ func (s *storage) Soundtracks(ctx context.Context, limit int64, after int64, bef
 		// it's like sorting
 
 		for i := len(items) - 1; i >= 0; i-- {
-			soundtracks = append(soundtracks, buildSoundtrackEntity(items[i]))
+			soundtracks = append(soundtracks, s.buildSoundtrackEntity(items[i]))
 		}
 
 	} else {
 		for _, item := range items {
-			soundtracks = append(soundtracks, buildSoundtrackEntity(item))
+			soundtracks = append(soundtracks, s.buildSoundtrackEntity(item))
 		}
 	}
 

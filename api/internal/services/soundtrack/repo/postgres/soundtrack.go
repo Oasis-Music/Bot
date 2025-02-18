@@ -24,7 +24,7 @@ func (s *storage) Soundtrack(ctx context.Context, soundtrackID int64, userID int
 		return nil, err
 	}
 
-	soundtrack := buildSoundtrackEntity(SoundtrackDB(data))
+	soundtrack := s.buildSoundtrackEntity(SoundtrackDB(data))
 
 	return &soundtrack, nil
 }
