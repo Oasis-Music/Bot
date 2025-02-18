@@ -3,48 +3,71 @@ import * as Types from '../../../../shared/lib/gqlgen.types2'
 import { gql } from 'urql'
 import * as Urql from 'urql'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type AllSoundtracksQueryVariables = Types.Exact<{
-  page: Types.Scalars['Int']['input']
+export type SoundtracksQueryVariables = Types.Exact<{
+  first: Types.Scalars['Int']['input']
+  after?: Types.InputMaybe<Types.Scalars['String']['input']>
 }>
 
-export type AllSoundtracksQuery = {
+export type SoundtracksQuery = {
   __typename?: 'Query'
   soundtracks: {
-    __typename?: 'SoundtracksResponse'
-    soundtracks: Array<{
-      __typename?: 'Soundtrack'
-      id: string
-      title: string
-      author: string
-      duration: number
-      coverURL?: string | null
-      audioURL: string
-      attached: boolean
+    __typename?: 'SoundtrackConnection'
+    totalCount: number
+    pageInfo: {
+      __typename?: 'PageInfo'
+      hasNextPage: boolean
+      startCursor?: string | null
+      endCursor?: string | null
+      hasPreviousPage: boolean
+    }
+    edges: Array<{
+      __typename?: 'SoundtrackEdge'
+      cursor: string
+      node: {
+        __typename?: 'Soundtrack'
+        id: string
+        title: string
+        author: string
+        duration: number
+        coverURL?: string | null
+        audioURL: string
+        attached: boolean
+      }
     }>
   }
 }
 
-export const AllSoundtracksDocument = gql`
-  query AllSoundtracks($page: Int!) {
-    soundtracks(filter: { page: $page }) {
-      soundtracks {
-        id
-        title
-        author
-        duration
-        coverURL
-        audioURL
-        attached
+export const SoundtracksDocument = gql`
+  query Soundtracks($first: Int!, $after: String) {
+    soundtracks(first: $first, after: $after) {
+      totalCount
+      pageInfo {
+        hasNextPage
+        startCursor
+        endCursor
+        hasPreviousPage
+      }
+      edges {
+        cursor
+        node {
+          id
+          title
+          author
+          duration
+          coverURL
+          audioURL
+          attached
+        }
       }
     }
   }
 `
 
-export function useAllSoundtracksQuery(
-  options: Omit<Urql.UseQueryArgs<AllSoundtracksQueryVariables>, 'query'>
+export function useSoundtracksQuery(
+  options: Omit<Urql.UseQueryArgs<SoundtracksQueryVariables>, 'query'>
 ) {
-  return Urql.useQuery<AllSoundtracksQuery, AllSoundtracksQueryVariables>({
-    query: AllSoundtracksDocument,
+  return Urql.useQuery<SoundtracksQuery, SoundtracksQueryVariables>({
+    query: SoundtracksDocument,
     ...options
   })
 }

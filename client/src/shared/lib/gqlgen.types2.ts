@@ -68,13 +68,21 @@ export type NotFound = {
   message: Scalars['String']['output']
 }
 
+export type PageInfo = {
+  __typename?: 'PageInfo'
+  endCursor?: Maybe<Scalars['String']['output']>
+  hasNextPage: Scalars['Boolean']['output']
+  hasPreviousPage: Scalars['Boolean']['output']
+  startCursor?: Maybe<Scalars['String']['output']>
+}
+
 export type Query = {
   __typename?: 'Query'
   authorizeUser: AuthorizationResponse
   checkAudioHash?: Maybe<SoundtrackResult>
   searchSoundtrack: Array<Soundtrack>
-  soundtrack?: Maybe<SoundtrackResult>
-  soundtracks: SoundtracksResponse
+  soundtrack?: Maybe<SoundtrackPayload>
+  soundtracks: SoundtrackConnection
   user?: Maybe<UserResult>
   userSoundtracks: UserSoundtracksResult
 }
@@ -96,7 +104,10 @@ export type QuerySoundtrackArgs = {
 }
 
 export type QuerySoundtracksArgs = {
-  filter: SoundtracksFilter
+  after?: InputMaybe<Scalars['String']['input']>
+  before?: InputMaybe<Scalars['String']['input']>
+  first: Scalars['Int']['input']
+  where?: InputMaybe<SoundtrackFilter>
 }
 
 export type QueryUserArgs = {
@@ -128,16 +139,26 @@ export type Soundtrack = {
   validated: Scalars['Boolean']['output']
 }
 
+export type SoundtrackConnection = {
+  __typename?: 'SoundtrackConnection'
+  edges: Array<SoundtrackEdge>
+  pageInfo: PageInfo
+  totalCount: Scalars['Int']['output']
+}
+
+export type SoundtrackEdge = {
+  __typename?: 'SoundtrackEdge'
+  cursor: Scalars['String']['output']
+  node: Soundtrack
+}
+
+export type SoundtrackFilter = {
+  duration?: InputMaybe<Scalars['Int']['input']>
+}
+
+export type SoundtrackPayload = NotFound | Soundtrack
+
 export type SoundtrackResult = NotFound | Soundtrack
-
-export type SoundtracksFilter = {
-  page: Scalars['Int']['input']
-}
-
-export type SoundtracksResponse = {
-  __typename?: 'SoundtracksResponse'
-  soundtracks: Array<Soundtrack>
-}
 
 export type UnattachSoundtrackInput = {
   trackId: Scalars['ID']['input']
@@ -177,6 +198,7 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
+    SoundtrackPayload: ['NotFound', 'Soundtrack'],
     SoundtrackResult: ['NotFound', 'Soundtrack'],
     UserResult: ['NotFound', 'User'],
     UserSoundtracksResult: ['NotFound', 'UserSoundtracksResponse']

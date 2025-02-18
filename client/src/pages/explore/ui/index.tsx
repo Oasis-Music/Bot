@@ -1,79 +1,86 @@
-import { useState, useEffect } from 'react'
-import { List } from './list'
+import { useState, useEffect, useCallback } from 'react'
 import { Search } from '@/widgets/search'
-import { useAllSoundtracksQuery, useSearchSoundtrackLazyQuery } from '../api'
+import { useSoundtracksQuery, type SoundtracksQueryVariables, type SoundtracksQuery } from '../api'
+import { VirtualizedPlaylist } from './virtualized-playlist'
 import { useTranslation } from 'react-i18next'
-import { useExplorePlaylist } from '@/features/soundtrack/set-explore-playlist'
-import type { Soundtrack } from '@/entities/soundtrack'
+import { Loader } from '@/shared/ui/loader'
+
+type soundtrackEdges = SoundtracksQuery['soundtracks']['edges']
 
 export function ExplorePage() {
   const { t } = useTranslation()
-  const [_, setTracks] = useState<Soundtrack[]>([])
 
-  const { setExplorePlaylist } = useExplorePlaylist()
-
-  const [firstLoad, setFirstLoad] = useState(true)
-  const [currentPage, setCurrentPage] = useState<number>(1)
-  const [hasNextPage, setHasNextPage] = useState<boolean>(false)
-
-  const ITEMS_PER_PAGE = 15
-
-  const { loading, error } = useAllSoundtracksQuery({
-    variables: {
-      page: currentPage
-    },
-    fetchPolicy: 'network-only', // TODO: when cache first duplicate values
-    onCompleted(q) {
-      const newTracks = q.soundtracks.soundtracks as Soundtrack[]
-
-      setExplorePlaylist(newTracks)
-      setHasNextPage(q.soundtracks.soundtracks.length === ITEMS_PER_PAGE)
-      setFirstLoad(false)
-    },
-    onError() {
-      setFirstLoad(false)
-    }
+  const [variables, setVariables] = useState<SoundtracksQueryVariables>({
+    first: 30,
+    after: null
   })
 
-  const [searchTrack] = useSearchSoundtrackLazyQuery({
-    onCompleted(queryData) {
-      setTracks(queryData.searchSoundtrack)
-    }
+  const [wasFirstLoad, setWasFirstLoad] = useState(false)
+
+  const [soundtracks, setSoundtracks] = useState<soundtrackEdges>([])
+  const [hasNextPage, setHasNextPage] = useState(false)
+  const [isFetchingNextPage, setFetchingNextPage] = useState(false)
+
+  const [result, refetchQuery] = useSoundtracksQuery({
+    variables
   })
 
-  // INFO: Because we have a cumulative effect of getting tracks
-  // when currentPage changes, we should not clean up already saved original data
+  const { data, fetching, error } = result
+
   useEffect(() => {
-    return () => {
-      setExplorePlaylist([])
+    if (data?.soundtracks) {
+      setSoundtracks((prev) => [...prev, ...data.soundtracks.edges])
+      setHasNextPage(data.soundtracks.pageInfo.hasNextPage)
+      setFetchingNextPage(false)
+    } else {
+      if (error) {
+        setFetchingNextPage(false)
+        setHasNextPage(false)
+      }
     }
-  }, [])
+  }, [data])
 
-  const fetchNextPage = () => {
-    setCurrentPage((prev) => prev + 1)
-  }
+  useEffect(() => {
+    if (!fetching && !wasFirstLoad) {
+      setWasFirstLoad(true)
+    }
+  }, [fetching, wasFirstLoad])
+
+  const loadMore = useCallback(() => {
+    if (!fetching && hasNextPage && !isFetchingNextPage) {
+      setFetchingNextPage(true)
+      setVariables((prev) => ({
+        ...prev,
+        after: data?.soundtracks.pageInfo.endCursor
+      }))
+    }
+  }, [fetching, hasNextPage, isFetchingNextPage, data])
 
   const handleSearchSubmit = (value: string) => {
-    searchTrack({
-      variables: {
-        value
-      }
-    })
+    console.log('search track', value)
   }
 
   const searchPlaceholder = t('pages.explore.searchInput')
 
   return (
-    <div>
+    <div className="flex h-full flex-col pb-14">
       <Search onSubmit={handleSearchSubmit} placeholder={searchPlaceholder} />
-      <List
-        currentPage={currentPage}
-        isLoad={loading}
-        hasNextPage={hasNextPage}
-        isFirstLoad={firstLoad}
-        error={error}
-        onFetchNextPage={fetchNextPage}
-      />
+
+      {!wasFirstLoad ? (
+        <div className="flex grow items-center justify-center">
+          <Loader />
+        </div>
+      ) : (
+        <VirtualizedPlaylist
+          fetching={fetching}
+          soundtracks={soundtracks}
+          onFetchMore={loadMore}
+          hasNextPage={hasNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          error={!!error}
+          onRetry={refetchQuery}
+        />
+      )}
     </div>
   )
 }

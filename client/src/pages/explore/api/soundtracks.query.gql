@@ -1,13 +1,23 @@
-query AllSoundtracks($page: Int!) {
-  soundtracks(filter: { page: $page }) {
-    soundtracks {
-      id
-      title
-      author
-      duration
-      coverURL
-      audioURL
-      attached
+query Soundtracks($first: Int!, $after: String) {
+  soundtracks(first: $first, after: $after) {
+    totalCount
+    pageInfo {
+      hasNextPage
+      startCursor
+      endCursor
+      hasPreviousPage
+    }
+    edges {
+      cursor
+      node {
+        id
+        title
+        author
+        duration
+        coverURL
+        audioURL
+        attached
+      }
     }
   }
 }
