@@ -9,14 +9,17 @@ interface MiniPlayerProps {
   onPlayPause(): void
 }
 
-const container = cva('z-40 flex rounded-t-2xl bg-white px-1.5 py-1.5 pr-4 transition-transform', {
-  variants: {
-    visible: {
-      true: 'visible translate-y-px',
-      false: 'invisible translate-y-full'
+const container = cva(
+  'absolute bottom-14 z-40 flex w-full rounded-t-2xl bg-white px-1.5 py-1.5 pr-4 transition-transform',
+  {
+    variants: {
+      visible: {
+        true: 'visible translate-y-px',
+        false: 'invisible translate-y-full'
+      }
     }
   }
-})
+)
 
 export function MiniPlayer({ onPlayerOpen, onPlayPause }: MiniPlayerProps) {
   const currentTrack = useReactiveVar(currentTrackVar)
