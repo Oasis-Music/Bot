@@ -118,9 +118,8 @@ export function VirtualizedPlaylist({
                     title={soundtrack.node.title}
                     author={soundtrack.node.author}
                     duration={soundtrack.node.duration}
-                    coverURL={soundtrack.node.coverURL || ''}
-                    // isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
-                    isPlaying={false}
+                    coverURL={soundtrack.node.coverURL}
+                    isPlaying={false} // isPlaying={currentTrack.id === track.id && currentTrack.isPlaying}
                     onClick={console.log}
                   />
                 </div>

@@ -6,7 +6,7 @@ export interface PlaylistItemProps {
   title: string
   author: string
   duration: number
-  coverURL: string
+  coverURL?: string | null
   isPlaying: boolean
   onClick(): void
 }
