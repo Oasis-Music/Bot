@@ -24,6 +24,8 @@ export function checkAuth(): Promise<void> {
           id: tokenData.userId
         })
 
+        sessionStorage.setItem('session', data.accessToken)
+
         console.log('%c authentication successfully refreshed ', 'background: #222; color: #bada55')
         res()
       })
