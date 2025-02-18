@@ -32,7 +32,7 @@ const button = cva(
     variants: {
       color: {
         primary: 'bg-white text-black active:bg-gray-300',
-        secondary: 'bg-[#1c1c1e] text-gray-300',
+        secondary: 'bg-[#16181c] text-gray-300 active:bg-[#202327]',
         accept: 'bg-accept text-stone-800 active:bg-[#3dc975]',
         danger: 'bg-red-500 text-white active:bg-red-700' // todo: pick color
       },
