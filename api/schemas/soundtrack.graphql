@@ -17,7 +17,7 @@ union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
-  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection!
+  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection! @hasRole(role: [ADMIN, USER])
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
 }

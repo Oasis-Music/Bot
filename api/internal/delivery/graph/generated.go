@@ -681,7 +681,7 @@ union SoundtrackPayload = Soundtrack | NotFound
 
 extend type Query {
   soundtrack(id: ID!): SoundtrackPayload @hasRole(role: [ADMIN, USER])
-  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection!
+  soundtracks(first: Int!, after: String, before: String, where: SoundtrackFilter): SoundtrackConnection! @hasRole(role: [ADMIN, USER])
   searchSoundtrack(value: String!): [Soundtrack!]! @hasRole(role: [ADMIN, USER])
   checkAudioHash(hash: String!): SoundtrackResult @hasRole(role: [ADMIN, USER])
 }
@@ -2134,8 +2134,35 @@ func (ec *executionContext) _Query_soundtracks(ctx context.Context, field graphq
 		}
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (any, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Soundtracks(rctx, fc.Args["first"].(int64), fc.Args["after"].(*string), fc.Args["before"].(*string), fc.Args["where"].(*models.SoundtrackFilter))
+		directive0 := func(rctx context.Context) (any, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().Soundtracks(rctx, fc.Args["first"].(int64), fc.Args["after"].(*string), fc.Args["before"].(*string), fc.Args["where"].(*models.SoundtrackFilter))
+		}
+
+		directive1 := func(ctx context.Context) (any, error) {
+			role, err := ec.unmarshalNRole2ᚕoasisᚋapiᚋinternalᚋdeliveryᚋgraphᚋmodelsᚐRoleᚄ(ctx, []any{"ADMIN", "USER"})
+			if err != nil {
+				var zeroVal *models.SoundtrackConnection
+				return zeroVal, err
+			}
+			if ec.directives.HasRole == nil {
+				var zeroVal *models.SoundtrackConnection
+				return zeroVal, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, graphql.ErrorOnPath(ctx, err)
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.SoundtrackConnection); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *oasis/api/internal/delivery/graph/models.SoundtrackConnection`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
