@@ -7,7 +7,7 @@ build:
 prod:
 	go run ./cmd/main.go -env=prod
 gqlgen:
-	go run github.com/99designs/gqlgen generate
+	go tool gqlgen
 sqlc:
 	sqlc generate
 

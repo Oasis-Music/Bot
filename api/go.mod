@@ -1,6 +1,6 @@
 module oasis/api
 
-go 1.23.4
+go 1.24.0
 
 require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.22
@@ -64,10 +64,12 @@ require (
 )
 
 require (
-	github.com/99designs/gqlgen v0.17.64
+	github.com/99designs/gqlgen v0.17.66
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.30.0
 	github.com/aws/aws-sdk-go-v2/config v1.27.22
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.57.0
 	github.com/go-chi/cors v1.2.1
 )
+
+tool github.com/99designs/gqlgen

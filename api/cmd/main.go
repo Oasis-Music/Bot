@@ -3,12 +3,14 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"oasis/api/internal/app"
 	"oasis/api/internal/config"
 	"oasis/api/pkg/logger"
 	"oasis/api/pkg/postgres"
 	"oasis/api/pkg/s3"
+	"runtime/debug"
 
 	"github.com/joho/godotenv"
 )
@@ -33,6 +35,10 @@ func init() {
 }
 
 func main() {
+	info, _ := debug.ReadBuildInfo()
+	fmt.Println("Go version:", info.GoVersion)
+	// fmt.Println("App version:", info.Main.Version)
+
 	config := config.New()
 	logger := logger.New(config.Environment)
 
